@@ -18,46 +18,54 @@ Pod::Spec.new do |s|
     'Whiteboard' => ['Whiteboard/Resource/*']
   }
 
-  s.source_files = 'Whiteboard/Classes/whiteboard.h'
+  s.source_files = 'Whiteboard/Classes/Whiteboard.h'
+
+  # 配置类
+  s.subspec 'Object' do |object|
+    object.source_files = 'Whiteboard/Classes/Object/**'
+    object.public_header_files = 'Whiteboard/Classes/Object/**.h'
+    object.dependency 'YYModel', '~> 1.0.4'
+    object.frameworks = 'UIKit'
+  end
 
   # 动静态转换 http 请求封装
-  s.subspec 'Converter' do |sp|
-    sp.source_files = 'Whiteboard/Classes/Converter/**'
-    sp.dependency 'Whiteboard/Object'
-  end
-
-  # 实时房间
-  s.subspec 'Room' do |sp|
-    sp.source_files = 'Whiteboard/Classes/Room/**'
-    sp.dependency 'Whiteboard/Base'
-  end
-
-  # 回放房间
-  s.subspec 'Replayer' do |sp|
-    sp.source_files = 'Whiteboard/Classes/Replayer/**'
-    sp.dependency 'Whiteboard/Base'
-  end
-
-  # 音视频 native 与回放房间结合
-  s.subspec 'NativeReplayer' do |sp|
-    sp.source_files = 'Whiteboard/Classes/NativeReplayer/**'
-    sp.dependency 'Whiteboard/Replayer'
-    sp.frameworks = 'AVFoundation'
+  s.subspec 'Converter' do |converter|
+    converter.source_files = 'Whiteboard/Classes/Converter/**'
+    converter.public_header_files = 'Whiteboard/Classes/Converter/**.h'
+    converter.dependency 'Whiteboard/Object'
   end
 
   # 基础类，包括sdk，Displayer（Room与Player父类）
-  s.subspec 'Base' do |sp|
-    sp.source_files = 'Whiteboard/Classes/**', 'Whiteboard/Classes/Displayer/**'
-    sp.frameworks = 'WebKit'
-    sp.dependency 'dsBridge', '~> 3.0.2'
-    sp.dependency 'Whiteboard/Object'
+  s.subspec 'Base' do |base|
+    base.source_files = 'Whiteboard/Classes/**', 'Whiteboard/Classes/Displayer/**'
+    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/**.h'
+    # 这个是总的头文件
+    base.exclude_files = 'Whiteboard/Classes/Whiteboard.h'
+    base.frameworks = 'WebKit'
+    base.dependency 'dsBridge', '~> 3.0.2'
+    base.dependency 'Whiteboard/Object'
   end
 
-  # 配置类
-  s.subspec 'Object' do |sp|
-    sp.source_files = 'Whiteboard/Classes/Object/**'
-    sp.dependency 'YYModel', '~> 1.0.4'
-    sp.frameworks = 'UIKit'
+  # 实时房间
+  s.subspec 'Room' do |room|
+    room.source_files = 'Whiteboard/Classes/Room/**'
+    room.public_header_files = 'Whiteboard/Classes/Room/**.h'
+    room.dependency 'Whiteboard/Base'
+  end
+
+  # 回放房间
+  s.subspec 'Replayer' do |replayer|
+    replayer.source_files = 'Whiteboard/Classes/Replayer/**'
+    replayer.public_header_files = 'Whiteboard/Classes/Replayer/**.h'
+    replayer.dependency 'Whiteboard/Base'
+  end
+
+  # 音视频 native 与回放房间结合
+  s.subspec 'NativeReplayer' do |naitve|
+    naitve.source_files = 'Whiteboard/Classes/NativeReplayer/**'
+    naitve.public_header_files = 'Whiteboard/Classes/NativeReplayer/**.h'
+    naitve.dependency 'Whiteboard/Replayer'
+    naitve.frameworks = 'AVFoundation'
   end
 
 end
