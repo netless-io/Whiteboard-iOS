@@ -37,10 +37,8 @@ Pod::Spec.new do |s|
 
   # 基础类，包括sdk，Displayer（Room与Player父类）
   s.subspec 'Base' do |base|
-    base.source_files = 'Whiteboard/Classes/**', 'Whiteboard/Classes/Displayer/**'
-    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/**.h'
-    # 这个是总的头文件
-    base.exclude_files = 'Whiteboard/Classes/Whiteboard.h'
+    base.source_files = 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**'
+    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h'
     base.frameworks = 'WebKit'
     base.dependency 'dsBridge', '~> 3.0.2'
     base.dependency 'Whiteboard/Object'
