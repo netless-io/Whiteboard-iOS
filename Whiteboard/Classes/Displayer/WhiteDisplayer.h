@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param cameraBound 视野范围描述类
  */
-//- (void)setCameraBound:(WhiteCameraBound *)cameraBound;
+- (void)setCameraBound:(WhiteCameraBound *)cameraBound;
 
 /**
  移动视角中心
