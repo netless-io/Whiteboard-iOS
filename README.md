@@ -2,6 +2,25 @@
 
 本项目为 White-SDK-iOS 的开源版本，源码结构层次有改动，实现基本一致。
 
+## 迁移
+
+为了更好的显示源码结构，Whiteboard将项目分为了多个`subpod`，更有利于开发者查看项目源码层级。为此需要修改引用关系。
+
+旧项目迁移，只需要将
+
+```Objective-C
+#import <White-SDK-iOS/WhiteSDK.h>
+```
+
+更换为
+
+```Objective-C
+import <Whiteboard/Whiteboard.h>
+```
+
+即可。
+
+
 ## Example
 
 * 启动Example
@@ -57,13 +76,13 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 1. Object：主要作用是通过`YYModel`处理`JSON`转换。包含以下部分：
     1. `Object`基类，所有`sdk`中使用的参数配置类的基类。
     2. `Room`，`Player`中API所涉及到的一些参数配置类。
-2. Base：除了配置项以外的一些共同类，主要为以下部分：
+2. Base：包含`SDK``Displayer`以及部分相关类，主要为以下部分：
     1. `WhiteSDK`以及其初始化参数类。
-    2. `WhiteSDK`设置的通用回调。
+    2. `WhiteSDK`设置的通用回调`WhiteCommonCallbacks`
     3. `Room`与`Player`共同的父类`Displayer`类的实现。
     4. `Displayer`中API所使用的一些参数配置类。
     5. `Displayer`用来描述当前房间状态的类，为`RoomState`,`PlayerState`的基类。
-3. Room：实时房间类相关内容：
+3. Room：实时房间相关内容：
     1. `Room`类，及其相关事件回调类。
     1. `WhiteSDK+Room`，使用`SDK`创建`Room`的API。
     1. `Room`特有的参数配置类。
@@ -76,9 +95,9 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 5. NativePlayer：在`iOS`端播放音视频，并与白板播放状态做同步
     1. `WhiteCombinePlayer`类，及其相关部分类。
 6. Converter：动静态转换请求封装类。
-    * 动静态转换计算QPS（日并发），不推荐客户端在生产环境下使用。详情请参考文档。
+    * 动静态转换计费以QPS（日并发）计算，客户端无法控制并发，不推荐在生产环境下使用。详情请参考文档。
 
-## Usage
+## 文档
 
 [文档](https://developer.netless.link)
 
