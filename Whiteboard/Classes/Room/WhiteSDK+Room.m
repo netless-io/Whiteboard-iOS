@@ -11,6 +11,7 @@
 #import "WhiteConsts.h"
 #import "WhiteRoom+Private.h"
 #import "WhiteRoomCallbacks+Private.h"
+#import "WhiteRoom.h"
 
 @implementation WhiteSDK (Room)
 

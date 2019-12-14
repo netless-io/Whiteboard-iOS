@@ -5,7 +5,7 @@
 //  Created by leavesster on 2018/8/15.
 //
 
-#import <Foundation/Foundation.h>
+#import "WhiteBoardView.h"
 
 @class WhiteRoomCallbacks, WhitePlayerEvent, WhiteCommonCallbacks, WhiteSdkConfiguration;
 

@@ -12,15 +12,11 @@
 
 //for legacy，Can't look back……
 #import "WhiteSDK.h"
-
 #import "WhiteSDK+Room.h"
 #import "WhiteRoom.h"
-
 #import "WhiteSDK+Replayer.h"
 #import "WhitePlayer.h"
-
 #import "WhiteConverter.h"
-
 #import "WhiteCombinePlayer.h"
 
 #endif /* Whiteboard_h */

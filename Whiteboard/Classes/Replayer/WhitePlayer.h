@@ -10,6 +10,7 @@
 #import "WhitePlayerState.h"
 #import "WhitePlayerTimeInfo.h"
 #import "WhiteDisplayer.h"
+#import "WhiteSDK+Replayer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

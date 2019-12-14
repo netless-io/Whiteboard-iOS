@@ -6,7 +6,6 @@
 //
 
 #import "WhitePlayer.h"
-#import "WhiteBoardView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

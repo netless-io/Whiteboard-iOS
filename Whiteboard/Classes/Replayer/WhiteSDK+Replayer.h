@@ -6,11 +6,12 @@
 //
 
 #import "WhiteSDK.h"
-#import "WhitePlayer.h"
 #import "WhitePlayerEvent.h"
 #import "WhitePlayerConfig.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class WhitePlayer;
 
 @interface WhiteSDK (Replayer)
 #pragma mark - Player

@@ -7,11 +7,8 @@
 
 #import "WhiteSDK.h"
 #import "WhiteSDK+Private.h"
-#import "WhitePlayerEvent+Private.h"
-#import "WhitePlayer+Private.h"
 #import "WhiteBoardView+Private.h"
 #import "WhiteDisplayer+Private.h"
-#import "WhitePlayer+Private.h"
 #import "WhiteConsts.h"
 
 @interface WhiteSDK()

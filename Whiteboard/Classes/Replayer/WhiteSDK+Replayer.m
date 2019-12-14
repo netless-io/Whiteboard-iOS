@@ -12,6 +12,7 @@
 #import "WhiteDisplayer+Private.h"
 #import "WhiteConsts.h"
 #import "WhitePlayerEvent+Private.h"
+#import "WhitePlayer.h"
 
 @implementation WhiteSDK (Replayer)
 

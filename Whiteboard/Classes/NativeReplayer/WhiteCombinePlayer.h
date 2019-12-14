@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WhiteSDK+Replayer.h"
+#import "WhitePlayer.h"
 #import <AVFoundation/AVFoundation.h>
 #import "WhiteVideoView.h"
 #import "WhiteSliderView.h"

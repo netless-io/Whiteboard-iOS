@@ -7,9 +7,11 @@
 
 #import "WhiteSDK.h"
 #import "WhiteRoomConfig.h"
-#import "WhiteRoom.h"
+#import "WhiteRoomCallbacks.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class WhiteRoom;
 
 @interface WhiteSDK (Room)
 

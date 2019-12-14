@@ -19,6 +19,7 @@
 #import "WhiteSceneState.h"
 #import "WhitePanEvent.h"
 #import "WhiteDisplayer.h"
+#import "WhiteSDK+Room.h"
 
 @class WhiteBoardView;
 
