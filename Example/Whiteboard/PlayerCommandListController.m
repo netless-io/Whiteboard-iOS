@@ -11,7 +11,7 @@
 @interface PlayerCommandListController ()
 
 @property (nonatomic, strong) NSArray<NSString *> *commands;
-@property (nonatomic, weak) WhitePlayer *player;
+@property (nonatomic, weak) WhiteCombinePlayer *combinePlayer;
 
 @end
 
@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
 - (instancetype)initWithPlayer:(WhitePlayer *)player
 {
     if (self = [self init]) {
-        _player = player;
+        _combinePlayer = player;
     }
     return self;
 }
@@ -69,19 +69,20 @@ static NSString *kReuseCell = @"reuseCell";
 {
     switch (indexPath.row) {
         case CommandTypePlay:
-            [self.player play];
+            [self.combinePlayer play];
             break;
-        case CommandTypePause:
-            [self.player pause];
-            break;
+        //CombinePlayer 没有释放API
         case CommondTypeStop:
-            [self.player stop];
+        case CommandTypePause:
+            [self.combinePlayer pause];
             break;
         case CommandTypeSeek:
         {
-            //seek后，保持原始状态
-            [self.player seekToScheduleTime:0];
-            [self.player play];
+            //快进至5s位置，参数分别为 对应秒数，1秒内频率，Apple推荐为600，此处为演示随意填写。
+            CMTime time = CMTimeMakeWithSeconds(5, 100);
+            [self.combinePlayer seekToTime:time completionHandler:^(BOOL finished) {
+                [self.combinePlayer play];
+            }];
             break;
         }
         case CommandTypeInfo:
@@ -104,14 +105,14 @@ static NSString *kReuseCell = @"reuseCell";
 
 - (void)getPlayerTimeInfo
 {
-    [self.player getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
+    [self.combinePlayer.whitePlayer getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
         NSLog(@"%@", info);
     }];
 }
 
 - (void)getPlayerState
 {
-    [self.player getPlayerStateWithResult:^(WhitePlayerState * _Nonnull state) {
+    [self.combinePlayer.whitePlayer getPlayerStateWithResult:^(WhitePlayerState * _Nonnull state) {
         NSLog(@"%@", state);
     }];
 }

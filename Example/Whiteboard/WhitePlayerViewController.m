@@ -96,7 +96,7 @@
 
 - (void)settingAPI:(id)sender
 {
-    PlayerCommandListController *controller = [[PlayerCommandListController alloc] initWithPlayer:self.player];
+    PlayerCommandListController *controller = [[PlayerCommandListController alloc] initWithPlayer:self.combinePlayer];
     [self showPopoverViewController:controller sourceView:sender];
 }
 
