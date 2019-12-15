@@ -282,7 +282,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     self.pauseReason = self.pauseReason & ~PauseReasonNativePlayerBuffering;
     
     // whitePlayer 也不缓冲了，则调用 endBuffering
-    if (self.pauseReason & PauseReasonWhitePlayerBuffering) {
+    if (self.pauseReason & ~PauseReasonWhitePlayerBuffering) {
         DLog(@"pauseReason %ld", self.pauseReason);
         if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
             [self.delegate combinePlayerEndBuffering];
