@@ -11,6 +11,7 @@
 #import <YYModel.h>
 
 typedef NS_ENUM(NSInteger, CommandType) {
+    CommandTypeResize,
     CommandTypeBroadcast,
     CommandTypeFollower,
     CommandTypeMoveCamera,
@@ -65,7 +66,7 @@ static NSString *kReuseCell = @"reuseCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.commands = @[NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"移动视角中心", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
+    self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"移动视角中心", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
                       NSLocalizedString(@"插入动态 PPT", nil), NSLocalizedString(@"插入图片", nil), NSLocalizedString(@"获取预览截图", nil), NSLocalizedString(@"获取场景完整封面", nil), NSLocalizedString(@"获取PPT", nil), NSLocalizedString(@"获取页面数据", nil),  NSLocalizedString(@"下一页", nil), NSLocalizedString(@"获取连接状态", nil), NSLocalizedString(@"主动断连", nil), NSLocalizedString(@"视野锁定", nil), NSLocalizedString(@"只读", nil), NSLocalizedString(@"取消只读", nil), NSLocalizedString(@"文本", nil), NSLocalizedString(@"画笔", nil),
                       NSLocalizedString(@"橡皮擦", nil),
                       NSLocalizedString(@"矩形", nil), NSLocalizedString(@"颜色", nil), NSLocalizedString(@"坐标转换", nil), NSLocalizedString(@"缩放", nil)];
@@ -99,6 +100,9 @@ static NSString *kReuseCell = @"reuseCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
+        case CommandTypeResize:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"changeframe" object:nil];
+            break;
         case CommandTypeBroadcast:
             [self.room setViewMode:WhiteViewModeBroadcaster];
             break;
@@ -155,7 +159,6 @@ static NSString *kReuseCell = @"reuseCell";
                 NSLog(@"progress:%f", progress);
             } completionHandler:^(BOOL success, ConvertedFiles * _Nullable ppt, WhiteConversionInfo * _Nullable info, NSError * _Nullable error) {
                 NSLog(@"success:%d ppt: %@ error:%@", success, [ppt yy_modelDescription], error);
-                
                 
                 if (ppt) {
                     [self.room putScenes:@"/static" scenes:ppt.scenes index:0];

@@ -65,6 +65,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         // room 需要调用 refreshViewSize（由于文字教具弹起键盘的原因，sdk 无法主动调用）
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refresh" object:nil];
     });
 }
 

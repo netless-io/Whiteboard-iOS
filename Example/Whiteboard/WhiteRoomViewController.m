@@ -41,6 +41,7 @@
         [self createRoom];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidDismiss:) name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:@"refresh" object:nil];
 }
 
 #pragma mark - CallbackDelegate
@@ -86,6 +87,11 @@
     activityVC.popoverPresentationController.sourceView = [self.navigationItem.rightBarButtonItem valueForKey:@"view"];
     [self presentViewController:activityVC animated:YES completion:nil];
     NSLog(@"%@", [NSString stringWithFormat:NSLocalizedString(@"房间 UUID: %@", nil), self.roomUuid]);
+}
+
+- (void)refresh
+{
+    [self.room refreshViewSize];
 }
 
 #pragma mark - Room Action
