@@ -60,7 +60,7 @@
 
 - (void)refreshViewSize
 {
-    [self.bridge callHandler:@"player.refreshViewSize" completionHandler:nil];
+    [self.bridge callHandler:@"displayer.refreshViewSize" completionHandler:nil];
 }
 
 - (void)convertToPointInWorld:(WhitePanEvent *)point result:(void (^) (WhitePanEvent *convertPoint))result;
