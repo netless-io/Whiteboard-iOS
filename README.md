@@ -103,6 +103,8 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 
 ### native 端播放音视频
 
+>m3u8 格式的音视频，可能需要经过一次 combinePlayerEndBuffering 调用，才能不经过 Play 直接seek播放。（否则可能仍然从初始位置开始播放）
+
 ```Objective-C
 #import <Whiteboard/Whiteboard.h>
 
@@ -163,7 +165,6 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
     //两端都结束缓冲
     NSLog(@"combinePlayerEndBuffering");
 }
-
 
 @end
 
