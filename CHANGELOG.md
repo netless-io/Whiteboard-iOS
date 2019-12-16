@@ -167,8 +167,4 @@
 - 增加回放 API，并提供回放 API 示例
 - 增加测试用例代码，大部分 API 可以参考测试用例
 ### change
-<<<<<<< HEAD
 - 修改 PPT 翻页 API，并修改示例代码
-=======
-- 修改 PPT 翻页 API，并修改示例代码
->>>>>>> 5947dbe... add changelog, version and API
