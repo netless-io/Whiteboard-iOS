@@ -41,31 +41,34 @@
 }
 
 #pragma mark - 视角
+static NSString * const kDisplayerNamespace = @"displayer.%@";
+static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
+
 - (void)setCameraBound:(WhiteCameraBound *)cameraBound
 {
-    [self.bridge callHandler:@"displayer.setCameraBound" arguments:@[cameraBound]];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setCameraBound"] arguments:@[cameraBound]];
 }
 
 - (void)moveCamera:(WhiteCameraConfig *)camera
 {
-    [self.bridge callHandler:@"displayer.moveCamera" arguments:@[camera]];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"moveCamera"] arguments:@[camera]];
 }
 
 - (void)moveCameraToContainer:(WhiteRectangleConfig *)rectange
 {
-    [self.bridge callHandler:@"displayer.moveCameraToContain" arguments:@[rectange]];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"moveCameraToContain"] arguments:@[rectange]];
 }
 
 # pragma mark - Common
 
 - (void)refreshViewSize
 {
-    [self.bridge callHandler:@"displayer.refreshViewSize" completionHandler:nil];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"refreshViewSize"] completionHandler:nil];
 }
 
 - (void)convertToPointInWorld:(WhitePanEvent *)point result:(void (^) (WhitePanEvent *convertPoint))result;
 {
-    [self.bridge callHandler:@"displayer.convertToPointInWorld" arguments:@[@(point.x), @(point.y)] completionHandler:^(id  _Nullable value) {
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"convertToPointInWorld"] arguments:@[@(point.x), @(point.y)] completionHandler:^(id  _Nullable value) {
         if (result) {
             WhitePanEvent *convertP = [WhitePanEvent modelWithJSON:value];
             result(convertP);
@@ -77,24 +80,24 @@
 
 - (void)addMagixEventListener:(NSString *)eventName
 {
-    [self.bridge callHandler:@"displayer.addMagixEventListener" arguments:@[eventName]];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"addMagixEventListener"] arguments:@[eventName]];
 }
 
 - (void)addHighFrequencyEventListener:(NSString *)eventName fireInterval:(NSUInteger)millseconds
 {
     NSAssert(millseconds >= 500, @"millsecond should not less than 500");
-    [self.bridge callHandler:@"displayer.addHighFrequencyEventListener" arguments:@[eventName, @(millseconds)]];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"addHighFrequencyEventListener"] arguments:@[eventName, @(millseconds)]];
 }
 
 - (void)removeMagixEventListener:(NSString *)eventName
 {
-    [self.bridge callHandler:@"displayer.removeMagixEventListener" arguments:@[eventName]];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"removeMagixEventListener"] arguments:@[eventName]];
 }
 
 #pragma mark - 截图图片 API
 - (void)getScenePreviewImage:(NSString *)scenePath completion:(void (^)(UIImage * _Nullable image))completionHandler
 {
-    [self.bridge callHandler:@"displayerAsync.scenePreview" arguments:@[scenePath] completionHandler:^(NSString * _Nullable value) {
+    [self.bridge callHandler:[NSString stringWithFormat:kAsyncDisplayerNamespace, @"scenePreview"] arguments:@[scenePath] completionHandler:^(NSString * _Nullable value) {
         NSString *imageData = [value stringByReplacingOccurrencesOfString:@"data:image/png;base64," withString:@""];
         NSData *data = [[NSData alloc] initWithBase64EncodedString:imageData options:NSDataBase64DecodingIgnoreUnknownCharacters];
         UIImage *image = [UIImage imageWithData:data scale:[UIScreen mainScreen].scale];
@@ -106,7 +109,7 @@
 
 - (void)getSceneSnapshotImage:(NSString *)scenePath completion:(void (^)(UIImage * _Nullable image))completionHandler
 {
-    [self.bridge callHandler:@"displayerAsync.sceneSnapshot" arguments:@[scenePath] completionHandler:^(NSString * _Nullable value) {
+    [self.bridge callHandler:[NSString stringWithFormat:kAsyncDisplayerNamespace, @"sceneSnapshot"] arguments:@[scenePath] completionHandler:^(NSString * _Nullable value) {
         NSString *imageData = [value stringByReplacingOccurrencesOfString:@"data:image/png;base64," withString:@""];
         NSData *data = [[NSData alloc] initWithBase64EncodedString:imageData options:NSDataBase64DecodingIgnoreUnknownCharacters];
         UIImage *image = [UIImage imageWithData:data scale:[UIScreen mainScreen].scale];
