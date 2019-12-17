@@ -278,30 +278,40 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 
 - (void)nativeEndBuffering
 {
-    //移除 native 缓冲标识
+    //?0?
     self.pauseReason = self.pauseReason & ~PauseReasonNativePlayerBuffering;
-    
-    // whitePlayer 也不缓冲了，则调用 endBuffering
-    if (self.pauseReason & ~PauseReasonWhitePlayerBuffering) {
-        DLog(@"pauseReason %ld", self.pauseReason);
-        if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
-            [self.delegate combinePlayerEndBuffering];
-        }
-    }
-    
-    DLog(@"endNativeBuffering");
 
-    //如果 whitePlayer 不处于缓冲状态，又不是暂停，则直接播放。否则不作任何事情
+    DLog(@"nativeEndBuffering %lu", (unsigned long)self.pauseReason);
+    
+    /**
+     1. WhitePlayer 还在缓冲(?01)，暂停
+     2. WhitePlayer 不在缓冲(?00)，结束缓冲
+     */
+    if (self.pauseReason & PauseReasonWhitePlayerBuffering) {
+        [self.nativePlayer pause];
+    } else if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
+        [self.delegate combinePlayerEndBuffering];
+    }
+
+    /**
+     1. 目前是播放状态（100），没有任何一个播放器，处于缓冲，调用两端播放API
+     2. 目前是主动暂停（000），暂停白板
+     3. whitePlayer 还在缓存（101、110），已经在处理缓冲回调的位置，处理完毕
+     */
     if (self.pauseReason == PauseReasonNone) {
-        DLog(@"playWhitePlayer");
+        [self.nativePlayer play];
         [self playWhitePlayer];
+    } else if (self.pauseReason & PauseReasonPlayerPause) {
+        [self.nativePlayer pause];
+        [self.whitePlayer pause];
     }
 }
 
 #pragma mark - white player buffering
 - (void)whitePlayerStartBuffing
 {
-    //直接暂停
+    self.pauseReason = self.pauseReason | PauseReasonWhitePlayerBuffering;
+
     [self.nativePlayer pause];
     
     if ([self.delegate respondsToSelector:@selector(combinePlayerStartBuffering)]) {
@@ -311,25 +321,32 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 
 - (void)whitePlayerEndBuffering
 {
-    
-    if (!(self.pauseReason & PauseReasonNativePlayerBuffering)) {
-        DLog(@"pauseReason %ld", self.pauseReason);
-        if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
-            [self.delegate combinePlayerEndBuffering];
-        }
+    //??0
+    self.pauseReason = self.pauseReason & ~PauseReasonWhitePlayerBuffering;
+
+    DLog(@"nativeEndBuffering %lu", (unsigned long)self.pauseReason);
+
+    /**
+     1. native 还在缓存(?10)，主动暂停 whitePlayer
+     2. native 不在缓存(?00)，缓冲结束
+     */
+    if (self.pauseReason & PauseReasonNativePlayerBuffering) {
+        [self.whitePlayer pause];
+    } else if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
+        [self.delegate combinePlayerEndBuffering];
     }
     
-    /*
-     1. 本身已经被主动暂停，不需要播放，不做操作
-     2. nativePlayer 在缓冲，则暂停 whitePlayer 等待 nativePlayer
-     3. nativePlayer 可以播放，一起播放
+    /**
+     1. 目前是播放状态（100），没有任何一个播放器，处于缓冲，调用两端播放API
+     2. 目前是主动暂停（000），暂停白板
+     3. native 还在缓存（110、010），已经在处理缓冲回调的位置，处理完毕
      */
-    if ((self.pauseReason & PauseReasonPlayerPause) == PauseReasonPlayerPause) {
-        DLog("%ld do nothing", (long)self.pauseReason)
-    } else if ((self.pauseReason & PauseReasonNativePlayerBuffering) == PauseReasonNativePlayerBuffering) {
-        [self pauseWhitePlayer];
-    } else {
+    if (self.pauseReason == PauseReasonNone) {
         [self.nativePlayer play];
+        [self playWhitePlayer];
+    } else if (self.pauseReason & PauseReasonPlayerPause) {
+        [self.nativePlayer pause];
+        [self.whitePlayer pause];
     }
 }
 
@@ -383,12 +400,10 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     DLog(@"first updateWhitePlayerPhase %ld pauseReason:%ld", phase, self.pauseReason);
     // WhitePlay 处于缓冲状态，pauseReson 加上 whitePlayerBuffering
     if (phase == WhitePlayerPhaseBuffering || phase == WhitePlayerPhaseWaitingFirstFrame) {
-        self.pauseReason = self.pauseReason | PauseReasonWhitePlayerBuffering;
         [self whitePlayerStartBuffing];
     }
     // 进入暂停状态，whitePlayer 已经完成缓冲，移除 whitePlayerBufferring
     else if (phase == WhitePlayerPhasePause || phase == WhitePlayerPhasePlaying) {
-        self.pauseReason = self.pauseReason & ~PauseReasonWhitePlayerBuffering;
         [self whitePlayerEndBuffering];
     }
     DLog(@"end updateWhitePlayerPhase %ld pauseReason:%ld", phase, self.pauseReason);
