@@ -59,6 +59,13 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"moveCameraToContain"] arguments:@[rectange]];
 }
 
+- (void)scalePptToFit:(WhiteAnimationMode)mode
+{
+    NSDictionary *dict = @{@(0): @"continuous", @(1): @"immediately"};
+    NSString *modeString = dict[@(mode)];
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"scalePptToFit"] arguments:@[modeString]];
+}
+
 # pragma mark - Common
 
 - (void)refreshViewSize

@@ -69,6 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)moveCameraToContainer:(WhiteRectangleConfig *)rectange;
 
+/**
+ 将 ppt 等比例铺满屏幕（参考 UIViewContentModeScaleAspectFit ），如果当前页没有 ppt，则不会进行缩放。
+ @param mode 动画参数，连续动画，或者瞬间切换
+ */
+- (void)scalePptToFit:(WhiteAnimationMode)mode;
+
 #pragma mark - 截图
 
 /**
