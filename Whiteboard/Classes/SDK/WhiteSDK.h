@@ -20,7 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)version;
 
 
-/** 推荐初始化方法, CommonCallback 为 Room 与 Player 都支持的 callback。 */
+/**
+ 初始化方法, CommonCallback 为 Room 与 Player 都支持的 callback
+ 注意: 在 iOS 12 以后，调用该方法，以及任何 sdk 代码时，都先确保 WhiteBoardView 在视图栈中，并且没有被隐藏（可以被遮盖）
+ */
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback;
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config DEPRECATED_MSG_ATTRIBUTE("initWithWhiteBoardView:config:commonCallbackDelegate");
