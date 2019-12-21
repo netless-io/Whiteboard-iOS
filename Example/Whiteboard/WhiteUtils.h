@@ -14,10 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)sdkToken;
 
-+ (void)createRoomWithResult:(void (^) (BOOL success, id _Nullable response, NSError * _Nullable error))result;
 + (void)createRoomWithCompletionHandler:(void (^) (NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
 
-+ (void)getRoomTokenWithUuid:(NSString *)uuid Result:(void (^) (BOOL success, id _Nullable response, NSError * _Nullable error))result;
 + (void)getRoomTokenWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
 
 @end

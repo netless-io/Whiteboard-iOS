@@ -24,18 +24,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    # warning 请在 WhiteBaseViewController 中查看 SDK 初始化代码，以及注意事项。
-    NSString *sdkToken = [WhiteUtils sdkToken];
-    self.view.backgroundColor = [UIColor orangeColor];
     
-    if ([sdkToken length] == 0) {
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"sdk token 不合法", nil) message:NSLocalizedString(@"请在 https://console.herewhite.com 注册并申请 Token，并在 WhiteUtils sdkToken 方法中，填入 SDKToken 进行测试", nil) preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-        [alertVC addAction:action];
-        [self presentViewController:alertVC animated:YES completion:nil];
-    } else if ([self.roomUuid length] > 0) {
+    self.view.backgroundColor = [UIColor orangeColor];
+
+    if ([self.roomUuid length] > 0) {
         [self joinRoom];
     } else {
         [self createRoom];
@@ -137,12 +129,12 @@
 //        self.roomUuid = copyPast;
 //    }
     self.title = NSLocalizedString(@"加入房间中...", nil);
-    [WhiteUtils getRoomTokenWithUuid:self.roomUuid Result:^(BOOL success, id response, NSError *error) {
-        if (success) {
-            NSString *roomToken = response[@"msg"][@"roomToken"];
-            [self joinRoomWithToken:roomToken];
-        } else {
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"服务器信息:%@，系统错误信息:%@", [error localizedDescription], [response description]] preferredStyle:UIAlertControllerStyleAlert];
+    [WhiteUtils getRoomTokenWithUuid:self.roomUuid completionHandler:^(NSString * _Nullable roomToken, NSError * _Nullable error) {
+        if (roomToken) {
+            self.roomToken = roomToken;
+             [self joinRoomWithToken:roomToken];
+         } else {
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"获取 RoomToken 失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [self.navigationController popViewControllerAnimated:YES];
             }];
