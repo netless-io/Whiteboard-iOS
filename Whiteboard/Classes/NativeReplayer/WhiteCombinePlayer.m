@@ -44,16 +44,14 @@ typedef NS_OPTIONS(NSUInteger, PauseReason) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserverWithPlayItem:self.nativePlayer.currentItem];
+    [self removeNativePlayerKVO];
 }
 
-- (instancetype)initWithNativePlayer:(AVPlayer *)player whitePlayer:(WhitePlayer *)whitePlayer
+- (instancetype)initWithNativePlayer:(AVPlayer *)nativePlayer whitePlayer:(WhitePlayer *)whitePlayer
 {
-    if (self = [super init]) {
-        _nativePlayer = player;
-        _whitePlayer = whitePlayer;
-        _pauseReason = PauseReasonInit;
-    }
-    [self setup];
+    self = [self initWithNativePlayer:nativePlayer];
+    _whitePlayer = whitePlayer;
+    [self updateWhitePlayerPhase:whitePlayer.phase];
     return self;
 }
 
@@ -63,11 +61,33 @@ typedef NS_OPTIONS(NSUInteger, PauseReason) {
     return [self initWithNativePlayer:videoPlayer whitePlayer:whitePlayer];
 }
 
-- (void)setup
+- (instancetype)initWithMediaUrl:(NSURL *)mediaUrl
+{
+    AVPlayer *videoPlayer = [AVPlayer playerWithURL:mediaUrl];
+    return [self initWithNativePlayer:videoPlayer];
+}
+
+- (instancetype)initWithNativePlayer:(AVPlayer *)nativePlayer
+{
+    if (self = [super init]) {
+        _nativePlayer = nativePlayer;
+        _pauseReason = WhiteSyncManagerPauseReasonInit;
+    }
+    [self registerNotificationAndKVO];
+    return self;
+}
+
+- (void)setWhitePlayer:(WhitePlayer *)whitePlayer
+{
+    _whitePlayer = whitePlayer;
+    [self updateWhitePlayerPhase:whitePlayer.phase];
+}
+
+- (void)registerNotificationAndKVO
 {
     [self registerAudioSessionNotification];
     [self.nativePlayer addObserver:self forKeyPath:kRateKey options:0 context:nil];
-    [self.nativePlayer addObserver:self forKeyPath:@"currentItem" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    [self.nativePlayer addObserver:self forKeyPath:kCurrentItemKey options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
 }
 
 #pragma mark - Private Methods
@@ -258,6 +278,12 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     [item removeObserver:self forKeyPath:kLoadedTimeRangesKey];
     [item removeObserver:self forKeyPath:kPlaybackBufferEmptyKey];
     [item removeObserver:self forKeyPath:kPlaybackLikelyToKeepUpKey];
+}
+
+- (void)removeNativePlayerKVO
+{
+    [self.nativePlayer removeObserver:self forKeyPath:kRateKey];
+    [self.nativePlayer removeObserver:self forKeyPath:kCurrentItemKey];
 }
 
 #pragma mark - NativePlayer Buffering

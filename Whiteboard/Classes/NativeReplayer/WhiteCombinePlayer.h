@@ -80,8 +80,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<WhiteCombineDelegate> delegate;
 
-- (instancetype)initWithNativePlayer:(AVPlayer *)player whitePlayer:(WhitePlayer *)replayer;
+
+- (instancetype)initWithNativePlayer:(AVPlayer *)nativePlayer whitePlayer:(WhitePlayer *)replayer;
 - (instancetype)initWithMediaUrl:(NSURL *)mediaUrl whitePlayer:(WhitePlayer *)replayer;
+
+- (instancetype)initWithMediaUrl:(NSURL *)mediaUrl;
+- (instancetype)initWithNativePlayer:(AVPlayer *)nativePlayer NS_DESIGNATED_INITIALIZER;
 
 - (NSTimeInterval)videoDuration;
 
