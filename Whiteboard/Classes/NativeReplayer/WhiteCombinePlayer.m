@@ -191,8 +191,9 @@
 static NSString * const kRateKey = @"rate";
 static NSString * const kCurrentItemKey = @"currentItem";
 static NSString * const kStatusKey = @"status";
-static NSString * const kPlaybackBufferEmptyKey = @"playbackBufferEmpty";
 static NSString * const kPlaybackLikelyToKeepUpKey = @"playbackLikelyToKeepUp";
+static NSString * const kPlaybackBufferFullKey = @"playbackBufferFull";
+static NSString * const kPlaybackBufferEmptyKey = @"playbackBufferEmpty";
 static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -235,13 +236,20 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
                 [self.delegate combineVideoPlayerError:self.nativePlayer.currentItem.error];
             }
         }
-    } else if ([keyPath isEqualToString:kPlaybackBufferEmptyKey]) {
-        if (self.nativePlayer.currentItem.isPlaybackBufferEmpty) {
-            [self nativeStartBuffering];
-        }
     } else if ([keyPath isEqualToString:kPlaybackLikelyToKeepUpKey]) {
+        DLog(@"isPlaybackLikelyToKeepUp %d", self.nativePlayer.currentItem.isPlaybackLikelyToKeepUp);
         if (self.nativePlayer.currentItem.isPlaybackLikelyToKeepUp) {
             [self nativeEndBuffering];
+        }
+    } else if ([keyPath isEqualToString:kPlaybackBufferFullKey]) {
+        DLog(@"isPlaybackBufferFull %d", self.nativePlayer.currentItem.isPlaybackBufferFull);
+        if (self.nativePlayer.currentItem.isPlaybackBufferFull) {
+            [self nativeEndBuffering];
+        }
+    } else if ([keyPath isEqualToString:kPlaybackBufferEmptyKey]) {
+        DLog(@"isPlaybackBufferEmpty %d", self.nativePlayer.currentItem.isPlaybackBufferEmpty);
+        if (self.nativePlayer.currentItem.isPlaybackBufferEmpty) {
+            [self nativeStartBuffering];
         }
     } else if ([keyPath isEqualToString:kLoadedTimeRangesKey]) {
         NSArray *timeRanges = (NSArray *)change[NSKeyValueChangeNewKey];
@@ -255,17 +263,19 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 - (void)addObserverWithPlayItem:(AVPlayerItem *)item
 {
     [item addObserver:self forKeyPath:kStatusKey options:NSKeyValueObservingOptionNew context:nil];
-    [item addObserver:self forKeyPath:kLoadedTimeRangesKey options:NSKeyValueObservingOptionNew context:nil];
-    [item addObserver:self forKeyPath:kPlaybackBufferEmptyKey options:NSKeyValueObservingOptionNew context:nil];
-    [item addObserver:self forKeyPath:kPlaybackLikelyToKeepUpKey options:NSKeyValueObservingOptionNew context:nil];
+    [item addObserver:self forKeyPath:kLoadedTimeRangesKey options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+    [item addObserver:self forKeyPath:kPlaybackLikelyToKeepUpKey options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+    [item addObserver:self forKeyPath:kPlaybackBufferFullKey options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+    [item addObserver:self forKeyPath:kPlaybackBufferEmptyKey options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
 }
 
 - (void)removeObserverWithPlayItem:(AVPlayerItem *)item
 {
     [item removeObserver:self forKeyPath:kStatusKey];
     [item removeObserver:self forKeyPath:kLoadedTimeRangesKey];
-    [item removeObserver:self forKeyPath:kPlaybackBufferEmptyKey];
     [item removeObserver:self forKeyPath:kPlaybackLikelyToKeepUpKey];
+    [item removeObserver:self forKeyPath:kPlaybackBufferFullKey];
+    [item removeObserver:self forKeyPath:kPlaybackBufferEmptyKey];
 }
 
 - (void)removeNativePlayerKVO
