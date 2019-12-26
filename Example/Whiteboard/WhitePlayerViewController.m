@@ -75,6 +75,14 @@
     
     self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:config commonCallbackDelegate:self.commonDelegate];
     WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
+    
+    //音视频，白板混合播放处理类
+    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]];
+    //显示 AVPlayer 画面
+    [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
+    //配置代理
+    self.combinePlayer.delegate = self;
+    
     [self.sdk createReplayerWithConfig:playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
         if (self.playBlock) {
             self.playBlock(player, error);
@@ -83,12 +91,11 @@
         } else {
             self.player = player;
             [self.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"] whitePlayer:player];
-            self.combinePlayer.delegate = self;
-            [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
-
-            [self.combinePlayer play];
-            NSLog(@"创建回放房间成功，开始回放");
+            
+            //配置 WhitePlayer
+            self.combinePlayer.whitePlayer = player;
+            //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
+            [player seekToScheduleTime:0];
         }
     }];
 }
