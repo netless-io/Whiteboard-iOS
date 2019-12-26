@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  进入缓冲状态，WhitePlayer，NativePlayer 任一进入缓冲，都会回调。
+ 目前存在重复回调的情况
  */
 - (void)combinePlayerStartBuffering;
 
@@ -67,6 +68,21 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadedTimeRangeChange:(NSArray<NSValue *> *)loadedTimeRanges;
 @end
 
+#pragma mark - WhiteSyncManagerPauseReason
+
+typedef NS_OPTIONS(NSUInteger, WhiteSyncManagerPauseReason) {
+    //正常播放
+    WhiteSyncManagerPauseReasonNone                           = 0,
+    //暂停，暂停原因：白板缓冲
+    WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering    = 1 << 0,
+    //暂停，暂停原因：音视频缓冲
+    WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering   = 1 << 1,
+    //暂停，暂停原因：主动暂停
+    SyncManagerWaitingPauseReasonPlayerPause                  = 1 << 2,
+    //初始状态，暂停，全缓冲
+    WhiteSyncManagerPauseReasonInit                           = WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering | WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering | SyncManagerWaitingPauseReasonPlayerPause,
+};
+
 
 #pragma mark - WhiteCombinePlayer
 
@@ -76,9 +92,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteCombinePlayer : NSObject
 
 @property (nonatomic, strong, readonly) AVPlayer *nativePlayer;
-@property (nonatomic, strong, readonly) WhitePlayer *whitePlayer;
 
-@property (nonatomic, weak) id<WhiteCombineDelegate> delegate;
+/** 设置 WhitePlayer，会同时更新 WhitePlayerPhase
+ 如果不设置，PauseReason 不会移除 WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering 的 flag
+ */
+@property (nonatomic, strong, nullable, readwrite) WhitePlayer *whitePlayer;
+
+@property (nonatomic, weak, nullable) id<WhiteCombineDelegate> delegate;
+
+/** 暂停原因，默认所有 buffer + 主动暂停 */
+@property (nonatomic, assign, readonly) NSUInteger pauseReason;
 
 
 - (instancetype)initWithNativePlayer:(AVPlayer *)nativePlayer whitePlayer:(WhitePlayer *)replayer;
@@ -95,10 +118,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)seekToTime:(CMTime)time completionHandler:(void (^)(BOOL finished))completionHandler;
 
 /**
- 当 whiteplayer 连接缓冲状态发生变化，会主动调用 whiteplayer 的 WhitePlayerEventDelegate 中 - (void)phaseChanged:(WhitePlayerPhase)phase 方法，
- 此时需要开发者主动调用该方法，将该状态同步给 WhiteCombinePlayer
+ 当 whiteplayer 播放状态发生变化时，会主动调用 whiteplayer 的 WhitePlayerEventDelegate 中 - (void)phaseChanged:(WhitePlayerPhase)phase 方法.
+ 开发者在该回调中，需要主动调用该方法，将状态同步给 WhiteCombinePlayer
  */
 - (void)updateWhitePlayerPhase:(WhitePlayerPhase)phase;
+
+//TODO:是否支持，只有 WhitePlayer 的情况
 
 @end
 

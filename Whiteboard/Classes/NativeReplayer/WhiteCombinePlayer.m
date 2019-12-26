@@ -8,18 +8,7 @@
 #import "WhiteCombinePlayer.h"
 #import <AVFoundation/AVFoundation.h>
 
-typedef NS_OPTIONS(NSUInteger, PauseReason) {
-    //正常播放
-    PauseReasonNone                    = 0,
-    //暂停，暂停原因：白板缓冲
-    PauseReasonWhitePlayerBuffering    = 1 << 0,
-    //暂停，暂停原因：音视频缓冲
-    PauseReasonNativePlayerBuffering   = 1 << 1,
-    //暂停，暂停原因：主动暂停
-    PauseReasonPlayerPause             = 1 << 2,
-    //初始状态，暂停，全缓冲
-    PauseReasonInit                    = PauseReasonWhitePlayerBuffering | PauseReasonNativePlayerBuffering | PauseReasonPlayerPause,
-};
+
 
 #ifdef DEBUG
 #define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
@@ -29,12 +18,11 @@ typedef NS_OPTIONS(NSUInteger, PauseReason) {
 
 @interface WhiteCombinePlayer ()
 @property (nonatomic, strong, readwrite) AVPlayer *nativePlayer;
-@property (nonatomic, strong, readwrite) WhitePlayer *whitePlayer;
 
 @property (nonatomic, assign, getter=isRouteChangedWhilePlaying) BOOL routeChangedWhilePlaying;
 @property (nonatomic, assign, getter=isInterruptedWhilePlaying) BOOL interruptedWhilePlaying;
 
-@property (nonatomic, assign) NSUInteger pauseReason;
+@property (nonatomic, assign, readwrite) NSUInteger pauseReason;
 
 @end
 
@@ -296,7 +284,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     DLog(@"startNativeBuffering");
     
     //加上 native 缓冲标识
-    self.pauseReason = self.pauseReason | PauseReasonNativePlayerBuffering;
+    self.pauseReason = self.pauseReason | WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering;
     
     //whitePlayer 加载 buffering 的行为，一旦开始，不会停止。所以直接暂停播放即可。
     [self pauseWhitePlayer];
@@ -304,8 +292,9 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 
 - (void)nativeEndBuffering
 {
+    BOOL isBuffering  = (self.pauseReason & WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering) || (self.pauseReason & WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering);
     //?0?
-    self.pauseReason = self.pauseReason & ~PauseReasonNativePlayerBuffering;
+    self.pauseReason = self.pauseReason & ~WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering;
 
     DLog(@"nativeEndBuffering %lu", (unsigned long)self.pauseReason);
     
@@ -313,9 +302,9 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
      1. WhitePlayer 还在缓冲(?01)，暂停
      2. WhitePlayer 不在缓冲(?00)，结束缓冲
      */
-    if (self.pauseReason & PauseReasonWhitePlayerBuffering) {
+    if (self.pauseReason & WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering) {
         [self.nativePlayer pause];
-    } else if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
+    } else if (isBuffering && [self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
         [self.delegate combinePlayerEndBuffering];
     }
 
@@ -324,10 +313,10 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
      2. 目前是主动暂停（000），暂停白板
      3. whitePlayer 还在缓存（101、110），已经在处理缓冲回调的位置，处理完毕
      */
-    if (self.pauseReason == PauseReasonNone) {
+    if (self.pauseReason == WhiteSyncManagerPauseReasonNone) {
         [self.nativePlayer play];
         [self playWhitePlayer];
-    } else if (self.pauseReason & PauseReasonPlayerPause) {
+    } else if (self.pauseReason & SyncManagerWaitingPauseReasonPlayerPause) {
         [self.nativePlayer pause];
         [self.whitePlayer pause];
     }
@@ -336,7 +325,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 #pragma mark - white player buffering
 - (void)whitePlayerStartBuffing
 {
-    self.pauseReason = self.pauseReason | PauseReasonWhitePlayerBuffering;
+    self.pauseReason = self.pauseReason | WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering;
 
     [self.nativePlayer pause];
     
@@ -347,18 +336,19 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 
 - (void)whitePlayerEndBuffering
 {
+    BOOL isBuffering  = (self.pauseReason & WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering) || (self.pauseReason & WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering);
     //??0
-    self.pauseReason = self.pauseReason & ~PauseReasonWhitePlayerBuffering;
+    self.pauseReason = self.pauseReason & ~WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering;
 
-    DLog(@"nativeEndBuffering %lu", (unsigned long)self.pauseReason);
+    DLog(@"playerEndBuffering %lu", (unsigned long)self.pauseReason);
 
     /**
      1. native 还在缓存(?10)，主动暂停 whitePlayer
      2. native 不在缓存(?00)，缓冲结束
      */
-    if (self.pauseReason & PauseReasonNativePlayerBuffering) {
-        [self.whitePlayer pause];
-    } else if ([self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
+    if (self.pauseReason & WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering) {
+        [self pauseWhitePlayer];
+    } else if (isBuffering && [self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
         [self.delegate combinePlayerEndBuffering];
     }
     
@@ -367,12 +357,12 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
      2. 目前是主动暂停（000），暂停白板
      3. native 还在缓存（110、010），已经在处理缓冲回调的位置，处理完毕
      */
-    if (self.pauseReason == PauseReasonNone) {
+    if (self.pauseReason == WhiteSyncManagerPauseReasonNone) {
         [self.nativePlayer play];
         [self playWhitePlayer];
-    } else if (self.pauseReason & PauseReasonPlayerPause) {
+    } else if (self.pauseReason & SyncManagerWaitingPauseReasonPlayerPause) {
         [self.nativePlayer pause];
-        [self.whitePlayer pause];
+        [self pauseWhitePlayer];
     }
 }
 
@@ -402,7 +392,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 
 - (void)play
 {
-    self.pauseReason = self.pauseReason & ~PauseReasonPlayerPause;
+    self.pauseReason = self.pauseReason & ~SyncManagerWaitingPauseReasonPlayerPause;
     [self.nativePlayer play];
     self.interruptedWhilePlaying = NO;
     self.routeChangedWhilePlaying = NO;
@@ -410,15 +400,15 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     // video 将直接播放，whitePlayer 也直接播放
     if ([self hasEnoughNativeBuffer]) {
         DLog(@"play directly");
-        [self.whitePlayer play];
+        [self playWhitePlayer];
     }
 }
 
 - (void)pause
 {
-    self.pauseReason = self.pauseReason | PauseReasonPlayerPause;
+    self.pauseReason = self.pauseReason | SyncManagerWaitingPauseReasonPlayerPause;
     [self.nativePlayer pause];
-    [self.whitePlayer pause];
+    [self pauseWhitePlayer];
 }
 
 - (void)updateWhitePlayerPhase:(WhitePlayerPhase)phase
@@ -440,6 +430,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     NSTimeInterval seekTime = CMTimeGetSeconds(time);
     [self.whitePlayer seekToScheduleTime:seekTime];
     DLog(@"seekTime: %f", seekTime);
+    
     __weak typeof(self)weakSelf = self;
     [self.nativePlayer seekToTime:time completionHandler:^(BOOL finished) {
         NSTimeInterval realTime = CMTimeGetSeconds(weakSelf.nativePlayer.currentItem.currentTime);
