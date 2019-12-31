@@ -49,5 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) NSDictionary *loggerOptions;
 
+/** 多路由操作，针对部分 dns 污染情况，临时提供的 native 端解决方案 */
+@property (nonatomic, assign) BOOL routeBackup;
+
 @end
 NS_ASSUME_NONNULL_END
