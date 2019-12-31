@@ -122,22 +122,26 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
     // 3. 配置 WhitePlayerConfig，room uuid 与 roomToken 为必须。其他更多参数，见 WhitePlayerConfig.h 头文件
     WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
     
-    // 4. 创建 WhitePlayer ，并设置 Player的 callbacks
+    //音视频，白板混合播放处理类
+    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]];
+    //显示 AVPlayer 画面
+    [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
+    //配置代理
+    self.combinePlayer.delegate = self;
+    
     [self.sdk createReplayerWithConfig:playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
-        if (error) {
-            # 错误处理
+        if (self.playBlock) {
+            self.playBlock(player, error);
+        } else if (error) {
+            NSLog(@"创建回放房间失败 error:%@", [error localizedDescription]);
         } else {
+            self.player = player;
+            [self.player addHighFrequencyEventListener:@"a" fireInterval:1000];
             
-            // CombinePlayer 处理逻辑
-            // 1. 传入系统AVPlayer支持的播放文件格式，并将初始化成功的 WhitePlayer 一起传入
-            self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"请确认该地址正确有效可访问，否则后续会回调 - (void)combineVideoPlayerError:(NSError *)error 方法，无法正常播放"] whitePlayer:player];
-            // 2. 设置 CombinePlayer 代理，以接受回调
-            self.combinePlayer.delegate = self;
-            // 3. 设置用来显示视频的 View
-            // 在 - (void)phaseChanged:(WhitePlayerPhase)phase 回调中，主动更新 WhiteCombinePlayer 的whitePlayer状态
-            [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
-            // 5. 播放，等待 CombinePlayer
-            [self.combinePlayer play];
+            //配置 WhitePlayer
+            self.combinePlayer.whitePlayer = player;
+            //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
+            [player seekToScheduleTime:0];
         }
     }];
 }
