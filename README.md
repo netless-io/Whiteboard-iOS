@@ -35,14 +35,18 @@ pod install
 >同时在 `WhiteUtils.m` 根据提示修改当前部分内容。
 
 ```Objective-C
-+ (NSString *)sdkToken
-{
-    /* FIXME: 此处 tonken 只做 demo 试用。
-     token 请从 https://console.herewhite.com 注册获取。
-     该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中。此处只做演示使用。
-     */
-    return [[NSUserDefaults standardUserDefaults] stringForKey:@"white-sdk-token"];
-}
+/* FIXME: sdkToken
+ 请在 https://console.herewhite.com 注册并获取 sdk token
+ 该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
+ */
+#ifndef kWhiteSDKToken
+#define kWhiteSDKToken <#@sdk Token#>
+#endif
+
+//如需要进入特定房间。取消以下注释，填入 UUID 与 roomToken，启动项目后，点击创建房间，即可进入特定房间
+//#define WhiteRoomUUID @""
+//#define WhiteRoomToken @""
+
 ```
 
 ## Requirements
@@ -173,3 +177,8 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 @end
 
 ```
+
+## 一些问题
+
+由于项目名字过短，无法通过 `pod search Whiteboard` 命令，搜索到本项目。
+目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
