@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeResize,
     CommandTypeBroadcast,
     CommandTypeFollower,
-    CommandTypeMoveCamera,
+    CommandTypeScalePptToFit,
     CommandTypeMoveRectange,
     CommandTypeCurrentViewMode,
     CommandTypeCustomEvent,
@@ -67,7 +67,7 @@ static NSString *kReuseCell = @"reuseCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"移动视角中心", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
+    self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"ppt 铺满屏幕", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
                       NSLocalizedString(@"插入动态 PPT", nil), NSLocalizedString(@"插入图片", nil), NSLocalizedString(@"获取预览截图", nil), NSLocalizedString(@"获取场景完整封面", nil), NSLocalizedString(@"获取PPT", nil), NSLocalizedString(@"获取页面数据", nil),  NSLocalizedString(@"下一页", nil), NSLocalizedString(@"获取连接状态", nil), NSLocalizedString(@"主动断连", nil), NSLocalizedString(@"视野锁定", nil), NSLocalizedString(@"只读", nil), NSLocalizedString(@"取消只读", nil), NSLocalizedString(@"文本", nil), NSLocalizedString(@"选择", nil), NSLocalizedString(@"画笔", nil),
                       NSLocalizedString(@"橡皮擦", nil),
                       NSLocalizedString(@"矩形", nil), NSLocalizedString(@"颜色", nil), NSLocalizedString(@"坐标转换", nil), NSLocalizedString(@"缩放", nil)];
@@ -110,13 +110,9 @@ static NSString *kReuseCell = @"reuseCell";
         case CommandTypeFollower:
             [self.room setViewMode:WhiteViewModeFollower];
             break;
-        case CommandTypeMoveCamera:
+        case CommandTypeScalePptToFit:
         {
-            WhiteCameraConfig *config = [[WhiteCameraConfig alloc] init];
-            config.animationMode = WhiteAnimationModeImmediately;
-            config.centerX = @10;
-            config.centerY = @10;
-            [self.room moveCamera:config];
+            [self.room scalePptToFit:WhiteAnimationModeContinuous];
             break;
         }
         case CommandTypeMoveRectange:
