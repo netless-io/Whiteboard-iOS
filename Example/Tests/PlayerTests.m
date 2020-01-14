@@ -34,8 +34,9 @@ static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
 - (void)setUp
 {
     [super setUp];
-    self.vc = [[WhitePlayerViewController alloc] init];
-    self.vc.roomUuid = @"8457ec86fbd24668b2e7a36795473150";
+    
+    self.vc = [[WhitePlayerViewController alloc] initWithSdkConfig:[self testingConfig]];
+
     self.vc.eventDelegate = self;
     self.vc.commonDelegate = self;
 
@@ -76,6 +77,19 @@ static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
 {
     [self.player seekToScheduleTime:0];
     [self.player play];
+}
+
+- (WhiteSdkConfiguration *)testingConfig;
+{
+    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
+    
+    //为了测试图片 拦截 API，开启
+    config.enableInterrupterAPI = YES;
+    config.debug = YES;
+    
+    //打开用户头像显示信息
+    config.userCursor = YES;
+    return config;
 }
 
 #pragma mark - Player Control

@@ -81,7 +81,6 @@
 - (void)replayRoom:(UIButton *)sender
 {
     WhitePlayerViewController *vc = [[WhitePlayerViewController alloc] init];
-    vc.roomUuid = [self.inputV.text length] > 0 ? self.inputV.text : @"fb4b7e680fcf46cf8aa02988908f2531";
     [self.navigationController pushViewController:vc animated:YES];
 }
 

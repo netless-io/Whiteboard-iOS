@@ -29,6 +29,18 @@
     [self initSDK];
 }
 
+#pragma mark - Property
+
+- (NSString *)roomUuid
+{
+    if (!_roomUuid) {
+#ifdef WhiteRoomUUID
+        _roomUuid = WhiteRoomUUID;
+#endif
+    }
+    return _roomUuid;
+}
+
 #pragma mark - WhiteBoardView
 - (void)setupViews {
     // 1. 初始化 WhiteBoardView，

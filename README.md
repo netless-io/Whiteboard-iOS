@@ -1,25 +1,26 @@
 # Whiteboard
 
-本项目为 White-SDK-iOS 的开源版本，源码结构层次有改动，实现基本一致。
+本项目为 White-SDK-iOS 的开源版本，为了更好的显示源码结构，`Whiteboard` 将项目分为了多个`subpod`，更有利于开发者查看项目源码层级。为此需要修改引用关系。
 
-## 迁移
+## 文档
 
-为了更好的显示源码结构，Whiteboard将项目分为了多个`subpod`，更有利于开发者查看项目源码层级。为此需要修改引用关系。
+[API 文档](https://developer.netless.link)
 
-旧项目迁移，只需要将
+## 快速迁移
+
+只需要将
 
 ```Objective-C
 #import <White-SDK-iOS/WhiteSDK.h>
 ```
 
-更换为
+修改为
 
 ```Objective-C
-import <Whiteboard/Whiteboard.h>
+#import <Whiteboard/Whiteboard.h>
 ```
 
 即可。
-
 
 ## Example
 
@@ -32,15 +33,15 @@ pod install
 
 进入Example文件夹，打开 `Example.xcworkspace` 项目文件。
 
->同时在 `WhiteUtils.m` 根据提示修改当前部分内容。
+>同时在 `WhiteUtils.m` 根据代码注释填写内容。
 
 ```Objective-C
 /* FIXME: sdkToken
  请在 https://console.herewhite.com 注册并获取 sdk token
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
-#ifndef kWhiteSDKToken
-#define kWhiteSDKToken <#@sdk Token#>
+#ifndef WhiteSDKToken
+#define WhiteSDKToken <#@sdk Token#>
 #endif
 
 //如需要进入特定房间。取消以下注释，填入 UUID 与 roomToken，启动项目后，点击创建房间，即可进入特定房间
@@ -49,12 +50,31 @@ pod install
 
 ```
 
-## Requirements
+### 快速调试
 
-iOS 9 +(推荐iOS 10以上使用，以获得更佳体验)
-Xcode 10+
+如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，填写以下代码：
 
-## Installation
+```C
+#define WhiteRoomUUID @"xxxx"
+#define WhiteRoomToken @"wwwwwwwww"
+```
+
+此时，实时/回放房间，如果在加入时，没有填写房间 UUID，都会进入该房间。
+
+### 单元测试
+
+单元测试需要对某些特殊行为进行测试，所以需要对应房间有以下操作：
+
+1. 调用过插入图片接口（从单元测试启动的房间，已经开启了图片拦截功能）
+1. 发送过特定的自定义事件（已定义在单元测试代码中）
+1. 发送过大量自定义事件
+
+## 要求设备
+
+运行设备：iOS 9 +(推荐iOS 10以上使用，以获得更佳体验)
+开发环境：Xcode 10+
+
+## 集成
 
 在项目的`Podfile`文件中，添加以下内容：
 
@@ -101,13 +121,9 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 6. Converter：动静态转换请求封装类。
     * 动静态转换计费以QPS（日并发）计算，客户端无法控制并发，不推荐在生产环境下使用。详情请参考文档。
 
-## 文档
+### Native 端播放音视频
 
-[文档](https://developer.netless.link)
-
-### native 端播放音视频
-
->m3u8 格式的音视频，可能需要经过一次 combinePlayerEndBuffering 调用，才能不经过 Play 直接seek播放。（否则可能仍然从初始位置开始播放）
+>m3u8 格式的音视频，可能需要经过一次 combinePlayerEndBuffering 调用后，才能进行`seek`播放。（否则可能仍然从初始位置开始播放）
 
 ```Objective-C
 #import <Whiteboard/Whiteboard.h>
@@ -180,5 +196,5 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 
 ## 一些问题
 
-由于项目名字过短，无法通过 `pod search Whiteboard` 命令，搜索到本项目。
-目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
+1. 由于项目名字过短，可能无法通过 `pod search Whiteboard` 命令，搜索到本项目。
+2. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。

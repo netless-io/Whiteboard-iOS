@@ -16,8 +16,8 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
  实际使用时，请在 https://console.herewhite.com 注册并获取 sdk token
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
-#ifndef kWhiteSDKToken
-#define kWhiteSDKToken <#@sdk Token#>
+#ifndef WhiteSDKToken
+#define WhiteSDKToken <#@sdk Token#>
 #endif
 
 //如需要进入特定房间。取消以下注释，填入 UUID 与 roomToken，启动项目后，点击创建房间，即可进入特定房间
@@ -27,9 +27,54 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
 
 + (NSString *)sdkToken
 {
-
-    return kWhiteSDKToken;
+    return WhiteSDKToken;
 }
+
++ (void)createRoomWithCompletionHandler:(void (^) (NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler
+{
+    if (!completionHandler) {
+        return;
+    }
+    
+    //方便在不改动内部代码的情况下，直接进入调试房间
+#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+    completionHandler(WhiteRoomUUID, WhiteRoomToken, nil);
+    return;
+#endif
+    
+    
+    [self createRoomWithResult:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            NSString *roomToken = response[@"msg"][@"roomToken"];
+            NSString *uuid = response[@"msg"][@"room"][@"uuid"];
+            !completionHandler ? : completionHandler(uuid, roomToken, nil);
+        } else {
+            !completionHandler ? : completionHandler(nil, nil, error);
+        }
+    }];
+}
+
++ (void)getRoomTokenWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler
+{
+
+#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+    if ([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) {
+        completionHandler(WhiteRoomToken, nil);
+        return;
+    }
+#endif
+
+    [self getRoomTokenWithUuid:uuid Result:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            NSString *roomToken = response[@"msg"][@"roomToken"];
+            !completionHandler ? : completionHandler(roomToken, nil);
+        } else {
+            !completionHandler ? : completionHandler(nil, error);
+        }
+    }];
+}
+
+#pragma mark - Private
 
 //FIXME:我们推荐将这两个请求，放在您的服务器端进行。防止您从 https://console.herewhite.com 获取的 token 发生泄露。
 + (void)createRoomWithResult:(void (^) (BOOL success, id  _Nullable response, NSError * _Nullable error))result;
@@ -73,30 +118,6 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
     [task resume];
 }
 
-+ (void)createRoomWithCompletionHandler:(void (^) (NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler
-{
-    if (!completionHandler) {
-        return;
-    }
-    
-    //方便在不改动内部代码的情况下，直接进入调试房间
-#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
-    completionHandler(WhiteRoomUUID, WhiteRoomToken, nil);
-    return;
-#endif
-    
-    
-    [self createRoomWithResult:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
-        if (success) {
-            NSString *roomToken = response[@"msg"][@"roomToken"];
-            NSString *uuid = response[@"msg"][@"room"][@"uuid"];
-            !completionHandler ? : completionHandler(uuid, roomToken, nil);
-        } else {
-            !completionHandler ? : completionHandler(nil, nil, error);
-        }
-    }];
-}
-
 /**
  向服务器获取对应 room uuid 所需要的房间 roomToken
  
@@ -135,18 +156,6 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
         });
     }];
     [task resume];
-}
-
-+ (void)getRoomTokenWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler
-{
-    [self getRoomTokenWithUuid:uuid Result:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
-        if (success) {
-            NSString *roomToken = response[@"msg"][@"roomToken"];
-            !completionHandler ? : completionHandler(roomToken, nil);
-        } else {
-            !completionHandler ? : completionHandler(nil, error);
-        }
-    }];
 }
 
 @end

@@ -10,6 +10,25 @@
 #warning "This project uses features only available in iOS SDK 5.0 and later."
 #endif
 
+//支持插件系统用户，取消下一行注释
+#define Plugin 1
+
+#ifdef Plugin
+// 插件版本
+
+//#define WhiteSDKToken @""
+//#define WhiteRoomUUID @""
+//#define WhiteRoomToken @""
+
+#else
+
+// 非插件版本
+
+//#define WhiteSDKToken @""
+//#define WhiteRoomUUID @""
+//#define WhiteRoomToken @""
+
+#endif
 #ifdef __OBJC__
     @import UIKit;
     @import Foundation;

@@ -28,9 +28,9 @@
     self.view.backgroundColor = [UIColor orangeColor];
 
     if ([self.roomUuid length] > 0) {
-        [self joinRoom];
+        [self joinExistRoom];
     } else {
-        [self createRoom];
+        [self joinNewRoom];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidDismiss:) name:UIKeyboardDidHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:@"refresh" object:nil];
@@ -93,7 +93,7 @@
     1. 调用创建房间API，服务器会同时返回了该房间的 roomToken；
     2. 通过 roomToken 进行加入房间操作。
  */
-- (void)createRoom
+- (void)joinNewRoom
 {
     self.title = NSLocalizedString(@"创建房间中...", nil);
     [WhiteUtils createRoomWithCompletionHandler:^(NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error) {
@@ -121,13 +121,8 @@
  1. 与服务器通信，获取该房间的 room token
  2. 通过 roomToken 进行加入房间操作。
  */
-- (void)joinRoom
+- (void)joinExistRoom
 {
-//    NSString *copyPast = [UIPasteboard generalPasteboard].string;
-//    if ([copyPast length] == 32 && !self.roomUuid) {
-//        NSLog(@"%@", [NSString stringWithFormat:NSLocalizedString(@"粘贴板 UUID：%@", nil), copyPast]);
-//        self.roomUuid = copyPast;
-//    }
     self.title = NSLocalizedString(@"加入房间中...", nil);
     [WhiteUtils getRoomTokenWithUuid:self.roomUuid completionHandler:^(NSString * _Nullable roomToken, NSError * _Nullable error) {
         if (roomToken) {
@@ -150,7 +145,10 @@
     
     NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg"};
     WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken userPayload:payload];
-//    roomConfig.disableEraseImage = YES;
+
+    // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
+    // roomConfig.disableEraseImage = YES;
+    
     [self.sdk joinRoomWithConfig:roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
         if (success) {
             self.title = NSLocalizedString(@"我的白板", nil);
@@ -179,16 +177,6 @@
 
 #pragma mark - Keyboard
 
-- (void)setRectangle {
-    [self.room getSceneStateWithResult:^(WhiteSceneState * _Nonnull state) {
-        if (state.scenes) {
-            WhitePptPage *ppt = state.scenes[state.index].ppt;
-            WhiteRectangleConfig *rectangle = [[WhiteRectangleConfig alloc] initWithInitialPosition:ppt.width height:ppt.height];
-            [self.room moveCameraToContainer:rectangle];
-        }
-    }];
-}
-
 /**
  处理文字教具键盘隐藏时，内容偏移。
  可以
@@ -203,7 +191,8 @@
 - (void)firePhaseChanged:(WhiteRoomPhase)phase
 {
     NSLog(@"%s, %ld", __FUNCTION__, (long)phase);
-    if (phase == WhiteRoomPhaseDisconnected && self.sdk && !self.isReconnecting) {
+    
+    if (phase == WhiteRoomPhaseDisconnected && self.sdk && !self.isReconnecting && self.roomUuid && self.roomToken) {
         self.reconnecting = YES;
         [self.sdk joinRoomWithUuid:self.roomUuid roomToken:self.roomToken completionHandler:^(BOOL success, WhiteRoom *room, NSError *error) {
             self.reconnecting = NO;

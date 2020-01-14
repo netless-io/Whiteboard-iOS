@@ -38,7 +38,7 @@ typedef void(^InterrupterBlock)(NSString *url);
         [exp fulfill];
     };
     
-    //部分API，需要 Webview 在视图栈中
+    //Webview 在视图栈中才能正确执行 js
     __unused UIView *view = [self.vc view];
     UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     if ([nav isKindOfClass:[UINavigationController class]]) {
@@ -66,10 +66,9 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 - (WhiteSdkConfiguration *)testingConfig;
 {
-    // 4. 初始化 SDK 配置项，根据需求配置属性
     WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
     
-    //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
+    //为了测试图片 拦截 API，开启
     config.enableInterrupterAPI = YES;
     config.debug = YES;
     
