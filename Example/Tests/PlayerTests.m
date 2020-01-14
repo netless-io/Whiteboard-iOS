@@ -10,6 +10,8 @@
 #import <Whiteboard/Whiteboard.h>
 #import "WhitePlayerViewController.h"
 
+typedef void(^InterrupterBlock)(NSString *url);
+
 @interface PlayerTests : XCTestCase<WhitePlayerEventDelegate, WhiteCommonCallbackDelegate>
 
 @property (nonatomic, strong) WhitePlayerViewController *vc;
@@ -21,6 +23,7 @@
 @property (nonatomic, copy) dispatch_block_t pauseBlock;
 @property (nonatomic, copy) void (^eventBlock)(WhiteEvent *event);
 @property (nonatomic, copy) void (^eventsBlock)(NSArray<WhiteEvent *> *events);
+@property (nonatomic, copy) InterrupterBlock interrupterBlock;
 
 @end
 
@@ -218,6 +221,21 @@ static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
     }];
 }
 
+- (void)testInsertImage
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    self.interrupterBlock = ^(NSString *url) {
+        [exp fulfill];
+    };
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 #pragma mark - Get
 - (void)testGetPhase
 {
@@ -338,7 +356,10 @@ static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
 #pragma mark - WhiteCommonCallbackDelegate
 - (NSString *)urlInterrupter:(NSString *)url
 {
-    return @"https://white-pan-cn.oss-cn-hangzhou.aliyuncs.com/124/image/image.png";
+    if (self.interrupterBlock) {
+        self.interrupterBlock(url);
+    }
+    return url;
 }
 
 @end
