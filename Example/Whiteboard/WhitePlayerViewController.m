@@ -50,6 +50,16 @@
     }];
 }
 
+- (void)alert:(NSString *)title message:(NSString *)message
+{
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    [alertVC addAction:action];
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
 - (void)getRoomToken;
 {
     
@@ -58,12 +68,7 @@
             self.roomToken = roomToken;
             [self initPlayer];
         } else {
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"获取 RoomToken 失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
-            }];
-            [alertVC addAction:action];
-            [self presentViewController:alertVC animated:YES completion:nil];
+            [self alert:NSLocalizedString(@"获取 RoomToken 失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]]];
         }
     }];
 }
@@ -88,11 +93,10 @@
         if (self.playBlock) {
             self.playBlock(player, error);
         } else if (error) {
-            NSLog(@"创建回放房间失败 error:%@", [error localizedDescription]);
+            [self alert:NSLocalizedString(@"回放失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]]];
         } else {
             self.player = player;
             [self.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            
             //配置 WhitePlayer
             self.combinePlayer.whitePlayer = player;
             //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
