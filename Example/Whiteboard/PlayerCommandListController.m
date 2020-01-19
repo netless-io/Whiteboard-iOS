@@ -18,14 +18,14 @@
 typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypePlay,
     CommandTypePause,
-    CommondTypeStop,
+    CommondTypeSpeed,
     CommandTypeSeek,
     CommandTypeInfo,
 };
 
 @implementation PlayerCommandListController
 
-- (instancetype)initWithPlayer:(WhitePlayer *)player
+- (instancetype)initWithPlayer:(WhiteCombinePlayer *)player
 {
     if (self = [self init]) {
         _combinePlayer = player;
@@ -36,7 +36,7 @@ static NSString *kReuseCell = @"reuseCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.commands = @[NSLocalizedString(@"播放", nil), NSLocalizedString(@"暂停", nil), NSLocalizedString(@"停止", nil),  NSLocalizedString(@"快进", nil), NSLocalizedString(@"获取信息", nil)];
+    self.commands = @[NSLocalizedString(@"播放", nil), NSLocalizedString(@"暂停", nil), NSLocalizedString(@"加速", nil),  NSLocalizedString(@"快进", nil), NSLocalizedString(@"获取信息", nil)];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kReuseCell];
 }
 
@@ -71,10 +71,11 @@ static NSString *kReuseCell = @"reuseCell";
         case CommandTypePlay:
             [self.combinePlayer play];
             break;
-        //CombinePlayer 没有释放API
-        case CommondTypeStop:
         case CommandTypePause:
             [self.combinePlayer pause];
+            break;
+        case CommondTypeSpeed:
+            self.combinePlayer.playbackSpeed = 2;
             break;
         case CommandTypeSeek:
         {
@@ -107,6 +108,9 @@ static NSString *kReuseCell = @"reuseCell";
 {
     [self.combinePlayer.whitePlayer getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
         NSLog(@"%@", info);
+    }];
+    [self.combinePlayer.whitePlayer getPlaybackSpeed:^(CGFloat speed) {
+        NSLog(@"%f", speed);
     }];
 }
 

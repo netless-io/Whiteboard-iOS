@@ -27,9 +27,9 @@
     [super viewDidLoad];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"设置", nil) style:UIBarButtonItemStylePlain target:self action:@selector(settingAPI:)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"初始化", nil) style:UIBarButtonItemStylePlain target:self action:@selector(initPlayer)];
+    [self addVideoView];
     [self getRoomToken];
     self.navigationItem.rightBarButtonItems = @[item1, item2];
-    [self addVideoView];
 }
 
 - (void)addVideoView
@@ -40,8 +40,9 @@
     [self.view addSubview:self.videoView];
 
     [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.equalTo(self.view);
-        make.height.equalTo(self.view.mas_width).multipliedBy(0.8);
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.mas_topLayoutGuideBottom);
+        make.height.equalTo(self.view.mas_width).multipliedBy(0.6);
     }];
     
     [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -75,10 +76,6 @@
 
 - (void)initPlayer
 {
-    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
-    config.debug = YES;
-    
-    self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:config commonCallbackDelegate:self.commonDelegate];
     WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
     
     //音视频，白板混合播放处理类
