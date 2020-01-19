@@ -34,6 +34,12 @@ Pod::Spec.new do |s|
     converter.public_header_files = 'Whiteboard/Classes/Converter/**.h'
     converter.dependency 'Whiteboard/Object'
   end
+  
+  # 工具类，完全独立
+  s.subspec 'Utils' do |utils|
+    utils.source_files = 'Whiteboard/Classes/Utils/**'
+    utils.frameworks = 'AVFoundation'
+  end
 
   # 基础类，包括sdk，Displayer（Room与Player父类）
   s.subspec 'Base' do |base|
