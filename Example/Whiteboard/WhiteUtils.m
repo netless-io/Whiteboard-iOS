@@ -20,10 +20,6 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
 #define WhiteSDKToken <#@sdk Token#>
 #endif
 
-//如需要进入特定房间。取消以下注释，填入 UUID 与 roomToken，启动项目后，点击创建房间，即可进入特定房间
-//#define WhiteRoomUUID @""
-//#define WhiteRoomToken @""
-
 
 + (NSString *)sdkToken
 {

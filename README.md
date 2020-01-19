@@ -2,6 +2,15 @@
 
 本项目为 White-SDK-iOS 的开源版本，为了更好的显示源码结构，`Whiteboard` 将项目分为了多个`subpod`，更有利于开发者查看项目源码层级。为此需要修改引用关系。
 
+## TOC
+
+- [文档](#文档)
+- [Example](#Example)
+    - [快速调试](#快速调试)
+- [项目结构](#项目结构)
+- [Native音视频](#Native音视频)
+- [部分问题](#部分问题)
+
 ## 文档
 
 [API 文档](https://developer.netless.link)
@@ -44,10 +53,6 @@ pod install
 #define WhiteSDKToken <#@sdk Token#>
 #endif
 
-//如需要进入特定房间。取消以下注释，填入 UUID 与 roomToken，启动项目后，点击创建房间，即可进入特定房间
-//#define WhiteRoomUUID @""
-//#define WhiteRoomToken @""
-
 ```
 
 ### 快速调试
@@ -55,6 +60,8 @@ pod install
 如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，填写以下代码：
 
 ```C
+//有 UUID 和 RoomToken 时，只要不在输入栏填写 UUID，WhiteSDKToken 就不会被使用，直接写空即可。
+#define WhiteSDKToken @""
 #define WhiteRoomUUID @"xxxx"
 #define WhiteRoomToken @"wwwwwwwww"
 ```
@@ -121,7 +128,9 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 6. Converter：动静态转换请求封装类。
     * 动静态转换计费以QPS（日并发）计算，客户端无法控制并发，不推荐在生产环境下使用。详情请参考文档。
 
-### Native 端播放音视频
+## Native音视频
+
+sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会负责音视频与白板回放的状态同步。
 
 >m3u8 格式的音视频，可能需要经过一次 combinePlayerEndBuffering 调用后，才能进行`seek`播放。（否则可能仍然从初始位置开始播放）
 
@@ -194,7 +203,7 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 
 ```
 
-## 一些问题
+## 部分问题
 
 1. 由于项目名字过短，可能无法通过 `pod search Whiteboard` 命令，搜索到本项目。
 2. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
