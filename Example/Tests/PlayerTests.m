@@ -229,6 +229,30 @@ static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
         [exp fulfill];
     };
     
+    [self setupPlayer];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testPlaybackSpeed
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+
+    self.player.playbackSpeed = 1.25;
+    __weak typeof(self)weakSelf = self;
+    [self.player getPlaybackSpeed:^(CGFloat speed) {
+        if (speed == weakSelf.player.playbackSpeed) {
+            [exp fulfill];
+        } else {
+            id self = weakSelf;
+            XCTFail(@"倍率调整失败");
+        }
+    }];
+    
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
