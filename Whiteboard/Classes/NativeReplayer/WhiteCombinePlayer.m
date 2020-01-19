@@ -59,6 +59,7 @@
 {
     if (self = [super init]) {
         _nativePlayer = nativePlayer;
+        _playbackSpeed = 1;
         _pauseReason = WhiteSyncManagerPauseReasonInit;
     }
     [self registerNotificationAndKVO];
@@ -324,7 +325,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
      3. whitePlayer 还在缓存（101、110），已经在处理缓冲回调的位置，处理完毕
      */
     if (self.pauseReason == WhiteSyncManagerPauseReasonNone) {
-        [self.nativePlayer play];
+        [self playNativePlayer];
         [self playWhitePlayer];
     } else if (self.pauseReason & SyncManagerWaitingPauseReasonPlayerPause) {
         [self.nativePlayer pause];
@@ -368,7 +369,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
      3. native 还在缓存（110、010），已经在处理缓冲回调的位置，处理完毕
      */
     if (self.pauseReason == WhiteSyncManagerPauseReasonNone) {
-        [self.nativePlayer play];
+        [self playNativePlayer];
         [self playWhitePlayer];
     } else if (self.pauseReason & SyncManagerWaitingPauseReasonPlayerPause) {
         [self.nativePlayer pause];
@@ -377,6 +378,20 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 }
 
 #pragma mark - Play Control
+
+- (void)setPlaybackSpeed:(CGFloat)playbackSpeed
+{
+    _playbackSpeed = playbackSpeed;
+    if ([self videoDesireToPlay]) {
+        [self playNativePlayer];
+    }
+    self.whitePlayer.playbackSpeed = playbackSpeed;
+}
+
+- (void)playNativePlayer
+{
+    self.nativePlayer.rate = self.playbackSpeed;
+}
 
 - (void)playWhitePlayer
 {
@@ -403,7 +418,7 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 - (void)play
 {
     self.pauseReason = self.pauseReason & ~SyncManagerWaitingPauseReasonPlayerPause;
-    [self.nativePlayer play];
+    [self playNativePlayer];
     self.interruptedWhilePlaying = NO;
     self.routeChangedWhilePlaying = NO;
     

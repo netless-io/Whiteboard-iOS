@@ -100,6 +100,9 @@ typedef NS_OPTIONS(NSUInteger, WhiteSyncManagerPauseReason) {
 
 @property (nonatomic, weak, nullable) id<WhiteCombineDelegate> delegate;
 
+/** 播放时，播放速率。即使暂停，该值也不会变为 0 */
+@property (nonatomic, assign) CGFloat playbackSpeed;
+
 /** 暂停原因，默认所有 buffer + 主动暂停 */
 @property (nonatomic, assign, readonly) NSUInteger pauseReason;
 
@@ -114,7 +117,6 @@ typedef NS_OPTIONS(NSUInteger, WhiteSyncManagerPauseReason) {
 
 - (void)play;
 - (void)pause;
-
 - (void)seekToTime:(CMTime)time completionHandler:(void (^)(BOOL finished))completionHandler;
 
 /**

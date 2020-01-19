@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 当 phase 处于 WhitePlayerPhaseWaitingFirstFrame 时，房间处于为开始状态，state 为 nil */
 @property (nonatomic, strong, readonly, nullable) WhitePlayerState *state;
 @property (nonatomic, strong, readonly) WhitePlayerTimeInfo *timeInfo;
+/** 播放时，播放速率，默认为 1。处于暂停状态时，speed 不会变为 0。 */
+@property (nonatomic, assign) CGFloat playbackSpeed;
 
 #pragma mark - action API
 
@@ -59,6 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getPlayerStateWithResult:(void (^)(WhitePlayerState * _Nullable state))result;
 
 - (void)getPlayerTimeInfoWithResult:(void (^)(WhitePlayerTimeInfo *info))result;
+
+/** 播放时的播放速率，正常使用，直接使用同步 API 即可。该 API 主要用作 debug 与测试 */
+- (void)getPlaybackSpeed:(void (^) (CGFloat speed))result;
 
 @end
 

@@ -32,6 +32,7 @@
         _uuid = uuid;
         _state = [[WhitePlayerState alloc] init];
         _timeInfo = [[WhitePlayerTimeInfo alloc] init];
+        _playbackSpeed = 1.0;
     }
     return self;
 }
@@ -63,6 +64,12 @@
 {
     NSString *key = @"scheduleTime";
     [_timeInfo yy_modelSetWithJSON:@{key : @(time)}];
+}
+
+- (void)setPlaybackSpeed:(CGFloat)playbackSpeed
+{
+    _playbackSpeed = playbackSpeed;
+    [self.bridge callHandler:[NSString stringWithFormat:PlayerNamespace, @"setPlaybackSpeed"] arguments:@[@(playbackSpeed)] completionHandler:nil];
 }
 
 #pragma mark - action API
@@ -163,6 +170,16 @@ static NSString * const PlayerStateNamespace = @"player.state.%@";
         }
         if (result) {
             result(timeInfo);
+        }
+    }];
+}
+
+/** 播放时的播放速率，正常使用，直接使用同步 API 即可。该 API 主要用作 debug 与测试 */
+- (void)getPlaybackSpeed:(void (^) (CGFloat speed))result {
+    [self.bridge callHandler:[NSString stringWithFormat:PlayerStateNamespace, @"playbackSpeed"] completionHandler:^(id  _Nullable value) {
+        if (result) {
+            CGFloat speed = [value doubleValue];
+            result(speed);
         }
     }];
 }
