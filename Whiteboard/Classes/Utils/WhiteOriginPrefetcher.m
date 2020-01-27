@@ -6,6 +6,8 @@
 //
 
 #import "WhiteOriginPrefetcher.h"
+#import "WhiteSDK.h"
+
 NSString * const kHost = @"https://cloudcapiv4.herewhite.com";
 
 @interface WhiteOriginPrefetcher ()
@@ -45,6 +47,7 @@ NSString * const kHost = @"https://cloudcapiv4.herewhite.com";
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
         config.timeoutIntervalForRequest = 30;
+        config.HTTPAdditionalHeaders = @{@"platform": @"ios", @"version": [WhiteSDK version]};
         _session = [NSURLSession sessionWithConfiguration:config];
     }
     return _session;
