@@ -71,6 +71,12 @@ static CGFloat kTimeout = 30;
     __weak typeof(self)weakSelf = self;
     self.prefetchBlock = ^(NSDictionary * _Nonnull result) {
         NSLog(@"result: %@", [result description]);
+        
+        if ([weakSelf diffDict:result source:prefetcher.configDict]) {
+            id self = weakSelf;
+            XCTFail(@"config fail");
+        }
+        
         [weakSelf.exp fulfill];
     };
     
@@ -117,8 +123,15 @@ static CGFloat kTimeout = 30;
         [weakPrefetcher prefetchOrigins];
     };
     
+    
+    __weak typeof(self)weakSelf = self;
     weakPrefetcher.prefetchFinishBlock = ^(NSDictionary * _Nonnull result) {
         NSLog(@"result: %@", [result description]);
+        
+        if ([weakSelf diffDict:result source:prefetcher.configDict]) {
+            XCTFail(@"config fail");
+        }
+        
         [exp fulfill];
     };
     
@@ -135,29 +148,39 @@ static CGFloat kTimeout = 30;
     }];
 }
 
-- (void)testSort {
-    NSMutableArray *array = [@[@"2", @"1", @"0", @"6", @"5", @"4", @"3"] mutableCopy];
-    
-    NSDictionary *dict = @{@"4": @1, @"3": @0.6, @"2": @0.58, @"1": @0.2, @"0": @0.05};
+#pragma mark - Hook test
 
-    NSSet *keySet = [NSSet setWithArray:dict.allKeys];
+- (void)testSortDomainsAPI {
+    WhiteOriginPrefetcher *prefetcher = [WhiteOriginPrefetcher shareInstance];
     
-    NSMutableSet *insertSet = [NSMutableSet setWithArray:array];
-    [insertSet intersectSet:keySet];
-        
-    NSArray *sortedArray = [insertSet.allObjects sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        NSNumber *speed1 = dict[obj1];
-        NSNumber *speed2 = dict[obj2];
-        return [speed1 compare:speed2];
-    }];
+    NSDictionary *config = @{
+        @"origin": @{
+            @"one": @[
+                @"https://one.group",
+                @"https://one1.pro"
+            ],
+            @"two": @[
+                @"https://two.group",
+                @"https://two1.group"
+            ],
+            @"three": @[
+                @"https://three.group",
+                @"https://three1.group"
+            ],
+            @"ws": @[
+                @"wss://three.group",
+                @"wss://three1.group"
+            ],
+        }
+    };
+    NSDictionary *speed = @{@"https://one.group": @2, @"https://one1.group": @1, @"https://two1.group": @3, @"https://three1.group": @0.33, @"https://three.group": @0.5666};
+    [prefetcher setValue:speed forKey:@"respondingSpeedDict"];
+    NSDictionary *dict = [prefetcher sortedDomainConfigFrom:config];
     
-    NSMutableSet *minusSet = [NSMutableSet setWithArray:array];
-    [minusSet minusSet:keySet];
-    NSArray *result = [sortedArray arrayByAddingObjectsFromArray:minusSet.allObjects];
+    if ([self diffDict:config source:dict]) {
+        XCTFail(@"config fail");
+    }
     
-    [result enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        XCTAssertEqual([obj integerValue], idx);
-    }];
 }
 
 #pragma mark - WhiteOriginPrefetcherDelegate
@@ -179,6 +202,51 @@ static CGFloat kTimeout = 30;
     if (self.prefetchBlock) {
         self.prefetchBlock(result);
     }
+}
+
+#pragma mark - Private
+- (BOOL)diffDict:(NSDictionary *)target source:(NSDictionary *)source
+{
+    __block BOOL diff = NO;
+    [target enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[NSString class]]) {
+            id comparison = source[key];
+            if (![comparison isKindOfClass:[NSString class]] || ![obj isEqualToString:comparison]) {
+                diff = YES;
+                *stop = YES;
+            }
+        } else if ([obj isKindOfClass:[NSArray class]]) {
+            id comparison = source[key];
+            if (![comparison isKindOfClass:[NSArray class]] || [self diffArray:obj source:comparison]) {
+                diff = YES;
+                *stop = YES;
+            }
+        } else if ([obj isKindOfClass:[NSDictionary class]]) {
+            id comparison = source[key];
+            if (![comparison isKindOfClass:[NSDictionary class]] || [self diffDict:obj source:comparison]) {
+                diff = YES;
+                *stop = YES;
+            }
+        }
+    }];
+    
+    return diff;
+}
+
+- (BOOL)diffArray:(NSArray *)target source:(NSArray *)source
+{
+    if ([target count] != [source count]) {
+        return YES;
+    }
+    __block BOOL diff = NO;
+    [target enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSUInteger result = [source indexOfObject:obj];
+        if (result == NSNotFound) {
+            diff = YES;
+            *stop = YES;
+        }
+    }];
+    return diff;
 }
 
 @end

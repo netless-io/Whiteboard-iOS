@@ -13,10 +13,10 @@ NSString * const kHost = @"https://cloudcapiv4.herewhite.com";
 @interface WhiteOriginPrefetcher ()
 
 @property (nonatomic, strong) NSURLSession *session;
-@property (nonatomic, copy) NSDictionary<NSString *, NSDictionary *> *configDict;
+@property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *configDict;
 @property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *resultDict;
-@property (nonatomic, copy) NSSet<NSString *> *domains;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
+@property (nonatomic, strong, readwrite) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
+@property (nonatomic, copy, readwrite) NSSet<NSString *> *domains;
 
 @end
 
@@ -177,7 +177,7 @@ static NSString *kSchemePrefix = @"https";
 
 - (NSDictionary *)sortedDomainConfigFrom:(NSDictionary *)config {
     
-    NSMutableDictionary *dict = [self.configDict mutableCopy];
+    NSMutableDictionary *dict = [config mutableCopy];
     
     [config enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull subObj, BOOL * _Nonnull stop) {
         NSMutableDictionary *mutableDict = [subObj mutableCopy];
