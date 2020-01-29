@@ -72,7 +72,7 @@ static CGFloat kTimeout = 30;
     self.prefetchBlock = ^(NSDictionary * _Nonnull result) {
         NSLog(@"result: %@", [result description]);
         
-        if ([weakSelf diffDict:result source:prefetcher.configDict]) {
+        if ([weakSelf diffDict:result source:prefetcher.serverConfig]) {
             id self = weakSelf;
             XCTFail(@"config fail");
         }
@@ -128,7 +128,7 @@ static CGFloat kTimeout = 30;
     weakPrefetcher.prefetchFinishBlock = ^(NSDictionary * _Nonnull result) {
         NSLog(@"result: %@", [result description]);
         
-        if ([weakSelf diffDict:result source:prefetcher.configDict]) {
+        if ([weakSelf diffDict:result source:prefetcher.sdkStrategyConfig]) {
             XCTFail(@"config fail");
         }
         
@@ -149,39 +149,6 @@ static CGFloat kTimeout = 30;
 }
 
 #pragma mark - Hook test
-
-- (void)testSortDomainsAPI {
-    WhiteOriginPrefetcher *prefetcher = [WhiteOriginPrefetcher shareInstance];
-    
-    NSDictionary *config = @{
-        @"origin": @{
-            @"one": @[
-                @"https://one.group",
-                @"https://one1.pro"
-            ],
-            @"two": @[
-                @"https://two.group",
-                @"https://two1.group"
-            ],
-            @"three": @[
-                @"https://three.group",
-                @"https://three1.group"
-            ],
-            @"ws": @[
-                @"wss://three.group",
-                @"wss://three1.group"
-            ],
-        }
-    };
-    NSDictionary *speed = @{@"https://one.group": @2, @"https://one1.group": @1, @"https://two1.group": @3, @"https://three1.group": @0.33, @"https://three.group": @0.5666};
-    [prefetcher setValue:speed forKey:@"respondingSpeedDict"];
-    NSDictionary *dict = [prefetcher sortedDomainConfigFrom:config];
-    
-    if ([self diffDict:config source:dict]) {
-        XCTFail(@"config fail");
-    }
-    
-}
 
 #pragma mark - WhiteOriginPrefetcherDelegate
 
@@ -209,7 +176,13 @@ static CGFloat kTimeout = 30;
 {
     __block BOOL diff = NO;
     [target enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([obj isKindOfClass:[NSString class]]) {
+        if ([key isEqualToString:@"origins"]) {
+            id comparison = source[key];
+            if (![comparison isKindOfClass:[NSDictionary class]] || [self diffOrigins:obj source:comparison]) {
+                diff = YES;
+                *stop = YES;
+            }
+        } else if ([obj isKindOfClass:[NSString class]]) {
             id comparison = source[key];
             if (![comparison isKindOfClass:[NSString class]] || ![obj isEqualToString:comparison]) {
                 diff = YES;
@@ -228,6 +201,28 @@ static CGFloat kTimeout = 30;
                 *stop = YES;
             }
         }
+    }];
+    
+    return diff;
+}
+
+- (BOOL)diffOrigins:(NSDictionary<NSString *, NSArray *> *)target source:(NSDictionary<NSString *, NSArray *> *)source
+{
+    __block BOOL diff = NO;
+    
+    [target enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSArray *diffArray = source[key];
+        if ([obj count] != [diffArray count]) {
+            diff = YES;
+            *stop = YES;
+        }
+        [obj enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *host = diffArray[idx];
+            if (![obj[@"origin"] isEqualToString:host]) {
+                diff = YES;
+                *stop = YES;
+            }
+        }];
     }];
     
     return diff;

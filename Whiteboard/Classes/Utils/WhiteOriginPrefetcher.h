@@ -28,11 +28,13 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 
 @interface WhiteOriginPrefetcher : NSObject
 
+/** 当前用户的策略组，目前不开放 */
 @property (nonatomic, nullable, copy) NSString *strategy;
 @property (nonatomic, nullable, weak) id<WhiteOriginPrefetcherDelegate> prefetchDelgate;
 
-@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *configDict;
-@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *resultDict;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *serverConfig;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *sdkStructConfig;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *sdkStrategyConfig;
 @property (nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
 @property (nonatomic, nullable, copy, readonly) NSSet<NSString *> *domains;
 
@@ -44,12 +46,6 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 
 - (void)fetchOriginConfigs;
 - (void)prefetchOrigins;
-
-/**
- just for unit testing
- */
-- (NSDictionary *)sortedDomainConfigFrom:(NSDictionary *)config;
-- (NSArray *)sortDomains:(NSArray *)domains by:(NSDictionary *)speedDict;
 
 @end
 

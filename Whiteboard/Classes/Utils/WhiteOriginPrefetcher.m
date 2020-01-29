@@ -13,12 +13,59 @@ NSString * const kHost = @"https://cloudcapiv4.herewhite.com";
 @interface WhiteOriginPrefetcher ()
 
 @property (nonatomic, strong) NSURLSession *session;
-@property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *configDict;
-@property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *resultDict;
+
+/**
+ {
+    [strategy: NSString]: {
+        version: NSString,
+        [server-name: NSString]: NSArray<NSString *>
+    }
+ }
+ */
+@property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *serverConfig;
+
+/**
+ 转换服务器数据结构，为后续 sdk 初始化时，需要的结构做准备
+
+ {
+    [strategy: NSString]: {
+        version: NSString,
+        origins: {
+            [server-name: NSString]: NSArray<NSString *>
+        }
+    }
+ }
+ */
+@property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *sdkStructConfig;
+
+/**
+sdk 最终需要的数据格式，添加了服务器连接信息
+{
+   [strategy: NSString]: {
+       version: NSString,
+       origins: {
+           [server-name: NSString]: NSArray<NSDictionary *> [{
+               origin: string
+               ping: number
+               valid: boolean
+           }]
+       }
+   }
+}
+*/
+@property (nonatomic, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *sdkStrategyConfig;
+
 @property (nonatomic, strong, readwrite) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
+
 @property (nonatomic, copy, readwrite) NSSet<NSString *> *domains;
 
 @end
+
+static NSString *const kOriginsKey = @"origins";
+
+static NSString *const kHostInfoOriginKey = @"origin";
+static NSString *const kHostInfoPingKey = @"ping";
+static NSString *const kHostInfoValidKey = @"valid";
 
 @implementation WhiteOriginPrefetcher
 
@@ -53,6 +100,25 @@ NSString * const kHost = @"https://cloudcapiv4.herewhite.com";
     return _session;
 }
 
+- (void)generateSdkOriginConfigFrom:(NSDictionary *)serverConfig
+{
+    NSMutableDictionary *convertedDict = [NSMutableDictionary dictionary];
+    [serverConfig enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull subDict, BOOL * _Nonnull stop) {
+        NSMutableDictionary *strategyConfig = [NSMutableDictionary dictionary];
+        NSMutableDictionary *originConfig = [NSMutableDictionary dictionary];
+        [subDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull subKey, id _Nonnull subObj, BOOL * _Nonnull stop) {
+            if ([subObj isKindOfClass:[NSString class]]) {
+                strategyConfig[subKey] = subObj;
+            } else {
+                originConfig[subKey] = subObj;
+            }
+        }];
+        strategyConfig[kOriginsKey] = originConfig;
+        convertedDict[key] = strategyConfig;
+    }];
+    self.sdkStructConfig = [convertedDict copy];
+}
+
 #pragma mark - Public
 
 - (void)fetchOriginConfigs
@@ -72,13 +138,14 @@ NSString * const kHost = @"https://cloudcapiv4.herewhite.com";
             if (httpResponse.statusCode == 200) {
                 NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                 if ([responseObject[@"code"] integerValue] == 200) {
-                    self.configDict = responseObject[@"msg"];
-                    [self getDomains];
+                    self.serverConfig = responseObject[@"msg"];
+                    [self generateSdkOriginConfigFrom:self.serverConfig];
+                    [self collectDomains];
                     if ([self.prefetchDelgate respondsToSelector:@selector(originPrefetcherFetchOriginConfigsSuccess:)]) {
-                        [self.prefetchDelgate originPrefetcherFetchOriginConfigsSuccess:self.configDict];
+                        [self.prefetchDelgate originPrefetcherFetchOriginConfigsSuccess:self.serverConfig];
                     }
                     if (self.fetchConfigSuccessBlock) {
-                        self.fetchConfigSuccessBlock(self.configDict);
+                        self.fetchConfigSuccessBlock(self.serverConfig);
                     }
                 } else {
                     NSInteger code = [responseObject[@"code"] integerValue];
@@ -127,13 +194,12 @@ static NSString *kSchemePrefix = @"https";
                 dispatch_semaphore_signal(signal);
             }];
         }];
-        
-        self.resultDict = [self sortedDomainConfigFrom:self.configDict];
+        self.sdkStrategyConfig = [self generatePingInfoConfig:self.sdkStructConfig];
         if ([self.prefetchDelgate respondsToSelector:@selector(originPrefetcherFinishPrefetch:)]) {
-            [self.prefetchDelgate originPrefetcherFinishPrefetch:self.resultDict];
+            [self.prefetchDelgate originPrefetcherFinishPrefetch:self.sdkStrategyConfig];
         }
         if (self.prefetchFinishBlock) {
-            self.prefetchFinishBlock(self.resultDict);
+            self.prefetchFinishBlock(self.sdkStrategyConfig);
         }
     });
 }
@@ -165,9 +231,9 @@ static NSString *kSchemePrefix = @"https";
 
 #pragma mark - Handle Configs
 
-- (void)getDomains {
+- (void)collectDomains {
     NSMutableSet *set = [NSMutableSet set];
-    [self.configDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.serverConfig enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull obj, BOOL * _Nonnull stop) {
         if (!self.strategy || [key isEqualToString:self.strategy]) {
             [set unionSet:[self getDomainsFromConfig:obj]];
         }
@@ -175,78 +241,44 @@ static NSString *kSchemePrefix = @"https";
     self.domains = [set copy];
 }
 
-- (NSDictionary *)sortedDomainConfigFrom:(NSDictionary *)config {
+- (NSDictionary *)generatePingInfoConfig:(NSDictionary <NSString *, NSDictionary *>*)config {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
-    NSMutableDictionary *dict = [config mutableCopy];
-    
-    [config enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull subObj, BOOL * _Nonnull stop) {
-        NSMutableDictionary *mutableDict = [subObj mutableCopy];
-        [subObj enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[NSArray class]] && [obj count] > 1) {
-                NSArray *sort = [self sortDomains:obj by:self.respondingSpeedDict];
-                mutableDict[key] = sort;
+    [config enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSMutableDictionary *subConfig = [obj mutableCopy];
+        NSDictionary *origins = obj[kOriginsKey];
+        
+        NSMutableDictionary *mutableOrigins = [origins mutableCopy];
+        [origins enumerateKeysAndObjectsUsingBlock:^(id _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[NSArray class]]) {
+                NSArray<NSDictionary *> *pingInfo = [self pingInfoFor:obj];
+                mutableOrigins[key] = pingInfo;
             }
         }];
-        dict[key] = mutableDict;
+        subConfig[kOriginsKey] = mutableOrigins;
+        dict[key] = subConfig;
     }];
-    
     return [dict copy];
 }
 
-- (NSArray *)sortDomains:(nonnull NSArray *)domains by:(NSDictionary *)speedDict;
-{
-    NSSet *keySet = [NSSet setWithArray:speedDict.allKeys];
-    
-    BOOL needReplaceSchemeForSort = NO;
-    NSString *originScheme = kSchemePrefix;
-    if ([[domains firstObject] isKindOfClass:[NSString class]]) {
-        NSString *firstDomain = (NSString *)[domains firstObject];
-        NSURLComponents *components = [[NSURLComponents alloc] initWithString:firstDomain];
-        if (![components.scheme isEqualToString:kSchemePrefix]) {
-            needReplaceSchemeForSort = YES;
-            originScheme = components.scheme;
+- (NSArray<NSDictionary *> *)pingInfoFor:(NSArray<NSString *> *)hosts {
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:hosts.count];
+    for (NSString *host in hosts) {
+        NSMutableDictionary *dict = [@{kHostInfoOriginKey: host} mutableCopy];
+        NSURLComponents *components = [[NSURLComponents alloc] initWithString:host];
+        components.scheme = kSchemePrefix;
+        NSString *httpsHost = components.URL.absoluteString;
+        NSNumber *speed = self.respondingSpeedDict[httpsHost];
+        if (speed) {
+            dict[kHostInfoPingKey] = speed;
+            dict[kHostInfoValidKey] = @(YES);
+        } else {
+            dict[kHostInfoPingKey] = @(100000);
+            dict[kHostInfoValidKey] = @(NO);
         }
+        [array addObject:dict];
     }
-    
-    if (needReplaceSchemeForSort) {
-        NSMutableArray *array = [NSMutableArray arrayWithCapacity:domains.count];
-        [domains enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[NSString class]]) {
-                NSString *str = (NSString *)obj;
-                obj = [str stringByReplacingOccurrencesOfString:originScheme withString:kSchemePrefix];
-            }
-            [array addObject:obj];
-        }];
-        domains = [array copy];
-    }
-    
-    NSMutableSet *insertSet = [NSMutableSet setWithArray:domains];
-    [insertSet intersectSet:keySet];
-        
-    NSArray *sortedArray = [insertSet.allObjects sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id  _Nonnull obj2) {
-        
-        NSNumber *speed1 = speedDict[obj1];
-        NSNumber *speed2 = speedDict[obj2];
-        return [speed1 compare:speed2];
-    }];
-    
-
-    NSMutableSet *minusSet = [NSMutableSet setWithArray:domains];
-    [minusSet minusSet:keySet];
-
-    NSArray *result = [sortedArray arrayByAddingObjectsFromArray:minusSet.allObjects];
-    if (needReplaceSchemeForSort) {
-        NSMutableArray *array = [NSMutableArray arrayWithCapacity:result.count];
-        [result enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[NSString class]]) {
-                NSString *str = (NSString *)obj;
-                obj = [str stringByReplacingOccurrencesOfString:kSchemePrefix withString:originScheme];
-            }
-            [array addObject:obj];
-        }];
-        result = [array copy];
-    }
-    return result;
+    return [array copy];
 }
 
 - (NSSet *)getDomainsFromConfig:(NSDictionary *)config {
