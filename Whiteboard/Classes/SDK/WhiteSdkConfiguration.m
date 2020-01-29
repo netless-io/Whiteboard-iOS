@@ -25,6 +25,11 @@ static NSString *const kJSDeviceType = @"deviceType";
     return self;
 }
 
++ (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper
+{
+    return @{@"sdkStrategyConfig": @"initializeOriginsStates"};
+}
+
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {
     if (_deviceType == WhiteDeviceTypeDesktop) {
         dic[kJSDeviceType] = @"desktop";
