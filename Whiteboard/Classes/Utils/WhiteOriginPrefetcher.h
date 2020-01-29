@@ -31,10 +31,10 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 @property (nonatomic, nullable, copy) NSString *strategy;
 @property (nonatomic, nullable, weak) id<WhiteOriginPrefetcherDelegate> prefetchDelgate;
 
-@property (nonatomic, nullable, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *configDict;
-@property (nonatomic, nullable, copy, readwrite) NSDictionary<NSString *, NSDictionary *> *resultDict;
-@property (nonatomic, nullable, strong, readwrite) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
-@property (nonatomic, nullable, copy, readwrite) NSSet<NSString *> *domains;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *configDict;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *resultDict;
+@property (nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
+@property (nonatomic, nullable, copy, readonly) NSSet<NSString *> *domains;
 
 @property (nonatomic, nullable, copy) FetchConfigFailBlock fetchConfigFailBlock;
 @property (nonatomic, nullable, copy) FetchConfigSuccessBlock fetchConfigSuccessBlock;
