@@ -16,11 +16,13 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 
 @protocol WhiteOriginPrefetcherDelegate <NSObject>
 
+/** 从服务器获取配置列表失败 */
 - (void)originPrefetcherFetchOriginConfigsFail:(NSError *)error;
+/** 成功从服务器获取配置列表，开始对服务器域名进行连接性测试 */
 - (void)originPrefetcherFetchOriginConfigsSuccess:(NSDictionary *)dict;
 
 /**
- 预加载结束，排序结果。
+ 服务器连接性测试完成
  */
 - (void)originPrefetcherFinishPrefetch:(NSDictionary *)result;
 
@@ -34,6 +36,8 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 @property (nonatomic, nullable, weak) id<WhiteOriginPrefetcherDelegate> prefetchDelgate;
 
 @property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *serverConfig;
+@property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *sdkStructConfig;
+/** 对服务器返回的配置信息的结构进行转换，同时，加上连接可用性信息 */
 @property (nonatomic, nullable, copy, readonly) NSDictionary<NSString *, NSDictionary *> *sdkStrategyConfig;
 @property (nonatomic, nullable, strong, readonly) NSMutableDictionary<NSString *, NSNumber *> *respondingSpeedDict;
 @property (nonatomic, nullable, copy, readonly) NSSet<NSString *> *domains;
@@ -44,7 +48,8 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 
 + (instancetype)shareInstance;
 
-- (void)fetchOriginConfigs;
+/** 获取服务器配置列表。如果成功，紧接着连接性测试 */
+- (void)fetchConfigAndPrefetchDomains;
 
 @end
 

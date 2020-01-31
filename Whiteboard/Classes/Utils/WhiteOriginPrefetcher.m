@@ -121,7 +121,7 @@ static NSString *const kHostInfoValidKey = @"valid";
 
 #pragma mark - Public
 
-- (void)fetchOriginConfigs
+- (void)fetchConfigAndPrefetchDomains
 {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[kHost stringByAppendingPathComponent:@"configs/origin"]]];
     
@@ -218,7 +218,7 @@ static NSString *kSchemePrefix = @"https";
             NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:beginDate];
             self.respondingSpeedDict[host] = @(interval);
         } else {
-            NSLog(@"%@ can not get response. statusCode:%ld response:%@ error:%@", host, (long)httpResponse.statusCode, response, [error localizedDescription]);
+//            NSLog(@"%@ can not get response. statusCode:%ld response:%@ error:%@", host, (long)httpResponse.statusCode, response, [error localizedDescription]);
         }
         if (completionHandler) {
             completionHandler(data, response, error);
