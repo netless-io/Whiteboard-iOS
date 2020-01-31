@@ -33,6 +33,23 @@
     // Put teardown code here. This method is called after the invocation of each test method in the class.
 }
 
+#pragma mark - Commom
+- (void)testBooleanToJson {
+    NSDictionary *dict = @{@"k1": @YES, @"k2": @(YES), @"k3": [NSNumber numberWithBool:YES]};
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
+    NSString *string = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSLog(@"%@", string);
+    
+    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
+    config.sdkStrategyConfig = dict;
+    NSDictionary *dict1 = [config jsonDict];
+    jsonData = [NSJSONSerialization dataWithJSONObject:dict1 options:0 error:nil];
+    string = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", string);
+    
+}
+
 #pragma mark - WhiteEvent
 - (void)testWhiteEventConvertDict {
     WhiteEvent *event = [[WhiteEvent alloc] init];
