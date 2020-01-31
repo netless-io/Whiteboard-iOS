@@ -185,15 +185,12 @@ static NSString *kSchemePrefix = @"https";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
-        dispatch_semaphore_t signal = dispatch_semaphore_create(1);
-        dispatch_time_t overTime = dispatch_time(DISPATCH_TIME_NOW, 30 * NSEC_PER_SEC);
-
+        dispatch_semaphore_t signal = dispatch_semaphore_create(0);
         [self.domains enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            dispatch_semaphore_wait(signal, overTime);
-            
             [self pingHost:obj completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 dispatch_semaphore_signal(signal);
             }];
+            dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER);
         }];
         self.sdkStrategyConfig = [self generatePingInfoConfig:self.sdkStructConfig];
         if ([self.prefetchDelgate respondsToSelector:@selector(originPrefetcherFinishPrefetch:)]) {
