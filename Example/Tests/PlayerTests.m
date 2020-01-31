@@ -27,11 +27,13 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 @end
 
-
+/**
+ 测试 Player 时，需要在 example 里面填写  WhiteRoomUUID 以及 WhiteRoomToken
+ */
 @implementation PlayerTests
 #pragma mark - Const
 static NSTimeInterval kTimeout = 30;
-static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
+static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 
 #pragma mark - Test
 - (void)setUp

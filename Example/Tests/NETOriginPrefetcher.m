@@ -33,6 +33,9 @@
     [WhiteOriginPrefetcher shareInstance].fetchConfigSuccessBlock = nil;
     [WhiteOriginPrefetcher shareInstance].fetchConfigFailBlock = nil;
     [WhiteOriginPrefetcher shareInstance].prefetchFinishBlock = nil;
+    
+    self.fetchSuccessBlock = nil;
+    self.prefetchBlock = nil;
 }
 
 static CGFloat kTimeout = 30;
@@ -49,7 +52,7 @@ static CGFloat kTimeout = 30;
         [weakSelf.exp fulfill];
     };
     
-    [prefetcher fetchOriginConfigs];
+    [prefetcher fetchConfigAndPrefetchDomains];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
@@ -63,16 +66,11 @@ static CGFloat kTimeout = 30;
 
     WhiteOriginPrefetcher *prefetcher = [WhiteOriginPrefetcher shareInstance];
     prefetcher.prefetchDelgate = self;
-
-    self.fetchSuccessBlock = ^(NSDictionary * _Nonnull dict) {
-        [prefetcher prefetchOrigins];
-    };
     
     __weak typeof(self)weakSelf = self;
     self.prefetchBlock = ^(NSDictionary * _Nonnull result) {
-        NSLog(@"result: %@", [result description]);
         
-        if ([weakSelf diffDict:result source:prefetcher.serverConfig]) {
+        if ([weakSelf diffDict:result source:prefetcher.sdkStructConfig]) {
             id self = weakSelf;
             XCTFail(@"config fail");
         }
@@ -80,7 +78,7 @@ static CGFloat kTimeout = 30;
         [weakSelf.exp fulfill];
     };
     
-    [prefetcher fetchOriginConfigs];
+    [prefetcher fetchConfigAndPrefetchDomains];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
@@ -104,7 +102,7 @@ static CGFloat kTimeout = 30;
         XCTFail(@"fetchConfigFail: %@", [err description]);
     };
 
-    [prefetcher fetchOriginConfigs];
+    [prefetcher fetchConfigAndPrefetchDomains];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
@@ -120,15 +118,14 @@ static CGFloat kTimeout = 30;
     
     __weak typeof(prefetcher)weakPrefetcher = prefetcher;
     prefetcher.fetchConfigSuccessBlock = ^(NSDictionary * _Nonnull dict) {
-        [weakPrefetcher prefetchOrigins];
+        
     };
     
     
     __weak typeof(self)weakSelf = self;
     weakPrefetcher.prefetchFinishBlock = ^(NSDictionary * _Nonnull result) {
-        NSLog(@"result: %@", [result description]);
         
-        if ([weakSelf diffDict:result source:prefetcher.sdkStrategyConfig]) {
+        if ([weakSelf diffDict:result source:prefetcher.sdkStructConfig]) {
             XCTFail(@"config fail");
         }
         
@@ -139,7 +136,7 @@ static CGFloat kTimeout = 30;
         XCTFail(@"fetchConfigFail: %@", [err description]);
     };
 
-    [prefetcher fetchOriginConfigs];
+    [prefetcher fetchConfigAndPrefetchDomains];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {

@@ -55,14 +55,36 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 - (void)tearDown
 {
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav popToRootViewControllerAnimated:YES];
+    
+    if (self.room.phase == WhiteRoomPhaseDisconnected) {
+        [self popToRoot];
+        [super tearDown];
+        return;
     }
-    [super tearDown];
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+
+    [self.room disconnect:^{
+        [self popToRoot];
+        [exp fulfill];
+        [super tearDown];
+    }];
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
 }
 
 #pragma mark - Prepare
+
+- (void)popToRoot {
+    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+   if ([nav isKindOfClass:[UINavigationController class]]) {
+       [nav popToRootViewControllerAnimated:YES];
+   }
+}
 
 - (WhiteSdkConfiguration *)testingConfig;
 {
@@ -79,7 +101,7 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 #pragma mark - Consts
 
-static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
+static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
 

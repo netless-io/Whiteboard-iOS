@@ -202,9 +202,9 @@ static NSString *kReuseCell = @"reuseCell";
             info.height = 300;
             info.uuid = @"WhiteImageInformation";
             //这一行与注释的两行代码等效
-            [self.room insertImage:info src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg"];
+            [self.room insertImage:info src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
 //            [self.room insertImage:info];
-//            [self.room completeImageUploadWithUuid:info.uuid src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg"];
+//            [self.room completeImageUploadWithUuid:info.uuid src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
             break;
         }
         case CommandTypeGetPpt:

@@ -10,6 +10,7 @@
 #import "WhiteSDK.h"
 #import "WhiteUtils.h"
 #import "PlayerCommandListController.h"
+#import "RoomCommandListController.h"
 #import <Whiteboard/Whiteboard.h>
 
 @interface WhitePlayerViewController ()<WhiteCommonCallbackDelegate, WhitePlayerEventDelegate, WhiteCombineDelegate, UIPopoverPresentationControllerDelegate>
@@ -93,6 +94,7 @@
             [self alert:NSLocalizedString(@"回放失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]]];
         } else {
             self.player = player;
+            [self.player addMagixEventListener:WhiteCommandCustomEvent];
             [self.player addHighFrequencyEventListener:@"a" fireInterval:1000];
             //配置 WhitePlayer
             self.combinePlayer.whitePlayer = player;

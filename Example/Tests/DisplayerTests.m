@@ -23,7 +23,7 @@ typedef void(^WhiteEventBlock)(WhiteEvent *event);
 
 @implementation WhiteDisplayerTests
 
-static NSString * const kTestingCustomEventName = @"TestingCustomEventName";
+static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
 
