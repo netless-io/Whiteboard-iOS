@@ -107,7 +107,7 @@ static NSString *const kHostInfoValidKey = @"valid";
         NSMutableDictionary *strategyConfig = [NSMutableDictionary dictionary];
         NSMutableDictionary *originConfig = [NSMutableDictionary dictionary];
         [subDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull subKey, id _Nonnull subObj, BOOL * _Nonnull stop) {
-            if ([subObj isKindOfClass:[NSString class]]) {
+            if ([subObj isKindOfClass:[NSString class]] || [subObj isKindOfClass:[NSNumber class]]) {
                 strategyConfig[subKey] = subObj;
             } else {
                 originConfig[subKey] = subObj;
@@ -147,6 +147,7 @@ static NSString *const kHostInfoValidKey = @"valid";
                     if (self.fetchConfigSuccessBlock) {
                         self.fetchConfigSuccessBlock(self.serverConfig);
                     }
+                    [self prefetchOrigins];
                 } else {
                     NSInteger code = [responseObject[@"code"] integerValue];
                     NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:code userInfo:responseObject];
