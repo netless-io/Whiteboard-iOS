@@ -9,7 +9,7 @@
 #import "StartViewController.h"
 #import "WhiteRoomViewController.h"
 #import "WhitePlayerViewController.h"
-
+#import <Whiteboard/Whiteboard.h>
 @interface StartViewController ()
 @property (nonatomic, strong) UITextField *inputV;
 @end
@@ -57,6 +57,8 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeybroader:)];
     [self.view addGestureRecognizer:tap];
+    WhiteOriginPrefetcher *prefetcher = [WhiteOriginPrefetcher shareInstance];
+    [prefetcher fetchOriginConfigs];
 }
 
 - (void)dismissKeybroader:(id)sender

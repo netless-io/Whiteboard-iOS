@@ -101,7 +101,7 @@
             if (self.roomBlock) {
                 self.roomBlock(nil, error);
             } else {
-                NSLog(NSLocalizedString(@"创建房间失败，error:", nil), [error localizedDescription]);
+                NSLog(NSLocalizedString(@"创建房间失败，error:", nil), [error description]);
                 self.title = NSLocalizedString(@"创建失败", nil);
             }
         } else {
@@ -129,7 +129,7 @@
             self.roomToken = roomToken;
              [self joinRoomWithToken:roomToken];
          } else {
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"获取 RoomToken 失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"获取 RoomToken 失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error description]] preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [self.navigationController popViewControllerAnimated:YES];
             }];
@@ -198,7 +198,7 @@
             self.reconnecting = NO;
             NSLog(@"reconnected");
             if (error) {
-                NSLog(@"error:%@", [error localizedDescription]);
+                NSLog(@"error:%@", [error description]);
             } else {
                 self.room = room;
             }

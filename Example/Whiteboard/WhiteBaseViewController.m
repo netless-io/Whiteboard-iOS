@@ -91,6 +91,7 @@
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;
         config.debug = YES;
+        config.sdkStrategyConfig = [WhiteOriginPrefetcher shareInstance].sdkStrategyConfig;
         
         //打开用户头像显示信息
         config.userCursor = YES;
