@@ -35,10 +35,11 @@ Pod::Spec.new do |s|
     converter.dependency 'Whiteboard/Object'
   end
   
-  # 工具类，完全独立
+  # 工具类
   s.subspec 'Utils' do |utils|
     utils.source_files = 'Whiteboard/Classes/Utils/**'
     utils.frameworks = 'AVFoundation'
+    utils.dependency 'Whiteboard/Base'
   end
 
   # 基础类，包括sdk，Displayer（Room与Player父类）
