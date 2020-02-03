@@ -117,11 +117,6 @@ static CGFloat kTimeout = 30;
     WhiteOriginPrefetcher *prefetcher = [WhiteOriginPrefetcher shareInstance];
     
     __weak typeof(prefetcher)weakPrefetcher = prefetcher;
-    prefetcher.fetchConfigSuccessBlock = ^(NSDictionary * _Nonnull dict) {
-        
-    };
-    
-    
     __weak typeof(self)weakSelf = self;
     weakPrefetcher.prefetchFinishBlock = ^(NSDictionary * _Nonnull result) {
         
