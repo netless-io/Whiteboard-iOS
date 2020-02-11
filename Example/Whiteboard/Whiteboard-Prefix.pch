@@ -16,17 +16,17 @@
 #ifdef Plugin
 // 插件版本
 
-//#define WhiteSDKToken @""
-//#define WhiteRoomUUID @""
-//#define WhiteRoomToken @""
+#define WhiteSDKToken @""
+#define WhiteRoomUUID @""
+#define WhiteRoomToken @""
 
 #else
 
 // 非插件版本
 
-//#define WhiteSDKToken @""
-//#define WhiteRoomUUID @""
-//#define WhiteRoomToken @""
+#define WhiteSDKToken @""
+#define WhiteRoomUUID @""
+#define WhiteRoomToken @""
 
 #endif
 #ifdef __OBJC__
