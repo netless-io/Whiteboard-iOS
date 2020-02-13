@@ -194,10 +194,14 @@ static NSString *kSchemePrefix = @"https";
         }];
         self.sdkStrategyConfig = [self generatePingInfoConfig:self.sdkStructConfig];
         if ([self.prefetchDelgate respondsToSelector:@selector(originPrefetcherFinishPrefetch:)]) {
-            [self.prefetchDelgate originPrefetcherFinishPrefetch:self.sdkStrategyConfig];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.prefetchDelgate originPrefetcherFinishPrefetch:self.sdkStrategyConfig];
+            });
         }
         if (self.prefetchFinishBlock) {
-            self.prefetchFinishBlock(self.sdkStrategyConfig);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.prefetchFinishBlock(self.sdkStrategyConfig);
+            });
         }
     });
 }
