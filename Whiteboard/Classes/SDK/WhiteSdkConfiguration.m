@@ -48,4 +48,14 @@ static NSString *const kJSDeviceType = @"deviceType";
     return YES;
 }
 
+- (void)setPreloadDynamicPPT:(BOOL)preloadDynamicPPT
+{
+    // 动态ppt的预加载在低版本iOS存在兼容性问题
+    if (@available(iOS 13, *)) {
+        _preloadDynamicPPT = preloadDynamicPPT;
+    } else {
+        
+    }
+}
+
 @end

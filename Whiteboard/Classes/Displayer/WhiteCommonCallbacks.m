@@ -35,4 +35,17 @@
     return url;
 }
 
+
+- (NSString *)postMessage:(NSString *)message
+{
+    NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    if (dict && dict[@"shapeId"] && dict[@"mediaType"]) {
+        NSString *name = dict[@"action"];
+        NSString *notificationName = [NSString stringWithFormat:@"DynamicPpt-%@", name];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict];
+    }
+    return @"";
+}
+
 @end
