@@ -72,6 +72,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 主动断开连接 */
 - (void)disconnect:(void (^ _Nullable) (void))completeHandler;
+/** 当主动断开连接时，该值会被赋值为 YES */
+@property (nonatomic, assign) BOOL disconnectedBySelf;
 
 /**
  只读切换，只读时，无法执行任何能够影响他人的API

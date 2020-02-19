@@ -112,6 +112,7 @@
 
 - (void)disconnect:(void (^ _Nullable) (void))completeHandler
 {
+    self.disconnectedBySelf = YES;
     [self.bridge callHandler:@"room.disconnect" completionHandler:^(id  _Nullable value) {
         if (completeHandler) {
             completeHandler();
