@@ -15,6 +15,7 @@
     if (self = [super init]) {
         _room = roomUuid;
         _roomToken = roomToken;
+        _step = @(0.5);
     }
     return self;
 }
@@ -27,6 +28,7 @@
     if (self.duration) {
         dic[NSStringFromSelector(@selector(duration))] = @([self.duration integerValue] * WhiteConstsTimeUnitRatio);
     }
+    dic[@"step"] = @([self.step floatValue] * WhiteConstsTimeUnitRatio);
     return true;
 }
 

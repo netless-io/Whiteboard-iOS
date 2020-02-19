@@ -51,6 +51,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) id userPayload;
 @property (nonatomic, copy, nullable) WhiteMemberInformation *memberInfo __attribute__((deprecated("memberInfo is deprecated, please use userPayload")));
 
+/**
+ 房间进入重连的最长时间，超时后，会主动断连，并在 phaseChange 中回调。同时还会触发 fireDisconnectWithError，会返回：重连时长超出 xx 毫秒...的提示
+ 单位：秒。
+ */
+@property (nonatomic, strong) NSNumber *timeout;
+
 @end
 
 NS_ASSUME_NONNULL_END

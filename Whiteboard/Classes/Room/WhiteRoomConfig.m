@@ -6,6 +6,7 @@
 //
 
 #import "WhiteRoomConfig.h"
+#import "WhiteConsts.h"
 
 @implementation WhiteRoomConfig
 
@@ -30,8 +31,7 @@
         _uuid = uuid;
         _roomToken = roomToken;
         _userPayload = userPayload;
-        
-        //TODO: 提前校验数据合法性
+        _timeout = @45;
         if (_userPayload) {
             NSDictionary *dict = @{@"key": _userPayload};
             if (![NSJSONSerialization isValidJSONObject:dict]) {
@@ -41,5 +41,12 @@
     }
     return self;
 }
+
+- (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
+{
+    dic[@"timeout"] = @([self.timeout floatValue] * WhiteConstsTimeUnitRatio);
+    return true;
+}
+
 
 @end

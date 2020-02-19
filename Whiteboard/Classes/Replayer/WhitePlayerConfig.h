@@ -36,6 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable) NSString *audioUrl;
 
+/**
+ 控制回放时，时间进度的回调频率。默认为 0.5 秒。单位：秒。回调间隔，不会准确为 0.5 秒，只是近似值。
+ */
+@property (nonatomic, strong) NSNumber *step;
+
 /** 视野范围 */
 //@property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;
 
