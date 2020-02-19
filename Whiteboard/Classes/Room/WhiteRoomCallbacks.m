@@ -48,15 +48,6 @@
     return @"";
 }
 
-- (NSString *)fireBeingAbleToCommitChange:(BOOL)isAbleToCommit
-{
-    if ([self.delegate respondsToSelector:@selector(fireBeingAbleToCommitChange:)]) {
-        [self.delegate fireBeingAbleToCommitChange:isAbleToCommit];
-    }
-    return @"";
-}
-
-
 - (NSString *)fireDisconnectWithError:(NSString *)error
 {
     if ([self.delegate respondsToSelector:@selector(fireDisconnectWithError:)]) {

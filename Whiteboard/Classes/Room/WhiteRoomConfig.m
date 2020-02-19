@@ -10,6 +10,13 @@
 
 @implementation WhiteRoomConfig
 
+/** never use this */
+- (instancetype)init
+{
+    NSAssert(false, @"please never use this method.");
+    return [self initWithUuid:nil roomToken:nil userPayload:nil];
+}
+
 - (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken
 {
     return [self initWithUuid:uuid roomToken:roomToken userPayload:nil];
@@ -17,9 +24,8 @@
 
 - (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken memberInfo:(WhiteMemberInformation *)memberInfo
 {
-    if (self = [super init]) {
-        _uuid = uuid;
-        _roomToken = roomToken;
+    self = [self initWithUuid:uuid roomToken:roomToken userPayload:memberInfo];
+    if (self) {
         _memberInfo = memberInfo;
     }
     return self;

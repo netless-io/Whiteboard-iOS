@@ -32,8 +32,6 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
  */
 - (void)fireRoomStateChanged:(WhiteRoomState *)modifyState;
 
-- (void)fireBeingAbleToCommitChange:(BOOL)isAbleToCommit;
-
 /** 白板失去连接回调，附带错误信息 */
 - (void)fireDisconnectWithError:(NSString *)error;
 
