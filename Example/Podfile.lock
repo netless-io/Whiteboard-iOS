@@ -1,28 +1,28 @@
 PODS:
   - dsBridge (3.0.6)
   - Masonry (1.1.0)
-  - Whiteboard (2.5.11):
-    - Whiteboard/Base (= 2.5.11)
-    - Whiteboard/Converter (= 2.5.11)
-    - Whiteboard/NativeReplayer (= 2.5.11)
-    - Whiteboard/Object (= 2.5.11)
-    - Whiteboard/Replayer (= 2.5.11)
-    - Whiteboard/Room (= 2.5.11)
-    - Whiteboard/Utils (= 2.5.11)
-  - Whiteboard/Base (2.5.11):
+  - Whiteboard (2.6.1):
+    - Whiteboard/Base (= 2.6.1)
+    - Whiteboard/Converter (= 2.6.1)
+    - Whiteboard/NativeReplayer (= 2.6.1)
+    - Whiteboard/Object (= 2.6.1)
+    - Whiteboard/Replayer (= 2.6.1)
+    - Whiteboard/Room (= 2.6.1)
+    - Whiteboard/Utils (= 2.6.1)
+  - Whiteboard/Base (2.6.1):
     - dsBridge (~> 3.0.2)
     - Whiteboard/Object
-  - Whiteboard/Converter (2.5.11):
+  - Whiteboard/Converter (2.6.1):
     - Whiteboard/Object
-  - Whiteboard/NativeReplayer (2.5.11):
+  - Whiteboard/NativeReplayer (2.6.1):
     - Whiteboard/Replayer
-  - Whiteboard/Object (2.5.11):
+  - Whiteboard/Object (2.6.1):
     - YYModel (~> 1.0.4)
-  - Whiteboard/Replayer (2.5.11):
+  - Whiteboard/Replayer (2.6.1):
     - Whiteboard/Base
-  - Whiteboard/Room (2.5.11):
+  - Whiteboard/Room (2.6.1):
     - Whiteboard/Base
-  - Whiteboard/Utils (2.5.11):
+  - Whiteboard/Utils (2.6.1):
     - Whiteboard/Base
   - YYModel (1.0.4)
 
@@ -43,7 +43,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  Whiteboard: 74094a008acfe216822fa83783f3972b3e541777
+  Whiteboard: 2b65995a0158c09d56b941ce6875dc3859c5c235
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: 2ddde4082da93a898580af8c7e62e3325b3bcb26
