@@ -199,6 +199,26 @@
     }];
 }
 
+- (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;
+{
+    [self.bridge callHandler:@"room.setWritable" arguments:@[@(writable)] completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            NSDictionary *error = dict[@"__error"];
+            if (error) {
+                NSString *desc = error[@"message"] ? : @"";
+                NSString *description = error[@"jsStack"] ? : @"";
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+            } else {
+                completionHandler(YES, nil);
+            }
+        }
+    }];
+}
+
+
 - (void)removeScenes:(NSString *)dirOrPath
 {
     [self.bridge callHandler:@"room.removeScenes" arguments:@[dirOrPath]];

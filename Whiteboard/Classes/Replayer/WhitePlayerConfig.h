@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *step;
 
 /** 视野范围 */
-//@property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;
+@property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;
 
 @end
 

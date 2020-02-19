@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  视野范围限制
  */
-//@property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;
+@property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;
 
 /**
  加入房间时，允许带入用户数据（限制：允许转换为 JSON，或者单纯的 NSString，数字 NSNumber）。
@@ -51,6 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) id userPayload;
 @property (nonatomic, copy, nullable) WhiteMemberInformation *memberInfo __attribute__((deprecated("memberInfo is deprecated, please use userPayload")));
 
+/**
+ 以只读模式进入房间，只能接收其他人同步的信息。不能操作教具、修改房间状态，也不会出现在 roomMembers 中。
+ 默认为 true。
+ */
+@property (nonatomic, assign) BOOL isWritable;
 /**
  房间进入重连的最长时间，超时后，会主动断连，并在 phaseChange 中回调。同时还会触发 fireDisconnectWithError，会返回：重连时长超出 xx 毫秒...的提示
  单位：秒。

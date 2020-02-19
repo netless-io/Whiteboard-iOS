@@ -73,6 +73,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 主动断开连接 */
 - (void)disconnect:(void (^ _Nullable) (void))completeHandler;
 
+/**
+ 只读切换，只读时，无法执行任何能够影响他人的API
+ */
+- (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;
+
 #pragma mark - Operation
 /**
  进入只读模式，不响应用户任何手势
