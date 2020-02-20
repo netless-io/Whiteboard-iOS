@@ -31,7 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 通用 API
 
-/**  如果白板窗口大小改变。应该重新调用该方法刷新尺寸 */
+/**
+ 如果白板View大小改变，需要主动重新调用该方法，告知 sdk 界面发生变化
+ 注意：使用 autolayout 修改白板布局时，白板界面并没有立即刷新，可以使用延时操作，或在相应大小修改回调时，再调用。
+ */
 - (void)refreshViewSize;
 /** 返回当前坐标点，在白板内部的坐标位置 */
 - (void)convertToPointInWorld:(WhitePanEvent *)point result:(void (^) (WhitePanEvent *convertPoint))result;

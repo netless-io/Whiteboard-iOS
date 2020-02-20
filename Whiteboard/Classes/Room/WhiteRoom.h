@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 同步 API
 /** 当前用户在白板上的序号 id。
- 从 0 开始，与 RoomMember 中的 memberId 相同
+ 从 0 开始，与该用户在 RoomMember 中的 memberId 相同。
  */
 @property (nonatomic, strong, readonly) NSNumber *observerId;
 /** 房间 uuid */
@@ -44,16 +44,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) WhiteBroadcastState *broadcastState;
 /** 缩放比例 */
 @property (nonatomic, assign, readonly) CGFloat scale;
+/** 房间状态信息，继承自 WhiteDisplayerState（Room 与 Player 共同状态）*/
 @property (nonatomic, strong, readonly) WhiteRoomState *state;
-/** 场景状态 */
+/** 白板页面（场景）状态，属于房间状态之一 */
 @property (nonatomic, strong, readonly) WhiteSceneState *sceneState;
 /** 连接状态 */
 @property (nonatomic, assign, readonly) WhiteRoomPhase phase;
 
 #pragma mark - action API
 
-/** 白板所有人共享的全局状态
- 1.0 用户请阅读文档站中 [场景管理] 更新 API，使用setScencePath API
+/**
+ 白板所有人共享的全局状态
+ 1.0 迁移用户，请阅读文档站中 [页面（场景）管理] ，使用setScencePath API 进行翻页。
  */
 - (void)setGlobalState:(WhiteGlobalState * )globalState;
 
@@ -62,10 +64,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 切换用户视角模式 */
 - (void)setViewMode:(WhiteViewMode)viewMode;
+
 #pragma mark - action API
 
 /**
- 如果白板窗口大小改变。应该重新调用该方法刷新尺寸
+ 如果白板窗口大小改变，需要重新调用该方法刷新尺寸。
  查看父类 WhiteDisplayer 类中方法
  */
 //- (void)refreshViewSize;
