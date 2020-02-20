@@ -11,7 +11,8 @@
 - 开放视野限制 API（查看 WhiteCameraBound 类相关内容）
 - 添加回放时间进度回调频率 API（详情见 WhitePlayerConfig`step`属性）
 - 添加重连等待时长 API（详见 WhiteRoomConfig`timeout`属性）
-- 添加只读模式（详情见 WhiteRoomConfig`writable`属性，以及 WhiteRoom `setWritable:completionHandler:`方法）
+- 添加`writable`只读模式（详情见 WhiteRoomConfig`writable`属性，以及 WhiteRoom `setWritable:completionHandler:`方法）
+    * 修正`disableOperations:`描述为禁止操作API
 - WhiteRoom 追加主动断连标记
 - 修复部分情况下，清屏 API 失效的情况
 ## [2.6.0] - 2020-02-18
