@@ -56,7 +56,7 @@
             } else {
                 WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:config.uuid bridge:weakBridge state:[WhiteRoomState modelWithJSON:dict[@"state"]]];
                 room.observerId = dict[@"observerId"];
-                room.writable = dict[@"isWritable"];
+                room.writable = [dict[@"isWritable"] boolValue];
                 weakBridge.roomCallbacks.room = room;
                 completionHandler(YES, room, nil);
             }
