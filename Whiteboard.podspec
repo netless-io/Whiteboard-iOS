@@ -24,6 +24,7 @@ Pod::Spec.new do |s|
   s.subspec 'Object' do |object|
     object.source_files = 'Whiteboard/Classes/Object/**'
     object.public_header_files = 'Whiteboard/Classes/Object/**.h'
+    object.private_header_files = 'Whiteboard/Classes/Object/*+Private.h'
     object.dependency 'YYModel', '~> 1.0.4'
     object.frameworks = 'UIKit'
   end
@@ -38,6 +39,7 @@ Pod::Spec.new do |s|
   # 工具类
   s.subspec 'Utils' do |utils|
     utils.source_files = 'Whiteboard/Classes/Utils/**'
+    utils.private_header_files = 'Whiteboard/Classes/Utils/*+Private.h'
     utils.frameworks = 'AVFoundation'
     utils.dependency 'Whiteboard/Base'
   end
@@ -46,6 +48,7 @@ Pod::Spec.new do |s|
   s.subspec 'Base' do |base|
     base.source_files = 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**'
     base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h'
+    base.private_header_files = 'Whiteboard/Classes/Displayer/*+Private.h', 'Whiteboard/Classes/SDK/*+Private.h'
     base.frameworks = 'WebKit'
     base.dependency 'dsBridge', '~> 3.0.2'
     base.dependency 'Whiteboard/Object'
@@ -55,6 +58,7 @@ Pod::Spec.new do |s|
   s.subspec 'Room' do |room|
     room.source_files = 'Whiteboard/Classes/Room/**'
     room.public_header_files = 'Whiteboard/Classes/Room/**.h'
+    room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h'
     room.dependency 'Whiteboard/Base'
   end
 
@@ -62,6 +66,7 @@ Pod::Spec.new do |s|
   s.subspec 'Replayer' do |replayer|
     replayer.source_files = 'Whiteboard/Classes/Replayer/**'
     replayer.public_header_files = 'Whiteboard/Classes/Replayer/**.h'
+    replayer.private_header_files = 'Whiteboard/Classes/Replayer/*+Private.h'
     replayer.dependency 'Whiteboard/Base'
   end
 
@@ -69,6 +74,7 @@ Pod::Spec.new do |s|
   s.subspec 'NativeReplayer' do |naitve|
     naitve.source_files = 'Whiteboard/Classes/NativeReplayer/**'
     naitve.public_header_files = 'Whiteboard/Classes/NativeReplayer/**.h'
+    naitve.private_header_files = 'Whiteboard/Classes/NativeReplayer/*+Private.h'
     naitve.dependency 'Whiteboard/Replayer'
     naitve.frameworks = 'AVFoundation'
   end
