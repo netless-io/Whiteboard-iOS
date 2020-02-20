@@ -87,21 +87,19 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Operation
 /**
  禁止操作，不响应用户任何手势
- @param readonly 是否进入禁止操作
+ @param disable 是否禁止操作，true 为禁止。
  */
-- (void)disableOperations:(BOOL)readonly;
+- (void)disableOperations:(BOOL)disable;
 
 /**
  禁止视野移动
-
- @param disableCameraTransform 是否禁止移动
+ @param disableCameraTransform 是否禁止移动，true 为禁止。
  */
 - (void)disableCameraTransform:(BOOL)disableCameraTransform;
 
 /**
  禁止用户的教具操作
-
- @param disable 是否禁止教具操作
+ @param disable 是否禁止教具操作，true 为禁止。
  */
 - (void)disableDeviceInputs:(BOOL)disable;
 
