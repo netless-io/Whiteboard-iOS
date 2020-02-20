@@ -206,8 +206,11 @@
 - (void)firePhaseChanged:(WhiteRoomPhase)phase
 {
     NSLog(@"%s, %ld", __FUNCTION__, (long)phase);
+    if (self.room.disconnectedBySelf || !self.isReconnecting || !self.sdk) {
+        return;
+    }
     
-    if (phase == WhiteRoomPhaseDisconnected && self.sdk && !self.isReconnecting && self.roomUuid && self.roomToken) {
+    if (phase == WhiteRoomPhaseDisconnected && self.roomUuid && self.roomToken) {
         self.reconnecting = YES;
         [self.sdk joinRoomWithUuid:self.roomUuid roomToken:self.roomToken completionHandler:^(BOOL success, WhiteRoom *room, NSError *error) {
             self.reconnecting = NO;
