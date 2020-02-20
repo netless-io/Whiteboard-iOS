@@ -86,8 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Operation
 /**
- 进入只读模式，不响应用户任何手势
- @param readonly 是否进入只读模式
+ 禁止操作，不响应用户任何手势
+ @param readonly 是否进入禁止操作
  */
 - (void)disableOperations:(BOOL)readonly;
 
