@@ -78,7 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  只读切换，只读时，无法执行任何能够影响他人的API
  */
-- (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;
+- (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL isWritable, NSError * _Nullable error))completionHandler;
+@property (nonatomic, assign, readonly, getter=isWritable) BOOL writable;
 
 #pragma mark - Operation
 /**

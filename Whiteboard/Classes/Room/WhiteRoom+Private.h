@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteRoom ()
 
 @property (nonatomic, strong, readwrite) NSNumber *observerId;
+@property (nonatomic, assign, readwrite, getter=isWritable) BOOL writable;
 
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge NS_UNAVAILABLE;
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge state:(WhiteRoomState *)roomState;

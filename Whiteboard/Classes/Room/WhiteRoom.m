@@ -200,7 +200,7 @@
     }];
 }
 
-- (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;
+- (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL isWritable, NSError * _Nullable error))completionHandler;
 {
     [self.bridge callHandler:@"room.setWritable" arguments:@[@(writable)] completionHandler:^(id  _Nullable value) {
         if (completionHandler) {
@@ -213,7 +213,9 @@
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
                 completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
             } else {
-                completionHandler(YES, nil);
+                BOOL isWritable = [dict[@"isWritable"] boolValue];
+                self.writable = isWritable;
+                completionHandler(isWritable, nil);
             }
         }
     }];
