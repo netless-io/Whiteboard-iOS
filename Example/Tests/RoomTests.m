@@ -13,7 +13,7 @@
 typedef void(^InterrupterBlock)(NSString *url);
 
 @interface RoomTests : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
-@property (nonatomic, strong) WhiteRoomViewController *vc;
+@property (nonatomic, strong) WhiteRoomViewController *roomVC;
 @property (nonatomic, strong) WhiteRoom *room;
 @property (nonatomic, copy) InterrupterBlock interrupterBlock;
 @end
@@ -24,26 +24,18 @@ typedef void(^InterrupterBlock)(NSString *url);
 - (void)setUp
 {
     [super setUp];
-    self.vc = [[WhiteRoomViewController alloc] initWithSdkConfig:[self testingConfig]];
-    self.vc.roomCallbackDelegate = self;
-    self.vc.commonDelegate = self;
     
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
+    
     __weak typeof(self)weakSelf = self;
-    self.vc.roomBlock = ^(WhiteRoom *room, NSError *error) {
+    self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
         XCTAssertNotNil(room);
         [exp fulfill];
     };
-    
-    //Webview 在视图栈中才能正确执行 js
-    __unused UIView *view = [self.vc view];
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav pushViewController:self.vc animated:YES];
-    }
+
+    [self pushRoomVC];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
@@ -79,11 +71,29 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 #pragma mark - Prepare
 
+- (void)pushRoomVC {
+    //Webview 在视图栈中才能正确执行 js
+    __unused UIView *view = [self.roomVC view];
+    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([nav isKindOfClass:[UINavigationController class]]) {
+        [nav pushViewController:self.roomVC animated:YES];
+    }
+}
+
 - (void)popToRoot {
     UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
    if ([nav isKindOfClass:[UINavigationController class]]) {
        [nav popToRootViewControllerAnimated:YES];
    }
+}
+
+- (WhiteRoomViewController *)roomVC {
+    if (!_roomVC) {
+        _roomVC = [[WhiteRoomViewController alloc] initWithSdkConfig:[self testingConfig]];
+        _roomVC.roomCallbackDelegate = self;
+        _roomVC.commonDelegate = self;
+    }
+    return _roomVC;
 }
 
 - (WhiteSdkConfiguration *)testingConfig;
@@ -187,6 +197,54 @@ static NSTimeInterval kTimeout = 30;
     }];
 }
 
+- (void)testWritableFalseInit {
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    self.roomVC = nil;
+    [self popToRoot];
+    
+    self.roomVC.isWritable = NO;
+    __weak typeof(self)weakSelf = self;
+    self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
+        typeof(weakSelf)self = weakSelf;
+        weakSelf.room = room;
+        XCTAssertNotNil(room);
+        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable);
+        [exp fulfill];
+    };
+
+    [self pushRoomVC];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+
+}
+
+- (void)testSetWritable {
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    __weak typeof(self)weakSelf = self;
+    
+    BOOL writable = NO;
+    [self.room setWritable:writable completionHandler:^(BOOL isWritable, NSError * _Nullable error) {
+        id self = weakSelf;
+        XCTAssertEqual(writable, weakSelf.room.isWritable);
+        XCTAssertEqual(writable, isWritable);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 #pragma mark - Camera
 
 - (void)testCameraScale
@@ -219,7 +277,7 @@ static NSTimeInterval kTimeout = 30;
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room disableOperations:YES];
     
-    [self.vc.boardView evaluateJavaScript:@"room.disableOperations" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableOperations" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if ([result boolValue]) {
             [exp fulfill];
         }
@@ -238,7 +296,7 @@ static NSTimeInterval kTimeout = 30;
     [self.room disableOperations:YES];
     [self.room disableOperations:NO];
 
-    [self.vc.boardView evaluateJavaScript:@"room.disableOperations" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableOperations" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (![result boolValue]) {
             [exp fulfill];
         }
@@ -257,7 +315,7 @@ static NSTimeInterval kTimeout = 30;
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room disableDeviceInputs:YES];
 
-    [self.vc.boardView evaluateJavaScript:@"room.disableDeviceInputs" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableDeviceInputs" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if ([result boolValue]) {
             [exp fulfill];
         }
@@ -276,7 +334,7 @@ static NSTimeInterval kTimeout = 30;
     [self.room disableDeviceInputs:YES];
     [self.room disableDeviceInputs:NO];
 
-    [self.vc.boardView evaluateJavaScript:@"room.disableDeviceInputs" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableDeviceInputs" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (![result boolValue]) {
             [exp fulfill];
         }
@@ -294,7 +352,7 @@ static NSTimeInterval kTimeout = 30;
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room disableCameraTransform:YES];
 
-    [self.vc.boardView evaluateJavaScript:@"room.disableCameraTransform" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableCameraTransform" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if ([result boolValue]) {
             [exp fulfill];
         }
@@ -313,7 +371,7 @@ static NSTimeInterval kTimeout = 30;
     [self.room disableCameraTransform:YES];
     [self.room disableCameraTransform:NO];
 
-    [self.vc.boardView evaluateJavaScript:@"room.disableCameraTransform" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableCameraTransform" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (![result boolValue]) {
             [exp fulfill];
         }

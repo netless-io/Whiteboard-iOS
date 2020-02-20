@@ -21,6 +21,20 @@
 
 @implementation WhiteRoomViewController
 
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    _isWritable = YES;
+    return self;
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    _isWritable = YES;
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -145,7 +159,8 @@
     
     NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg"};
     WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken userPayload:payload];
-
+    // * isWritable 默认为 yes，此处为了单元测试用
+    roomConfig.isWritable = self.isWritable;
     // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
     // roomConfig.disableEraseImage = YES;
     

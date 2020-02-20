@@ -18,6 +18,7 @@ typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror)
 
 #pragma mark - Unit Testing
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
+@property (nonatomic, assign) BOOL isWritable;
 
 #pragma mark - CallbackDelegate
 @property (nonatomic, weak, nullable) id<WhiteRoomCallbackDelegate> roomCallbackDelegate;
