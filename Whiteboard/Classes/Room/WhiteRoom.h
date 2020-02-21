@@ -65,6 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 切换用户视角模式 */
 - (void)setViewMode:(WhiteViewMode)viewMode;
 
+- (void)debugInfo:(void (^ _Nullable)(NSDictionary * _Nullable dict))completionHandler;
+
 #pragma mark - action API
 
 /**

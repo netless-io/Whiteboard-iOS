@@ -135,6 +135,17 @@
     [self.bridge callHandler:@"room.disableOperations" arguments:@[@(readonly)]];
 }
 
+- (void)debugInfo:(void (^ _Nullable)(NSDictionary * _Nullable dict))completionHandler
+{
+    [self.bridge callHandler:@"room.state.debugInfo" completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                completionHandler(value);
+            }
+        }
+    }];
+}
+
 #pragma mark - PPT
 - (void)pptNextStep
 {
