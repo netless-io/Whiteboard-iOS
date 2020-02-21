@@ -6,8 +6,14 @@
 //
 
 #import "WhiteSdkConfiguration.h"
-
+#import "WhiteSDK.h"
 static NSString *const kJSDeviceType = @"deviceType";
+
+@interface WhiteSdkConfiguration ()
+
+@property (nonatomic, copy, nonnull) NSDictionary *nativeTags;
+
+@end
 
 @implementation WhiteSdkConfiguration
 
@@ -22,12 +28,15 @@ static NSString *const kJSDeviceType = @"deviceType";
     _deviceType = WhiteDeviceTypeTouch;
     _zoomMinScale = 0.1;
     _zoomMaxScale = 10;
+    UIDevice *currentDevice = [UIDevice currentDevice];
+    _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", currentDevice.model, currentDevice.systemVersion]};
+
     return self;
 }
 
 + (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper
 {
-    return @{@"sdkStrategyConfig": @"initializeOriginsStates"};
+    return @{@"sdkStrategyConfig": @"initializeOriginsStates", @"nativeTags": @"__nativeTags"};
 }
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {

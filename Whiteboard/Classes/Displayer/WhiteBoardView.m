@@ -37,7 +37,7 @@
         [configuration setValue:@(1) forKey:@"allowUniversalAccessFromFileURLs"];
 #endif
     }
-
+    
     self = [super initWithFrame:frame configuration:configuration];
     
     if (@available(iOS 11.0.0, *)) {
