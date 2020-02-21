@@ -27,10 +27,8 @@
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration
 {
     configuration.allowsInlineMediaPlayback = YES;
-    NSOperatingSystemVersion iOS_10_0_0 = (NSOperatingSystemVersion){10, 0, 0};
-    NSOperatingSystemVersion iOS_11_0_0 = (NSOperatingSystemVersion){11, 0, 0};
-
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_10_0_0] && [configuration respondsToSelector:@selector(setMediaTypesRequiringUserActionForPlayback:)]) {
+    
+    if (@available(iOS 10.0.0, *)) {
         configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
 #if defined(__LP64__) && __LP64__
         [configuration setValue:@"TRUE" forKey:@"allowUniversalAccessFromFileURLs"];
@@ -38,13 +36,11 @@
         //32位 CPU 支持：https://www.jianshu.com/p/fe876b9d1f7c
         [configuration setValue:@(1) forKey:@"allowUniversalAccessFromFileURLs"];
 #endif
-    } else {
-        // Fallback on earlier versions
     }
 
     self = [super initWithFrame:frame configuration:configuration];
-
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_11_0_0] && [self.scrollView respondsToSelector:@selector(setContentInsetAdjustmentBehavior:)]) {
+    
+    if (@available(iOS 11.0.0, *)) {
         self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     
