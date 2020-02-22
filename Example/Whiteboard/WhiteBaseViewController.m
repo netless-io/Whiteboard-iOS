@@ -69,16 +69,38 @@
 
 - (void)changeFrame
 {
-    CGFloat newOffset = CGRectGetMaxY(self.view.frame) == CGRectGetMaxY(self.boardView.frame) ? -200 : 0;
-    
-    [self.boardView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(newOffset);
-    }];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // room 需要调用 refreshViewSize（由于文字教具弹起键盘的原因，sdk 无法主动调用）
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refresh" object:nil];
-    });
+    static int i = 0;
+    if (i % 3 == 1) {
+        [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.mas_topLayoutGuideBottom);
+            make.left.bottom.right.equalTo(self.view);
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // room 需要调用 refreshViewSize（由于文字教具弹起键盘的原因，sdk 无法主动调用）
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refresh" object:nil];
+        });
+    } else if (i % 3 == 0) {
+        [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self.view);
+            make.width.equalTo(@90);
+            make.height.equalTo(@51);
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // room 需要调用 refreshViewSize（由于文字教具弹起键盘的原因，sdk 无法主动调用）
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refresh" object:nil];
+        });
+    } else if (i % 3 == 2) {
+        [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.mas_topLayoutGuideBottom);
+            make.bottom.equalTo(self.view).inset(200);
+            make.left.right.equalTo(self.view).inset(50);
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // room 需要调用 refreshViewSize（由于文字教具弹起键盘的原因，sdk 无法主动调用）
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refresh" object:nil];
+        });
+    }
+    i++;
 }
 
 #pragma mark - WhiteSDK
