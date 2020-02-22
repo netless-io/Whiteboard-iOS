@@ -206,10 +206,11 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [self.player setObserverMode:WhiteObserverModeFreedom];
     
     __weak typeof(self)weakSelf = self;
+    
     self.playBlock = ^{
         [weakSelf.player getPlayerStateWithResult:^(WhitePlayerState * _Nonnull state) {
             id self = weakSelf;
-            XCTAssertTrue(state.observerMode == WhiteObserverModeFreedom);
+            XCTAssertTrue(state.observerMode == WhiteObserverModeFreedom, @"already set %ld but still %ld", (long)WhiteObserverModeFreedom, (long)state.observerMode);
             [exp fulfill];
         }];
     };

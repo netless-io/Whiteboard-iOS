@@ -31,7 +31,7 @@ typedef void(^InterrupterBlock)(NSString *url);
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
-        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable);
+        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.isWritable, room.isWritable);
         XCTAssertNotNil(room);
         [exp fulfill];
     };
@@ -48,7 +48,6 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 - (void)tearDown
 {
-    
     if (self.room.phase == WhiteRoomPhaseDisconnected) {
         [self popToRoot];
         [super tearDown];
@@ -127,10 +126,10 @@ static NSTimeInterval kTimeout = 30;
     
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room getMemberStateWithResult:^(WhiteMemberState *state) {
-        XCTAssertTrue([state isKindOfClass:[WhiteMemberState class]]);
-        XCTAssertTrue([state.currentApplianceName isEqualToString:mState.currentApplianceName]);
+        XCTAssertTrue([state isKindOfClass:[WhiteMemberState class]], @"state is not a WhiteMemberState instance");
+        XCTAssertTrue([state.currentApplianceName isEqualToString:mState.currentApplianceName], @"set appliance %@ but realy appliance is: %@", mState.currentApplianceName, state.currentApplianceName);
         for (NSInteger i=0; i < [state.strokeColor count]; i++) {
-            XCTAssertTrue([mState.strokeColor[i] isEqualToNumber:state.strokeColor[i]]);
+            XCTAssertTrue([mState.strokeColor[i] isEqualToNumber:state.strokeColor[i]], @"set color %@ but realy color is: %@", mState.strokeColor[i], state.strokeColor[i]);
         }
         [exp fulfill];
     }];
@@ -159,7 +158,7 @@ static NSTimeInterval kTimeout = 30;
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room getBroadcastStateWithResult:^(WhiteBroadcastState *state) {
         XCTAssertTrue([state isKindOfClass:[WhiteBroadcastState class]]);
-        XCTAssertTrue(state.viewMode == viewMode);
+        XCTAssertTrue(state.viewMode == viewMode, @"set viewMode as %ld but real is %ld", (long)viewMode, (long)viewMode);
         [exp fulfill];
     }];
     
@@ -211,7 +210,7 @@ static NSTimeInterval kTimeout = 30;
         typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
         XCTAssertNotNil(room);
-        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable);
+        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.isWritable, room.isWritable);
         [exp fulfill];
     };
 
@@ -261,7 +260,7 @@ static NSTimeInterval kTimeout = 30;
     [self.room moveCamera:config];
     
     [self.room getZoomScaleWithResult:^(CGFloat scale) {
-        XCTAssertTrue(scale == zoomScale);
+        XCTAssertTrue(scale == zoomScale, @"set scale is:%f realy scale is:%f", scale, zoomScale);
         [exp fulfill];
     }];
     
@@ -559,7 +558,7 @@ static NSTimeInterval kTimeout = 30;
             XCTAssertTrue([member isKindOfClass:[WhiteRoomMember class]]);
             NSLog(@"%s %@", __FUNCTION__, [member jsonString]);
         }
-        XCTAssertTrue([roomMembers count] == 1);
+        XCTAssertTrue([roomMembers count] == 1, @"room should be 1 people, but has %lu", (unsigned long)[roomMembers count]);
         [exp fulfill];
     }];
     
@@ -646,7 +645,7 @@ static NSTimeInterval kTimeout = 30;
 #pragma mark - WhiteCommonCallbackDelegate
 - (void)throwError:(NSError *)error
 {
-    NSLog(@"throwError: %@", error.userInfo);
+    XCTFail(@"调用出现报错：%@", error.userInfo);
 }
 
 - (NSString *)urlInterrupter:(NSString *)url
