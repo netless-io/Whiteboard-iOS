@@ -17,11 +17,19 @@
     return @"";
 }
 
-- (NSString *)throwError:(id)error
+- (NSString *)throwError:(NSDictionary *)errInfo
 {
     if ([self.delegate respondsToSelector:@selector(throwError:)]) {
-        NSDictionary *dict = [NSDictionary yy_modelWithJSON:error];
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:NSIntegerMax userInfo:dict];
+        NSMutableDictionary *info = [errInfo mutableCopy];
+        
+        static NSString *kMessageKey = @"message";
+        static NSString *kErrorKey = @"error";
+        info[NSLocalizedDescriptionKey] = errInfo[kMessageKey];
+        info[NSDebugDescriptionErrorKey] = errInfo[kErrorKey];
+        info[kMessageKey] = nil;
+        info[kErrorKey] = nil;
+        
+        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:NSIntegerMax userInfo:info];
         [self.delegate throwError:error];
     }
     return @"";
