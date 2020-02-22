@@ -241,6 +241,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     }];
 }
 
+//FIXME:添加一个异步获取，反而获得的是 1
 - (void)testPlaybackSpeed
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
@@ -322,7 +323,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 
 - (void)phaseChanged:(WhitePlayerPhase)phase
 {
-    NSLog(@"PlayerTest %s %ld", __FUNCTION__, (long)phase);
+//    NSLog(@"PlayerTest %s %ld", __FUNCTION__, (long)phase);
     if (phase == WhitePlayerPhasePlaying && self.playBlock) {
         self.playBlock();
     } else if (phase == WhitePlayerPhasePause && self.pauseBlock) {
@@ -332,7 +333,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 
 - (void)loadFirstFrame
 {
-    NSLog(@"PlayerTest %s", __FUNCTION__);
+//    NSLog(@"PlayerTest %s", __FUNCTION__);
     if (self.loadFirstFrameBlock) {
         self.loadFirstFrameBlock();
     }
@@ -340,23 +341,24 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 
 - (void)sliceChanged:(NSString *)slice
 {
-    NSLog(@"PlayerTest %s slice:%@", __FUNCTION__, slice);
+//    NSLog(@"PlayerTest %s slice:%@", __FUNCTION__, slice);
 }
 
 - (void)playerStateChanged:(WhitePlayerState *)modifyState
 {
-    NSString *str = [modifyState jsonString];
-    NSLog(@"PlayerTest %s state:%@", __FUNCTION__, str);
+//    NSString *str = [modifyState jsonString];
+//    NSLog(@"PlayerTest %s state:%@", __FUNCTION__, str);
 }
 
 - (void)stoppedWithError:(NSError *)error
 {
-    NSLog(@"PlayerTest %s error:%@", __FUNCTION__, error);
+//    NSLog(@"PlayerTest %s error:%@", __FUNCTION__, error);
+    XCTFail(@"异常停止：%@", error.userInfo);
 }
 
 - (void)scheduleTimeChanged:(NSTimeInterval)time
 {
-    NSLog(@"PlayerTest %s time:%f", __FUNCTION__, (double)time);
+//    NSLog(@"PlayerTest %s time:%f", __FUNCTION__, (double)time);
     if (self.seekBlock) {
         self.seekBlock(time);
     }
@@ -365,7 +367,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 - (void)fireMagixEvent:(WhiteEvent *)event
 {
     XCTAssertNotNil(event);
-    NSLog(@"fireMagixEvent: %@", event);
+//    NSLog(@"fireMagixEvent: %@", event);
     if (self.eventBlock) {
         self.eventBlock(event);
     }
@@ -381,6 +383,11 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 }
 
 #pragma mark - WhiteCommonCallbackDelegate
+- (void)throwError:(NSError *)error
+{
+    XCTFail(@"调用出现报错：%@", error.userInfo);
+}
+
 - (NSString *)urlInterrupter:(NSString *)url
 {
     if (self.interrupterBlock) {

@@ -606,27 +606,29 @@ static NSTimeInterval kTimeout = 30;
 #pragma mark - WhiteRoomCallbackDelegate
 - (void)firePhaseChanged:(WhiteRoomPhase)phase
 {
-    NSLog(@"%s, %ld", __func__, (long)phase);
+//    NSLog(@"%s, %ld", __func__, (long)phase);
 }
 
 - (void)fireRoomStateChanged:(WhiteRoomState *)magixPhase;
 {
-    NSLog(@"%s, %@", __func__, [magixPhase jsonString]);
+//    NSLog(@"%s, %@", __func__, [magixPhase jsonString]);
 }
 
 - (void)fireDisconnectWithError:(NSString *)error
 {
-    NSLog(@"%s, %@", __func__, error);
+//    NSLog(@"%s, %@", __func__, error);
+    XCTFail(@"fireDisconnectWithError：%@", error);
 }
 
 - (void)fireKickedWithReason:(NSString *)reason
 {
-    NSLog(@"%s, %@", __func__, reason);
+    XCTFail(@"fireKickedWithReason：%@", reason);
+//    NSLog(@"%s, %@", __func__, reason);
 }
 
 - (void)fireCatchErrorWhenAppendFrame:(NSUInteger)userId error:(NSString *)error
 {
-    NSLog(@"%s, %lu %@", __func__, (unsigned long)userId, error);
+//    NSLog(@"%s, %lu %@", __func__, (unsigned long)userId, error);
 }
 
 - (void)fireMagixEvent:(WhiteEvent *)event
