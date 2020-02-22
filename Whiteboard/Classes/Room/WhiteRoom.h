@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 连接状态 */
 @property (nonatomic, assign, readonly) WhiteRoomPhase phase;
 
-#pragma mark - action API
+#pragma mark - Normal API
 
 /**
  白板所有人共享的全局状态
