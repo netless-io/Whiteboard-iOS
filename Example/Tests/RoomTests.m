@@ -31,6 +31,7 @@ typedef void(^InterrupterBlock)(NSString *url);
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
+        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable);
         XCTAssertNotNil(room);
         [exp fulfill];
     };
