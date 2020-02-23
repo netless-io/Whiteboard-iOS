@@ -203,9 +203,12 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
 
-    [self.player setObserverMode:WhiteObserverModeFreedom];
     
     __weak typeof(self)weakSelf = self;
+    
+    self.loadFirstFrameBlock = ^{
+        [weakSelf.player setObserverMode:WhiteObserverModeFreedom];
+    };
     
     self.playBlock = ^{
         [weakSelf.player getPlayerStateWithResult:^(WhitePlayerState * _Nonnull state) {

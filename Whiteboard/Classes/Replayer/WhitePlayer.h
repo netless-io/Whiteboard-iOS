@@ -36,7 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
  @param beginTime 开始时间（秒）
  */
 - (void)seekToScheduleTime:(NSTimeInterval)beginTime;
-//设置查看模式
+/**
+ 设置查看模式
+ 必须要等待 phase 属性，从初始 WhitePlayerPhaseWaitingFirstFrame 变成其他任意状态时，该 API 才能正确设置。
+ */
 - (void)setObserverMode:(WhiteObserverMode)mode;
 
 @end
