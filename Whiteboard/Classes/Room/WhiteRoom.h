@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 连接状态 */
 @property (nonatomic, assign, readonly) WhiteRoomPhase phase;
 
-#pragma mark - Normal API
+#pragma mark - Set API
 
 /**
  白板所有人共享的全局状态
@@ -65,9 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 切换用户视角模式 */
 - (void)setViewMode:(WhiteViewMode)viewMode;
 
-- (void)debugInfo:(void (^ _Nullable)(NSDictionary * _Nullable dict))completionHandler;
 
-#pragma mark - action API
+#pragma mark - Action API
+
+/** 白板 debug 用的一些信息 */
+- (void)debugInfo:(void (^ _Nullable)(NSDictionary * _Nullable dict))completionHandler;
 
 /**
  如果白板窗口大小改变，需要重新调用该方法刷新尺寸。
@@ -75,26 +77,29 @@ NS_ASSUME_NONNULL_BEGIN
  */
 //- (void)refreshViewSize;
 
-/** 主动断开连接 */
+/** 主动断开连接，仍会触发 phaseChange API */
 - (void)disconnect:(void (^ _Nullable) (void))completeHandler;
-/** 当主动断开连接时，该值会被赋值为 YES */
-@property (nonatomic, assign) BOOL disconnectedBySelf;
+
+/** 在调用主动断连时，该值会被立即赋值为 YES，可以用于在 phaseChange 中区分 disconnect 原因 */
+@property (nonatomic, assign, readonly) BOOL disconnectedBySelf;
 
 /**
- 只读切换，只读时，无法执行任何能够影响他人的API
+ 读写模式切换。传入 false，进入只读模式，此时无法执行任何可以影响他人的 API 操作，当前用户也不会在房间用户列表。
+ 在加入房间前，就可以在 WhiteRoomConfig 中设置 isWritable ，来决定该模式。
  */
 - (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL isWritable, NSError * _Nullable error))completionHandler;
+/** 读写模式查询 API */
 @property (nonatomic, assign, readonly, getter=isWritable) BOOL writable;
 
-#pragma mark - Operation
+
 /**
- 禁止操作，不响应用户任何手势
+ 禁止操作，不响应用户的所有操作操作，是 disableDeviceInputs: disableCameraTransform: 方法的集合。
  @param disable 是否禁止操作，true 为禁止。
  */
 - (void)disableOperations:(BOOL)disable;
 
 /**
- 禁止视野移动
+ 禁止视野移动，视角为 follower + disableCameraTransform true 时，可以保证观众永远处于观众模式，永远跟随主播。
  @param disableCameraTransform 是否禁止移动，true 为禁止。
  */
 - (void)disableCameraTransform:(BOOL)disableCameraTransform;
@@ -105,15 +110,38 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)disableDeviceInputs:(BOOL)disable;
 
+/**
+ 发送自定义事件，详细内容，可以查看文档，或者单元测试代码，
+ 注册，移除自定义事件 API，在 WhiteDisplayer 父类中
+ */
+- (void)dispatchMagixEvent:(NSString *)eventName payload:(NSDictionary *)payload;
+
 #pragma mark - PPT
+
+/**
+ * 动态 ppt 下一步动画 API
+ * 如果当前页面，ppt 步骤动画，已经全部执行完，执行该 API 会进入（同一个目录）下一页；没有则不动。
+ * 如果当前页面，没有动态 ppt，会进入（同一个目录）下一页；没有则不动。
+ */
 - (void)pptNextStep;
+
+/**
+ * 动态 ppy 上一步动画 API
+ * 如果当前页面，ppt 步骤动画，已经是初始状态，执行该 API 会进入（同一个目录）上一页，并保持为上一页最后一个动画状态；没有则不动。
+ * 如果当前页面，没有动态 ppt，会退回（同一页面）上一页；没有则不动。
+ */
 - (void)pptPreviousStep;
 
 #pragma mark - Image API
 
 /**
- 1. 先使用 insertImage API，插入占位图
- 2. 再通过 completeImageUploadWithUuid:src: 替换内容
+ * 插入网络图片 API
+ * 一次传入图片坐标，大小信息，以及图片地址。是 insertImage: 和 completeImageUploadWithUuid:src: 的封装。
+ * */
+- (void)insertImage:(WhiteImageInformation *)imageInfo src:(NSString *)src;
+
+/**
+ 图片占位，会立即在白板上显示一个占位图
  */
 - (void)insertImage:(WhiteImageInformation *)imageInfo;
 
@@ -125,25 +153,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)completeImageUploadWithUuid:(NSString *)uuid src:(NSString *)src;
 
-/** 封装上述两个 API */
-- (void)insertImage:(WhiteImageInformation *)imageInfo src:(NSString *)src;
-
 #pragma mark - 延时
+
+/** 白板延时 API
+ 配合 rtmp 等有延迟的视频推流，人为延迟白板内容。
+ 白板内所有内容（包括自定义事件，GlobalState，RoomState 变化），都会被延时，只有当前用户自己的输入行为，不会有延时
+ */
 - (void)setTimeDelay:(NSTimeInterval)delay;
 @property (nonatomic, assign, readonly) NSTimeInterval delay;
-
-#pragma mark - 自定义事件
-/**
- 发送自定义事件，详细内容，可以查看文档，或者单元测试代码，
- 注册，移除自定义事件 API，在 WhiteDisplayer 父类中
- */
-- (void)dispatchMagixEvent:(NSString *)eventName payload:(NSDictionary *)payload;
 
 @end
 
 
-#pragma mark - 场景管理 API
-/** 白板场景（多页面）API，为了更好理解本部分 API，请先阅读 [文档站](https://developer.herewhite.com/) 中 [场景管理] 部分概念介绍 */
+#pragma mark - 页面（场景）管理 API
+/** 白板场景（多页面）API，为了更好理解本部分 API，请先阅读 [文档站](https://developer.neltess.link/) 中 [场景管理] 部分概念介绍 */
 @interface WhiteRoom (Scene)
 
 /** 获取场景 State，具体信息可以查看 WhiteSceneState 类 */
@@ -172,6 +195,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param index 目标场景 index。当前页面 index，可以通过 getSceneStateWithResult 获取
  @param completionHandler 完成回调，如果失败，会在 error 中的 userInfo 显示错误信息，一般为数组越界
+ 单纯切换上下页，可以使用 PPT API，见 ppt API 注释
  */
 - (void)setSceneIndex:(NSUInteger)index completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;
 
@@ -182,7 +206,10 @@ NS_ASSUME_NONNULL_BEGIN
  @param scenes WhiteScence 实例；在生成 WhiteScence 时，可以同时配置 ppt。
  @param index 选择在页面组，插入的位置。index 即为新 scence 的 index 位置。如果想要放在最末尾，可以传入 NSUIntegerMax。
  
- 注意：scenes 实际上只是白板页面的配置项，scenes 都会生成新页面
+ 注意：
+ 1. scenes 实际上只是白板页面的配置项，即使每次传入相同的 scenes，白板也会生成新页面。
+ 2. putScenes 调用后，并不会立即切换到对应页面，需要再调用 setScene 系列 API。
+ 3. putScenes 插入的白板页面，如果是当前目录下，也不能理解使用 room.sceneState 获取，需要通过对应的异步 API getRoomStateWithResult: 获取
  */
 - (void)putScenes:(NSString *)dir scenes:(NSArray<WhiteScene *> *)scenes index:(NSUInteger)index;
 
@@ -217,7 +244,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - 异步 API
-/** 该部分 API，均为异步获取。可以使用同步 property 直接获取新数据 */
+/**
+ * 异步 API
+ * 目前 SDK 会在状态变化时，自动更新所有对应的属性。
+ * 只有在同一个代码块，立即调用了 Set API，又立刻需要看到更新内容时，才需要调用异步 API
+ */
 @interface WhiteRoom (Asynchronous)
 
 /**
@@ -248,7 +279,6 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  缩小放大白板
  @param scale 相对于原始大小的比例，而不是相对当前的缩放比例
- 
  */
 - (void)zoomChange:(CGFloat)scale DEPRECATED_MSG_ATTRIBUTE("use moveCamera:");
 
