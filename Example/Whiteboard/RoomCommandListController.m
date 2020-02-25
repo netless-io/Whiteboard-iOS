@@ -197,10 +197,7 @@ static NSString *kReuseCell = @"reuseCell";
         }
         case CommandTypeInsertImage:
         {
-            WhiteImageInformation *info = [[WhiteImageInformation alloc] init];
-            info.width = 200;
-            info.height = 300;
-            info.uuid = @"WhiteImageInformation";
+            WhiteImageInformation *info = [[WhiteImageInformation alloc] initWithSize:CGSizeMake(200, 300)];
             //这一行与注释的两行代码等效
             [self.room insertImage:info src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
 //            [self.room insertImage:info];

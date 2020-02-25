@@ -531,10 +531,7 @@ static NSTimeInterval kTimeout = 30;
 - (void)testInsertImage
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    WhiteImageInformation *info = [[WhiteImageInformation alloc] init];
-    info.width = 200;
-    info.height = 300;
-    info.uuid = @"WhiteImageInformation";
+    WhiteImageInformation *info = [[WhiteImageInformation alloc] initWithSize:CGSizeMake(200, 300)];
     [self.room insertImage:info src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg"];
     
     self.interrupterBlock = ^(NSString *url) {
