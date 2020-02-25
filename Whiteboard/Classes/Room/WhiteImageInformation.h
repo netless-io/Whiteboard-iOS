@@ -8,15 +8,28 @@
 #import "WhiteObject.h"
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteImageInformation : WhiteObject
 
+/** 系统生成 UUID，指定宽高以及左上角坐标（白板坐标系内） */
+- (instancetype)initWithFrame:(CGRect)frame;
+
+/** 系统生成 UUID，指定宽高，图片中点为坐标系原点（白板坐标系内）*/
+- (instancetype)initWithSize:(CGSize)size;
+
+- (instancetype)initWithUuid:(NSString *)uuid frame:(CGRect)frame;
+
 @property (nonatomic, copy) NSString *uuid;
-/** 图片中点，在白板上的坐标，白板坐标原点为初始状态下，WhiteboardView 中点。 */
+/** 图片中点在白板内部坐标系的 X 坐标，白板坐标原点为初始状态下，WhiteboardView 中点。 */
 @property (nonatomic, assign) CGFloat centerX;
-/** 图片中点，在白板上的坐标，白板坐标原点为初始状态下，WhiteboardView 中点。*/
+/** 图片中点在白板内部坐标系上的 Y 坐标，白板坐标原点为初始状态下，WhiteboardView 中点。*/
 @property (nonatomic, assign) CGFloat centerY;
+/** 白板 1:1 缩放时，图片所占宽度 */
 @property (nonatomic, assign) CGFloat width;
+/** 白板 1:1 缩放时，图片所占高度 */
 @property (nonatomic, assign) CGFloat height;
 
 @end
+
+NS_ASSUME_NONNULL_END
