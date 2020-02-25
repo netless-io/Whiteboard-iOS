@@ -66,13 +66,15 @@
     [_timeInfo yy_modelSetWithJSON:@{key : @(time)}];
 }
 
+#pragma mark - action API
+
+static NSString * const PlayerNamespace = @"player.%@";
+
 - (void)setPlaybackSpeed:(CGFloat)playbackSpeed
 {
     _playbackSpeed = playbackSpeed;
     [self.bridge callHandler:[NSString stringWithFormat:PlayerNamespace, @"setPlaybackSpeed"] arguments:@[@(playbackSpeed)] completionHandler:nil];
 }
-
-#pragma mark - action API
 
 - (void)play
 {
@@ -136,7 +138,6 @@ static NSString * const kPlayerPhaseBuffering = @"buffering";
 
 #pragma mark - get API
 
-static NSString * const PlayerNamespace = @"player.%@";
 static NSString * const PlayerStateNamespace = @"player.state.%@";
 
 - (void)getPhaseWithResult:(void (^)(WhitePlayerPhase phase))result

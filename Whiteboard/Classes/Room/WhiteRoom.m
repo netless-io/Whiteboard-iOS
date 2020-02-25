@@ -15,6 +15,7 @@
 @property (nonatomic, assign, readwrite) NSTimeInterval delay;
 @property (nonatomic, assign, readwrite) WhiteRoomPhase phase;
 @property (nonatomic, strong, readwrite) WhiteRoomState *state;
+@property (nonatomic, assign, readwrite) BOOL disconnectedBySelf;
 
 @end
 
@@ -37,7 +38,8 @@
 
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge;
 {
-    self = [self initWithUuid:uuid bridge:bridge state:nil];
+    WhiteRoomState *roomState = [[WhiteRoomState alloc] init];
+    self = [self initWithUuid:uuid bridge:bridge state:roomState];
     return self;
 }
 
@@ -387,21 +389,29 @@
 
 - (void)setViewSizeWithWidth:(CGFloat)width height:(CGFloat)height;
 {
-    [self.bridge callHandler:@"room.setViewSize" arguments:@[@(width), @(height)]];
+    [self.bridge callHandler:@"room.refreshViewSize" arguments:@[]];
 }
 
 - (void)zoomChange:(CGFloat)scale
 {
-    [self.bridge callHandler:@"room.zoomChange" arguments:@[@(scale)]];
+    WhiteCameraConfig *cameraConfig = [[WhiteCameraConfig alloc] init];
+    cameraConfig.scale = @(scale);
+    [self moveCamera:cameraConfig];
 }
 
 - (void)getPptImagesWithResult:(void (^) (NSArray <NSString *> *pptPages))result
 {
-    [self.bridge callHandler:@"room.getPptImages" completionHandler:^(id  _Nullable value) {
-        if (result && [value isKindOfClass:[NSString class]]) {
-            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
-            NSArray *values = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            result(values);
+    [self getScenesWithResult:^(NSArray<WhiteScene *> * _Nonnull scenes) {
+        if (result) {
+            NSMutableArray<NSString *> *pptPages = [NSMutableArray arrayWithCapacity:[scenes count]];
+            for (WhiteScene *scene in scenes) {
+                if (scene.ppt) {
+                    [pptPages addObject:scene.ppt.src];
+                } else {
+                    [pptPages addObject:@""];
+                }
+            }
+            result(pptPages);
         }
     }];
 }
