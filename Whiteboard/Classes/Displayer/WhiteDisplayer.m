@@ -13,6 +13,22 @@
 
 @implementation WhiteDisplayer
 
+#pragma mark - Class Methods
+
++ (WhiteScenePathType)scenePathTypeConvertFrom:(NSString *)type {
+    if ([type isEqualToString:@"page"]) {
+        return WhiteScenePathTypePage;
+    } else if ([type isEqualToString:@"dir"]) {
+        return WhiteScenePathTypeDir;
+    } else {
+        return WhiteScenePathTypeEmpty;
+    }
+}
+
+#pragma mark -
+#pragma mark - Instance Methods
+#pragma mark -
+
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge
 {
     self = [super init];
@@ -39,6 +55,20 @@
     NSUInteger B = floorf(b * 255.0);
     
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setBackgroundColor"] arguments:@[@(R), @(G), @(B), @(a * 255.0)]];
+}
+
+#pragma mark - 页面（场景）API
+
+- (void)getScenePathType:(NSString *)pathOrDir result:(void (^) (WhiteScenePathType pathType))result;
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"scenePathType"] arguments:@[pathOrDir] completionHandler:^(id  _Nullable value) {
+        if (result) {
+            if ([value isKindOfClass:[NSString class]]) {
+                WhiteScenePathType pathType = [[self class] scenePathTypeConvertFrom:value];
+                result(pathType);
+            }
+        }
+    }];
 }
 
 #pragma mark - 视野坐标类 API

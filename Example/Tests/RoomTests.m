@@ -386,6 +386,58 @@ static NSTimeInterval kTimeout = 30;
 
 #pragma mark - Scene API
 
+- (void)testSceneTypePage
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+
+    [self.room getScenePathType:@"/init" result:^(WhiteScenePathType pathType) {
+        XCTAssertEqual(pathType, WhiteScenePathTypePage);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testSceneTypeDir
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    WhitePptPage *pptPage = [[WhitePptPage alloc] initWithSrc:@"https://example.com/1.png" size:CGSizeMake(600, 800)];
+    WhiteScene *scene = [[WhiteScene alloc] initWithName:@"1" ppt:pptPage];
+    [self.room putScenes:@"/ppt" scenes:@[scene] index:0];
+
+    [self.room getScenePathType:@"/ppt" result:^(WhiteScenePathType pathType) {
+        XCTAssertEqual(pathType, WhiteScenePathTypeDir);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testSceneTypeEmpty
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+
+    [self.room getScenePathType:@"/dadasijdisajdisaj/disajdiosajdiasjdoisa" result:^(WhiteScenePathType pathType) {
+        XCTAssertEqual(pathType, WhiteScenePathTypeEmpty);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 /**
  put and setScene
  */

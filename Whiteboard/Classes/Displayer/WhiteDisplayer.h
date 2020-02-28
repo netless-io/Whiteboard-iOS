@@ -11,6 +11,15 @@
 #import "WhiteCameraBound.h"
 #import "WhitePanEvent.h"
 
+typedef NS_ENUM(NSInteger, WhiteScenePathType) {
+    /** 路径对应的内容为空 */
+    WhiteScenePathTypeEmpty,
+    /** 路径对应的内容，是一个白板页面 */
+    WhiteScenePathTypePage,
+    /** 路径对应的内容，是一个目录，该目录下存在目录，或者多个页面 */
+    WhiteScenePathTypeDir
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteDisplayer : NSObject
@@ -31,7 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - 页面（场景）管理 API
 
 /**
+ * 查询路径对应的内容，是空白内容，还是页面（场景），或者是页面（场景）目录
  */
+- (void)getScenePathType:(NSString *)pathOrDir result:(void (^) (WhiteScenePathType pathType))result;
 
 #pragma mark - 自定义事件
 /** 自定义事件注册 */
