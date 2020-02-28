@@ -16,31 +16,25 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteDisplayer : NSObject
 
 /**
- 修改白板背景色 API。
- 如需在显示 WhiteBoardView 时，就改变颜色，请遵循以下步骤：
+ 修改白板背景色 API
+ 如需在显示 WhiteBoardView，未加入房间时，就改变颜色，请通过以下步骤：
  
- 1. 先设置 whiteboardView 实例属性 opaque 为 NO。
- 2. 设置 WhiteboardView backgroundColr
- 3. 在成功初始化实时房间或者回放房间后，通过该 API 再次设置 backgroundColor
- 4. 将 WhiteBoardView opaque 属性，恢复为 YES。（由于该 API 异步生效，建议使用延迟 API 恢复）
+ 1. 先将 whiteboardView 实例属性 opaque 为 NO
+ 2. 再设置 WhiteboardView backgroundColor
+ 3. 在成功初始化 实时房间 / 回放房间 后，通过该 API 再次设置 backgroundColor
+ 4. 将 WhiteBoardView opaque 属性，恢复为 YES。（由于 ddisplayer 的 background API 实际上是异步的，所以建议延迟恢复 opaque 属性）
  
- opaque 为 NO 时，iOS 系统会进行颜色合成计算。比较影响性能。
- 所以建议使用该 API 替换。
+ 之所以最后又把 opaque 设置为 NO，是因为 iOS 系统会进行颜色合成计算。保持为 YES，比较影响性能。
  */
 @property (nonatomic, strong) UIColor *backgroundColor;
 
-#pragma mark - 通用 API
+#pragma mark - 页面（场景）管理 API
 
 /**
- 如果白板View大小改变，需要主动重新调用该方法，告知 sdk 界面发生变化
- 注意：使用 autolayout 修改白板布局时，白板界面并没有立即刷新，可以使用延时操作，或在相应大小修改回调时，再调用。
  */
-- (void)refreshViewSize;
-/** 返回当前坐标点，在白板内部的坐标位置 */
-- (void)convertToPointInWorld:(WhitePanEvent *)point result:(void (^) (WhitePanEvent *convertPoint))result;
 
-#pragma mark -
-/** 低频自定义事件注册 */
+#pragma mark - 自定义事件
+/** 自定义事件注册 */
 - (void)addMagixEventListener:(NSString *)eventName;
 /**
  * 高频自定义事件注册
@@ -50,7 +44,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addHighFrequencyEventListener:(NSString *)eventName fireInterval:(NSUInteger)millseconds;
 - (void)removeMagixEventListener:(NSString *)eventName;
 
-#pragma mark - 视角
+#pragma mark - 视野坐标类 API
+
+/**
+ 如果白板View大小改变，需要主动重新调用该方法，告知 sdk 界面发生变化
+ 注意：使用 autolayout 修改白板布局时，白板界面并没有立即刷新，可以使用延时操作，或在相应大小修改回调时，再调用。
+ */
+- (void)refreshViewSize;
+
+/** 返回当前坐标点，在白板内部的坐标位置 */
+- (void)convertToPointInWorld:(WhitePanEvent *)point result:(void (^) (WhitePanEvent *convertPoint))result;
+
 /**
  设置视野范围
 

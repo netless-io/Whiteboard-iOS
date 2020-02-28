@@ -33,14 +33,16 @@
     
     [backgroundColor getRed:&r green:&g blue:&b alpha:&a];
     
+    //fix issue: iOS 10/11 rgb css don's support float
     NSUInteger R = floorf(r * 255.0);
     NSUInteger G = floorf(g * 255.0);
     NSUInteger B = floorf(b * 255.0);
-    //fix issue: iOS 10/11 rgb css don's support float
-    [self.bridge callHandler:@"displayer.setBackgroundColor" arguments:@[@(R), @(G), @(B), @(a * 255.0)]];
+    
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setBackgroundColor"] arguments:@[@(R), @(G), @(B), @(a * 255.0)]];
 }
 
-#pragma mark - 视角
+#pragma mark - 视野坐标类 API
+
 static NSString * const kDisplayerNamespace = @"displayer.%@";
 static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
 
@@ -65,8 +67,6 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
     NSString *modeString = dict[@(mode)];
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"scalePptToFit"] arguments:@[modeString]];
 }
-
-# pragma mark - Common
 
 - (void)refreshViewSize
 {
