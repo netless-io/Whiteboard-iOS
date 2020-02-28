@@ -228,6 +228,7 @@
             } else {
                 BOOL isWritable = [dict[@"isWritable"] boolValue];
                 self.writable = isWritable;
+                self.observerId = @([dict[@"observerId"] longLongValue]);
                 completionHandler(isWritable, nil);
             }
         }
