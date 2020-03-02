@@ -457,25 +457,13 @@ static NSTimeInterval kTimeout = 30;
     
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     
-    
-    dispatch_group_t group = dispatch_group_create();
-    
-    dispatch_group_enter(group);
     [self.room getSceneStateWithResult:^(WhiteSceneState * _Nonnull state) {
         XCTAssertTrue([state.scenePath isEqualToString:@"/ppt/opt"]);
-        dispatch_group_leave(group);
-    }];
-    
-    dispatch_group_enter(group);
-    [self.room getScenesWithResult:^(NSArray<WhiteScene *> * _Nonnull scenes) {
-        XCTAssertTrue([scenes[index].ppt.src isEqualToString:pptPage.src]);
-        dispatch_group_leave(group);
-    }];
-    
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        //FIXME: sdk 覆盖插入时，index 没有发生修改
+        XCTAssertTrue([state.scenes[state.index].ppt.src isEqualToString:pptPage.src]);
         [exp fulfill];
-    });
-    
+    }];
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
