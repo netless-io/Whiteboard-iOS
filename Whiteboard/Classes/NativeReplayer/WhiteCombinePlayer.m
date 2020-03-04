@@ -291,6 +291,10 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
     if ([self.delegate respondsToSelector:@selector(combinePlayerStartBuffering)]) {
         [self.delegate combinePlayerStartBuffering];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(nativePlayerStartBuffering)]) {
+        [self.delegate nativePlayerStartBuffering];
+    }
 
     DLog(@"startNativeBuffering");
     
@@ -317,6 +321,10 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
         [self.nativePlayer pause];
     } else if (isBuffering && [self.delegate respondsToSelector:@selector(combinePlayerEndBuffering)]) {
         [self.delegate combinePlayerEndBuffering];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(nativePlayerEndBuffering)]) {
+        [self.delegate nativePlayerEndBuffering];
     }
 
     /**

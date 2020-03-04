@@ -41,6 +41,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)combinePlayerEndBuffering;
 
 /**
+ nativePlayer，进入缓冲
+ */
+- (void)nativePlayerStartBuffering;
+
+/**
+ nativePlayer，结束缓冲
+ */
+- (void)nativePlayerEndBuffering;
+/**
  NativePlayer 播放结束
  */
 - (void)nativePlayerDidFinish;
