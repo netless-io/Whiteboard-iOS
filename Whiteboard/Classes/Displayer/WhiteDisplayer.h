@@ -91,6 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
  将 ppt 等比例铺满屏幕（参考 UIViewContentModeScaleAspectFit ）。
  该操作为一次性操作，不会持续锁定。
  如果当前页没有 ppt，则不会进行缩放。
+ 
+ 注意：如果当前用户，已经通过 setViewMode: 设置为 follower ，或者已经是 follower（有用户主动设置为 broadcaster），此 API 可能会造成，当前用户与主播内容不完全一致。
  @param mode 动画参数，连续动画，或者瞬间切换
  @since 2.5.1
  */
