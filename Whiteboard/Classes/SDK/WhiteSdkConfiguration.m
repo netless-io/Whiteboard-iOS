@@ -7,6 +7,8 @@
 
 #import "WhiteSdkConfiguration.h"
 #import "WhiteSDK.h"
+#import <sys/utsname.h>
+
 static NSString *const kJSDeviceType = @"deviceType";
 
 @interface WhiteSdkConfiguration ()
@@ -29,7 +31,11 @@ static NSString *const kJSDeviceType = @"deviceType";
     _zoomMinScale = 0.1;
     _zoomMaxScale = 10;
     UIDevice *currentDevice = [UIDevice currentDevice];
-    _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", currentDevice.model, currentDevice.systemVersion]};
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+
+    _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", deviceModel, currentDevice.systemVersion]};
 
     return self;
 }
