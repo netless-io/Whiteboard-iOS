@@ -24,7 +24,8 @@ typedef void(^InterrupterBlock)(NSString *url);
 - (void)setUp
 {
     [super setUp];
-    
+    self.continueAfterFailure = NO;
+
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     
     __weak typeof(self)weakSelf = self;

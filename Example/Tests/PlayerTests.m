@@ -39,6 +39,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 - (void)setUp
 {
     [super setUp];
+    self.continueAfterFailure = NO;
     
     self.vc = [[WhitePlayerViewController alloc] initWithSdkConfig:[self testingConfig]];
 

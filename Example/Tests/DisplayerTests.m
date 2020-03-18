@@ -40,7 +40,8 @@ static NSTimeInterval kTimeout = 30;
 - (void)setUp {
     
     [super setUp];
-    
+    self.continueAfterFailure = NO;
+
     self.vc = [[WhiteRoomViewController alloc] initWithSdkConfig:[self testingConfig]];
     self.vc.roomCallbackDelegate = self;
     self.vc.commonDelegate = self;
