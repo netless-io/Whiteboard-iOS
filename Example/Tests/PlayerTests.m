@@ -42,8 +42,8 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     self.continueAfterFailure = NO;
     
     self.vc = [[WhitePureReplayViewController alloc] initWithSdkConfig:[self testingConfig]];
-
     self.vc.eventDelegate = self;
+    self.vc.commonDelegate = self;
 
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     
@@ -61,7 +61,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
         [nav pushViewController:self.vc animated:YES];
     }
     
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+    [self waitForExpectationsWithTimeout:kTimeout * 5 handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%@", error);
         }
