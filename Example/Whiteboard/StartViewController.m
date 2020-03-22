@@ -10,6 +10,8 @@
 #import "WhiteRoomViewController.h"
 #import "WhitePlayerViewController.h"
 #import <Whiteboard/Whiteboard.h>
+#import "WhitePureReplayViewController.h"
+
 @interface StartViewController ()
 @property (nonatomic, strong) UITextField *inputV;
 @end
@@ -50,6 +52,12 @@
     [createBtn addTarget:self action:@selector(replayRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
+    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [createBtn setTitle:NSLocalizedString(@"纯白板回放房间", nil) forState:UIControlStateNormal];
+    [createBtn addTarget:self action:@selector(pureReplayRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:createBtn];
+    
+    
     for (UIView *view in stackView.arrangedSubviews) {
         [view setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
         [view setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
@@ -83,6 +91,28 @@
 - (void)replayRoom:(UIButton *)sender
 {
     WhitePlayerViewController *vc = [[WhitePlayerViewController alloc] init];
+    vc.roomUuid = self.inputV.text;
+    
+    #if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+        if ([self.inputV.text length] == 0) {
+            vc.roomUuid = WhiteRoomUUID;
+        }
+    #endif
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)pureReplayRoom:(UIButton *)sender
+{
+    WhitePureReplayViewController *vc = [[WhitePureReplayViewController alloc] init];
+    vc.roomUuid = self.inputV.text;
+
+    #if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+        if ([self.inputV.text length] == 0) {
+            vc.roomUuid = WhiteRoomUUID;
+        }
+    #endif
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 

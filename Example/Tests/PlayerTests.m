@@ -8,13 +8,13 @@
 
 #import <XCTest/XCTest.h>
 #import <Whiteboard/Whiteboard.h>
-#import "WhitePlayerViewController.h"
+#import "WhitePureReplayViewController.h"
 
 typedef void(^InterrupterBlock)(NSString *url);
 
 @interface PlayerTests : XCTestCase<WhitePlayerEventDelegate, WhiteCommonCallbackDelegate>
 
-@property (nonatomic, strong) WhitePlayerViewController *vc;
+@property (nonatomic, strong) WhitePureReplayViewController *vc;
 @property (nonatomic, strong) WhitePlayer *player;
 
 @property (nonatomic, copy) dispatch_block_t loadFirstFrameBlock;
@@ -41,10 +41,9 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [super setUp];
     self.continueAfterFailure = NO;
     
-    self.vc = [[WhitePlayerViewController alloc] initWithSdkConfig:[self testingConfig]];
+    self.vc = [[WhitePureReplayViewController alloc] initWithSdkConfig:[self testingConfig]];
 
     self.vc.eventDelegate = self;
-    self.vc.commonDelegate = self;
 
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     

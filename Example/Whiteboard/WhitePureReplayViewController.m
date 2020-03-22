@@ -1,56 +1,39 @@
 //
-//  WhitePlayerViewController.m
-//  WhiteSDKPrivate_Example
+//  WhitePureReplayViewController.m
+//  Whiteboard_Example
 //
-//  Created by yleaf on 2019/3/2.
-//  Copyright © 2019 leavesster. All rights reserved.
+//  Created by yleaf on 2020/3/22.
+//  Copyright © 2020 leavesster. All rights reserved.
 //
 
-#import "WhitePlayerViewController.h"
+#import "WhitePureReplayViewController.h"
 #import "WhiteSDK.h"
 #import "WhiteUtils.h"
 #import "PlayerCommandListController.h"
 #import "RoomCommandListController.h"
 #import <Whiteboard/Whiteboard.h>
 
-@interface WhitePlayerViewController ()<WhiteCommonCallbackDelegate, WhitePlayerEventDelegate, WhiteCombineDelegate, UIPopoverPresentationControllerDelegate>
+@interface WhitePureReplayViewController ()<WhiteCommonCallbackDelegate, WhitePlayerEventDelegate, UIPopoverPresentationControllerDelegate>
+
 @property (nonatomic, nullable, strong) WhitePlayer *player;
-@property (nonatomic, nullable, strong) WhiteCombinePlayer *combinePlayer;
 @property (nonatomic, nullable, strong) NSString *roomToken;
-@property (nonatomic, nullable, strong) WhiteVideoView *videoView;
+
 @end
 
-#import <Masonry/Masonry.h>
+@implementation WhitePureReplayViewController
 
-@implementation WhitePlayerViewController
+- (void)dealloc {
+    NSLog(@"");
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"设置", nil) style:UIBarButtonItemStylePlain target:self action:@selector(settingAPI:)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"初始化", nil) style:UIBarButtonItemStylePlain target:self action:@selector(initPlayer)];
-    [self addVideoView];
     [self getRoomToken];
     self.navigationItem.rightBarButtonItems = @[item1, item2];
 }
 
-- (void)addVideoView
-{
-    self.videoView = [[WhiteVideoView alloc] init];
-    // 展示用的 m3u8 有 3 秒黑屏，显示黑色时，就是加载成功
-    self.videoView.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:self.videoView];
-
-    [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.top.equalTo(self.mas_topLayoutGuideBottom);
-        make.height.equalTo(self.view.mas_width).multipliedBy(0.6);
-    }];
-    
-    [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.videoView.mas_bottom);
-        make.bottom.left.right.equalTo(self.view);
-    }];
-}
 
 - (void)alert:(NSString *)title message:(NSString *)message
 {
@@ -78,15 +61,6 @@
 - (void)initPlayer
 {
     WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
-    
-    //音视频，白板混合播放处理类
-//    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]];
-    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/oceans.mp4"]];
-    //显示 AVPlayer 画面
-    [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
-    //配置代理
-    self.combinePlayer.delegate = self;
-    
     __weak typeof(self)weakSelf = self;
     [self.sdk createReplayerWithConfig:playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
         if (weakSelf.playBlock) {
@@ -97,8 +71,6 @@
             weakSelf.player = player;
             [weakSelf.player addMagixEventListener:WhiteCommandCustomEvent];
             [weakSelf.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            //配置 WhitePlayer
-            weakSelf.combinePlayer.whitePlayer = player;
             //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
             [player seekToScheduleTime:0];
         }
@@ -109,7 +81,7 @@
 
 - (void)settingAPI:(id)sender
 {
-    PlayerCommandListController *controller = [[PlayerCommandListController alloc] initWithPlayer:self.combinePlayer];
+    PlayerCommandListController *controller = [[PlayerCommandListController alloc] initWithWhitePlayer:self.player];
     [self showPopoverViewController:controller sourceView:sender];
 }
 
@@ -123,48 +95,11 @@
     return _eventDelegate;
 }
 
-#pragma mark - WhiteCombinePlayerDelegate
-
-
-- (void)combinePlayerStartBuffering
-{
-    //任意一端进入缓冲
-    NSLog(@"combinePlayerStartBuffering");
-}
-
-- (void)combinePlayerEndBuffering
-{
-    //两端都结束缓冲
-    NSLog(@"combinePlayerEndBuffering");
-}
-
-- (void)nativePlayerDidFinish
-{
-    //可能音视频和白板时长不同
-}
-
-- (void)combineVideoPlayStateChange:(BOOL)isPlaying
-{
-    
-}
-
-- (void)combinePlayerError:(NSError *)error
-{
-    
-}
-
-- (void)loadedTimeRangeChange:(NSArray<NSValue *> *)loadedTimeRanges
-{
-    
-}
-
-
 #pragma mark - WhitePlayerEventDelegate
 
 - (void)phaseChanged:(WhitePlayerPhase)phase
 {
     NSLog(@"player %s %ld", __FUNCTION__, (long)phase);
-    [self.combinePlayer updateWhitePlayerPhase:phase];
 }
 
 - (void)loadFirstFrame
@@ -214,5 +149,6 @@
 {
     return @"https://white-pan-cn.oss-cn-hangzhou.aliyuncs.com/124/image/image.png";
 }
+
 
 @end

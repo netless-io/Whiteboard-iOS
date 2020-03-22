@@ -11,6 +11,7 @@
 		2EE19D7E3444768297D71EF9 /* Pods_Whiteboard_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 781CDCD9747ECEC061266215 /* Pods_Whiteboard_Tests.framework */; };
 		396E44B123DDB23600C10F15 /* NETOriginPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 396E44B023DDB23600C10F15 /* NETOriginPrefetcher.m */; };
 		398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */; };
+		39A82CE8242700BB00FC1FD6 /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */; };
 		39E4205023A37DCF002B9B38 /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204523A37DCE002B9B38 /* WhiteBaseViewController.m */; };
 		39E4205123A37DCF002B9B38 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204623A37DCE002B9B38 /* StartViewController.m */; };
 		39E4205223A37DCF002B9B38 /* WhitePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204A23A37DCF002B9B38 /* WhitePlayerViewController.m */; };
@@ -53,6 +54,8 @@
 		2EF0269B81A485649497C862 /* Whiteboard.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Whiteboard.podspec; path = ../Whiteboard.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		396E44B023DDB23600C10F15 /* NETOriginPrefetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NETOriginPrefetcher.m; sourceTree = "<group>"; };
 		398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		39A82CE6242700BB00FC1FD6 /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
+		39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhitePureReplayViewController.m; sourceTree = "<group>"; };
 		39E4204223A37DCE002B9B38 /* WhiteRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomViewController.h; sourceTree = "<group>"; };
 		39E4204323A37DCE002B9B38 /* PlayerCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerCommandListController.h; sourceTree = "<group>"; };
 		39E4204423A37DCE002B9B38 /* WhiteBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBaseViewController.h; sourceTree = "<group>"; };
@@ -168,6 +171,8 @@
 				39E4204523A37DCE002B9B38 /* WhiteBaseViewController.m */,
 				39E4204923A37DCF002B9B38 /* WhitePlayerViewController.h */,
 				39E4204A23A37DCF002B9B38 /* WhitePlayerViewController.m */,
+				39A82CE6242700BB00FC1FD6 /* WhitePureReplayViewController.h */,
+				39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */,
 				39E4204223A37DCE002B9B38 /* WhiteRoomViewController.h */,
 				39E4204D23A37DCF002B9B38 /* WhiteRoomViewController.m */,
 				39E4204323A37DCE002B9B38 /* PlayerCommandListController.h */,
@@ -423,6 +428,7 @@
 				39E4205223A37DCF002B9B38 /* WhitePlayerViewController.m in Sources */,
 				39E4205623A37DCF002B9B38 /* RoomCommandListController.m in Sources */,
 				39E4205123A37DCF002B9B38 /* StartViewController.m in Sources */,
+				39A82CE8242700BB00FC1FD6 /* WhitePureReplayViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				39E4205023A37DCF002B9B38 /* WhiteBaseViewController.m in Sources */,
 			);

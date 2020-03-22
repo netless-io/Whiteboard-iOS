@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSArray<NSString *> *commands;
 @property (nonatomic, weak) WhiteCombinePlayer *combinePlayer;
+@property (nonatomic, weak) WhitePlayer *whitePlayer;
 
 @end
 
@@ -30,9 +31,19 @@ typedef NS_ENUM(NSInteger, CommandType) {
 {
     if (self = [self init]) {
         _combinePlayer = player;
+        _whitePlayer = player.whitePlayer;
     }
     return self;
 }
+
+- (instancetype)initWithWhitePlayer:(WhitePlayer *)whitePlayer
+{
+    if (self = [self init]) {
+        _whitePlayer = whitePlayer;
+    }
+    return self;
+}
+
 static NSString *kReuseCell = @"reuseCell";
 
 - (void)viewDidLoad {
@@ -70,26 +81,48 @@ static NSString *kReuseCell = @"reuseCell";
 {
     switch (indexPath.row) {
         case CommandTypePlay:
-            [self.combinePlayer play];
+        {
+            if (self.combinePlayer) {
+                [self.combinePlayer play];
+            } else {
+                [self.whitePlayer play];
+            }
             break;
+        }
         case CommandTypePause:
-            [self.combinePlayer pause];
+        {
+            if (self.combinePlayer) {
+                [self.combinePlayer pause];
+            } else {
+                [self.whitePlayer pause];
+            }
             break;
+        }
         case CommondTypeSpeed:
-            self.combinePlayer.playbackSpeed = 1.25;
+        {
+            if (self.combinePlayer) {
+                self.combinePlayer.playbackSpeed = 1.25;
+            } else {
+                self.whitePlayer.playbackSpeed = 1.25;
+            }
             break;
+        }
         case CommandTypeSeek:
         {
-            //快进至5s位置，参数分别为 对应秒数，1秒内频率，Apple推荐为600，此处为演示随意填写。
-            CMTime time = CMTimeMakeWithSeconds(5, 100);
-            [self.combinePlayer seekToTime:time completionHandler:^(BOOL finished) {
-                [self.combinePlayer play];
-            }];
+            if (self.combinePlayer) {
+                //快进至5s位置，参数分别为 对应秒数，1秒内频率，Apple推荐为600，此处为演示随意填写。
+                CMTime time = CMTimeMakeWithSeconds(5, 100);
+                [self.combinePlayer seekToTime:time completionHandler:^(BOOL finished) {
+                    [self.combinePlayer play];
+                }];
+            } else {
+                [self.whitePlayer seekToScheduleTime:5];
+            }
             break;
         }
         case CommandTypeObserver:
         {
-            [self.combinePlayer.whitePlayer setObserverMode:WhiteObserverModeFreedom];
+            [self.whitePlayer setObserverMode:WhiteObserverModeFreedom];
             break;
         }
         case CommandTypeInfo:
@@ -112,7 +145,7 @@ static NSString *kReuseCell = @"reuseCell";
 
 - (void)getPlayerTimeInfo
 {
-    [self.combinePlayer.whitePlayer getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
+    [self.whitePlayer getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
         NSLog(@"%@", info);
     }];
     [self.combinePlayer.whitePlayer getPlaybackSpeed:^(CGFloat speed) {
@@ -122,7 +155,7 @@ static NSString *kReuseCell = @"reuseCell";
 
 - (void)getPlayerState
 {
-    [self.combinePlayer.whitePlayer getPlayerStateWithResult:^(WhitePlayerState * _Nonnull state) {
+    [self.whitePlayer getPlayerStateWithResult:^(WhitePlayerState * _Nonnull state) {
         NSLog(@"%@", state);
     }];
 }

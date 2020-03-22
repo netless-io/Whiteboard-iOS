@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PlayerCommandListController : UITableViewController
 
 - (instancetype)initWithPlayer:(WhiteCombinePlayer *)player;
-
+- (instancetype)initWithWhitePlayer:(WhitePlayer *)whitePlayer;
 
 @end
 

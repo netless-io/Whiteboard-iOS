@@ -54,7 +54,7 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
 {
 
 #if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
-    if ([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) {
+    if (([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) || [uuid length] == 0) {
         completionHandler(WhiteRoomToken, nil);
         return;
     }
