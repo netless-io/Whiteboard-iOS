@@ -93,7 +93,7 @@ static NSString *const kHostInfoValidKey = @"valid";
     if (!_session) {
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-        config.timeoutIntervalForRequest = 5;
+        config.timeoutIntervalForRequest = 3;
         config.HTTPAdditionalHeaders = @{@"platform": @"ios", @"version": [WhiteSDK version]};
         _session = [NSURLSession sessionWithConfiguration:config];
     }
