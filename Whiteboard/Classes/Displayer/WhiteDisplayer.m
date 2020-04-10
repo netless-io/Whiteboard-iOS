@@ -7,6 +7,7 @@
 
 #import "WhiteDisplayer.h"
 #import "WhiteDisplayer+Private.h"
+#import "WhiteScene.h"
 
 @interface WhiteDisplayer ()
 @end
@@ -67,6 +68,29 @@
                 WhiteScenePathType pathType = [[self class] scenePathTypeConvertFrom:value];
                 result(pathType);
             }
+        }
+    }];
+}
+
+- (void)getEntireScenes:(void (^) (NSDictionary<NSString *, NSArray<WhiteScene *>*> *dict))result;
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"entireScenes"] completionHandler:^(id  _Nullable value) {
+        if (result && [value isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dict = (NSDictionary *)value;
+            NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithCapacity:dict.allKeys.count];
+            [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSArray *obj, BOOL * _Nonnull stop) {
+                if ([key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSArray class]]) {
+                    NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:obj.count];
+                    [obj enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        WhiteScene *scene = [WhiteScene modelWithJSON:obj];
+                        if (scene) {
+                            [mutableArray addObject:scene];
+                        }
+                    }];
+                    mutableDict[key] = mutableArray;
+                }
+            }];
+            result([mutableDict copy]);
         }
     }];
 }

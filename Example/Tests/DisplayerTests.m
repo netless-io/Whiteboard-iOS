@@ -206,7 +206,27 @@ static NSTimeInterval kTimeout = 30;
     }];
 }
 
-//TODO:测试移动视角 API
+- (void)testEntireScene {
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+
+    [self.room getEntireScenes:^(NSDictionary<NSString *,NSArray<WhiteScene *> *> * _Nonnull dict) {
+        XCTAssertTrue(dict.allKeys.count > 0);
+        [dict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<WhiteScene *> * _Nonnull obj, BOOL * _Nonnull stop) {
+            XCTAssertTrue(obj.count > 0);
+            [obj enumerateObjectsUsingBlock:^(WhiteScene * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                XCTAssertTrue([obj isKindOfClass:[WhiteScene class]]);
+            }];
+        }];
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+
+}
 
 #pragma mark - WhiteRoomCallbackDelegate
 
