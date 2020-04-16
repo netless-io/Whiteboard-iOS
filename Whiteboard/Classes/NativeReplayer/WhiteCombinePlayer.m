@@ -161,17 +161,18 @@
 {
     NSDictionary *interuptionDict = notification.userInfo;
     NSInteger interruptionType = [interuptionDict[AVAudioSessionInterruptionTypeKey] integerValue];
-    
-    if (interruptionType == AVAudioSessionInterruptionTypeBegan && [self videoDesireToPlay]) {
-        self.interruptedWhilePlaying = YES;
-        [self pause];
-    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded && self.isInterruptedWhilePlaying) {
-        self.interruptedWhilePlaying = NO;
-        NSInteger resume = [interuptionDict[AVAudioSessionInterruptionOptionKey] integerValue];
-        if (resume == AVAudioSessionInterruptionOptionShouldResume) {
-            [self play];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (interruptionType == AVAudioSessionInterruptionTypeBegan && [self videoDesireToPlay]) {
+            self.interruptedWhilePlaying = YES;
+            [self pause];
+        } else if (interruptionType == AVAudioSessionInterruptionTypeEnded && self.isInterruptedWhilePlaying) {
+            self.interruptedWhilePlaying = NO;
+            NSInteger resume = [interuptionDict[AVAudioSessionInterruptionOptionKey] integerValue];
+            if (resume == AVAudioSessionInterruptionOptionShouldResume) {
+                [self play];
+            }
         }
-    }
+    });
 }
 
 - (void)routeChange:(NSNotification *)notification
@@ -179,13 +180,15 @@
     NSDictionary *routeChangeDict = notification.userInfo;
     NSInteger routeChangeType = [routeChangeDict[AVAudioSessionRouteChangeReasonKey] integerValue];
     
-    if (routeChangeType == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && [self videoDesireToPlay]) {
-        self.routeChangedWhilePlaying = YES;
-        [self pause];
-    } else if (routeChangeType == AVAudioSessionRouteChangeReasonNewDeviceAvailable && self.isRouteChangedWhilePlaying) {
-        self.routeChangedWhilePlaying = NO;
-        [self play];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (routeChangeType == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && [self videoDesireToPlay]) {
+            self.routeChangedWhilePlaying = YES;
+            [self pause];
+        } else if (routeChangeType == AVAudioSessionRouteChangeReasonNewDeviceAvailable && self.isRouteChangedWhilePlaying) {
+            self.routeChangedWhilePlaying = NO;
+            [self play];
+        }
+    });
 }
 
 #pragma mark - KVO
