@@ -12,6 +12,15 @@
 #import "WhiteObject.h"
 #import "WhiteCommonCallbacks.h"
 
+#ifndef dispatch_main_async_safe
+#define dispatch_main_async_safe(block)\
+    if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(dispatch_get_main_queue())) {\
+        block();\
+    } else {\
+        dispatch_async(dispatch_get_main_queue(), block);\
+    }
+#endif
+
 @implementation WhiteBoardView
 
 - (instancetype)init
@@ -91,7 +100,9 @@
 -(void)callHandler:(NSString *)methodName arguments:(NSArray *)args completionHandler:(void (^)(id  _Nullable value))completionHandler
 {
     if (!args) {
-        [super callHandler:methodName arguments:args completionHandler:completionHandler];
+        dispatch_main_async_safe(^ {
+            [super callHandler:methodName arguments:args completionHandler:completionHandler];
+        });
         return;
     }
     NSMutableArray *arr = [NSMutableArray arrayWithCapacity:[args count]];
@@ -106,7 +117,9 @@
             [arr addObject:([item yy_modelToJSONObject] ? : @"")];
         }
     }
-    [super callHandler:methodName arguments:arr completionHandler:completionHandler];
+    dispatch_main_async_safe(^ {
+        [super callHandler:methodName arguments:arr completionHandler:completionHandler];
+    });
 }
 
 #pragma mark - Private Methods
