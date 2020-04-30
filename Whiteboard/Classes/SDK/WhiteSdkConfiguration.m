@@ -14,6 +14,7 @@ static NSString *const kJSDeviceType = @"deviceType";
 @interface WhiteSdkConfiguration ()
 
 @property (nonatomic, copy, nonnull) NSDictionary *nativeTags;
+@property (nonatomic, copy, nonnull) NSString *platform;
 
 @end
 
@@ -34,7 +35,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     struct utsname systemInfo;
     uname(&systemInfo);
     NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-
+    _platform = @"ios";
     _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", deviceModel, currentDevice.systemVersion]};
 
     return self;
@@ -42,7 +43,7 @@ static NSString *const kJSDeviceType = @"deviceType";
 
 + (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper
 {
-    return @{@"sdkStrategyConfig": @"initializeOriginsStates", @"nativeTags": @"__nativeTags"};
+    return @{@"sdkStrategyConfig": @"initializeOriginsStates", @"nativeTags": @"__nativeTags", @"platform": @"__platform"};
 }
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {
