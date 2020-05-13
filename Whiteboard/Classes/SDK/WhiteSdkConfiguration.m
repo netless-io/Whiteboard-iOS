@@ -22,10 +22,17 @@ static NSString *const kJSDeviceType = @"deviceType";
 
 + (instancetype)defaultConfig
 {
-    return [[WhiteSdkConfiguration alloc] init];
+    NSAssert(NO, @"WhiteSdkConfiguration must have appIdentifier, please use initWithApp:");
+    return nil;
 }
 
 - (instancetype)init
+{
+    NSAssert(NO, @"WhiteSdkConfiguration must have appIdentifier, please use initWithApp:");
+    return nil;
+}
+
+- (instancetype)initWithApp:(NSString *)appIdentifier
 {
     self = [super init];
     _deviceType = WhiteDeviceTypeTouch;
@@ -37,7 +44,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
     _platform = @"ios";
     _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", deviceModel, currentDevice.systemVersion]};
-
+    _appIdentifier = appIdentifier;
     return self;
 }
 

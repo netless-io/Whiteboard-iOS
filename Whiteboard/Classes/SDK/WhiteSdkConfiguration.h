@@ -17,7 +17,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteSdkConfiguration : WhiteObject
 
-+ (instancetype)defaultConfig;
+/** 请使用 initWithApp: 方法，传入 appIdentifier 进行初始化，否则无法连接房间。 */
+//+ (instancetype)defaultConfig;
+- (instancetype)init NS_UNAVAILABLE;
+
+- (instancetype)initWithApp:(NSString *)appIdentifier NS_DESIGNATED_INITIALIZER;
+
+/**
+ 白板 APP id，2.8.0 开始，强制要求。可以在管理控制台 console.netless.link 中登录后查看
+ */
+@property (nonatomic, copy) NSString *appIdentifier;
 
 /** default value: Touch。native 端，无需关注该属性。 */
 @property (nonatomic, assign) WhiteDeviceType deviceType;
