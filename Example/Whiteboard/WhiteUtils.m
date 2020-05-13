@@ -12,14 +12,25 @@
 
 static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
 
-/* FIXME: 此处 tonken 只做 demo 试用。
- 实际使用时，请在 https://console.herewhite.com 注册并获取 sdk token
+/** FIXME: 此处 tonken 只做 demo 试用。
+ 实际使用时，请在 https://console.netless.link 注册并获取 sdk token
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
 #ifndef WhiteSDKToken
 #define WhiteSDKToken <#@sdk Token#>
 #endif
 
+/** FIXME: 2.8.0 新增必填项 AppIdentitier，通过该 API 可以避免大量预先的网络请求，极大增加异常网络下，用户的连通率。
+ 请在 https://console.netless.link 中进行获取。
+ */
+#ifndef WhiteAppIdentifier
+#define WhiteAppIdentifier <#@App identifier#>
+#endif
+
++ (NSString *)appIdentifier
+{
+    return WhiteAppIdentifier;
+}
 
 + (NSString *)sdkToken
 {
@@ -72,7 +83,7 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
 
 #pragma mark - Private
 
-//FIXME:我们推荐将这两个请求，放在您的服务器端进行。防止您从 https://console.herewhite.com 获取的 token 发生泄露。
+//FIXME:我们推荐将这两个请求，放在您的服务器端进行。防止您从 https://console.netless.link 获取的 token 发生泄露。
 + (void)createRoomWithResult:(void (^) (BOOL success, id  _Nullable response, NSError * _Nullable error))result;
 {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[APIHost stringByAppendingPathComponent:@"room"]]];

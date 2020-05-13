@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteUtils : NSObject
 
++ (NSString *)appIdentifier;
+
 + (NSString *)sdkToken;
 
 + (void)createRoomWithCompletionHandler:(void (^) (NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;

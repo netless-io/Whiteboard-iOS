@@ -15,7 +15,7 @@
 
 [API 文档](https://developer.netless.link)
 
-## 快速迁移
+## White-SDK-iOS 迁移
 
 只需要将
 
@@ -46,7 +46,7 @@ pod install
 
 ```Objective-C
 /* FIXME: sdkToken
- 请在 https://console.herewhite.com 注册并获取 sdk token
+ 请在 https://console.netless.link 注册并获取 sdk token
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
 #ifndef WhiteSDKToken
