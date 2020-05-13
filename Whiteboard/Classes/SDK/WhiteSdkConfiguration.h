@@ -15,6 +15,10 @@ typedef NS_ENUM(NSInteger, WhiteDeviceType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NSString * WhiteSdkRenderEngineKey NS_STRING_ENUM;
+FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg;
+FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
+
 @interface WhiteSdkConfiguration : WhiteObject
 
 /** 请使用 initWithApp: 方法，传入 appIdentifier 进行初始化，否则无法连接房间。 */
@@ -30,6 +34,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** default value: Touch。native 端，无需关注该属性。 */
 @property (nonatomic, assign) WhiteDeviceType deviceType;
+
+/**
+ 画笔教具的渲染模式。
+ 2.8.0 新增 canvas 渲染引擎，性能更好。有强烈书写需求的用户，推荐使用该引擎。
+ 默认为 WhiteSdkRenderEngineSvg，旧版本渲染方式
+ */
+@property (nonatomic, copy) WhiteSdkRenderEngineKey renderEngine;
 
 /** default value: 0.1 */
 @property (nonatomic, assign) CGFloat zoomMinScale;

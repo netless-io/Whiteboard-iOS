@@ -11,6 +11,9 @@
 
 static NSString *const kJSDeviceType = @"deviceType";
 
+WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg = @"svg";
+WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas = @"canvas";
+
 @interface WhiteSdkConfiguration ()
 
 @property (nonatomic, copy, nonnull) NSDictionary *nativeTags;
@@ -38,6 +41,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     _deviceType = WhiteDeviceTypeTouch;
     _zoomMinScale = 0.1;
     _zoomMaxScale = 10;
+    _renderEngine = WhiteSdkRenderEngineSvg;
     UIDevice *currentDevice = [UIDevice currentDevice];
     struct utsname systemInfo;
     uname(&systemInfo);
