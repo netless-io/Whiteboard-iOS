@@ -9,7 +9,9 @@
 #import "WhiteSDK.h"
 #import <sys/utsname.h>
 
-static NSString *const kJSDeviceType = @"deviceType";
+@implementation WhitePptParams
+
+@end
 
 @interface WhiteSdkConfiguration ()
 
@@ -19,6 +21,8 @@ static NSString *const kJSDeviceType = @"deviceType";
 @end
 
 @implementation WhiteSdkConfiguration
+
+static NSString *const kJSDeviceType = @"deviceType";
 
 + (instancetype)defaultConfig
 {
