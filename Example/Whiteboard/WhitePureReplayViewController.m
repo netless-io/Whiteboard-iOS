@@ -34,6 +34,13 @@
     self.navigationItem.rightBarButtonItems = @[item1, item2];
 }
 
+- (WhitePlayerConfig *)playerConfig
+{
+    if (!_playerConfig) {
+        _playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
+    }
+    return _playerConfig;
+}
 
 - (void)alert:(NSString *)title message:(NSString *)message
 {
@@ -60,9 +67,8 @@
 
 - (void)initPlayer
 {
-    WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
     __weak typeof(self)weakSelf = self;
-    [self.sdk createReplayerWithConfig:playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
+    [self.sdk createReplayerWithConfig:self.playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
         if (weakSelf.playBlock) {
             weakSelf.playBlock(player, error);
         } else if (error) {

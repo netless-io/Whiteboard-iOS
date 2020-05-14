@@ -88,11 +88,19 @@ typedef void(^InterrupterBlock)(NSString *url);
    }
 }
 
+- (WhiteRoomConfig *)roomConfig
+{
+    NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
+    WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:WhiteRoomUUID roomToken:WhiteRoomToken userPayload:payload];
+    return roomConfig;
+}
+
 - (WhiteRoomViewController *)roomVC {
     if (!_roomVC) {
         _roomVC = [[WhiteRoomViewController alloc] initWithSdkConfig:[self testingConfig]];
         _roomVC.roomCallbackDelegate = self;
         _roomVC.commonDelegate = self;
+        _roomVC.roomConfig = [self roomConfig];
     }
     return _roomVC;
 }

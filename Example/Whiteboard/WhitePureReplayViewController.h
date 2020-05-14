@@ -14,12 +14,13 @@ typedef void(^PlayBlock)(WhitePlayer * _Nullable player, NSError * _Nullable ero
 
 @interface WhitePureReplayViewController : WhiteBaseViewController
 
-#pragma mark - Unit Testing
-@property (nonatomic, copy, nullable) PlayBlock playBlock;
-
 #pragma mark - CallbackDelegate
 @property (nonatomic, weak, nullable) id<WhitePlayerEventDelegate> eventDelegate;
 
+#pragma mark - UnitTest
+
+@property (nonatomic, copy, nullable) PlayBlock playBlock;
+@property (nonatomic, strong) WhitePlayerConfig *playerConfig;
 
 @end
 

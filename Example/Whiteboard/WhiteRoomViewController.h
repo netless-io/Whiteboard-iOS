@@ -12,6 +12,8 @@
 
 typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror);
 
+
+NS_ASSUME_NONNULL_BEGIN
 @interface WhiteRoomViewController : WhiteBaseViewController
 
 @property (nonatomic, strong, nullable) WhiteRoom *room;
@@ -26,5 +28,8 @@ typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror)
 
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, assign) BOOL isWritable;
+@property (nonatomic, copy, nullable) WhiteRoomConfig *roomConfig;
 
 @end
+
+NS_ASSUME_NONNULL_END

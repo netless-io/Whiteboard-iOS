@@ -41,9 +41,18 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [super setUp];
     self.continueAfterFailure = NO;
     
-    self.vc = [[WhitePureReplayViewController alloc] initWithSdkConfig:[self testingConfig]];
-    self.vc.eventDelegate = self;
-    self.vc.commonDelegate = self;
+    WhitePureReplayViewController *vc = [[WhitePureReplayViewController alloc] initWithSdkConfig:[self testingConfig]];
+    vc.eventDelegate = self;
+    vc.commonDelegate = self;
+    WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:WhiteRoomUUID roomToken:WhiteRoomToken];
+    vc.playerConfig = playerConfig;
+
+#ifndef Plugin
+    playerConfig.duration = @120;
+    playerConfig.beginTimestamp = @(1580478940);
+#endif
+
+    self.vc = vc;
 
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     
@@ -61,7 +70,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
         [nav pushViewController:self.vc animated:YES];
     }
     
-    [self waitForExpectationsWithTimeout:kTimeout * 5 handler:^(NSError * _Nullable error) {
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%@", error);
         }

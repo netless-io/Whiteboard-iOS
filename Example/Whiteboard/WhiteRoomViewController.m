@@ -158,14 +158,17 @@
 {
     self.title = NSLocalizedString(@"正在连接房间", nil);
     
-    NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg"};
-    WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken userPayload:payload];
-    // * isWritable 默认为 yes，此处为了单元测试用
-    roomConfig.isWritable = self.isWritable;
-    // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
-    // roomConfig.disableEraseImage = YES;
-    
-    [self.sdk joinRoomWithConfig:roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
+    if (!self.roomConfig) {
+        NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg"};
+        WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken userPayload:payload];
+        // * isWritable 默认为 yes，此处为了单元测试用
+        roomConfig.isWritable = self.isWritable;
+        // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
+//         roomConfig.disableEraseImage = YES;
+        self.roomConfig = roomConfig;
+    }
+
+    [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
         if (success) {
             self.title = NSLocalizedString(@"我的白板", nil);
 

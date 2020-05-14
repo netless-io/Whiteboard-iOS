@@ -2,6 +2,24 @@
 
 #ifdef __OBJC__
 
-  
+//支持插件系统用户，取消下一行注释
+//#define Plugin 1
+
+#ifdef Plugin
+// 插件版本
+#define WhiteAppIdentifier @""
+#define WhiteSDKToken @""
+#define WhiteRoomUUID @"daef60b584ea4892a381c410ae15fe28"
+#define WhiteRoomToken @"WHITEcGFydG5lcl9pZD1ZSEpVMmoxVXAyUzdoQTluV3dvaVlSRVZ3MlI5M21ibmV6OXcmc2lnPWJkODdlOGFkZDcwZmEzN2YzNWQ3OTAyYmViMWFlMDk2YjQ1ZWI0MmM6YWRtaW5JZD02Njcmcm9vbUlkPWRhZWY2MGI1ODRlYTQ4OTJhMzgxYzQxMGFlMTVmZTI4JnRlYW1JZD03OTImcm9sZT1yb29tJmV4cGlyZV90aW1lPTE2MTIwMzU1MTgmYWs9WUhKVTJqMVVwMlM3aEE5bld3b2lZUkVWdzJSOTNtYm5lejl3JmNyZWF0ZV90aW1lPTE1ODA0Nzg1NjYmbm9uY2U9MTU4MDQ3ODU2NTczODAw"
+
+#else
+
+// 非插件版本
+#define WhiteAppIdentifier @""
+#define WhiteSDKToken @""
+#define WhiteRoomUUID @"972011da0bb649ab8040963252be7713"
+#define WhiteRoomToken @"WHITEcGFydG5lcl9pZD1zTkpjN3JyV1N6aDMyckI1NW1nTlF1ejNzNWhEWFhEeVBjYlQmc2lnPTdmYWIxNTM3OTBiYzY2NDIzYjlkZDg1ZjA0NWUzMTcwZTU2YjZlNDY6YWRtaW5JZD02Njkmcm9vbUlkPTk3MjAxMWRhMGJiNjQ5YWI4MDQwOTYzMjUyYmU3NzEzJnRlYW1JZD03OTQmcm9sZT1yb29tJmV4cGlyZV90aW1lPTE2MTIwMzU4ODUmYWs9c05KYzdycldTemgzMnJCNTVtZ05RdXozczVoRFhYRHlQY2JUJmNyZWF0ZV90aW1lPTE1ODA0Nzg5MzMmbm9uY2U9MTU4MDQ3ODkzMzQ4MjAw"
+#endif
+
 
 #endif
