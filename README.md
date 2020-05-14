@@ -53,6 +53,13 @@ pod install
 #define WhiteSDKToken <#@sdk Token#>
 #endif
 
+/** FIXME: 2.8.0 新增必填项 AppIdentitier，通过该 API 可以避免大量预先的网络请求，极大增加异常网络下，用户的连通率。
+ 请在 https://console.netless.link 中进行获取。
+ */
+#ifndef WhiteAppIdentifier
+#define WhiteAppIdentifier <#@App identifier#>
+#endif
+
 ```
 
 ### 快速调试
