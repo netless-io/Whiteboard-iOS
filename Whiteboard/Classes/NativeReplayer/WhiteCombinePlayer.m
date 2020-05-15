@@ -429,13 +429,11 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 - (void)play
 {
     self.pauseReason = self.pauseReason & ~SyncManagerWaitingPauseReasonPlayerPause;
-    [self playNativePlayer];
     self.interruptedWhilePlaying = NO;
     self.routeChangedWhilePlaying = NO;
     
-    // video 将直接播放，whitePlayer 也直接播放
-    if ([self hasEnoughNativeBuffer]) {
-        DLog(@"play directly");
+    if (self.pauseReason == WhiteSyncManagerPauseReasonNone) {
+        [self playNativePlayer];
         [self playWhitePlayer];
     }
 }
