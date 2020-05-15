@@ -116,6 +116,11 @@
         config.debug = YES;
         config.sdkStrategyConfig = [WhiteOriginPrefetcher shareInstance].sdkStrategyConfig;
         
+        //自定义 netless 协议，所有 ppt 请求，都由 https 更改
+//        WhitePptParams *pptParams = [[WhitePptParams alloc] init];
+//        pptParams.scheme = @"netlesss";
+//        config.pptParams = pptParams;
+        
         //打开用户头像显示信息
         config.userCursor = YES;
         _sdkConfig = config;

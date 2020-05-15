@@ -9,7 +9,9 @@
 #import "WhiteSDK.h"
 #import <sys/utsname.h>
 
-static NSString *const kJSDeviceType = @"deviceType";
+@implementation WhitePptParams
+
+@end
 
 WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg = @"svg";
 WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas = @"canvas";
@@ -22,6 +24,8 @@ WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas = @"canvas";
 @end
 
 @implementation WhiteSdkConfiguration
+
+static NSString *const kJSDeviceType = @"deviceType";
 
 + (instancetype)defaultConfig
 {

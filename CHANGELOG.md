@@ -7,13 +7,14 @@
 >非音视频插件，web 端不支持插入音视频。
 
 # `Whiteboard` 版本记录
-
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.8.0] - 2020-05-14
 - <span style="color:red;">不兼容改动</span>：SDK 初始化时，新增必须要的 APP identitier 参数（详情见 开发者文档中，查看 APP identitier 一栏）
 - 开放画笔渲染引擎选项，新增 canvas 渲染模式（需要主动选择）
 - 修复`isWritable=false`用户无法跟随新主播的问题
+## [2.7.14] - 2020-05-14
+- 动态 ppt 增加本地 scheme 支持（详情见`WhitePptParams`类，以及`WhiteSdkConfiguration` `pptParams`属性说明，注意：拦截自定义协议需要使用 iOS 11 API）
 ## [2.7.13] - 2020-05-07
 - 修复 2.7.11 引入导致动态 ppt 中音视频无法正常播放的问题
 ## [2.7.12] - 2020-05-06

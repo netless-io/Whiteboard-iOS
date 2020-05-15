@@ -15,9 +15,20 @@ typedef NS_ENUM(NSInteger, WhiteDeviceType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 typedef NSString * WhiteSdkRenderEngineKey NS_STRING_ENUM;
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg;
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
+
+@interface WhitePptParams : WhiteObject
+
+/**
+ 如果传入，则所有 ppt 的网络请求，以及图片地址，都会从 https 换成该属性。
+ */
+@property (nonatomic, copy, nullable) NSString *scheme;
+
+@end
+
 
 @interface WhiteSdkConfiguration : WhiteObject
 
@@ -74,6 +85,8 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 
 /** 服务端连接情况配置项，可以提前使用 WhiteOriginPrefetcher 进行检测服务器连接情况，在初始化 SDK 时，直接传入。 */
 @property (nonatomic, nullable, copy) NSDictionary *sdkStrategyConfig;
+
+@property (nonatomic, strong) WhitePptParams *pptParams;
 
 @end
 NS_ASSUME_NONNULL_END
