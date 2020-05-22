@@ -14,6 +14,7 @@
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, assign) BOOL isWritable;
+@property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 @end
 
 #import <Masonry/Masonry.h>

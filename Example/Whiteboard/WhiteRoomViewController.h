@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, assign) BOOL isWritable;
-@property (nonatomic, copy, nullable) WhiteRoomConfig *roomConfig;
+@property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 
 @end
 
