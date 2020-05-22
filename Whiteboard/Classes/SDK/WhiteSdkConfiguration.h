@@ -83,7 +83,10 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 /** 多路由操作，针对部分 dns 污染情况，临时提供的 native 端解决方案 */
 @property (nonatomic, assign) BOOL routeBackup;
 
-/** 服务端连接情况配置项，可以提前使用 WhiteOriginPrefetcher 进行检测服务器连接情况，在初始化 SDK 时，直接传入。 */
+/**
+ 服务端连接情况配置项，可以提前使用 WhiteOriginPrefetcher 进行检测服务器连接情况，在初始化 SDK 时，直接传入。
+ 2.8.0 开始，sdk 算法优化，自动在请求时，选择最佳链路。该配置不再起作用。
+ */
 @property (nonatomic, nullable, copy) NSDictionary *sdkStrategyConfig;
 
 @property (nonatomic, strong) WhitePptParams *pptParams;
