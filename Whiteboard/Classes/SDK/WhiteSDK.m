@@ -22,7 +22,7 @@
 
 + (NSString *)version
 {
-    return @"2.8.1";
+    return @"2.9.0";
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback
