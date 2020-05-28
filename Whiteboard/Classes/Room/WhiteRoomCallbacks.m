@@ -84,7 +84,7 @@
 - (NSString *)fireHighFrequencyEvent:(NSString *)info
 {
     if ([self.delegate respondsToSelector:@selector(fireHighFrequencyEvent:)]) {
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:[info dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+        NSArray *array = [NSJSONSerialization JSONObjectWithData:[info dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
         NSMutableArray<WhiteEvent *> *events = [NSMutableArray arrayWithCapacity:[array count]];
         for (NSString *evtString in array) {
             WhiteEvent *event = [WhiteEvent modelWithJSON:evtString];
