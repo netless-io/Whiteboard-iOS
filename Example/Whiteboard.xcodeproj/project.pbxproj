@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		210DE890A7D3CFE157235AB7 /* Pods_Whiteboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8F346899FAA709756155D1 /* Pods_Whiteboard_Example.framework */; };
 		2EE19D7E3444768297D71EF9 /* Pods_Whiteboard_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 781CDCD9747ECEC061266215 /* Pods_Whiteboard_Tests.framework */; };
-		396E44B123DDB23600C10F15 /* NETOriginPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 396E44B023DDB23600C10F15 /* NETOriginPrefetcher.m */; };
 		398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */; };
 		39A82CE8242700BB00FC1FD6 /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */; };
 		39E4205023A37DCF002B9B38 /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204523A37DCE002B9B38 /* WhiteBaseViewController.m */; };
@@ -52,7 +51,6 @@
 		0253522B7137279AE1FE150B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0B8F346899FAA709756155D1 /* Pods_Whiteboard_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Whiteboard_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EF0269B81A485649497C862 /* Whiteboard.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Whiteboard.podspec; path = ../Whiteboard.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		396E44B023DDB23600C10F15 /* NETOriginPrefetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NETOriginPrefetcher.m; sourceTree = "<group>"; };
 		398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		39A82CE6242700BB00FC1FD6 /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
 		39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhitePureReplayViewController.m; sourceTree = "<group>"; };
@@ -208,7 +206,6 @@
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
 				39E4205F23A3B861002B9B38 /* WhiteObjectTests.m */,
-				396E44B023DDB23600C10F15 /* NETOriginPrefetcher.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -438,7 +435,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				396E44B123DDB23600C10F15 /* NETOriginPrefetcher.m in Sources */,
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
 				39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */,
 				39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */,
