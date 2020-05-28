@@ -58,12 +58,18 @@
 - (NSString *)onStoppedWithError:(NSString *)errorJSON
 {
     if ([self.delegate respondsToSelector:@selector(stoppedWithError:)]) {
-        NSDictionary *errorInfo = [NSDictionary yy_modelWithJSON:errorJSON];
-        NSString *desc = errorInfo[@"message"] ? : @"";
-        NSString *description = errorInfo[@"jsStack"] ? : @"";
-        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+        NSMutableDictionary *errorInfo = [NSJSONSerialization JSONObjectWithData:[errorJSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
 
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-101 userInfo:userInfo];
+        NSString *message = errorInfo[@"message"];
+        NSString *description = errorInfo[@"jsStack"];
+        NSString *err = errorInfo[@"error"];
+        [errorInfo removeObjectForKey:@"message"];
+        [errorInfo removeObjectForKey:@"jsStack"];
+        [errorInfo removeObjectForKey:@"error"];
+        errorInfo[NSLocalizedDescriptionKey] = message;
+        errorInfo[NSLocalizedFailureReasonErrorKey] = err;
+        errorInfo[NSDebugDescriptionErrorKey] = description;
+        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-101 userInfo:errorInfo];
         [self.delegate stoppedWithError:error];
     }
     return @"";
