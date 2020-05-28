@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteRoomViewController (UnitTest)
 
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
-@property (nonatomic, assign) BOOL isWritable;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 
 @end
