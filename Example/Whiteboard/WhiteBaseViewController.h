@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) WhiteBoardView *boardView;
 @property (nonatomic, strong) WhiteSDK *sdk;
 
+@property (nonatomic, strong, nonnull) WhiteSdkConfiguration *sdkConfig;
+
 #pragma mark - CallbackDelegate
 @property (nonatomic, weak, nullable) id<WhiteCommonCallbackDelegate> commonDelegate;
 

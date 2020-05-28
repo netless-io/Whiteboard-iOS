@@ -15,6 +15,7 @@ typedef void(^InterrupterBlock)(NSString *url);
 @interface RoomTests : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
 @property (nonatomic, strong) WhiteRoomViewController *roomVC;
 @property (nonatomic, strong) WhiteRoom *room;
+@property (nonatomic, strong) WhiteRoomConfig *roomConfig;
 @property (nonatomic, copy) InterrupterBlock interrupterBlock;
 @end
 
@@ -32,7 +33,7 @@ typedef void(^InterrupterBlock)(NSString *url);
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
-        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.isWritable, room.isWritable);
+        XCTAssertEqual(weakSelf.roomVC.roomConfig.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.roomConfig.isWritable, room.isWritable);
         XCTAssertNotNil(room);
         [exp fulfill];
     };
@@ -90,32 +91,23 @@ typedef void(^InterrupterBlock)(NSString *url);
 
 - (WhiteRoomConfig *)roomConfig
 {
-    NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
-    WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:WhiteRoomUUID roomToken:WhiteRoomToken userPayload:payload];
-    return roomConfig;
+    if (!_roomConfig) {
+        NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
+        _roomConfig = [[WhiteRoomConfig alloc] initWithUuid:WhiteRoomUUID roomToken:WhiteRoomToken userPayload:payload];
+
+    }
+    return _roomConfig;
 }
 
 - (WhiteRoomViewController *)roomVC {
     if (!_roomVC) {
-        _roomVC = [[WhiteRoomViewController alloc] initWithSdkConfig:[self testingConfig]];
+        _roomVC = [[WhiteRoomViewController alloc] init];
+        _roomVC.sdkConfig.enableInterrupterAPI = YES;
         _roomVC.roomCallbackDelegate = self;
         _roomVC.commonDelegate = self;
-        _roomVC.roomConfig = [self roomConfig];
+        _roomVC.roomConfig = self.roomConfig;
     }
     return _roomVC;
-}
-
-- (WhiteSdkConfiguration *)testingConfig;
-{
-    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
-    
-    //为了测试图片 拦截 API，开启
-    config.enableInterrupterAPI = YES;
-    config.debug = YES;
-    
-    //打开用户头像显示信息
-    config.userCursor = YES;
-    return config;
 }
 
 #pragma mark - Consts
@@ -213,13 +205,13 @@ static NSTimeInterval kTimeout = 30;
     self.roomVC = nil;
     [self popToRoot];
     
-    self.roomVC.isWritable = NO;
+    self.roomConfig.isWritable = NO;
     __weak typeof(self)weakSelf = self;
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
         XCTAssertNotNil(room);
-        XCTAssertEqual(weakSelf.roomVC.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.isWritable, room.isWritable);
+        XCTAssertEqual(weakSelf.roomConfig.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomConfig.isWritable, room.isWritable);
         [exp fulfill];
     };
 

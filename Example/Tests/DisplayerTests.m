@@ -27,22 +27,13 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
 
-- (WhiteSdkConfiguration *)testingConfig;
-{
-    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
-    
-    //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
-    config.enableInterrupterAPI = YES;
-    config.debug = YES;
-    return config;
-}
-
 - (void)setUp {
     
     [super setUp];
     self.continueAfterFailure = NO;
 
-    self.vc = [[WhiteRoomViewController alloc] initWithSdkConfig:[self testingConfig]];
+    self.vc = [[WhiteRoomViewController alloc] init];
+    self.vc.sdkConfig.enableInterrupterAPI = YES;
     self.vc.roomCallbackDelegate = self;
     self.vc.commonDelegate = self;
     __unused UIView *view = [self.vc view];

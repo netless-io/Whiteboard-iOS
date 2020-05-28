@@ -11,7 +11,6 @@
 #import "WhiteUtils.h"
 
 @interface WhiteBaseViewController ()<WhiteCommonCallbackDelegate>
-@property (nonatomic, strong, nonnull) WhiteSdkConfiguration *sdkConfig;
 @end
 
 @implementation WhiteBaseViewController

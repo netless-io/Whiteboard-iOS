@@ -41,7 +41,8 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [super setUp];
     self.continueAfterFailure = NO;
     
-    WhitePureReplayViewController *vc = [[WhitePureReplayViewController alloc] initWithSdkConfig:[self testingConfig]];
+    WhitePureReplayViewController *vc = [[WhitePureReplayViewController alloc] init];
+    vc.sdkConfig.enableInterrupterAPI = YES;
     vc.eventDelegate = self;
     vc.commonDelegate = self;
     WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:WhiteRoomUUID roomToken:WhiteRoomToken];
@@ -91,19 +92,6 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 {
     [self.player seekToScheduleTime:0];
     [self.player play];
-}
-
-- (WhiteSdkConfiguration *)testingConfig;
-{
-    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
-    
-    //为了测试图片 拦截 API，开启
-    config.enableInterrupterAPI = YES;
-    config.debug = YES;
-    
-    //打开用户头像显示信息
-    config.userCursor = YES;
-    return config;
 }
 
 #pragma mark - Player Control

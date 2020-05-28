@@ -44,15 +44,6 @@
                                       options:NSMatchingReportCompletion
                                         range:NSMakeRange(0, [string length])];
     XCTAssertEqual([matches count], 3);
-    NSLog(@"%@", string);
-    
-    WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
-    config.sdkStrategyConfig = dict;
-    NSDictionary *dict1 = [config jsonDict];
-    jsonData = [NSJSONSerialization dataWithJSONObject:dict1 options:0 error:nil];
-    string = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    matches = [regex matchesInString:string options:NSMatchingReportCompletion range:NSMakeRange(0, [string length])];
-    XCTAssertEqual([matches count], 3);
 
     NSLog(@"%@", string);
     
