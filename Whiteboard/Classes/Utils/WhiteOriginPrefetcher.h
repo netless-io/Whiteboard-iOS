@@ -28,6 +28,7 @@ typedef void(^PrefetchFinishBlock)(NSDictionary *result);
 
 @end
 
+__attribute__ ((deprecated("this class is not needed after 2.8.0")))
 @interface WhiteOriginPrefetcher : NSObject
 
 /** 当前用户的策略组，目前不开放 */
