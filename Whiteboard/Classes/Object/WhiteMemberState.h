@@ -15,6 +15,10 @@ extern WhiteApplianceNameKey const ApplianceText;
 extern WhiteApplianceNameKey const ApplianceEllipse;
 extern WhiteApplianceNameKey const ApplianceRectangle;
 extern WhiteApplianceNameKey const ApplianceEraser;
+/** 直线工具 */
+extern WhiteApplianceNameKey const ApplianceStraight;
+/** 箭头工具 */
+extern WhiteApplianceNameKey const ApplianceArrow;
 
 @interface WhiteReadonlyMemberState : WhiteObject
 
