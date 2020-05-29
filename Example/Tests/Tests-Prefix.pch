@@ -2,24 +2,10 @@
 
 #ifdef __OBJC__
 
-//支持插件系统用户，取消下一行注释
-//#define Plugin 1
 
-#ifdef Plugin
-// 插件版本
 #define WhiteAppIdentifier @""
 #define WhiteSDKToken @""
 #define WhiteRoomUUID @""
 #define WhiteRoomToken @""
-
-#else
-
-// 非插件版本
-#define WhiteAppIdentifier @""
-#define WhiteSDKToken @""
-#define WhiteRoomUUID @""
-#define WhiteRoomToken @""
-#endif
-
 
 #endif
