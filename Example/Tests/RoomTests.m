@@ -278,7 +278,7 @@ static NSTimeInterval kTimeout = 30;
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room disableOperations:YES];
     
-    [self.roomVC.boardView evaluateJavaScript:@"room.disableOperations" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableDeviceInputs && room.disableCameraTransform" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if ([result boolValue]) {
             [exp fulfill];
         }
@@ -521,18 +521,20 @@ static NSTimeInterval kTimeout = 30;
     [self.room cleanScene:retainPPT];
     
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.room getSceneStateWithResult:^(WhiteSceneState * _Nonnull state) {
-        WhiteScene *current = state.scenes[state.index];
-        if (retainPPT) {
-            XCTAssertTrue([current.ppt.src isEqualToString:pptPage.src]);
-            XCTAssertTrue(current.componentsCount == 1);
-        } else {
-            XCTAssertNil(current.ppt);
-            XCTAssertTrue(current.componentsCount == 0);
-        }
-        [exp fulfill];
-    }];
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.room getSceneStateWithResult:^(WhiteSceneState * _Nonnull state) {
+            WhiteScene *current = state.scenes[state.index];
+            if (retainPPT) {
+                XCTAssertTrue([current.ppt.src isEqualToString:pptPage.src]);
+                XCTAssertTrue(current.componentsCount == 1);
+            } else {
+                XCTAssertNil(current.ppt);
+                XCTAssertTrue(current.componentsCount == 0);
+            }
+            [exp fulfill];
+        }];
+
+    });
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
