@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeText,
     CommandTypeSelector,
     CommandTypePencil,
+    CommandTypeArrow,
     CommandTypeEraser,
     CommandTypeRectangle,
     CommandTypeColor,
@@ -68,7 +69,7 @@ static NSString *kReuseCell = @"reuseCell";
     [super viewDidLoad];
 
     self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"ppt 铺满屏幕", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
-                      NSLocalizedString(@"插入动态 PPT", nil), NSLocalizedString(@"插入图片", nil), NSLocalizedString(@"获取预览截图", nil), NSLocalizedString(@"获取场景完整封面", nil), NSLocalizedString(@"获取PPT", nil), NSLocalizedString(@"获取页面数据", nil),  NSLocalizedString(@"下一页", nil), NSLocalizedString(@"获取连接状态", nil), NSLocalizedString(@"主动断连", nil), NSLocalizedString(@"视野锁定", nil), NSLocalizedString(@"禁止操作", nil), NSLocalizedString(@"恢复操作", nil), NSLocalizedString(@"文本", nil), NSLocalizedString(@"选择", nil), NSLocalizedString(@"画笔", nil),
+                      NSLocalizedString(@"插入动态 PPT", nil), NSLocalizedString(@"插入图片", nil), NSLocalizedString(@"获取预览截图", nil), NSLocalizedString(@"获取场景完整封面", nil), NSLocalizedString(@"获取PPT", nil), NSLocalizedString(@"获取页面数据", nil),  NSLocalizedString(@"下一页", nil), NSLocalizedString(@"获取连接状态", nil), NSLocalizedString(@"主动断连", nil), NSLocalizedString(@"视野锁定", nil), NSLocalizedString(@"禁止操作", nil), NSLocalizedString(@"恢复操作", nil), NSLocalizedString(@"文本", nil), NSLocalizedString(@"选择", nil), NSLocalizedString(@"画笔", nil), NSLocalizedString(@"箭头", nil),
                       NSLocalizedString(@"橡皮擦", nil),
                       NSLocalizedString(@"矩形", nil), NSLocalizedString(@"颜色", nil), NSLocalizedString(@"坐标转换", nil), NSLocalizedString(@"缩放", nil)];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kReuseCell];
@@ -276,6 +277,13 @@ static NSString *kReuseCell = @"reuseCell";
         {
             WhiteMemberState *mState = [[WhiteMemberState alloc] init];
             mState.currentApplianceName = AppliancePencil;
+            [self.room setMemberState:mState];
+            break;
+        }
+        case CommandTypeArrow:
+        {
+            WhiteMemberState *mState = [[WhiteMemberState alloc] init];
+            mState.currentApplianceName = ApplianceArrow;
             [self.room setMemberState:mState];
             break;
         }
