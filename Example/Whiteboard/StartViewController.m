@@ -65,8 +65,6 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeybroader:)];
     [self.view addGestureRecognizer:tap];
-    WhiteOriginPrefetcher *prefetcher = [WhiteOriginPrefetcher shareInstance];
-    [prefetcher fetchConfigAndPrefetchDomains];
 }
 
 - (void)dismissKeybroader:(id)sender

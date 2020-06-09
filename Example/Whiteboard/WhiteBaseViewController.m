@@ -113,7 +113,7 @@
         
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;
-        config.debug = YES;
+        config.log = YES;
         
         //自定义 netless 协议，所有 ppt 请求，都由 https 更改
 //        WhitePptParams *pptParams = [[WhitePptParams alloc] init];

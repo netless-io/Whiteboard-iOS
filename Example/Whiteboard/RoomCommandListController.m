@@ -143,11 +143,11 @@ static NSString *kReuseCell = @"reuseCell";
             pptPage.src = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg";
             pptPage.width = 400;
             pptPage.height = 600;
-            WhiteScene *scene = [[WhiteScene alloc] initWithName:@"init" ppt:pptPage];
+            WhiteScene *scene = [[WhiteScene alloc] initWithName:@"ppt2" ppt:pptPage];
             
             //插入新页面的 API，现在支持传入 ppt 参数（可选），所以插入PPT和插入新页面的 API，合并成了一个。
             [self.room putScenes:@"/" scenes:@[scene] index:0];
-            [self.room setScenePath:@"/init"];
+            [self.room setScenePath:@"/ppt2"];
             break;
         }
         case CommandTypeInsertStatic:
@@ -182,7 +182,7 @@ static NSString *kReuseCell = @"reuseCell";
         }
         case CommandTypeGetPreviewImage:
         {
-            [self.room getScenePreviewImage:@"/init" completion:^(UIImage * _Nullable image) {
+            [self.room getScenePreviewImage:@"/action-11大4黄蜂产品培训.pptx/5" completion:^(UIImage * _Nullable image) {
                 __unused UIImageView *imgV = [[UIImageView alloc] initWithImage:image];
                 [UIPasteboard generalPasteboard].image = image;
             }];
