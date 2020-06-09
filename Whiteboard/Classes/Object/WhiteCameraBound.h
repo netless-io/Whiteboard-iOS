@@ -44,6 +44,12 @@ typedef NS_ENUM(NSUInteger, WhiteContentMode) {
 #pragma mark - WhiteCameraBound
 @interface WhiteCameraBound : WhiteObject
 
+- (instancetype)initWithCenter:(CGPoint)visionCenter minContent:(WhiteContentModeConfig *)minConfig maxContent:(WhiteContentModeConfig *)maxConfig;
+- (instancetype)initWithFrame:(CGRect)visionFrame minContent:(WhiteContentModeConfig *)minConfig maxContent:(WhiteContentModeConfig *)maxConfig;
+
+/** 效果类似 WhiteSdkConfig 中，删除的 zoomMiniScale 以及 zoomMaxScale */
++ (instancetype)defaultMinContentModeScale:(CGFloat )miniScale maxContentModeScale:(CGFloat )maxScale;
+
 /** 基础视野中心点坐标。不传，则默认为 0 */
 @property (nonatomic, nullable, strong) NSNumber *centerX;
 /** 基础视野中心点坐标。不传，则默认为 0 */

@@ -47,4 +47,33 @@
 
 @implementation WhiteCameraBound
 
++ (instancetype)defaultMinContentModeScale:(CGFloat )miniScale maxContentModeScale:(CGFloat )maxScale
+{
+    WhiteContentModeConfig *minConfig = [[WhiteContentModeConfig alloc] initWithContentMode:WhiteContentModeScale];
+    minConfig.scale = miniScale;
+    
+    WhiteContentModeConfig *maxConfig = [[WhiteContentModeConfig alloc] initWithContentMode:WhiteContentModeScale];
+    maxConfig.scale = maxScale;
+
+    
+    WhiteCameraBound *bound = [[WhiteCameraBound alloc] initWithCenter:CGPointZero minContent:minConfig maxContent:maxConfig];
+    return bound;
+}
+
+- (instancetype)initWithCenter:(CGPoint)visionCenter minContent:(WhiteContentModeConfig *)minConfig maxContent:(WhiteContentModeConfig *)maxConfig {
+    self = [self init];
+    _centerX = @(visionCenter.x);
+    _centerY = @(visionCenter.y);
+    _minContentMode = minConfig;
+    _maxContentMode = maxConfig;
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)visionFrame minContent:(WhiteContentModeConfig *)minConfig maxContent:(WhiteContentModeConfig *)maxConfig {
+    self = [self initWithCenter:CGPointMake(CGRectGetMidX(visionFrame), CGRectGetMidY(visionFrame)) minContent:minConfig maxContent:maxConfig];
+    _width = @(CGRectGetWidth(visionFrame));
+    _height = @(CGRectGetHeight(visionFrame));
+    return self;
+}
+
 @end
