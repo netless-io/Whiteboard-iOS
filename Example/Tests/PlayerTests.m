@@ -48,11 +48,6 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:WhiteRoomUUID roomToken:WhiteRoomToken];
     vc.playerConfig = playerConfig;
 
-#ifndef Plugin
-    playerConfig.duration = @120;
-    playerConfig.beginTimestamp = @(1580478940);
-#endif
-
     self.vc = vc;
 
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];

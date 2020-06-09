@@ -297,7 +297,7 @@ static NSTimeInterval kTimeout = 30;
     [self.room disableOperations:YES];
     [self.room disableOperations:NO];
 
-    [self.roomVC.boardView evaluateJavaScript:@"room.disableOperations" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.roomVC.boardView evaluateJavaScript:@"room.disableDeviceInputs && room.disableCameraTransform" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (![result boolValue]) {
             [exp fulfill];
         }
