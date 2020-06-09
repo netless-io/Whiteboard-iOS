@@ -132,11 +132,6 @@
     [self.bridge callHandler:@"room.disableDeviceInputs" arguments:@[@(disable)]];
 }
 
-- (void)disableOperations:(BOOL)readonly
-{
-    [self.bridge callHandler:@"room.disableOperations" arguments:@[@(readonly)]];
-}
-
 - (void)debugInfo:(void (^ _Nullable)(NSDictionary * _Nullable dict))completionHandler
 {
     [self.bridge callHandler:@"room.state.debugInfo" completionHandler:^(id  _Nullable value) {
@@ -388,9 +383,10 @@
 
 @implementation WhiteRoom (Deprecated)
 
-- (void)setViewSizeWithWidth:(CGFloat)width height:(CGFloat)height;
+- (void)disableOperations:(BOOL)readonly
 {
-    [self.bridge callHandler:@"room.refreshViewSize" arguments:@[]];
+    [self.bridge callHandler:@"room.disableCameraTransform" arguments:@[@(readonly)]];
+    [self.bridge callHandler:@"room.disableDeviceInputs" arguments:@[@(readonly)]];
 }
 
 - (void)zoomChange:(CGFloat)scale

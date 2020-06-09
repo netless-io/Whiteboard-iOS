@@ -20,6 +20,11 @@
     return self;
 }
 
++ (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper
+{
+    return @{@"audioUrl": @"mediaURL"};
+}
+
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
 {
     if (self.beginTimestamp) {

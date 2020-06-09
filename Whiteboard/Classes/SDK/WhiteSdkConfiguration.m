@@ -43,9 +43,7 @@ static NSString *const kJSDeviceType = @"deviceType";
 {
     self = [super init];
     _deviceType = WhiteDeviceTypeTouch;
-    _zoomMinScale = 0.1;
-    _zoomMaxScale = 10;
-    _renderEngine = WhiteSdkRenderEngineSvg;
+    _renderEngine = WhiteSdkRenderEngineCanvas;
     UIDevice *currentDevice = [UIDevice currentDevice];
     struct utsname systemInfo;
     uname(&systemInfo);

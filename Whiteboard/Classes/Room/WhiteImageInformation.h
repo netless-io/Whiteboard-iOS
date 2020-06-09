@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 白板 1:1 缩放时，图片所占高度 */
 @property (nonatomic, assign) CGFloat height;
 
+/** 新增字段，后续版本会根据该字段决定橡皮对该参数效果。当为 true 时，橡皮将不能擦除该图片，默认 false */
+@property (nonatomic, assign) BOOL locked;
+
 @end
 
 NS_ASSUME_NONNULL_END

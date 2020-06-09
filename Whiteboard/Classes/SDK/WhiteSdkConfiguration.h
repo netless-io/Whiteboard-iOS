@@ -48,18 +48,9 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 
 /**
  画笔教具的渲染模式。
- 2.8.0 新增 canvas 渲染引擎，性能更好。有强烈书写需求的用户，推荐使用该引擎。
- 默认为 WhiteSdkRenderEngineSvg，旧版本渲染方式
+ 2.8.0 新增 canvas 渲染引擎，性能更好。2.9.0 开始，默认为 WhiteSdkRenderEngineCanvas。
  */
 @property (nonatomic, copy) WhiteSdkRenderEngineKey renderEngine;
-
-/** default value: 0.1 */
-@property (nonatomic, assign) CGFloat zoomMinScale;
-/** default value: 10 */
-@property (nonatomic, assign) CGFloat zoomMaxScale;
-
-/** 设置后，SDK 会打印大部分 房间中的 function，以及收到的参数 */
-@property (nonatomic, assign) BOOL debug;
 
 /** 显示操作用户头像(需要在加入房间时，配置 userPayload，并确保存在 avatar 字段) */
 @property (nonatomic, assign) BOOL userCursor;
@@ -73,6 +64,9 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
   当开启图片拦截后，最后显示图片时，会回调初始化 sdk 时，传入的 WhiteCommonCallbackDelegate 对象。
  */
 @property (nonatomic, assign) BOOL enableInterrupterAPI;
+
+/** 设置后，SDK 会打印大部分 房间中的 function，以及收到的参数 */
+@property (nonatomic, assign) BOOL log;
 
 /**
  字段 disableReportLog: BOOL
@@ -90,6 +84,19 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 @property (nonatomic, nullable, copy) NSDictionary *sdkStrategyConfig;
 
 @property (nonatomic, strong) WhitePptParams *pptParams;
+
+@end
+
+@implementation WhiteSdkConfiguration (Deprecated)
+
+/**
+ 在加入实时房间/回放房间时，将构造的 cameraBound 参数传入初始化方法中。
+ 具体见 WhiteDisplayer.h 中 setCameraBound API。
+ */
+
+//@property (nonatomic, assign) CGFloat zoomMinScale;
+//@property (nonatomic, assign) CGFloat zoomMaxScale;
+
 
 @end
 NS_ASSUME_NONNULL_END

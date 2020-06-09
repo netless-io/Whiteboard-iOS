@@ -93,12 +93,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- 禁止操作，不响应用户的所有操作操作，是 disableDeviceInputs: disableCameraTransform: 方法的集合。
- @param disable 是否禁止操作，true 为禁止。
- */
-- (void)disableOperations:(BOOL)disable;
-
-/**
  禁止视野移动，视角为 follower + disableCameraTransform true 时，可以保证观众永远处于观众模式，永远跟随主播。
  @param disableCameraTransform 是否禁止移动，true 为禁止。
  */
@@ -274,7 +268,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - 弃用方法
 @interface WhiteRoom (Deprecated)
 
-- (void)setViewSizeWithWidth:(CGFloat)width height:(CGFloat)height DEPRECATED_MSG_ATTRIBUTE("use refreshViewSize");
+/**
+ 禁止操作，不响应用户的所有操作操作，是 disableDeviceInputs: disableCameraTransform: 方法的集合。
+ @param disable 是否禁止操作，true 为禁止。
+ */
+- (void)disableOperations:(BOOL)disable DEPRECATED_MSG_ATTRIBUTE("use disableDeviceInputs and disableCameraTransform");
 
 /**
  缩小放大白板
