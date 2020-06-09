@@ -18,6 +18,5 @@
 #import "WhitePlayer.h"
 #import "WhiteConverter.h"
 #import "WhiteCombinePlayer.h"
-#import "WhiteOriginPrefetcher.h"
 
 #endif /* Whiteboard_h */

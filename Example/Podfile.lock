@@ -8,7 +8,6 @@ PODS:
     - Whiteboard/Object (= 2.9.0)
     - Whiteboard/Replayer (= 2.9.0)
     - Whiteboard/Room (= 2.9.0)
-    - Whiteboard/Utils (= 2.9.0)
   - Whiteboard/Base (2.9.0):
     - dsBridge (~> 3.0.2)
     - Whiteboard/Object
@@ -21,8 +20,6 @@ PODS:
   - Whiteboard/Replayer (2.9.0):
     - Whiteboard/Base
   - Whiteboard/Room (2.9.0):
-    - Whiteboard/Base
-  - Whiteboard/Utils (2.9.0):
     - Whiteboard/Base
   - YYModel (1.0.4)
 
@@ -43,7 +40,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  Whiteboard: b9daf150d9462f633f36d7d464a59cc29702919f
+  Whiteboard: abdee73fb212cfba7e9e9ed8fec31f46d75f117c
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: 2ddde4082da93a898580af8c7e62e3325b3bcb26
