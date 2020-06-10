@@ -43,7 +43,11 @@ static NSString *const kJSDeviceType = @"deviceType";
 {
     self = [super init];
     _deviceType = WhiteDeviceTypeTouch;
-    _renderEngine = WhiteSdkRenderEngineCanvas;
+    if (__builtin_available(iOS 12, *)) {
+        _renderEngine = WhiteSdkRenderEngineCanvas;
+    } else {
+        _renderEngine = WhiteSdkRenderEngineSvg;
+    }
     UIDevice *currentDevice = [UIDevice currentDevice];
     struct utsname systemInfo;
     uname(&systemInfo);

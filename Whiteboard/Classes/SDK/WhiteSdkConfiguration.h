@@ -77,7 +77,11 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 /** 多路由操作，针对部分 dns 污染情况，临时提供的 native 端解决方案 */
 @property (nonatomic, assign) BOOL routeBackup;
 
+/** 动态 ppt 参数，目前可以修改动态 ppt 发起的所有网络请求的 scheme，然后在 iOS11 及其以上，可以通过 WKWebview 的接口，对其进行拦截 */
 @property (nonatomic, strong) WhitePptParams *pptParams;
+
+/** 禁止教具操作 */
+@property (nonatomic, assign) BOOL disableDeviceInputs;
 
 @end
 
