@@ -55,5 +55,11 @@
     return true;
 }
 
+- (void)setDisableOperations:(BOOL)disableOperations
+{
+    _disableOperations = disableOperations;
+    _disableDeviceInputs = disableOperations;
+    _disableCameraTransform = disableOperations;
+}
 
 @end

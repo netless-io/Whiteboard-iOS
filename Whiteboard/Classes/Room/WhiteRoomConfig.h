@@ -25,14 +25,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL disableDeviceInputs;
 
 /**
+ 禁止用户缩放、移动视角，默认 NO,即允许
+ */
+@property (nonatomic, assign) BOOL disableCameraTransform;
+/**
  禁止贝塞尔曲线优化，默认 NO，即允许。
  */
 @property (nonatomic, assign) BOOL disableBezier;
 
 /**
- 禁止白板响应用户操作，默认 NO，即允许。
+ 禁止白板响应用户操作，默认 NO，即允许。直接操作该属性，会同时修改 disableDeviceInputs disableCameraTransform 两个属性。
  */
-@property (nonatomic, assign) BOOL disableOperations;
+@property (nonatomic, assign) BOOL disableOperations __attribute__((deprecated("please use disableDeviceInputs and disableCameraTransform")));
 
 /**
  禁止橡皮擦擦除所有图片，默认 NO，即允许橡皮擦擦除图片。
