@@ -7,6 +7,13 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.9.3] - 2020-06-23
+- 同步更新 white-web-sdk 至 2.9.2 版本
+- 新增`抓手``激光笔`教（见`WhiteApplianceNameKey`）
+- 橡皮教具`disableEraseImage`属性，支持中途切换（见Room `disableEraseImage:`API） 
+- Room 新增`撤销`，`取消撤销`（开启该功能前，请先阅读`disableSerialization:`介绍）
+- Room 提供`复制`，`粘贴`，`副本`，`删除` API，可以对选中的内容，执行上述操作（见`WhiteRoom` 执行操作 API 部分）
+- RoomConfig 弃用`disableOperations`，新增`disableCameraTransform` API，与`disableDeviceInputs`搭配，可以起到同样效果。
 ## [2.9.2] - 2020-06-13
 - 修复 userPayload 显示问题，保持与 web 端一致的显示逻辑。
 ## [2.9.1] - 2020-06-10
