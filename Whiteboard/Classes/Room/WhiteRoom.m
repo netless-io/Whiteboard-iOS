@@ -260,6 +260,11 @@
     [self.bridge callHandler:@"room.completeImageUpload" arguments:@[imageInfo.uuid, src]];
 }
 
+- (void)disableEraseImage:(BOOL)disable
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"disableEraseImage"] arguments:@[@(disable)]];
+}
+
 #pragma mark - 延时
 - (void)setTimeDelay:(NSTimeInterval)delay
 {
@@ -376,6 +381,64 @@
             result(jsState);
         }
     }];
+}
+
+#pragma mark - 执行操作 API
+
+static NSString * const RoomSyncNamespace = @"room.sync.%@";
+
+/**
+ * 复制选中内容，不会粘贴，而是存储在内存中
+ */
+- (void)copy
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"copy"] arguments:nil];
+}
+
+/**
+ * 将 copy API 的复制内容，粘贴到白板中间（用户当前视野的中间）。多次粘贴，会有随机偏移
+ */
+- (void)paste
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"paste"] arguments:nil];
+}
+
+/**
+ * copy paste 组合 API
+ */
+- (void)duplicate
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"duplicate"] arguments:nil];
+}
+
+/**
+ * 删除选中内容
+ */
+- (void)deleteOpertion
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
+}
+
+/**
+ * 不兼容改动
+ * 本地序列化，用于回退与撤销回退
+ * 默认 true，即禁止启动本地序列化；无法使用回退与撤销回退功能
+ * false 时，则打开序列化，可以对本地操作进行解析，可以执行 该 pragma mark 下的 redo undo 操作
+ * 注意：切换 true 时，将导致 web sdk 2.9.2 以下（不包含），native 端 2.9.3 以下（不包含）的客户端崩溃。请确认使用 sdk 版本再进行开启。
+ */
+- (void)disableSerialization:(BOOL)disable
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"disableSerialization"] arguments:@[@(disable)]];
+}
+
+- (void)redo
+{
+    [self.bridge callHandler:@"room.redo" arguments:nil];
+}
+
+- (void)undo
+{
+    [self.bridge callHandler:@"room.undo" arguments:nil];
 }
 
 @end

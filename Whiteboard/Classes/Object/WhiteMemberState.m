@@ -15,6 +15,9 @@ WhiteApplianceNameKey const ApplianceRectangle = @"rectangle";
 WhiteApplianceNameKey const ApplianceEraser = @"eraser";
 WhiteApplianceNameKey const ApplianceStraight = @"straight";
 WhiteApplianceNameKey const ApplianceArrow = @"arrow";
+WhiteApplianceNameKey const ApplianceHand = @"hand";
+WhiteApplianceNameKey const ApplianceLaserPointer = @"laserPointer";
+
 
 @interface WhiteReadonlyMemberState ()
 @property (nonatomic, copy) WhiteApplianceNameKey currentApplianceName;

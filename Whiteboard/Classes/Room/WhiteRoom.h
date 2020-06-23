@@ -147,6 +147,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)completeImageUploadWithUuid:(NSString *)uuid src:(NSString *)src;
 
+/**
+ * 切换橡皮教具配置，true 为禁止擦除图片，false 为可以擦除。
+ */
+- (void)disableEraseImage:(BOOL)disable;
+
 #pragma mark - 延时
 
 /** 白板延时 API
@@ -234,8 +239,52 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)moveScene:(NSString *)source target:(NSString *)target;
 
-@end
 
+/**
+ * 以下 API，可以对使用【选择框】教具进行操作
+ */
+#pragma mark - 执行操作 API
+
+/**
+ * 复制选中内容，不会粘贴，而是存储在内存中
+ */
+- (void)copy;
+
+/**
+ * 将 copy API 的复制内容，粘贴到白板中间（用户当前视野的中间）。多次粘贴，会有随机偏移
+ */
+- (void)paste;
+
+/**
+ * copy paste 组合 API
+ */
+- (void)duplicate;
+
+/**
+ * 删除选中内容
+ */
+- (void)deleteOpertion;
+
+/**
+ * 不兼容改动
+ * 禁用本地序列化
+ * 默认 true，即禁止启动本地序列化；
+ * false 时，则打开序列化，可以对本地操作进行解析，可以执行 该 pragma mark 下的 redo undo 操作
+ * 调用了该 API 的房间，将导致 web sdk 2.9.2 以下（不包含），native 端 2.9.3 以下（不包含）的客户端，崩溃。请确认使用 sdk 版本再进行开启。
+ */
+- (void)disableSerialization:(BOOL)disable;
+
+/**
+ * 回退 undo 的效果，需要 disableSerialization 为 true
+ */
+- (void)redo;
+
+/**
+ * 撤销上一步操作，需要 disableSerialization 为 true
+ */
+- (void)undo;
+
+@end
 
 #pragma mark - 异步 API
 /**

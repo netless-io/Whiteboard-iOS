@@ -19,6 +19,10 @@ extern WhiteApplianceNameKey const ApplianceEraser;
 extern WhiteApplianceNameKey const ApplianceStraight;
 /** 箭头工具 */
 extern WhiteApplianceNameKey const ApplianceArrow;
+/** 抓手工具 */
+extern WhiteApplianceNameKey const ApplianceHand;
+/** 激光笔工具 */
+extern WhiteApplianceNameKey const ApplianceLaserPointer;
 
 @interface WhiteReadonlyMemberState : WhiteObject
 
