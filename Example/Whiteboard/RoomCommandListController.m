@@ -15,6 +15,8 @@ typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeBroadcast,
     CommandTypeFollower,
     CommandTypeScalePptToFit,
+    CommandTypeOperation,
+    CommandTypeDeleteOperation,
     CommandTypeMoveRectange,
     CommandTypeCurrentViewMode,
     CommandTypeCustomEvent,
@@ -68,7 +70,7 @@ static NSString *kReuseCell = @"reuseCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"ppt 铺满屏幕", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
+    self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil), NSLocalizedString(@"ppt 铺满屏幕", nil),  NSLocalizedString(@"操作", nil), NSLocalizedString(@"删除", nil), NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil), NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil), NSLocalizedString(@"插入静态 PPT", nil),
                       NSLocalizedString(@"插入动态 PPT", nil), NSLocalizedString(@"插入图片", nil), NSLocalizedString(@"获取预览截图", nil), NSLocalizedString(@"获取场景完整封面", nil), NSLocalizedString(@"获取PPT", nil), NSLocalizedString(@"获取页面数据", nil),  NSLocalizedString(@"下一页", nil), NSLocalizedString(@"获取连接状态", nil), NSLocalizedString(@"主动断连", nil), NSLocalizedString(@"视野锁定", nil), NSLocalizedString(@"禁止操作", nil), NSLocalizedString(@"恢复操作", nil), NSLocalizedString(@"文本", nil), NSLocalizedString(@"选择", nil), NSLocalizedString(@"画笔", nil), NSLocalizedString(@"箭头", nil),
                       NSLocalizedString(@"橡皮擦", nil),
                       NSLocalizedString(@"矩形", nil), NSLocalizedString(@"颜色", nil), NSLocalizedString(@"坐标转换", nil), NSLocalizedString(@"缩放", nil)];
@@ -114,6 +116,27 @@ static NSString *kReuseCell = @"reuseCell";
         case CommandTypeScalePptToFit:
         {
             [self.room scalePptToFit:WhiteAnimationModeContinuous];
+            break;
+        }
+        case CommandTypeOperation:
+        {
+            // 开启 本地序列化后，才能使用 redo undo
+            [self.room disableSerialization:NO];
+            // 在这 10 秒中画点东西
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.room undo];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.room redo];
+                });
+            });
+            break;
+        }
+        case CommandTypeDeleteOperation:
+        {
+            [self.room duplicate];
+            [self.room copy];
+            [self.room paste];
+            [self.room deleteOpertion];
             break;
         }
         case CommandTypeMoveRectange:
@@ -182,7 +205,7 @@ static NSString *kReuseCell = @"reuseCell";
         }
         case CommandTypeGetPreviewImage:
         {
-            [self.room getScenePreviewImage:@"/action-11大4黄蜂产品培训.pptx/5" completion:^(UIImage * _Nullable image) {
+            [self.room getScenePreviewImage:@"/init" completion:^(UIImage * _Nullable image) {
                 __unused UIImageView *imgV = [[UIImageView alloc] initWithImage:image];
                 [UIPasteboard generalPasteboard].image = image;
             }];
