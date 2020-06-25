@@ -1,6 +1,8 @@
 PODS:
   - dsBridge (3.0.6)
   - Masonry (1.1.0)
+  - NETURLSchemeHandler (0.1.3)
+  - SSZipArchive (2.2.3)
   - Whiteboard (2.9.3):
     - Whiteboard/Base (= 2.9.3)
     - Whiteboard/Converter (= 2.9.3)
@@ -25,12 +27,16 @@ PODS:
 
 DEPENDENCIES:
   - Masonry
+  - NETURLSchemeHandler
+  - SSZipArchive
   - Whiteboard (from `../`)
 
 SPEC REPOS:
   trunk:
     - dsBridge
     - Masonry
+    - NETURLSchemeHandler
+    - SSZipArchive
     - YYModel
 
 EXTERNAL SOURCES:
@@ -40,9 +46,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  NETURLSchemeHandler: 8f183a4affc026f9b3ecab8d49470cd470bfea97
+  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Whiteboard: b1e285830220927e1848f8218414ba4e5e13a5c2
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 2ddde4082da93a898580af8c7e62e3325b3bcb26
+PODFILE CHECKSUM: e052dc06c440b69a7b5aeda81ee0e5d1914d76d7
 
 COCOAPODS: 1.9.3
