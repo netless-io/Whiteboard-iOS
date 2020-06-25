@@ -9,6 +9,7 @@
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.9.4] - 2020-06-25
 - 同步更新 white-web-sdk 至 2.9.4 版本
+- 修复`WhiteContentModeConfig`中`scale`为 0 时，实际为 1 的问题
 ## [2.9.3] - 2020-06-23
 - 同步更新 white-web-sdk 至 2.9.3 版本
 - 新增`抓手``激光笔`教（见`WhiteApplianceNameKey`）
