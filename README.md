@@ -8,7 +8,8 @@
 - [Example](#Example)
     - [快速调试](#快速调试)
 - [项目结构](#项目结构)
-- [Native音视频](#Native音视频)
+- [音视频支持](#Native音视频)
+- [动态PPT本地资源包](#动态ppt本地资源包)
 - [部分问题](#部分问题)
 
 ## 文档
@@ -209,6 +210,12 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 @end
 
 ```
+
+## 动态ppt本地资源包
+
+查看 git 记录：
+1. 代码实现：`implement local zip`
+2. 所需依赖：`add dependency to demo for ppt zip feature`
 
 ## 部分问题
 
