@@ -11,6 +11,8 @@
 #import "WhitePlayerViewController.h"
 #import <Whiteboard/Whiteboard.h>
 #import "WhitePureReplayViewController.h"
+#import <SSZipArchive/SSZipArchive.h>
+#import <NETURLSchemeHandler/NETURLSchemeHandler.h>
 
 @interface StartViewController ()
 @property (nonatomic, strong) UITextField *inputV;
@@ -65,11 +67,48 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeybroader:)];
     [self.view addGestureRecognizer:tap];
+
+    [self downloadZip:@"https://convertcdn.netless.link/publicFiles.zip"];
+    [self downloadZip:[NSString stringWithFormat:@"https://convertcdn.netless.link/dynamicConvert/%@.zip", @"e1ee27fdb0fc4b7c8f649291010c4882"]];
 }
 
 - (void)dismissKeybroader:(id)sender
 {
     [self.inputV resignFirstResponder];
+}
+
+#pragma mark - Dynamic
+//https://convertcdn.netless.link/publicFiles.zip
+- (void)downloadZip:(NSString *)zipUrl
+{
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:nil];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:zipUrl]];
+    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!error) {
+            
+            NSString *des = NSTemporaryDirectory();
+            // zip 包解压后，会有一个叫 taskUUID 或者 publicFiles 的文件夹，里面的内容才是真正可以用的内容。
+            if ([zipUrl containsString:@"publicFiles"]) {
+                des = [des stringByAppendingPathComponent:@"convertcdn.netless.link"];
+            } else {
+                des = [des stringByAppendingPathComponent:@"convertcdn.netless.link/dynamicConvert"];
+            }
+            BOOL result = [SSZipArchive unzipFileAtPath:location.path toDestination:des];
+            NSLog(@"download %@ success and unzip complete %d", zipUrl, result);
+            [[NSFileManager defaultManager] removeItemAtURL:location error:nil];
+        } else {
+            NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+            if (![res isKindOfClass:[NSHTTPURLResponse class]]) {
+                return;
+            }
+            
+            if (res.statusCode < 200 || res.statusCode >= 400) {
+                NSLog(@"response error: %@", response);
+                return;
+            }
+        }
+    }];
+    [task resume];
 }
 
 #pragma mark - Button Action

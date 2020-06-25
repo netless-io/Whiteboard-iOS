@@ -8,16 +8,31 @@
 
 #import "WhiteBaseViewController.h"
 #import <Masonry/Masonry.h>
+#import <NETURLSchemeHandler/NETURLSchemeHandler.h>
 #import "WhiteUtils.h"
 
 @interface WhiteBaseViewController ()<WhiteCommonCallbackDelegate>
+@property (nonatomic, strong, nullable) NETURLSchemeHandler *schemeHandler API_AVAILABLE(ios(11.0));
 @end
+
+/** 动态 ppt 请求时的 scheme 部分，不能带 - */
+static NSString *kPPTScheme = @"netless";
 
 @implementation WhiteBaseViewController
 
-- (instancetype)initWithSdkConfig:(WhiteSdkConfiguration *)sdkConfig
+- (instancetype)init
 {
     if (self = [super init]) {
+        if (@available(iOS 11.0, *)) {
+            _schemeHandler = [[NETURLSchemeHandler alloc] initWithScheme:kPPTScheme directory:NSTemporaryDirectory()];
+        }
+    }
+    return self;
+}
+
+- (instancetype)initWithSdkConfig:(WhiteSdkConfiguration *)sdkConfig
+{
+    if (self = [self init]) {
         _sdkConfig = sdkConfig;
     }
     return self;
@@ -45,7 +60,16 @@
 - (void)setupViews {
     // 1. 初始化 WhiteBoardView，
     // FIXME: 请提前加入视图栈，否则 iOS12 上，SDK 无法正常初始化。
-    self.boardView = [[WhiteBoardView alloc] init];
+    
+    if (@available(iOS 11, *)) {
+        // 在初始化 sdk 时，配置 PPTParams 的 scheme，保证与此处传入的 scheme 一致。
+        self.schemeHandler = [[NETURLSchemeHandler alloc] initWithScheme:kPPTScheme directory:NSTemporaryDirectory()];
+        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+        [config setURLSchemeHandler:self.schemeHandler forURLScheme:kPPTScheme];
+        self.boardView = [[WhiteBoardView alloc] initWithFrame:CGRectZero configuration:config];
+    } else {
+        self.boardView = [[WhiteBoardView alloc] init];
+    }
     [self.view addSubview:self.boardView];
     
     // 2. 为 WhiteBoardView 做 iOS10 及其以下兼容
@@ -115,10 +139,12 @@
         //    config.enableInterrupterAPI = YES;
         config.log = YES;
         
-        //自定义 netless 协议，所有 ppt 请求，都由 https 更改
-//        WhitePptParams *pptParams = [[WhitePptParams alloc] init];
-//        pptParams.scheme = @"netlesss";
-//        config.pptParams = pptParams;
+        //自定义 netless 协议，所有 ppt 请求，都由 https 更改为 kPPTScheme
+        if (@available(iOS 11.0, *)) {
+            WhitePptParams *pptParams = [[WhitePptParams alloc] init];
+            pptParams.scheme = kPPTScheme;
+            config.pptParams = pptParams;
+        }
         
         //打开用户头像显示信息
         config.userCursor = YES;
