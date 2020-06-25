@@ -23,9 +23,10 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 @interface WhitePptParams : WhiteObject
 
 /**
- 如果传入，则所有 ppt 的网络请求，以及图片地址，都会从 https 换成该属性。
+ 如果传入，则所有 ppt 的网络请求，以及图片地址，都会从 https 换成该值。
+ 该属性，配合 iOS 11 WebKit 中 WKWebViewConfiguration 类的 setURLSchemeHandler:forURLScheme: 方法，就可以对 ppt 的资源进行拦截，选择使用本地资源
  */
-@property (nonatomic, copy, nullable) NSString *scheme;
+@property (nonatomic, copy, nullable) NSString *scheme API_AVAILABLE(ios(11.0));
 
 @end
 
