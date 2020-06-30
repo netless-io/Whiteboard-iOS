@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.9.5] - 2020-06-30
+- 同步更新 white-web-sdk 至 2.9.7
+- 提高 canvas 引擎兼容性
 ## [2.9.4] - 2020-06-25
 - 同步更新 white-web-sdk 至 2.9.4 版本
 - 修复`WhiteContentModeConfig`中`scale`为 0 时，实际为 1 的问题
