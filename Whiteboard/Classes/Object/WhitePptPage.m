@@ -7,6 +7,12 @@
 
 #import "WhitePptPage.h"
 
+@interface WhitePptPage ()
+
+@property (nonatomic, copy, readwrite) NSString *previewURL;
+
+@end
+
 @implementation WhitePptPage
 
 - (instancetype)initWithSrc:(NSString *)src size:(CGSize)size
@@ -15,6 +21,13 @@
     _src = src;
     _width = size.width;
     _height = size.height;
+    return self;
+}
+
+- (instancetype)initWithSrc:(NSString *)src preview:(NSString *)url size:(CGSize)size
+{
+    self = [self initWithSrc:src size:size];
+    _previewURL = url;
     return self;
 }
 
