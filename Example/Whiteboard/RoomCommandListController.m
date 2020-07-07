@@ -223,7 +223,8 @@ static NSString *kReuseCell = @"reuseCell";
         }
         case CommandTypeGetPreviewImage:
         {
-            [self.room getScenePreviewImage:@"/init" completion:^(UIImage * _Nullable image) {
+            NSString *path = self.room.state.sceneState.scenePath;
+            [self.room getScenePreviewImage:path completion:^(UIImage * _Nullable image) {
                 __unused UIImageView *imgV = [[UIImageView alloc] initWithImage:image];
                 [UIPasteboard generalPasteboard].image = image;
             }];
@@ -231,7 +232,8 @@ static NSString *kReuseCell = @"reuseCell";
         }
         case CommandTypeGetSnapshot:
         {
-            [self.room getSceneSnapshotImage:@"/init" completion:^(UIImage * _Nullable image) {
+            NSString *path = self.room.state.sceneState.scenePath;
+            [self.room getSceneSnapshotImage:path completion:^(UIImage * _Nullable image) {
                 __unused UIImageView *imgV = [[UIImageView alloc] initWithImage:image];
                 [UIPasteboard generalPasteboard].image = image;
             }];
