@@ -275,12 +275,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)disableSerialization:(BOOL)disable;
 
 /**
- * 回退 undo 的效果，需要 disableSerialization 为 true
+ * 回退 undo 的效果，需要 disableSerialization 为 false
  */
 - (void)redo;
 
 /**
- * 撤销上一步操作，需要 disableSerialization 为 true
+ * 撤销上一步操作，需要 disableSerialization 为 false
  */
 - (void)undo;
 
