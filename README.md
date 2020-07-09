@@ -16,7 +16,15 @@
 
 [API 文档](https://developer.netless.link)
 
-## White-SDK-iOS 迁移
+## 引用
+
+在 Podfile 中写入
+
+```
+pod 'whiteboard'
+```
+
+### White-SDK-iOS 迁移
 
 只需要将
 
