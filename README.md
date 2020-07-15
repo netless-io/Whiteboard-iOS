@@ -40,6 +40,13 @@ pod 'whiteboard'
 
 即可。
 
+使用时，只要 import 以下内容即可。
+
+```Objective-C
+#import <Whiteboard/Whiteboard.h>
+# 使用白板sdk中任意类
+```
+
 ## Example
 
 * 启动Example
@@ -68,7 +75,6 @@ pod install
 #ifndef WhiteAppIdentifier
 #define WhiteAppIdentifier <#@App identifier#>
 #endif
-
 ```
 
 ### 快速调试
@@ -76,7 +82,9 @@ pod install
 如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，填写以下代码：
 
 ```C
-//有 UUID 和 RoomToken 时，只要不在输入栏填写 UUID，WhiteSDKToken 就不会被使用，直接写空即可。
+#define WhiteAppIdentifier @"792/uaYcRG0I7ctP9A"
+//有 UUID 和 RoomToken 时，只要不在输入栏填写 UUID，WhiteSDKToken 就不会被使用，直接写空占位，保证不报错即可。
+//如果在这里有填写任意值，WhiteUtils.m 中的值，就不会被使用
 #define WhiteSDKToken @""
 #define WhiteRoomUUID @"xxxx"
 #define WhiteRoomToken @"wwwwwwwww"
@@ -94,23 +102,8 @@ pod install
 
 ## 要求设备
 
-运行设备：iOS 9 +(推荐iOS 10以上使用，以获得更佳体验)
+运行设备：iOS 9 + (推荐iOS 10以上使用，以获得更佳体验)
 开发环境：Xcode 10+
-
-## 集成
-
-在项目的`Podfile`文件中，添加以下内容：
-
-```shell
-pod 'Whiteboard'
-```
-
-在实际项目中，使用：
-
-```Objective-C
-#import <Whiteboard/Whiteboard.h>
-# 使用白板sdk中任意类
-```
 
 ## 项目结构
 
@@ -147,6 +140,7 @@ SDK由多个`subpod`组成，依赖结构如下图所示：
 ## Native音视频
 
 sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会负责音视频与白板回放的状态同步。
+具体代码示例，可以参看 `WhitePlayerViewController`
 
 >m3u8 格式的音视频，可能需要经过一次 combinePlayerEndBuffering 调用后，才能进行`seek`播放。（否则可能仍然从初始位置开始播放）
 
@@ -221,11 +215,15 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 
 ## 动态ppt本地资源包
 
-查看 git 记录：
-1. 代码实现：`implement local zip`
-2. 所需依赖：`add dependency to demo for ppt zip feature`
+原理：提前下载动态转换所有需要的资源包，使用 WKWebView iOS 11 开始支持的自定义 scheme 请求，拦截 webView 请求，返回 native 端本地资源。
+
+具体实现，请查看 git 记录：
+
+1. 所需依赖：`add dependency to demo for ppt zip feature`
+2. 代码实现：`implement local zip`
+
+[动态转换资源包](https://developer.netless.link/docs/server/api/server-dynamic-conversion-zip/)
 
 ## 部分问题
 
-1. 由于项目名字过短，可能无法通过 `pod search Whiteboard` 命令，搜索到本项目。
-2. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
+1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
