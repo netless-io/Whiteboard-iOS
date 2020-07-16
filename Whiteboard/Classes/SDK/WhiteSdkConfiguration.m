@@ -43,7 +43,7 @@ static NSString *const kJSDeviceType = @"deviceType";
 {
     self = [super init];
     _deviceType = WhiteDeviceTypeTouch;
-    if (@available(iOS 12, *)) {
+    if (@available(iOS 10, *)) {
         _renderEngine = WhiteSdkRenderEngineCanvas;
     } else {
         _renderEngine = WhiteSdkRenderEngineSvg;
