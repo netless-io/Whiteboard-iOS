@@ -43,6 +43,22 @@
     return url;
 }
 
+- (NSString *)onPPTMediaPlay:(NSDictionary *)dict
+{
+    if ([self.delegate respondsToSelector:@selector(pptMediaPlay)]) {
+        [self.delegate pptMediaPlay];
+    }
+    return @"";
+}
+
+
+- (NSString *)onPPTMediaPause:(NSDictionary *)dict
+{
+    if ([self.delegate respondsToSelector:@selector(pptMediaPause)]) {
+        [self.delegate pptMediaPause];
+    }
+    return @"";
+}
 
 - (NSString *)postMessage:(NSString *)message
 {

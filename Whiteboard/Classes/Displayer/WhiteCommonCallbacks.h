@@ -29,6 +29,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString *)urlInterrupter:(NSString *)url;
 
+/**
+ * 动态 ppt 中的音视频媒体，播放通知
+ */
+- (void)pptMediaPlay;
+
+/**
+ * 动态 ppt 中的音视频媒体，暂停通知
+ */
+- (void)pptMediaPause;
+
 @end
 
 
