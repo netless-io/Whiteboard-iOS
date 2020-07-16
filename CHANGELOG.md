@@ -7,6 +7,10 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.9.12] - 2020-07-16
+- 同步 web SDK 至 2.9.11
+- 新增动态 ppt 中音视频播放暂停回调，具体见 `WhiteCommonCallbackDelegate`代理中`pptMediaPlay:``pptMediaPause:`方法及其注释
+- iOS 10 及其以上设备，切换至 canvas 渲染引擎
 ## [2.9.11] - 2020-07-09
 - 修复白板背景色 API 设置失效问题
 ## [2.9.10] - 2020-07-07
