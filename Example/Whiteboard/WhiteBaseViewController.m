@@ -207,4 +207,14 @@ static NSString *kPPTScheme = @"netless";
     return @"https://white-pan.oss-cn-shanghai.aliyuncs.com/124/image/beauty2.png";
 }
 
+- (void)pptMediaPlay
+{
+    NSLog(@"%s", __func__);
+}
+
+- (void)pptMediaPause
+{
+    NSLog(@"%s", __func__);
+}
+
 @end

@@ -69,7 +69,8 @@
     [self.view addGestureRecognizer:tap];
 
     [self downloadZip:@"https://convertcdn.netless.link/publicFiles.zip"];
-    [self downloadZip:[NSString stringWithFormat:@"https://convertcdn.netless.link/dynamicConvert/%@.zip", @"e1ee27fdb0fc4b7c8f649291010c4882"]];
+    /** 此处传入的 uuid 是 ppt 转换任务返回的 taskUUID 而不是房间的 uuid */
+    [self downloadZip:[NSString stringWithFormat:@"https://convertcdn.netless.link/dynamicConvert/%@.zip", @"93b0bee742774cd58f6fef6ec5e12b92"]];
 }
 
 - (void)dismissKeybroader:(id)sender
