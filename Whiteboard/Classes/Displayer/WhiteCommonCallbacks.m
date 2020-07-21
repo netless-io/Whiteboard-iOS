@@ -60,6 +60,19 @@
     return @"";
 }
 
+- (NSString *)setupFail:(NSDictionary *)info
+{
+    if ([self.delegate respondsToSelector:@selector(setupFail:)]) {
+        NSString *desc = info[@"message"] ? : @"";
+        NSString *description = info[@"jsStack"] ? : @"";
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-400 userInfo:userInfo];
+        [self.delegate sdkSetupFail:error];
+    }
+    
+    return @"";
+}
+
 - (NSString *)postMessage:(NSString *)message
 {
     NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];

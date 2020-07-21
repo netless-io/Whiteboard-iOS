@@ -14,7 +14,6 @@
 @interface WhiteSDK()
 
 @property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
-@property (nonatomic, assign, getter=hasCreateWebSdk) BOOL createWebSdk;
 
 @end
 
@@ -32,7 +31,7 @@
         _bridge = boardView;
         _config = config;
         _bridge.commonCallbacks.delegate = callback;
-        [self setupWebSdkInNeeded];
+        [self setupWebSdk];
     }
     return self;
 }
@@ -43,14 +42,9 @@
 }
 
 #pragma mark - Private
-- (void)setupWebSdkInNeeded
+- (void)setupWebSdk
 {
-    if (self.hasCreateWebSdk) {
-        return;
-    }
-
     [self.bridge setupWebSDKWithConfig:self.config completion:nil];
-    self.createWebSdk = YES;
 }
 
 #pragma mark - CommonCallback

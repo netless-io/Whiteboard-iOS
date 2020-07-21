@@ -39,6 +39,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)pptMediaPause;
 
+/**
+ * 初始化 SDK 时，会根据传入的 App Identifier 向服务器配置信息（最多尝试三次）
+ * 如果失败，SDK 处于不可用状态，调用加入房间/回放房间会处于一直无响应状态，需要开发者重新初始化 SDK。
+ * 一般触发情况：
+ * 1. 初始化 SDK 时候，网络异常，导致获取配置信息失败；
+ * 2. 传入了错误不合法的 App Identifier
+ * @since 2.9.13
+ */
+- (void)sdkSetupFail:(NSError *)error;
+
 @end
 
 
