@@ -7,6 +7,12 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.9.13] - 2020-07-22
+- 同步 web SDK 至 2.9.12
+- 修复以下情况时，webView 中 SDK 初始化/启动失败，没有任何通知的问题。回调通知在 `WhiteCommonCallbackDelegate`代理中新增的`sdkSetupFail:`方法中；更多具体内容，见源码注释。
+    1. 当传入非法 AppIdentifier
+    2. 当获取用户配置信息失败时（例如无网络）
+- 修复 webView 中 SDK 初始化失败，导致加入房间，回放房间 API 一直没有回调的问题。
 ## [2.9.12] - 2020-07-16
 - 同步 web SDK 至 2.9.11
 - 新增动态 ppt 中音视频播放暂停回调，具体见 `WhiteCommonCallbackDelegate`代理中`pptMediaPlay:``pptMediaPause:`方法及其注释
