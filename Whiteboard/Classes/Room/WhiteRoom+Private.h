@@ -14,8 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readwrite) NSNumber *observerId;
 @property (nonatomic, assign, readwrite, getter=isWritable) BOOL writable;
 
-- (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge NS_UNAVAILABLE;
-- (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge state:(WhiteRoomState *)roomState;
+- (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge;
 - (void)updatePhase:(WhiteRoomPhase)phase;
 - (void)updateRoomState:(WhiteRoomState *)state;
 

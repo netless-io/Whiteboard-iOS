@@ -24,22 +24,12 @@
 
 @implementation WhiteRoom
 
-- (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge state:(WhiteRoomState *)roomState
-{
-    self = [super initWithUuid:uuid bridge:bridge];
-    if (self) {
-        bridge.room = self;
-        _state = roomState;
-        _globalState = [[WhiteGlobalState alloc] init];
-        _uuid = uuid;
-    }
-    return self;
-}
-
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge;
 {
-    WhiteRoomState *roomState = [[WhiteRoomState alloc] init];
-    self = [self initWithUuid:uuid bridge:bridge state:roomState];
+    self = [super initWithUuid:uuid bridge:bridge];
+    _state = [[WhiteRoomState alloc] init];
+    _globalState = [[WhiteGlobalState alloc] init];
+    _uuid = uuid;
     return self;
 }
 

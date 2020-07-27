@@ -43,6 +43,9 @@
         self.bridge.roomCallbacks.delegate = callbacks;
     }
     __weak typeof(self.bridge)weakBridge = self.bridge;
+    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:config.uuid bridge:weakBridge];
+    self.bridge.roomCallbacks.room = room;
+    
     [self.bridge callHandler:@"sdk.joinRoom" arguments:@[config] completionHandler:^(id _Nullable value) {
         if (completionHandler) {
             NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
@@ -54,9 +57,10 @@
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
                 completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstsErrorDomain code:-100 userInfo:userInfo]);
             } else {
-                WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:config.uuid bridge:weakBridge state:[WhiteRoomState modelWithJSON:dict[@"state"]]];
                 room.observerId = dict[@"observerId"];
                 room.writable = [dict[@"isWritable"] boolValue];
+                [room updateRoomState:[WhiteRoomState modelWithJSON:dict[@"state"]]];
+                weakBridge.room = room;
                 weakBridge.roomCallbacks.room = room;
                 completionHandler(YES, room, nil);
             }
