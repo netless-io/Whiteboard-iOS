@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.9.14] - 2020-
+- 修复`room.phase`属性不正确，必须使用异步 API 获取的问题
 ## [2.9.13] - 2020-07-22
 - 同步 web SDK 至 2.9.12
 - 修复以下情况时，webView 中 SDK 初始化/启动失败，没有任何通知的问题。回调通知在 `WhiteCommonCallbackDelegate`代理中新增的`sdkSetupFail:`方法中；更多具体内容，见源码注释。
