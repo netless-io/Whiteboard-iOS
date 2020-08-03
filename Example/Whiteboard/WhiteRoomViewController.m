@@ -206,7 +206,7 @@
 - (void)firePhaseChanged:(WhiteRoomPhase)phase
 {
     NSLog(@"%s, %ld", __FUNCTION__, (long)phase);
-    if (self.room.disconnectedBySelf || !self.isReconnecting || !self.sdk) {
+    if (self.room.disconnectedBySelf || self.isReconnecting || !self.sdk) {
         return;
     }
     
