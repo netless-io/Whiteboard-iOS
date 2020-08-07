@@ -10,6 +10,14 @@
 #import <Whiteboard/Whiteboard.h>
 #import "WhiteRoomViewController.h"
 
+@interface CustomGlobalTestModel : WhiteGlobalState
+@property (nonatomic, strong) NSString *name;
+@end
+
+@implementation CustomGlobalTestModel
+
+@end
+
 typedef void(^InterrupterBlock)(NSString *url);
 
 @interface RoomTests : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
@@ -117,6 +125,27 @@ static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
 
 #pragma mark - setting
+
+- (void)testSetGlobalState
+{
+    [WhiteDisplayerState setCustomGlobalStateClass:[CustomGlobalTestModel class]];
+    // 不能直接初始化复制，直接从字典生成一个
+    NSDictionary *dict = @{@"globalState": @{@"name": @"value"}};
+    WhiteDisplayerState *result = [WhiteDisplayerState modelWithJSON:dict];
+    [self.room setGlobalState:result.globalState];
+
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+        XCTAssertTrue([state.globalState isKindOfClass:[CustomGlobalTestModel class]], @"state is not a CustomGlobalTestModel instance");
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
 
 - (void)testSetMemberState
 {
@@ -498,6 +527,46 @@ static NSTimeInterval kTimeout = 30;
     }];
 }
 
+- (void)testSetSceneIndex
+{
+    [self setupSceneIndexBound:NO];
+}
+
+- (void)testSetSceneIndexFail
+{
+    [self setupSceneIndexBound:YES];
+}
+
+- (void)setupSceneIndexBound:(BOOL)bound
+{
+    WhitePptPage *pptPage = [[WhitePptPage alloc] init];
+    pptPage.src = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg";
+    pptPage.width = 400;
+    pptPage.height = 600;
+    WhiteScene *scene = [[WhiteScene alloc] initWithName:@"opt" ppt:pptPage];
+    [self.room putScenes:@"/ppt" scenes:@[scene] index:0];
+    NSUInteger pptIndex = bound ? 100 : 1;
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.room setSceneIndex:pptIndex completionHandler:^(BOOL success, NSError * _Nullable error) {
+        if (bound) {
+            if (error) {
+                NSLog(@"setSceneIndex fail");
+                [exp fulfill];
+            }
+        } else {
+            XCTAssertTrue(success, @"setSceneIndex fail");
+            [exp fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 - (void)testCleanSceneNoPpt
 {
     [self cleanScene:NO];
@@ -530,6 +599,50 @@ static NSTimeInterval kTimeout = 30;
             } else {
                 XCTAssertNil(current.ppt);
                 XCTAssertTrue(current.componentsCount == 0);
+            }
+            [exp fulfill];
+        }];
+
+    });
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testRemoveScenesPage
+{
+    [self removeScenesAll:NO];
+}
+
+- (void)testRemoveScenesPpt
+{
+    [self removeScenesAll:YES];
+}
+
+- (void)removeScenesAll:(BOOL)removeAll
+{
+    WhitePptPage *pptPage = [[WhitePptPage alloc] init];
+    pptPage.src = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg";
+    pptPage.width = 400;
+    pptPage.height = 600;
+    WhiteScene *scene = [[WhiteScene alloc] initWithName:@"opt" ppt:pptPage];
+    [self.room putScenes:@"/ppt" scenes:@[scene] index:0];
+    [self.room setScenePath:@"/ppt/opt"];
+    NSString *dirOrPath = removeAll ? @"/ppt" : @"/ppt/page0";
+    [self.room removeScenes:dirOrPath];
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.room getSceneStateWithResult:^(WhiteSceneState * _Nonnull state) {
+            WhiteScene *current = state.scenes[state.index];
+            if (removeAll) {
+                XCTAssertNil(current.ppt);
+                XCTAssertTrue(current.componentsCount == 0);
+            } else {
+                XCTAssertTrue([current.ppt.src isEqualToString:pptPage.src]);
+                XCTAssertTrue(current.componentsCount == 1);
             }
             [exp fulfill];
         }];
