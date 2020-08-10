@@ -10,6 +10,14 @@
 #import <Whiteboard/Whiteboard.h>
 #import "WhiteRoomViewController.h"
 
+@interface CustomGlobalTestModel : WhiteGlobalState
+@property (nonatomic, copy) NSString *name;
+@end
+
+@implementation CustomGlobalTestModel
+
+@end
+
 typedef void(^InterrupterBlock)(NSString *url);
 
 @interface RoomTests : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
@@ -117,6 +125,27 @@ static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
 
 #pragma mark - setting
+- (void)testSetGlobalState
+{
+    [WhiteDisplayerState setCustomGlobalStateClass:[CustomGlobalTestModel class]];
+    NSDictionary *dict = @{@"globalState": @{@"name": @"testName"}};
+    WhiteDisplayerState *result = [WhiteDisplayerState modelWithJSON:dict];
+    [self.room setGlobalState:result.globalState];
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+        XCTAssertTrue([state.globalState isKindOfClass:[CustomGlobalTestModel class]]);
+        CustomGlobalTestModel *globalModel = (CustomGlobalTestModel *)state.globalState;
+        XCTAssertTrue([globalModel.name isEqualToString:@"testName"]);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
 
 - (void)testSetMemberState
 {
