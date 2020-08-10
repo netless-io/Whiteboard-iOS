@@ -259,4 +259,10 @@
     NSLog(@"%s", __func__);
 }
 
+#pragma mark - WhiteCommonCallbackDelegate
+- (void)sdkSetupFail:(NSError *)error
+{
+    NSLog(@"sdkSetupFail: %@", error.userInfo);
+}
+
 @end

@@ -62,7 +62,7 @@
 
 - (NSString *)setupFail:(NSDictionary *)info
 {
-    if ([self.delegate respondsToSelector:@selector(setupFail:)]) {
+    if ([self.delegate respondsToSelector:@selector(sdkSetupFail:)]) {
         NSString *desc = info[@"message"] ? : @"";
         NSString *description = info[@"jsStack"] ? : @"";
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
