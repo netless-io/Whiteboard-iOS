@@ -6,6 +6,7 @@
 //
 
 #import "WhiteSdkConfiguration.h"
+#import "WhiteSdkConfiguration+Private.h"
 #import "WhiteSDK.h"
 #import <sys/utsname.h>
 

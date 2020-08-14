@@ -8,12 +8,14 @@
 #import "WhiteSDK.h"
 #import "WhiteSDK+Private.h"
 #import "WhiteBoardView+Private.h"
+#import "WhiteSdkConfiguration+Private.h"
 #import "WhiteDisplayer+Private.h"
 #import "WhiteConsts.h"
 
 @interface WhiteSDK()
 
 @property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
+@property (nonatomic, strong) WhiteAudioMixerBridge *audioMixer;
 
 @end
 
@@ -24,15 +26,26 @@
     return @"2.9.14";
 }
 
-- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:( id<WhiteAudioMixerBridgeDelegate>)mixer
 {
     self = [super init];
     if (self) {
         _bridge = boardView;
         _config = config;
         _bridge.commonCallbacks.delegate = callback;
+        if ([mixer conformsToProtocol:@protocol(WhiteAudioMixerBridgeDelegate)]) {
+            config.enableRtcIntercept = YES;
+            _audioMixer = [[WhiteAudioMixerBridge alloc] initWithBridge:boardView deletegate:mixer];
+            [self.bridge addJavascriptObject:_audioMixer namespace:@"rtc"];
+        }
         [self setupWebSdk];
     }
+    return self;
+}
+
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback
+{
+    self = [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil];
     return self;
 }
 
