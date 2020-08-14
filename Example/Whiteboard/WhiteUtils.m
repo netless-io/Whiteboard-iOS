@@ -10,7 +10,7 @@
 
 @implementation WhiteUtils
 
-static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
+static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
 
 /** FIXME: 此处 tonken 只做 demo 试用。
  实际使用时，请在 https://console.netless.link 注册并获取 sdk token
@@ -96,8 +96,8 @@ static NSString *APIHost = @"https://cloudcapiv4.herewhite.com";
     //在 header 中加入身份鉴权
     [modifyRequest addValue:self.sdkToken forHTTPHeaderField:@"token"];
     
-    //@"mode": @"historied" 为可回放房间，默认为持久化房间。
-    NSDictionary *params = @{@"name": @"whiteboard-example-ios", @"limit": @110, @"mode": @"historied"};
+    //@"isRecord": @YES 是否开启录制，YES 为可回放房间，默认为持久化房间。
+    NSDictionary *params = @{@"name": @"whiteboard-example-ios", @"limit": @110, @"isRecord": @YES};
     NSData *postData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
     
     [modifyRequest setHTTPBody:postData];
