@@ -15,7 +15,7 @@
 @interface WhiteSDK()
 
 @property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
-@property (nonatomic, strong) WhiteAudioMixerBridge *audioMixer;
+@property (nonatomic, strong, readwrite) WhiteAudioMixerBridge *audioMixer;
 
 @end
 

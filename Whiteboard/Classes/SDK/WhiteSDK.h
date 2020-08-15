@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config DEPRECATED_MSG_ATTRIBUTE("initWithWhiteBoardView:config:commonCallbackDelegate");
 
+@property (nonatomic, strong, readonly, nullable) WhiteAudioMixerBridge *audioMixer;
+
 #pragma mark - CommonCallback
 
 /// 更新 CommonCallback 的 delegate
