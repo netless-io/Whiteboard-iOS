@@ -43,16 +43,16 @@
 
 - (NSString *)stopAudioMixing:(id)nothing
 {
-    if ([self.delegate respondsToSelector:@selector(stopAudioMixing:)]) {
+    if ([self.delegate respondsToSelector:@selector(stopAudioMixing)]) {
         [self.delegate stopAudioMixing];
     }
     return @"";
 }
 
-- (NSString *)setAudioMixingPosition:(NSInteger)position
+- (NSString *)setAudioMixingPosition:(NSNumber *)position
 {
     if ([self.delegate respondsToSelector:@selector(setAudioMixingPosition:)]) {
-        [self.delegate setAudioMixingPosition:position];
+        [self.delegate setAudioMixingPosition:[position integerValue]];
     }
     return @"";
 }
