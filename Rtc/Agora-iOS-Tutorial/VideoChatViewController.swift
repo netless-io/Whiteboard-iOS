@@ -11,49 +11,23 @@ import AgoraRtcKit
 import WebKit
 import JavaScriptCore
 
-class VideoChatViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(message.body);
+class VideoChatViewController: UIViewController, WKNavigationDelegate {
         
-        guard let cmdJson = message.body as? [String: Any] else {
-            print("Input String \(message.body) is not a dictionary")
-            return
-        }
-        
-        guard let methodName = cmdJson["method"] as? String else {
-            return
-        }
-        
-        switch methodName {
-        case "getChannelState":
-            print("getChannelState is called")
-            break
-        case "startAudioMixing":
-            print("startAudio")
-            if let filePath = cmdJson["filePath"] as? String {
-                print("\(filePath) iii")
-            }
-            
-            break
-        default:
-            print(methodName)
-        }
-    }
-    
     @IBOutlet weak var localVideo: UIView!
     @IBOutlet weak var remoteVideo: UIView!
-    @IBOutlet weak var remoteVideoMutedIndicator: UIImageView!
+
     @IBOutlet weak var localVideoMutedIndicator: UIView!
     @IBOutlet weak var micButton: UIButton!
     @IBOutlet weak var cameraButton: UIButton!
     @IBOutlet weak var wkWebView: WKWebView!
+    @IBOutlet weak var WhiteboardContianer: UIView!
     
     weak var logVC: LogViewController?
     var agoraKit: AgoraRtcEngineKit!
+    var whiteSdk: WhiteSDK?
     
     var isRemoteVideoRender: Bool = true {
         didSet {
-            remoteVideoMutedIndicator.isHidden = isRemoteVideoRender
             remoteVideo.isHidden = !isRemoteVideoRender
         }
     }
@@ -74,46 +48,39 @@ class VideoChatViewController: UIViewController, WKNavigationDelegate, WKScriptM
         }
     }
     
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-//        webView.evaluateJavaScript("sayHello('WebView你好！')") { (result, err) in
-//            print(result, err)
-//        }
-    }
-    
-    lazy var webView: WKWebView = {
-        
-        let preferences = WKPreferences()
-        preferences.javaScriptEnabled = true
-
-        let configuration = WKWebViewConfiguration()
-        configuration.preferences = preferences
-        
-      //  configuration.userContentController.add(self, name: "agoraJSBridge")
-        
-        
-        var webView = WKWebView(frame: self.view.frame, configuration: configuration)
-        webView.scrollView.bounces = true
-        webView.scrollView.alwaysBounceVertical = true
-        webView.navigationDelegate = self
-        return webView
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // This is our usual steps for joining
         // a channel and starting a call.
         initializeAgoraEngine()
-//        let board = WhiteBoardView()
-        
-//        agoraJSBridge = AgoraJSBridge(rtcEngine: agoraKit, wkWebView: webView)
-//        agoraJSBridge.addJavascriptInterface();
         view.backgroundColor = .white
-//        view.addSubview(webView)
-//        webView.loadFileURL(NSURL.fileURL(withPath: demoHtmlPath), allowingReadAccessTo: NSURL.fileURL(withPath: demoHtmlPath))
         setupVideo()
         setupLocalVideo()
         joinChannel()
+        setupWhiteboard()
+    }
+    
+    private func setupWhiteboard() {
+        let board = WhiteBoardView()
+        board.frame = self.WhiteboardContianer.bounds;
+        self.WhiteboardContianer.addSubview(board)
+        board.topAnchor.constraint(equalTo: self.WhiteboardContianer.topAnchor).isActive = true
+        board.leftAnchor.constraint(equalTo: self.WhiteboardContianer.leftAnchor).isActive = true
+        board.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        
+        
+        let config = WhiteSdkConfiguration(app: "792/uaYcRG0I7ctP9A")
+        self.whiteSdk = WhiteSDK(whiteBoardView: board, config: config, commonCallbackDelegate: self, audioMixerBridgeDelegate: self)
+
+        let roomConfig = WhiteRoomConfig(uuid: <#Room UUID#>, roomToken: <#ROOM Token#>)
+
+        self.whiteSdk!.joinRoom(with: roomConfig, callbacks: self) { (success, room, error) in
+            if ((room) != nil) {
+                
+            } else {
+                print("join room failed \(String(describing: error))")
+            }
+        }
     }
 
     
@@ -214,6 +181,42 @@ class VideoChatViewController: UIViewController, WKNavigationDelegate, WKScriptM
     }
 }
 
+extension VideoChatViewController: WhiteRoomCallbackDelegate {
+    
+}
+
+extension VideoChatViewController: WhiteCommonCallbackDelegate {
+    
+}
+
+extension VideoChatViewController: WhiteAudioMixerBridgeDelegate {
+    func startAudioMixing(_ filePath: String, loopback: Bool, replace: Bool, cycle: Int) {
+        let result:Int32 = agoraKit.startAudioMixing(filePath, loopback: true, replace: false, cycle: 1)
+        print("\(#function) \(filePath) \(loopback) \(replace) \(cycle) result:\(result)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(714, errorCode: Int(result))
+        }
+    }
+
+    func stopAudioMixing() {
+        let result:Int32 = agoraKit.stopAudioMixing()
+        print("\(#function) result:\(result)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(0, errorCode: Int(result))
+        }
+
+    }
+
+    func setAudioMixingPosition(_ position: Int) {
+        print("position: \(position)")
+        let result: Int32 = agoraKit.setAudioMixingPosition(position)
+        print("\(#function) result:\(result) position: \(position)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(0, errorCode: Int(result))
+        }
+    }
+}
+
 extension VideoChatViewController: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
@@ -232,6 +235,15 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, errorCode: AgoraAudioMixingErrorCode) {
+        print("localAudioMixingStateDidChanged: \(state.rawValue) errorCode: \(errorCode.rawValue)")
+        if let sdk = self.whiteSdk {
+            sdk.audioMixer?.setMediaState(state.rawValue, errorCode: errorCode.rawValue)
+        } else {
+            print("sdk not init !")
+        }
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {

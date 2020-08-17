@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,19 +20,19 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.28264099359512329" green="0.25691255927085876" blue="0.34382003545761108" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="big_logo" translatesAutoresizingMaskIntoConstraints="NO" id="LZg-5L-xeZ" userLabel="remoteVideoMutedIndicator">
-                                <rect key="frame" x="137.5" y="283.5" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="hhQ-Z7-CG0"/>
-                                    <constraint firstAttribute="width" secondItem="LZg-5L-xeZ" secondAttribute="height" multiplier="1:1" id="wWK-UO-1nf"/>
-                                </constraints>
-                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4vp-RG-lNX" userLabel="localVideo">
                                 <rect key="frame" x="265" y="36" width="85" height="113.5"/>
                                 <color key="backgroundColor" red="0.51017522811889648" green="0.48047775030136108" blue="0.57149040699005127" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="85" id="URX-FV-Xyu"/>
                                     <constraint firstAttribute="width" secondItem="4vp-RG-lNX" secondAttribute="height" multiplier="3:4" id="ywd-ga-BGz"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xvt-gA-F7P" userLabel="WhiteboardContainer">
+                                <rect key="frame" x="0.0" y="200" width="375" height="250"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Xvt-gA-F7P" secondAttribute="height" multiplier="75:50" id="zn6-gn-LIQ"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="riT-8m-B10">
@@ -100,23 +100,26 @@
                         </subviews>
                         <color key="backgroundColor" red="0.28264099359512329" green="0.25691255927085876" blue="0.34382003545761108" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="LZg-5L-xeZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2YX-WB-UuO"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="trailing" secondItem="bhC-Zh-0jg" secondAttribute="trailing" id="3VW-mb-Wud"/>
                             <constraint firstItem="IcU-fJ-7nU" firstAttribute="leading" secondItem="7Wh-nG-1kC" secondAttribute="trailing" constant="28" id="3Wr-up-scu"/>
                             <constraint firstItem="IcU-fJ-7nU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="41Z-pM-DpQ"/>
                             <constraint firstItem="5x4-q9-Nuw" firstAttribute="height" secondItem="7Wh-nG-1kC" secondAttribute="height" id="5bJ-kw-Dmx"/>
+                            <constraint firstItem="QRw-lx-Hkf" firstAttribute="top" secondItem="Xvt-gA-F7P" secondAttribute="bottom" id="6Vc-eh-BRf"/>
                             <constraint firstItem="riT-8m-B10" firstAttribute="width" secondItem="4vp-RG-lNX" secondAttribute="width" id="7Tr-qh-ewq"/>
                             <constraint firstItem="riT-8m-B10" firstAttribute="top" secondItem="4vp-RG-lNX" secondAttribute="top" id="7k9-Tg-Ayx"/>
                             <constraint firstItem="bhC-Zh-0jg" firstAttribute="trailing" secondItem="4vp-RG-lNX" secondAttribute="trailing" constant="25" id="90e-zQ-XGR"/>
                             <constraint firstItem="IcU-fJ-7nU" firstAttribute="top" secondItem="QRw-lx-Hkf" secondAttribute="bottom" constant="16" id="Eg5-VD-2wY"/>
+                            <constraint firstItem="Xvt-gA-F7P" firstAttribute="centerX" secondItem="bhC-Zh-0jg" secondAttribute="centerX" id="FvF-bx-gh8"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="leading" secondItem="bhC-Zh-0jg" secondAttribute="leading" id="Jad-zl-4Gt"/>
                             <constraint firstItem="5x4-q9-Nuw" firstAttribute="leading" secondItem="IcU-fJ-7nU" secondAttribute="trailing" constant="28" id="Png-D7-YLS"/>
+                            <constraint firstItem="bhC-Zh-0jg" firstAttribute="trailing" secondItem="Xvt-gA-F7P" secondAttribute="trailing" id="UBu-QG-nip"/>
                             <constraint firstItem="5x4-q9-Nuw" firstAttribute="centerY" secondItem="IcU-fJ-7nU" secondAttribute="centerY" id="WdE-DS-dO2"/>
-                            <constraint firstItem="LZg-5L-xeZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YdT-SS-WbL"/>
                             <constraint firstItem="riT-8m-B10" firstAttribute="leading" secondItem="4vp-RG-lNX" secondAttribute="leading" id="ZCh-CQ-IMl"/>
                             <constraint firstItem="riT-8m-B10" firstAttribute="height" secondItem="4vp-RG-lNX" secondAttribute="height" id="a1c-p1-8F3"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="bottom" secondItem="bhC-Zh-0jg" secondAttribute="bottom" id="dg1-Ff-82G"/>
+                            <constraint firstItem="Xvt-gA-F7P" firstAttribute="top" relation="greaterThanOrEqual" secondItem="riT-8m-B10" secondAttribute="bottom" id="fH2-34-APt"/>
                             <constraint firstItem="QRw-lx-Hkf" firstAttribute="leading" secondItem="bhC-Zh-0jg" secondAttribute="leading" constant="16" id="jhm-Hp-f9G"/>
+                            <constraint firstItem="Xvt-gA-F7P" firstAttribute="leading" secondItem="bhC-Zh-0jg" secondAttribute="leading" id="k2d-Ix-F58"/>
                             <constraint firstItem="5x4-q9-Nuw" firstAttribute="width" secondItem="7Wh-nG-1kC" secondAttribute="width" id="ne8-L0-xEz"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="pID-WY-ovL"/>
                             <constraint firstItem="4vp-RG-lNX" firstAttribute="top" secondItem="bhC-Zh-0jg" secondAttribute="top" constant="36" id="vzK-iw-QS1"/>
@@ -126,12 +129,12 @@
                         <viewLayoutGuide key="safeArea" id="bhC-Zh-0jg"/>
                     </view>
                     <connections>
+                        <outlet property="WhiteboardContianer" destination="Xvt-gA-F7P" id="HV4-T5-7I6"/>
                         <outlet property="cameraButton" destination="5x4-q9-Nuw" id="dxl-mh-8NQ"/>
                         <outlet property="localVideo" destination="4vp-RG-lNX" id="Clh-yM-Jto"/>
                         <outlet property="localVideoMutedIndicator" destination="riT-8m-B10" id="JMU-hc-efr"/>
                         <outlet property="micButton" destination="7Wh-nG-1kC" id="Re9-h7-ykU"/>
                         <outlet property="remoteVideo" destination="U9u-fT-DFZ" id="vMV-ZP-M0L"/>
-                        <outlet property="remoteVideoMutedIndicator" destination="LZg-5L-xeZ" id="mmM-KM-ixK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -148,7 +151,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="big_logo" width="100" height="106"/>
         <image name="call" width="284" height="284"/>
         <image name="end" width="292" height="292"/>
         <image name="logo" width="39" height="42"/>
