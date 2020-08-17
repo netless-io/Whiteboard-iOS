@@ -109,7 +109,26 @@
 - (void)joinNewRoom
 {
     self.title = NSLocalizedString(@"创建房间中...", nil);
-    [WhiteUtils createRoomWithCompletionHandler:^(NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error) {
+//    [WhiteUtils createRoomWithCompletionHandler:^(NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error) {
+//        if (error) {
+//            if (self.roomBlock) {
+//                self.roomBlock(nil, error);
+//            } else {
+//                NSLog(NSLocalizedString(@"创建房间失败，error:", nil), [error description]);
+//                self.title = NSLocalizedString(@"创建失败", nil);
+//            }
+//        } else {
+//            self.roomUuid = uuid;
+//            if (self.roomUuid && roomToken) {
+//                [self joinRoomWithToken:roomToken];
+//            } else {
+//                NSLog(NSLocalizedString(@"连接房间失败，room uuid:%@ roomToken:%@", nil), self.roomUuid, roomToken);
+//                self.title = NSLocalizedString(@"创建失败", nil);
+//            }
+//        }
+//    }];
+    
+    [WhiteUtils createRoomWithAccessKey:nil lifespan:0 role:@"admin" completionHandler:^(NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error) {
         if (error) {
             if (self.roomBlock) {
                 self.roomBlock(nil, error);

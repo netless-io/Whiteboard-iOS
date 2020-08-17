@@ -14,6 +14,8 @@
 #import <SSZipArchive/SSZipArchive.h>
 #import <NETURLSchemeHandler/NETURLSchemeHandler.h>
 
+#import "WhiteUtils.h"
+
 @interface StartViewController ()
 @property (nonatomic, strong) UITextField *inputV;
 @end
@@ -29,7 +31,7 @@
     stackView.alignment = UIStackViewAlignmentCenter;
     [self.view addSubview:stackView];
     
-    stackView.frame = CGRectMake(0, 0, 300, 120);
+    stackView.frame = CGRectMake(0, 0, 300, 200);
     stackView.center = self.view.center;
     stackView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
@@ -59,6 +61,20 @@
     [createBtn addTarget:self action:@selector(pureReplayRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
+    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [createBtn setTitle:NSLocalizedString(@"获取房间信息", nil) forState:UIControlStateNormal];
+    [createBtn addTarget:self action:@selector(getRoomInfo:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:createBtn];
+    
+    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [createBtn setTitle:NSLocalizedString(@"获取房间列表", nil) forState:UIControlStateNormal];
+    [createBtn addTarget:self action:@selector(getRoomsList:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:createBtn];
+    
+    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [createBtn setTitle:NSLocalizedString(@"封禁房间", nil) forState:UIControlStateNormal];
+    [createBtn addTarget:self action:@selector(banRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:createBtn];
     
     for (UIView *view in stackView.arrangedSubviews) {
         [view setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
@@ -152,6 +168,27 @@
     #endif
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)getRoomInfo:(UIButton *)sender
+{
+    [WhiteUtils getRoomInfoWithUuid:WhiteRoomUUID completionHandler:^(NSString * _Nullable roomToken, NSError * _Nullable error) {
+
+    }];
+}
+
+- (void)getRoomsList:(UIButton *)sender
+{
+    [WhiteUtils getRoomsListWithUuid:WhiteRoomUUID limit:10 completionHandler:^(NSString * _Nullable roomToken, NSError * _Nullable error) {
+        
+    }];
+}
+
+- (void)banRoom:(UIButton *)sender
+{
+    [WhiteUtils banRoomWithUuid:WhiteRoomUUID isBan:YES completionHandler:^(NSString * _Nullable roomToken, NSError * _Nullable error) {
+        
+    }];
 }
 
 @end
