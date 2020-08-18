@@ -16,15 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)sdkToken;
 
-+ (void)createRoomWithAccessKey:(NSString *)accessKey lifespan:(NSUInteger)lifespan role:(NSString *)role completionHandler:(void (^) (NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
++ (void)createRoomWithCompletionHandler:(void (^) (NSString * _Nullable uuid, NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
 
 + (void)getRoomTokenWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
-
-+ (void)getRoomInfoWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
-
-+ (void)getRoomsListWithUuid:(NSString *)uuid limit:(NSUInteger)limit completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
-
-+ (void)banRoomWithUuid:(NSString *)uuid isBan:(BOOL)isBan completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler;
 
 @end
 
