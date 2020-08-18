@@ -11,7 +11,6 @@
 @implementation WhiteUtils
 
 static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
-static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
 
 /** FIXME: 此处 tonken 只做 demo 试用。
  实际使用时，请在 https://console.netless.link 注册并获取 sdk token
@@ -86,7 +85,7 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
 //FIXME:我们推荐将这两个请求，放在您的服务器端进行。防止您从 https://console.netless.link 获取的 token 发生泄露。
 + (void)createRoomWithResult:(void (^) (BOOL success, id  _Nullable response, NSError * _Nullable error))result;
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[APIHost stringByAppendingPathComponent:@"rooms"]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[APIHost stringByAppendingString:@"rooms"]]];
     
     NSMutableURLRequest *modifyRequest = [request mutableCopy];
     [modifyRequest setHTTPMethod:@"POST"];
@@ -134,8 +133,8 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
 + (void)createRoomTokenWithUuid:(NSString *)uuid accessKey:(NSString *)accessKey lifespan:(NSUInteger)lifespan role:(NSString *)role Result:(void (^) (BOOL success, id response, NSError *error))result
 {
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:[tokenHost stringByAppendingPathComponent:@"rooms/%@"], uuid]]];
-    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:[APIHost stringByAppendingString:@"tokens/rooms/%@"], uuid]]];
+        
     NSMutableURLRequest *modifyRequest = [request mutableCopy];
     
     [modifyRequest setHTTPMethod:@"POST"];
@@ -157,7 +156,7 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
         dispatch_async(dispatch_get_main_queue(), ^{
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             if (httpResponse.statusCode == 201) {
-                NSMutableDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+                id responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                 result(YES, responseObject, nil);
             } else if (error) {
                 result(NO, nil, error);
