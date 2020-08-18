@@ -10,21 +10,20 @@
 
 @implementation WhiteUtils
 
-static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
+static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
+static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
 
 /** FIXME: 此处 tonken 只做 demo 试用。
  实际使用时，请在 https://console.netless.link 注册并获取 sdk token
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
 #ifndef WhiteSDKToken
-#define WhiteSDKToken <#@sdk Token#>
 #endif
 
 /** FIXME: 2.8.0 新增必填项 AppIdentitier，通过该 API 可以避免大量预先的网络请求，极大增加异常网络下，用户的连通率。
  请在 https://console.netless.link 中进行获取。
  */
 #ifndef WhiteAppIdentifier
-#define WhiteAppIdentifier <#@App identifier#>
 #endif
 
 + (NSString *)appIdentifier
@@ -52,9 +51,9 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
     
     [self createRoomWithResult:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
         if (success) {
-            NSString *roomToken = response[@"msg"][@"roomToken"];
-            NSString *uuid = response[@"msg"][@"room"][@"uuid"];
-            !completionHandler ? : completionHandler(uuid, roomToken, nil);
+//            NSString *roomToken = response[@"msg"][@"roomToken"];
+            NSString *uuid = response[@"uuid"];
+            !completionHandler ? : completionHandler(uuid, nil, nil);
         } else {
             !completionHandler ? : completionHandler(nil, nil, error);
         }
@@ -70,14 +69,9 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
         return;
     }
 #endif
-
-    [self getRoomTokenWithUuid:uuid Result:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
-        if (success) {
-            NSString *roomToken = response[@"msg"][@"roomToken"];
-            !completionHandler ? : completionHandler(roomToken, nil);
-        } else {
-            !completionHandler ? : completionHandler(nil, error);
-        }
+    
+    [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, id response, NSError *error) {
+        !completionHandler ? : completionHandler(response, nil);
     }];
 }
 
@@ -86,7 +80,7 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
 //FIXME:我们推荐将这两个请求，放在您的服务器端进行。防止您从 https://console.netless.link 获取的 token 发生泄露。
 + (void)createRoomWithResult:(void (^) (BOOL success, id  _Nullable response, NSError * _Nullable error))result;
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[APIHost stringByAppendingPathComponent:@"room"]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[APIHost stringByAppendingPathComponent:@"rooms"]]];
     
     NSMutableURLRequest *modifyRequest = [request mutableCopy];
     [modifyRequest setHTTPMethod:@"POST"];
@@ -110,7 +104,7 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
         
         dispatch_async(dispatch_get_main_queue(), ^{
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-            if (httpResponse.statusCode == 200) {
+            if (httpResponse.statusCode == 201) {
                 NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                 result(YES, responseObject, nil);
             } else if (error) {
@@ -131,9 +125,10 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
  @param uuid 房间 uuid
  @param result 服务器返回信息
  */
-+ (void)getRoomTokenWithUuid:(NSString *)uuid Result:(void (^) (BOOL success, id response, NSError *error))result
++ (void)createRoomTokenWithUuid:(NSString *)uuid accessKey:(NSString *)accessKey lifespan:(NSUInteger)lifespan role:(NSString *)role Result:(void (^) (BOOL success, id response, NSError *error))result
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:[APIHost stringByAppendingPathComponent:@"/room/join?uuid=%@"], uuid]]];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:[tokenHost stringByAppendingPathComponent:@"rooms/%@"], uuid]]];
     
     NSMutableURLRequest *modifyRequest = [request mutableCopy];
     
@@ -142,6 +137,11 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
     [modifyRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [modifyRequest addValue:self.sdkToken forHTTPHeaderField:@"token"];
     
+    NSDictionary *params = @{@"lifespan": @(lifespan), @"role": role};
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
+
+    [modifyRequest setHTTPBody:postData];
+
     NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:modifyRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (!result) {
@@ -150,8 +150,8 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
         
         dispatch_async(dispatch_get_main_queue(), ^{
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-            if (httpResponse.statusCode == 200) {
-                NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            if (httpResponse.statusCode == 201) {
+                NSMutableDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                 result(YES, responseObject, nil);
             } else if (error) {
                 result(NO, nil, error);
@@ -163,6 +163,7 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/rooms";
         });
     }];
     [task resume];
+
 }
 
 @end
