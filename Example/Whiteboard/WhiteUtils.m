@@ -45,10 +45,10 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
     }
     
     //方便在不改动内部代码的情况下，直接进入调试房间
-//#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
-//    completionHandler(WhiteRoomUUID, WhiteRoomToken, nil);
-//    return;
-//#endif
+#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+    completionHandler(WhiteRoomUUID, WhiteRoomToken, nil);
+    return;
+#endif
     
     [self createRoomWithResult:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
         if (success) {
@@ -69,12 +69,12 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
 + (void)getRoomTokenWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler
 {
 
-//#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
-//    if (([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) || [uuid length] == 0) {
-//        completionHandler(WhiteRoomToken, nil);
-//        return;
-//    }
-//#endif
+#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+    if (([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) || [uuid length] == 0) {
+        completionHandler(WhiteRoomToken, nil);
+        return;
+    }
+#endif
     
     [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, id response, NSError *error) {
         !completionHandler ? : completionHandler(response, nil);
