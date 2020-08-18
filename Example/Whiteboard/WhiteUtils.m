@@ -18,12 +18,14 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
 #ifndef WhiteSDKToken
+#define WhiteSDKToken <#@sdk Token#>
 #endif
 
 /** FIXME: 2.8.0 新增必填项 AppIdentitier，通过该 API 可以避免大量预先的网络请求，极大增加异常网络下，用户的连通率。
  请在 https://console.netless.link 中进行获取。
  */
 #ifndef WhiteAppIdentifier
+#define WhiteAppIdentifier <#@App identifier#>
 #endif
 
 + (NSString *)appIdentifier
@@ -43,17 +45,21 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
     }
     
     //方便在不改动内部代码的情况下，直接进入调试房间
-#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
-    completionHandler(WhiteRoomUUID, WhiteRoomToken, nil);
-    return;
-#endif
-    
+//#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+//    completionHandler(WhiteRoomUUID, WhiteRoomToken, nil);
+//    return;
+//#endif
     
     [self createRoomWithResult:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
         if (success) {
-//            NSString *roomToken = response[@"msg"][@"roomToken"];
             NSString *uuid = response[@"uuid"];
-            !completionHandler ? : completionHandler(uuid, nil, nil);
+            [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, id response, NSError *error) {
+                if (success) {
+                    !completionHandler ? : completionHandler(uuid, response, nil);
+                } else {
+                    !completionHandler ? : completionHandler(nil, nil, error);
+                }
+            }];
         } else {
             !completionHandler ? : completionHandler(nil, nil, error);
         }
@@ -63,12 +69,12 @@ static NSString *tokenHost = @"https://shunt-api.netless.link/v5/tokens/";
 + (void)getRoomTokenWithUuid:(NSString *)uuid completionHandler:(void (^)(NSString * _Nullable roomToken, NSError * _Nullable error))completionHandler
 {
 
-#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
-    if (([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) || [uuid length] == 0) {
-        completionHandler(WhiteRoomToken, nil);
-        return;
-    }
-#endif
+//#if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+//    if (([uuid isEqualToString:WhiteRoomUUID] && [WhiteRoomToken length] > 0) || [uuid length] == 0) {
+//        completionHandler(WhiteRoomToken, nil);
+//        return;
+//    }
+//#endif
     
     [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, id response, NSError *error) {
         !completionHandler ? : completionHandler(response, nil);
