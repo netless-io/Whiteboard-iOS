@@ -142,7 +142,10 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
     [modifyRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [modifyRequest addValue:self.sdkToken forHTTPHeaderField:@"token"];
     
-    NSDictionary *params = @{@"lifespan": @(lifespan), @"role": role};
+    NSMutableDictionary *params = @{@"lifespan": @(lifespan), @"role": role}.mutableCopy;
+    if (accessKey) {
+        [params setValue:accessKey forKey:@"ak"];
+    }
     NSData *postData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
 
     [modifyRequest setHTTPBody:postData];
