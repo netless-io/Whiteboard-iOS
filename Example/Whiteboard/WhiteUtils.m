@@ -52,7 +52,7 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
     [self createRoomWithResult:^(BOOL success, id  _Nullable response, NSError * _Nullable error) {
         if (success) {
             NSString *uuid = response[@"uuid"];
-            [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, id response, NSError *error) {
+            [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, NSString *response, NSError *error) {
                 if (success) {
                     !completionHandler ? : completionHandler(uuid, response, nil);
                 } else {
@@ -75,7 +75,7 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
     }
 #endif
 
-    [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, id response, NSError *error) {
+    [self createRoomTokenWithUuid:uuid accessKey:nil lifespan:0 role:@"admin" Result:^(BOOL success, NSString *response, NSError *error) {
         !completionHandler ? : completionHandler(response, nil);
     }];
 }
@@ -130,7 +130,7 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
  @param uuid 房间 uuid
  @param result 服务器返回信息
  */
-+ (void)createRoomTokenWithUuid:(NSString *)uuid accessKey:(NSString *)accessKey lifespan:(NSUInteger)lifespan role:(NSString *)role Result:(void (^) (BOOL success, id response, NSError *error))result
++ (void)createRoomTokenWithUuid:(NSString *)uuid accessKey:(NSString *)accessKey lifespan:(NSUInteger)lifespan role:(NSString *)role Result:(void (^) (BOOL success, NSString *response, NSError *error))result
 {
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:[APIHost stringByAppendingString:@"tokens/rooms/%@"], uuid]]];
