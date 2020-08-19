@@ -1,64 +1,80 @@
-# iOS 1-to-1 Tutorial for Swift
+# 混音
 
-*English | [中文](README.zh.md)*
+白板 SDK 的动态 ppt 中会含有大量音视频内容，当这些媒体文件通过系统发出声音时，会与终端用户使用的实时通讯 SDK 声音采集出现一定干扰，造成杂音，回音等问题。为此，我们新增使用 RTC 来播放动态音视频的混音 API。
 
-This tutorial enables you to quickly get started in your development efforts to create an iOS app with real-time video calls, voice calls, and interactive broadcasting. 
+>该文档默认开发者已经完成 RTC 集成，如果对 RTC 相关集成有疑问，请查看 [RTC](RTC.md)
 
-With this sample app you can:
+## Demo 启动
 
-- Start and end audio/visual communication between two users.
-- Join a communication channel.
-- Mute and unmute audio.
-- Enable and disable video.
-- Switch between the front and rear cameras.
+demo 需要填写以下三样内容：
 
-## Prerequisites
+1. room uuid
+2. room token
+3. rtc 用的 rtc App ID（`AppID.swift`）
 
-- Xcode 10.0+
-- Physical iOS device (iPhone or iPad)
-- iOS simulator is NOT supported
+直接打开 demo，执行 build 文件，会提示开发者需要填入以上三个参数。
 
-## Quick Start
+## 实现
 
-This section shows you how to prepare, build, and run the sample application.
+1. 实现`WhiteAudioMixerBridgeDelegate`协议。
+1. 使用最新 whiteboard SDK，在初始化 `WhiteSDK` 时，传入实现`audioMixerBridgeDelegate`协议的对象。
+1. 在 RTC `rtcEngine:localAudioMixingStateDidChanged:errorCode:`  回调中，主动调用 `WhiteSDK`的`audioMixer`属性中`setMediaState:errorCode:`方法，告知音视频状态更新完成。
 
-### Obtain an App Id
+## WhiteAudioMixerBridgeDelegate 协议实现内容
 
-To build and run the sample application, get an App Id:
+当白板动态 ppt 进行播放时，会在准备播放时，主动调用 `startAudioMixing:filePath:loopback:replace:cycle`API，开发者需要在此处主动调用 RTC sdk 的混音接口。
+>在 iOS sdk 中存在一种情况：当该方法失败时，rtc SDK 不会主动调用 `rtcEngine:localAudioMixingStateDidChanged:errorCode:` 所以，无法当该值为非 0 数值时，开发者需要直接在此处代码直接调用 `audioMixer`的`setMediaState:errorCode:`方法进行传递，将非零返回值传入 errorCode，stateCode 随意填写即可。
 
-1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
-2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
-3. Save the **App Id** from the Dashboard for later use.
-4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
+```Swift
+extension VideoChatViewController: WhiteAudioMixerBridgeDelegate {
+    func startAudioMixing(_ filePath: String, loopback: Bool, replace: Bool, cycle: Int) {
+        // 现阶段 iOS 端 rtc 不支持对线上 mp4 文件进行混音。该类文件混音，会出现跳转失败导致混音效果消失的问题。
+        // 如果是 线上 mp4 地址，请提前使用 动态 ppt 资源包下载，或者将 mp4 尾缀，更换为 m4a 进行播放。
+        // 该 filePath 路径会收到初始化 SDK 时，pptParams 中的 scheme 参数影响。请自行恢复。
+        let result:Int32 = agoraKit.startAudioMixing(filePath, loopback: true, replace: false, cycle: 1)
+        print("\(#function) \(filePath) \(loopback) \(replace) \(cycle) result:\(result)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(714, errorCode: Int(result))
+        }
+    }
 
-5. Open `Agora iOS Tutorial.xcodeproj` and edit the `AppID.swift` file. In the `agoraKit` declaration, update `<#Your App Id#>` with your App Id, and assign the token variable with the temp Access Token generated from dashboard.
+    func stopAudioMixing() {
+        let result:Int32 = agoraKit.stopAudioMixing()
+        print("\(#function) result:\(result)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(0, errorCode: Int(result))
+        }
 
-    ``` Swift
-    let AppID: String = <#Your App Id#>
-    // assign Token to nil if you have not enabled app certificate
-    let Token: String? = <#Temp Token#>
-    ```
+    }
 
-### Integrate the Agora Video SDK
+    func setAudioMixingPosition(_ position: Int) {
+        print("position: \(position)")
+        let result: Int32 = agoraKit.setAudioMixingPosition(position)
+        print("\(#function) result:\(result) position: \(position)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(0, errorCode: Int(result))
+        }
+    }
+}
 
-1. Download the [Agora Video SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the following files from the SDK `libs` folder into the sample application `Agora iOS Tutorial` folder.
+extension VideoChatViewController: AgoraRtcEngineDelegate {
+    ...
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, errorCode: AgoraAudioMixingErrorCode) {
+        print("localAudioMixingStateDidChanged: \(state.rawValue) errorCode: \(errorCode.rawValue)")
+        if let sdk = self.whiteSdk {
+            sdk.audioMixer?.setMediaState(state.rawValue, errorCode: errorCode.rawValue)
+        } else {
+            print("sdk not init !")
+        }
+    }
+    
+    ...    
+}
+```
 
-    - `AograRtcEngineKit.framework`
-    - `AgoraRtcCryptoLoader.framework`
-    - `libcrypto.a`
-  
-2. Connect your iPhone or iPad device and run the project. Ensure a valid provisioning profile is applied or your project will not run.
+以上内容，可在`VideoChatViewController.swift`项目中进行查看。
 
-## Contract Us
+## 混音 API 限制
 
-- For potential issues, you may take a look at our [FAQ](https://docs.agora.io/en/faq) first
-- Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
-- Would like to see how Agora SDK is used in more complicated real use case? Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase)
-- Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
-- You can find full API document at [Document Center](https://docs.agora.io/en/)
-- If you encounter problems during integration, you can ask question in [Developer Forum](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Call/issues)
-
-## License
-
-The MIT License (MIT)
+rtc 目前对于线上 mp4 混音效果不佳，当进行跳转时，会出现混音消失的情况。请提前下载对应 mp4，或者预先转换出同地址 m4a 用于混音使用。

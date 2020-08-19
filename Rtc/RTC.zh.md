@@ -1,7 +1,5 @@
 # iOS Tutorial for Swift - 1to1
 
-*[English](README.md) | 中文*
-
 这个开源示例项目演示了如何快速集成Agora视频SDK，实现1对1视频通话。
 
 在这个示例项目中包含了以下功能：
