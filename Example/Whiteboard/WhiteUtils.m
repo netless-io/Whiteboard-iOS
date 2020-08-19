@@ -157,7 +157,14 @@ static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             if (httpResponse.statusCode == 201) {
                 id responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                result(YES, responseObject, nil);
+                
+                if ([responseObject isKindOfClass:[NSString class]]) {
+                    result(YES, responseObject, nil);
+                } else {
+                    NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey:@"Error return value type", NSLocalizedDescriptionKey:responseObject};
+                    NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:401 userInfo:userInfo];
+                    result(NO, nil, error);
+                }
             } else if (error) {
                 result(NO, nil, error);
             } else if (data) {
