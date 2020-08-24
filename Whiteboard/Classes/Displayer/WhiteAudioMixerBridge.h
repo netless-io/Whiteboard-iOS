@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <WhiteBoardView.h>
+#import "WhiteBoardView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
