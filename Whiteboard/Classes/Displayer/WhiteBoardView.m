@@ -122,11 +122,14 @@
     });
 }
 
-#pragma mark - Private Methods
+
+
+//#pragma mark - Private Methods
 - (NSBundle *)whiteSDKBundle
 {
-    // 脱离 Cocoapods 时，打包成同名 bundle 就可以保证读取一致性
-    return [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"Whiteboard" ofType:@"bundle"]];
+    // 1. 脱离 Cocoapods 时，打包成同名 bundle 就可以保证读取一致性
+    // 2. 使用字符串，是为了保证使用子类时，self calss 的路径不会变化
+    return [NSBundle bundleWithPath:[[NSBundle bundleForClass:NSClassFromString(@"WhiteBoardView")] pathForResource:@"Whiteboard" ofType:@"bundle"]];
 }
 
 @end
