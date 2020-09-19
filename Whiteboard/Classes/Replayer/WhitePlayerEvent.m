@@ -9,7 +9,6 @@
 #import "WhitePlayerState.h"
 #import "WhitePlayer+Private.h"
 #import "WhitePlayerEvent+Private.h"
-#import <YYModel/YYModel.h>
 #import "WhiteConsts.h"
 
 @implementation WhitePlayerEvent

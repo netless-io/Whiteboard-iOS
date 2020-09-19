@@ -9,7 +9,7 @@
 #import "WhiteGlobalState.h"
 #import "WhiteRoomMember.h"
 #import "WhiteSceneState.h"
-#import <YYModel/YYModel.h>
+#import "WhiteObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

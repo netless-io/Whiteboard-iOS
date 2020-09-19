@@ -19,13 +19,22 @@ Pod::Spec.new do |s|
   }
 
   s.source_files = 'Whiteboard/Classes/Whiteboard.h'
+  
+  # YYModel 隔离类
+  s.subspec 'Model' do |model|
+    model.source_files = 'Whiteboard/Classes/Model/**'
+    model.public_header_files = 'Whiteboard/Classes/Model/**.h'
+    model.private_header_files = 'Whiteboard/Classes/Object/*+Private.h'
+    model.dependency 'YYModel', '~> 1.0.4'
+    model.frameworks = 'UIKit'
+  end
 
   # 配置类
   s.subspec 'Object' do |object|
     object.source_files = 'Whiteboard/Classes/Object/**'
     object.public_header_files = 'Whiteboard/Classes/Object/**.h'
     object.private_header_files = 'Whiteboard/Classes/Object/*+Private.h'
-    object.dependency 'YYModel', '~> 1.0.4'
+    object.dependency 'Whiteboard/Model'
     object.frameworks = 'UIKit'
   end
 
@@ -35,14 +44,6 @@ Pod::Spec.new do |s|
     converter.public_header_files = 'Whiteboard/Classes/Converter/**.h'
     converter.dependency 'Whiteboard/Object'
   end
-  
-#  # 工具类
-#  s.subspec 'Utils' do |utils|
-#    utils.source_files = 'Whiteboard/Classes/Utils/**'
-#    utils.private_header_files = 'Whiteboard/Classes/Utils/*+Private.h'
-#    utils.frameworks = 'AVFoundation'
-#    utils.dependency 'Whiteboard/Base'
-#  end
 
   # 基础类，包括sdk，Displayer（Room与Player父类）
   s.subspec 'Base' do |base|

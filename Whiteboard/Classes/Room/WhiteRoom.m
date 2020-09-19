@@ -10,6 +10,7 @@
 #import "WhiteBoardView.h"
 #import "WhiteConsts.h"
 #import "WhiteDisplayer+Private.h"
+#import "WhiteObject.h"
 
 @interface WhiteRoom()
 @property (nonatomic, assign, readwrite) NSTimeInterval delay;
@@ -20,7 +21,6 @@
 @end
 
 #import "WhiteRoomCallbacks+Private.h"
-#import <YYModel/YYModel.h>
 
 @implementation WhiteRoom
 

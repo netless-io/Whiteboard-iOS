@@ -7,7 +7,7 @@
 
 #import "WhiteCommonCallbacks.h"
 #import "WhiteConsts.h"
-#import <YYModel/YYModel.h>
+#import "WhiteObject.h"
 
 @implementation WhiteCommonCallbacks
 

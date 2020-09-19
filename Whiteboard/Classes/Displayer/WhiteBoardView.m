@@ -8,7 +8,6 @@
 #import "WhiteBoardView.h"
 #import "WhiteBoardView+Private.h"
 #import "WhiteWebViewInjection.h"
-#import <YYModel/YYModel.h>
 #import "WhiteObject.h"
 #import "WhiteCommonCallbacks.h"
 
