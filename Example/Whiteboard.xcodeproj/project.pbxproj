@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		210DE890A7D3CFE157235AB7 /* Pods_Whiteboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8F346899FAA709756155D1 /* Pods_Whiteboard_Example.framework */; };
-		2EE19D7E3444768297D71EF9 /* Pods_Whiteboard_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 781CDCD9747ECEC061266215 /* Pods_Whiteboard_Tests.framework */; };
 		398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */; };
 		39A82CE8242700BB00FC1FD6 /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */; };
 		39E4205023A37DCF002B9B38 /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204523A37DCE002B9B38 /* WhiteBaseViewController.m */; };
@@ -22,6 +20,7 @@
 		39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4205B23A3B790002B9B38 /* PlayerTests.m */; };
 		39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4205D23A3B81C002B9B38 /* RoomTests.m */; };
 		39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4205F23A3B861002B9B38 /* WhiteObjectTests.m */; };
+		432AAA5163AA3AC51477F852 /* libPods-Whiteboard_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -35,6 +34,7 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +49,7 @@
 
 /* Begin PBXFileReference section */
 		0253522B7137279AE1FE150B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		0B8F346899FAA709756155D1 /* Pods_Whiteboard_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Whiteboard_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EF0269B81A485649497C862 /* Whiteboard.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Whiteboard.podspec; path = ../Whiteboard.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		39A82CE6242700BB00FC1FD6 /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
@@ -92,10 +92,10 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		71FA1F4860720C219B686ED8 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		781CDCD9747ECEC061266215 /* Pods_Whiteboard_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Whiteboard_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		789AF49F9FB06918748A94DC /* Pods-Whiteboard_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Whiteboard_Tests/Pods-Whiteboard_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8470081D613A7C8DF8376FBA /* Pods-Whiteboard_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard_Example.release.xcconfig"; path = "Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +106,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				210DE890A7D3CFE157235AB7 /* Pods_Whiteboard_Example.framework in Frameworks */,
+				E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +117,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				2EE19D7E3444768297D71EF9 /* Pods_Whiteboard_Tests.framework in Frameworks */,
+				432AAA5163AA3AC51477F852 /* libPods-Whiteboard_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,8 +152,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				0B8F346899FAA709756155D1 /* Pods_Whiteboard_Example.framework */,
-				781CDCD9747ECEC061266215 /* Pods_Whiteboard_Tests.framework */,
+				11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */,
+				AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -254,7 +254,7 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				A1F1E5D3AA3F1E837FC48156 /* [CP] Embed Pods Frameworks */,
+				14A9084D4375BECEF3DF2A52 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -343,6 +343,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		14A9084D4375BECEF3DF2A52 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Whiteboard/Whiteboard.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Whiteboard.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1D7828B1A8443D9B3EA5DC28 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -385,34 +403,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A1F1E5D3AA3F1E837FC48156 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
-				"${BUILT_PRODUCTS_DIR}/NETURLSchemeHandler/NETURLSchemeHandler.framework",
-				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
-				"${BUILT_PRODUCTS_DIR}/Whiteboard/Whiteboard.framework",
-				"${BUILT_PRODUCTS_DIR}/YYModel/YYModel.framework",
-				"${BUILT_PRODUCTS_DIR}/dsBridge/dsBridge.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NETURLSchemeHandler.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Whiteboard.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYModel.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/dsBridge.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

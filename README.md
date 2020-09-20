@@ -10,6 +10,7 @@
 - [项目结构](#项目结构)
 - [音视频支持](#Native音视频)
 - [动态PPT本地资源包](#动态ppt本地资源包)
+- [YYKit兼容问题](#YYKit兼容问题)
 - [部分问题](#部分问题)
 
 ## 文档
@@ -21,7 +22,7 @@
 在 Podfile 中写入
 
 ```
-pod 'whiteboard'
+pod 'Whiteboard'
 ```
 
 ### White-SDK-iOS 迁移
@@ -223,6 +224,44 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 2. 代码实现：`implement local zip`
 
 [动态转换资源包](https://developer.netless.link/docs/server/api/server-dynamic-conversion-zip/)
+
+## YYKit 兼容问题
+
+YYKit有大量没有添加前缀的 API，极易引起冲突，作者也并不推荐直接使用。
+如果无法避免，可以使用以下方式进行引用。
+
+>此为兼容方案，请尽量避免使用
+
+### 兼容方案一
+
+```ruby
+# 打开 use_frameworks flag，开启动态库
+use_frameworks
+pod 'Whiteboard'
+```
+
+该方案仍然会依赖 YYModel，在启动时，会提示出现重复定义，由于定义内容一致，所以不用关心
+
+### 兼容方案二
+
+第一步：
+
+```ruby
+保持关闭状态
+# use_frameworks
+pod 'Whiteboard/Whiteboard-YYKit'
+```
+
+第二步：
+在 项目的 pch 文件中（example 项目中，则为 Whiteboard-Prefix.pch 文件），写入以下内容：
+
+```C
+#define USE_YYKit
+```
+
+该方案会将 Whiteboard 中的依赖，由 YYModel 切换成 YYKit，同时使用 YYKit 的 API 构建出 YYModel 形式的 API，给 sdk 内部使用。
+
+其他引用方式，以及 API 均不会变化。
 
 ## 部分问题
 
