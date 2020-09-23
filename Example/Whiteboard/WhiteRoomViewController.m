@@ -249,6 +249,14 @@
     NSLog(@"%s, %lu %@", __func__, (unsigned long)userId, error);
 }
 
+- (void)fireCanUndoStepsUpdate:(NSInteger)canUndoSteps {
+    NSLog(@"%s, %ld", __func__, (long)canUndoSteps);
+}
+
+- (void)fireCanRedoStepsUpdate:(NSInteger)canRedoSteps {
+    NSLog(@"%s, %ld", __func__, (long)canRedoSteps);
+}
+
 - (void)fireMagixEvent:(WhiteEvent *)event
 {
     NSLog(@"fireMagixEvent: %@", [event jsonString]);
