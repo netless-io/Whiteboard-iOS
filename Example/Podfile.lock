@@ -4,8 +4,11 @@ PODS:
   - NETURLSchemeHandler (0.1.3)
   - SSZipArchive (2.2.3)
   - Whiteboard (2.9.19):
+    - Whiteboard/Base (= 2.9.19)
     - Whiteboard/Converter (= 2.9.19)
+    - Whiteboard/Model (= 2.9.19)
     - Whiteboard/NativeReplayer (= 2.9.19)
+    - Whiteboard/Object (= 2.9.19)
     - Whiteboard/Replayer (= 2.9.19)
     - Whiteboard/Room (= 2.9.19)
   - Whiteboard/Base (2.9.19):
@@ -48,7 +51,7 @@ SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   NETURLSchemeHandler: 8f183a4affc026f9b3ecab8d49470cd470bfea97
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  Whiteboard: b9cb9a8d1eac7d6d8b5a0aec5c068c0922166c23
+  Whiteboard: fdaf5d46f4d07187ff1ef4d59cfdf48ffdc1ce7c
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: da7c7cd559a7263728398474a4acb1f87a959680
