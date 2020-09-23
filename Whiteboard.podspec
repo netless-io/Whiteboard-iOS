@@ -91,9 +91,8 @@ Pod::Spec.new do |s|
   
   # YYModel 隔离类
   s.subspec 'Model-YYKit' do |model|
-    model.source_files = 'Whiteboard/Classes/Model/**'
-    model.public_header_files = 'Whiteboard/Classes/Model/**.h'
-    model.private_header_files = 'Whiteboard/Classes/Object/*+Private.h'
+    model.source_files = 'Whiteboard/Classes/Model-YYKit/**'
+    model.public_header_files = 'Whiteboard/Classes/Model-YYKit/**.h'
     model.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'USE_YYKit=1'}
     model.dependency 'YYKit'
     model.frameworks = 'UIKit'
