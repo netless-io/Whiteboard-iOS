@@ -42,6 +42,18 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
 - (void)fireCatchErrorWhenAppendFrame:(NSUInteger)userId error:(NSString *)error;
 
 /**
+ * 当用户本地进行过任意操作，或者执行 room undo，或者取消撤回 room redo 操作后，该数字都会发生变化
+ * @param canUndoSteps 可以撤回的步骤数
+ */
+- (void)fireCanUndoStepsUpdate:(NSInteger)canUndoSteps;
+
+/**
+ * 当执行撤回，或者取消撤回操作后，该数字会发生变化
+ * @param canRedoSteps 可以取消撤回的步骤数
+ */
+- (void)fireCanRedoStepsUpdate:(NSInteger)canRedoSteps;
+
+/**
  白板自定义事件回调，
  自定义事件参考文档，或者 RoomTests 代码
  */

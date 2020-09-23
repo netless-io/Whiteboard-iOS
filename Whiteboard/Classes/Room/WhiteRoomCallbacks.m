@@ -95,4 +95,23 @@
     return @"";
 }
 
+
+- (NSString *)fireCanUndoStepsUpdate:(NSNumber *)canUndoSteps
+{
+    if ([self.delegate respondsToSelector:@selector(fireCanUndoStepsUpdate:)]) {
+        NSInteger step = [canUndoSteps integerValue];
+        [self.delegate fireCanUndoStepsUpdate:step];
+    }
+    return @"";
+}
+
+- (NSString *)fireCanRedoStepsUpdate:(NSNumber *)canRedoSteps
+{
+    if ([self.delegate respondsToSelector:@selector(fireCanRedoStepsUpdate:)]) {
+        NSInteger step = [canRedoSteps integerValue];
+        [self.delegate fireCanRedoStepsUpdate:step];
+    }
+    return @"";
+}
+
 @end
