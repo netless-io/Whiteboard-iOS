@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.10.0] - 2020-10-10
+- 同步更新 web sdk 至 2.10.1 版本（无断代更新内容）
+- 支持显示web 端通过 iframe 插件（`@netless/iframe-bridge`）插入的 iframe 插件，类似音视频插件，native 无需进行修改，只需要更新至 2.10.0 版本即可
 ## [2.9.19] - 2020-09-23
 - 同步 web sdk 至 2.9.17 版本
 - 增加 redo undo 可以操作步数回调，具体见`WhiteRoomCallbackDelegate`协议
