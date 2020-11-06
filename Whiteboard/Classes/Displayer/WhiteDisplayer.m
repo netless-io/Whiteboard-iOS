@@ -115,6 +115,11 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"moveCameraToContain"] arguments:@[rectange]];
 }
 
+- (void)disableCameraTransform:(BOOL)disable
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setDisableCameraTransform"] arguments:@[@(disable)]];
+}
+
 - (void)scalePptToFit:(WhiteAnimationMode)mode
 {
     NSDictionary *dict = @{@(0): @"continuous", @(1): @"immediately"};

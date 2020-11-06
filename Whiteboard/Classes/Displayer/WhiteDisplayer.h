@@ -110,6 +110,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)scalePptToFit:(WhiteAnimationMode)mode;
 
+/**
+ @param disableCameraTransform 是否禁止移动，true 为禁止。
+ @since 2.11.0
+ */
+- (void)disableCameraTransform:(BOOL)disable;
+
 #pragma mark - 截图
 
 /**
