@@ -6,6 +6,7 @@
 //
 
 #import "WhiteObject.h"
+#import "WhiteConsts.h"
 #import "WhiteCameraBound.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -14,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithRoom:(NSString *)roomUuid roomToken:(NSString *)roomToken;
+
+/** 默认为中国数据集群，@since 2.11.0 */
+@property (nonatomic, strong, nullable) WhiteRegionKey region;
 
 /** 房间UUID，目前必须要有 */
 @property (nonatomic, copy) NSString *room;

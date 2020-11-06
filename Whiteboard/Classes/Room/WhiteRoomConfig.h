@@ -8,6 +8,8 @@
 #import "WhiteObject.h"
 #import "WhiteMemberInformation.h"
 #import "WhiteCameraBound.h"
+#import "WhiteConsts.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoomConfig : WhiteObject
@@ -18,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *uuid;
 @property (nonatomic, copy) NSString *roomToken;
+
+/** 默认为中国数据集群，@since 2.11.0 */
+@property (nonatomic, strong, nullable) WhiteRegionKey region;
 
 /**
  禁止教具响应用户输入，默认 NO，即允许。

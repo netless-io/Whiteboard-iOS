@@ -7,6 +7,7 @@
 
 #import "WhiteObject.h"
 #import <UIKit/UIKit.h>
+#import "WhiteConsts.h"
 
 typedef NS_ENUM(NSInteger, WhiteDeviceType) {
     WhiteDeviceTypeTouch,
@@ -47,6 +48,8 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 /** default value: Touch。native 端，无需关注该属性。 */
 @property (nonatomic, assign) WhiteDeviceType deviceType;
 
+/** 默认为中国数据集群，@since 2.11.0 */
+@property (nonatomic, strong, nullable) WhiteRegionKey region;
 /**
  画笔教具的渲染模式。
  2.8.0 新增 canvas 渲染引擎，性能更好。2.9.0 开始，默认为 WhiteSdkRenderEngineCanvas。

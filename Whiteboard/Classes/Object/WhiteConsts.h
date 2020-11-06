@@ -14,3 +14,10 @@ extern NSString * const WhiteConstsConvertDomain;
 
 #pragma mark - Ratio
 extern NSTimeInterval const WhiteConstsTimeUnitRatio;
+
+#pragma mark - Region
+typedef NSString * WhiteRegionKey NS_STRING_ENUM;
+
+extern WhiteRegionKey const WhiteRegionDefault;
+extern WhiteRegionKey const WhiteRegionCN;
+extern WhiteRegionKey const WhiteRegionUS;
