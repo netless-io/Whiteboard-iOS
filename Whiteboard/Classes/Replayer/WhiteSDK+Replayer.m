@@ -55,5 +55,14 @@
     }];
 }
 
+- (void)isPlayable:(WhitePlayerConfig *)config result:(void (^)(BOOL isPlayable))result
+{
+    [self.bridge callHandler:@"sdk.isPlayable" arguments:@[config] completionHandler:^(id  _Nullable value) {
+        if (result) {
+            BOOL isPlayable = [value boolValue];
+            result(isPlayable);
+        }
+    }];
+}
 
 @end
