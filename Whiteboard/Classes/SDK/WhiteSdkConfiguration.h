@@ -45,6 +45,12 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
  */
 @property (nonatomic, copy) NSString *appIdentifier;
 
+/**
+ * 是否开启 iFrame 插件，默认关闭。
+ * 2.10.0 版本默认打开，后续版本默认关闭
+ */
+@property (nonatomic, assign) BOOL enableIFramePlugin;
+
 /** default value: Touch。native 端，无需关注该属性。 */
 @property (nonatomic, assign) WhiteDeviceType deviceType;
 
