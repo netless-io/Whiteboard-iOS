@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 音频地址。
  传入视频，也只会播放音频部分。设置后，sdk 会负责与白板同步播放 。
- 如需播放音频，请使用 WhiteNativePlayer 模块中的 WhiteCombinePlayer。
+ 如需显示视频画面，请使用 WhiteNativePlayer 模块中的 WhiteCombinePlayer。
  */
 @property (nonatomic, strong, nullable) NSString *mediaURL;
 
