@@ -7,12 +7,13 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## [2.11.0] - 2020-11-06
+## [2.11.0] - 2020-11-17
 - 同步更新 web sdk 至 2.11.3
-- iframe 插件的使用，增加开关，并且默认关闭（具体见 WhiteSdkConfiguration enableIFramePlugin 属性）。
+- iframe 插件的使用，增加开关，并且由默认打开，更改为默认关闭（具体见 WhiteSdkConfiguration enableIFramePlugin 属性）。
 - WhiteSdk 增加 isPlayable API，可以查询，对应房间，对应时间段是否存在回放数据。
 - WhiteSdk 支持多数据中心，枚举可见 WhiteConsts.h 中 WhiteRegionKey 枚举，可以分别在初始化 sdk，加入实时房间，回放房间时，进行设置。默认 Region 为旧数据中心。SDK 初始化 region 参数，将会影响实时房间，回放房间默认。 region。具体见`WhiteSdkConfiguration`,`RoomParams`,`PlayerConfiguration`中`setRegion`API。
 - 回放时，传入mediaURL，将由开源组件`@netless/combine-player`接管，该组件优化了音视频中有丢帧情况的播放处理。
+    * 目前问题：`@netless/combine-player` 无法正确处理，在初始化时，立刻进行 seek 的行为。`@netless/combine-player` 会主动 seek 触发缓冲，无需再次手动操作。
 - 回放 Player 增加 disableCameraTransform API，该功能与实时房间 room 效果一致（具体见 displayer disableCameraTransform方法）。
 ## [2.10.0] - 2020-10-10
 - 同步更新 web sdk 至 2.10.1 版本（无断代更新内容）
