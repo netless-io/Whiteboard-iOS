@@ -38,6 +38,7 @@
 {
     if (!_playerConfig) {
         _playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
+//        _playerConfig.mediaURL = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/oceans.mp4";
     }
     return _playerConfig;
 }
@@ -77,6 +78,8 @@
             weakSelf.player = player;
             [weakSelf.player addMagixEventListener:WhiteCommandCustomEvent];
             [weakSelf.player addHighFrequencyEventListener:@"a" fireInterval:1000];
+            // FIXME: 当存在 mediaURL 时，不要在 play 之前，调用 seek，交由 web 端的 combine-player 进行该操作；如果不存在 mediaURL 时，则随意。
+            // [player seekToScheduleTime:0];
         }
     }];
 }
@@ -85,8 +88,17 @@
 
 - (void)settingAPI:(id)sender
 {
-    PlayerCommandListController *controller = [[PlayerCommandListController alloc] initWithWhitePlayer:self.player];
-    [self showPopoverViewController:controller sourceView:sender];
+    if (self.player != nil) {
+        PlayerCommandListController *controller = [[PlayerCommandListController alloc] initWithWhitePlayer:self.player];
+        [self showPopoverViewController:controller sourceView:sender];
+    } else {
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"数据未初始化", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *doneAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"确认", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertVC addAction:doneAction];
+        [self presentViewController:alertVC animated:YES completion:nil];
+    }
 }
 
 #pragma mark - CallbackDelegate
