@@ -77,8 +77,6 @@
             weakSelf.player = player;
             [weakSelf.player addMagixEventListener:WhiteCommandCustomEvent];
             [weakSelf.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
-            [player seekToScheduleTime:0];
         }
     }];
 }
