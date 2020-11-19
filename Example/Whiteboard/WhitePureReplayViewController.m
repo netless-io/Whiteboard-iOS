@@ -78,8 +78,7 @@
             weakSelf.player = player;
             [weakSelf.player addMagixEventListener:WhiteCommandCustomEvent];
             [weakSelf.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            // FIXME: 当存在 mediaURL 时，不要在 play 之前，调用 seek，交由 web 端的 combine-player 进行该操作；如果不存在 mediaURL 时，则随意。
-            // [player seekToScheduleTime:0];
+             [player seekToScheduleTime:0];
         }
     }];
 }
