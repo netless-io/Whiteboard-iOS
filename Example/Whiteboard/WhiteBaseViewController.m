@@ -158,6 +158,23 @@ static NSString *kPPTScheme = @"netless";
     self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:self.sdkConfig commonCallbackDelegate:self.commonDelegate];
 }
 
+- (void)insertFontFace
+{
+    WhiteFontFace *f = [[WhiteFontFace alloc] initWithFontFamily:@"Times New Roman" src:@"url(https://white-pan.oss-cn-shanghai.aliyuncs.com/Pacifico-Regular.ttf)"];
+    f.fontStyle = @"Italic";
+    f.fontWeight = @"500";
+    
+    
+    // loadFontFace 与 insertFontFace 二选一即可
+    [self.sdk loadFontFaces:@[f] completionHandler:^(BOOL success, WhiteFontFace * _Nonnull fontFace, NSError * _Nullable error) {
+        NSLog(@"success: %d fontface: %@ error:%@", success, fontFace, error);
+    }];
+    // [self.sdk insertFontFaces:@[f]];
+    
+    
+    [self.sdk updateTextFont:@[@"Times New Roman"]];
+}
+
 #pragma mark - PopoverViewController
 - (void)showPopoverViewController:(UIViewController *)vc sourceView:(id)sourceView
 {

@@ -8,6 +8,7 @@
 #import "WhiteDisplayer.h"
 #import "WhiteDisplayer+Private.h"
 #import "WhiteScene.h"
+#import "WhiteConsts.h"
 
 @interface WhiteDisplayer ()
 @end

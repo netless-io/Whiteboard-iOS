@@ -54,6 +54,35 @@
     return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:nil];
 }
 
+#pragma mark - 字体
+
+- (void)setupFontFaces:(NSArray <WhiteFontFace *>*)fontFaces
+{
+    [self.bridge callHandler:@"sdk.updateNativeFontFaceCSS" arguments:@[fontFaces]];
+}
+
+- (void)loadFontFaces:(NSArray <WhiteFontFace *>*)fontFaces completionHandler:(void (^)(BOOL success, WhiteFontFace *fontFace, NSError * _Nullable error))completionHandler;
+{
+    [self.bridge callHandler:@"sdk.asyncInsertFontFaces" arguments:@[fontFaces] completionHandler:^(NSDictionary * _Nullable value) {
+        if (completionHandler) {
+            NSDictionary *info = value;
+            BOOL success = [info[@"success"] boolValue];
+            WhiteFontFace *fontFace = [WhiteFontFace modelWithJSON:info[@"fontFace"]];
+            if (success) {
+                completionHandler(YES, fontFace, nil);
+            } else {
+                NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-400 userInfo:info[@"fontFace"]];
+                completionHandler(NO, fontFace, error);
+            }
+        }
+    }];
+}
+
+- (void)updateTextFont:(NSArray <NSString *>*)fonts;
+{
+    [self.bridge callHandler:@"sdk.updateNativeTextareaFont" arguments:@[fonts]];
+}
+
 #pragma mark - Private
 - (void)setupWebSdk
 {

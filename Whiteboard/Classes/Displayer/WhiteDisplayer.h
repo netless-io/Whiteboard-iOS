@@ -10,7 +10,7 @@
 #import "WhiteRectangleConfig.h"
 #import "WhiteCameraBound.h"
 #import "WhitePanEvent.h"
-
+#import "WhiteFontFace.h"
 
 typedef NS_ENUM(NSInteger, WhiteScenePathType) {
     /** 路径对应的内容为空 */
