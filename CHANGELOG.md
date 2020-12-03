@@ -7,6 +7,10 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.11.3] - 2020-12-03
+- 同步更新 web sdk 至 2.11.6
+- 优化弱网连接
+- WhiteSDK 新增本地嵌入字体 API  `setupFontFaces:` `loadFontFaces:completionHandler:`，设置本地教具字体 API  `updateTextFont:`。具体使用，可以查看对应 API 代码注释，以及 Example 工程中`WhiteBaseViewController`的`insertFontFace`示例代码
 ## [2.11.2] - 2020-11-27
 - 同步更新 web sdk 至 2.11.5
 - 更新`@netless/combine-player`，优化插件逻辑
