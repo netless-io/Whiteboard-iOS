@@ -7,6 +7,11 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.11.4] - 2020-12-08
+- 修复`loadFontFaces:completionHandler:`无法添加多个不同字重的字体的问题
+- 新增与 iframe 插件通信 API
+    1. 向 iframe 插件发送消息见 `WhiteDisplayer`中`postIframeMessage:`方法。
+    2. 目前 iframe 发出的通知，sdk 会全局广播一个 NotificationName 为 `iframe`的通知，userInfo 会带有`iframe`的完整格式。
 ## [2.11.3] - 2020-12-03
 - 同步更新 web sdk 至 2.11.6
 - 优化弱网连接
