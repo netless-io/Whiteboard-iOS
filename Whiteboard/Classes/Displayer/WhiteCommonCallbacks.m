@@ -90,12 +90,12 @@
          错误类型，是直接从网络加载失败，还是从网络连接加载失败
          type: this.props.preload ? "indexDB" : "url",
          */
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict userInfo:dict];
     }
     if (dict && dict[@"shapeId"] && dict[@"mediaType"]) {
         NSString *name = dict[@"action"];
         NSString *notificationName = [NSString stringWithFormat:@"DynamicPpt-%@", name];
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict userInfo:dict];
     }
     if (dict && [dict[@"name"] isEqualToString:@"iframe"]) {
         NSString *name = dict[@"name"];
