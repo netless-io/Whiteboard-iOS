@@ -59,6 +59,14 @@
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setBackgroundColor"] arguments:@[@(R), @(G), @(B), @(a * 255.0)]];
 }
 
+#pragma mark - iframe
+- (void)postIframeMessage:(id)payload
+{
+    NSAssert([NSJSONSerialization isValidJSONObject:payload] || [payload isKindOfClass:[NSString class]], @"pay load should be a valid json object");
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"postMessage"] arguments: @[payload]];
+    
+}
+
 #pragma mark - 页面（场景）API
 
 - (void)getScenePathType:(NSString *)pathOrDir result:(void (^) (WhiteScenePathType pathType))result;

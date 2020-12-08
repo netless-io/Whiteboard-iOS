@@ -97,6 +97,14 @@
         NSString *notificationName = [NSString stringWithFormat:@"DynamicPpt-%@", name];
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict];
     }
+    if (dict && [dict[@"name"] isEqualToString:@"iframe"]) {
+        NSString *name = dict[@"name"];
+        /**
+         name: "iframe",
+         payload: web 端提供的信息
+         */
+        [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:dict];
+    }
     return @"";
 }
 

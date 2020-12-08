@@ -40,6 +40,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) UIColor *backgroundColor;
 
+#pragma mark - iframe
+
+/**
+ * @param payload 可以传入 字符串，字典，数组，内部会检查其是否是正确的 JSON 格式
+ */
+- (void)postIframeMessage:(id)payload;
+
 #pragma mark - 页面（场景）管理 API
 
 /**
