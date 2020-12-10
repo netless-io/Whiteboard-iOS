@@ -100,9 +100,9 @@
     if (dict && [dict[@"name"] isEqualToString:@"iframe"]) {
         NSString *name = dict[@"name"];
         /**
-         name: "iframe",
-         payload: web 端提供的信息
-         */
+         必然存在 name: "iframe" 字段
+         其他字段由 iframe 自行决定
+        */
         [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:dict];
     }
     return @"";
