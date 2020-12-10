@@ -146,6 +146,15 @@ static NSString *kPPTScheme = @"netless";
 //            config.pptParams = pptParams;
         }
         
+        // 只提供常规体的默认字体时，粗体斜体粗斜体将会由浏览器使用常规体，自行合成
+        config.fonts = @{@"*": @"https://developer-assets.netless.link/LiuJianMaoCao-Regular.ttf"};
+        
+//        config.fonts = @{@"*": @"https://developer-assets.netless.link/LiuJianMaoCao-Regular.ttf",
+//                         @"*-italic": @"https://developer-assets.netless.link/MaShanZheng-Regular.ttf",
+//                         @"*-bold": @"https://developer-assets.netless.link/ZCOOLQingKeHuangYou-Regular.ttf",
+//                         @"*-bold-italic": @"https://developer-assets.netless.link/ZhiMangXing-Regular.ttf"
+//        };
+        
         //打开用户头像显示信息
         config.userCursor = YES;
         _sdkConfig = config;
