@@ -139,11 +139,11 @@ static NSString *kPPTScheme = @"netless";
         //    config.enableInterrupterAPI = YES;
         config.log = YES;
         
-        //自定义 netless 协议，所有 ppt 请求，都由 https 更改为 kPPTScheme
+        //自定义 netless 协议，所有 ppt 请求，都由 https 更改为 kPPTScheme，需要配合 NETURLSchemeHandler 进行操作
         if (@available(iOS 11.0, *)) {
-            WhitePptParams *pptParams = [[WhitePptParams alloc] init];
-            pptParams.scheme = kPPTScheme;
-            config.pptParams = pptParams;
+//            WhitePptParams *pptParams = [[WhitePptParams alloc] init];
+//            pptParams.scheme = kPPTScheme;
+//            config.pptParams = pptParams;
         }
         
         //打开用户头像显示信息
