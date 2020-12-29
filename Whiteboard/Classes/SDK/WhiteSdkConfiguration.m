@@ -17,6 +17,14 @@
 WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg = @"svg";
 WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas = @"canvas";
 
+WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelDebug = @"debug";
+WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelInfo = @"info";
+WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelWarn = @"warn";
+WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelError = @"error";
+
+WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportAlways = @"alwaysReport";
+WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan = @"banReport";
+
 @interface WhiteSdkConfiguration ()
 
 @property (nonatomic, copy, nonnull) NSDictionary *nativeTags;
@@ -90,6 +98,21 @@ static NSString *const kJSDeviceType = @"deviceType";
     } else {
         
     }
+}
+
+static NSString *kLegacyReportLogKey = @"disableReportLog";
+- (void)setLoggerOptions:(NSDictionary *)loggerOptions
+{
+    NSMutableDictionary *options = [loggerOptions mutableCopy];
+    if (options[kLegacyReportLogKey] && [[options allKeys] count] == 1) {
+        BOOL kSwitch = [loggerOptions[kLegacyReportLogKey] boolValue];
+        if (!kSwitch) {
+            options[@"reportDebugLogMode"] = WhiteSDKLoggerReportBan;
+            options[@"reportQualityMode"] = WhiteSDKLoggerReportBan;
+        }
+    }
+    options[kLegacyReportLogKey] = nil;
+    _loggerOptions = [options copy];
 }
 
 @end

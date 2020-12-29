@@ -21,6 +21,23 @@ typedef NSString * WhiteSdkRenderEngineKey NS_STRING_ENUM;
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg;
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 
+
+typedef NSString * WhiteSDKLoggerOptionLevelKey NS_STRING_ENUM;
+/** debug 为最详细的日志，目前内容与 info 一致 */
+FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelDebug;
+/** info 主要为连接日志 */
+FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelInfo;
+/** warn 主要为对开发者传入的部分不符合 sdk 参数时，进行自动调整的警告（API 弃用警告不会在上报） */
+FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelWarn;
+/** error 报错，直接导致 sdk 无法正常运行的信息 */
+FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelError;
+
+typedef NSString * WhiteSDKLoggerReportModeKey NS_STRING_ENUM;
+/** 总是上报 */
+FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportAlways;
+/** 不上报 */
+FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
+
 @interface WhitePptParams : WhiteObject
 
 /**
@@ -79,10 +96,23 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 @property (nonatomic, assign) BOOL log;
 
 /**
- 字段 disableReportLog: BOOL
- 关闭日志上传功能，默认开启
+ 
+{
+    // SDK 日志信息上报模式（可选，默认 info）
+    @"reportDebugLogMode": WhiteSDKLoggerOptionLevelKey;
+ 
+    // 客户端本地，用户连接质量上报模式（可选，默认上报）
+    @"reportQualityMode": WhiteSDKLoggerReportModeKey;
+
+    // SDK 日志上报等级（可选，默认 info）
+    @"reportLevelMask": Level;
+    // webview 控制台打印日志等级（可选，默认 info）
+    @"printLevelMask": Level;
+ };
+
+ 关闭日志上传功能，默认开启。
  */
-@property (nonatomic, strong) NSDictionary *loggerOptions;
+@property (nonatomic, copy) NSDictionary *loggerOptions;
 
 /** 多路由操作，针对部分 dns 污染情况，临时提供的 native 端解决方案 */
 @property (nonatomic, assign) BOOL routeBackup;
