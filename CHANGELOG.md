@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.11.13] - 2021-01-20
+- 兼容 Xcode 10 闭源编译
 ## [2.11.12] - 2021-01-20
 - 更新`white-web-sdk`至 2.11.9
 - `WhiteDisplayerState`新增`cameraState`属性，`WhiteRoomState`与`WhitePlayerState`均可使用，具体请看`WhiteCameraState`类注释
