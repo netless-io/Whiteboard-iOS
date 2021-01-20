@@ -12,6 +12,7 @@
 @property (nonatomic, strong, readwrite) WhiteGlobalState *globalState;
 @property (nonatomic, strong, readwrite) WhiteSceneState *sceneState;
 @property (nonatomic, strong, readwrite) NSArray<WhiteRoomMember *> *roomMembers;
+@property (nonatomic, strong, readwrite) WhiteCameraState *cameraState;
 
 @end
 

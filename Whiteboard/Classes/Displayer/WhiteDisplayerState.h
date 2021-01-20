@@ -9,6 +9,7 @@
 #import "WhiteGlobalState.h"
 #import "WhiteRoomMember.h"
 #import "WhiteSceneState.h"
+#import "WhiteCameraState.h"
 #import "WhiteObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -32,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 场景页面状态 */
 @property (nonatomic, strong, readonly, nullable) WhiteSceneState *sceneState;
+
+/** 白板内部视野范围描述 */
+@property (nonatomic, strong, readonly, nullable) WhiteCameraState *cameraState;
 
 @end
 
