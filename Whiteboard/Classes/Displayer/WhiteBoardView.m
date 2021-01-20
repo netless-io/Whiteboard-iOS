@@ -36,7 +36,10 @@
 {
     configuration.allowsInlineMediaPlayback = YES;
     
-    if (@available(iOS 10.0.0, *)) {
+    NSOperatingSystemVersion iOS_10_0_0 = (NSOperatingSystemVersion){10, 0, 0};
+    NSOperatingSystemVersion iOS_11_0_0 = (NSOperatingSystemVersion){11, 0, 0};
+
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_10_0_0]) {
         configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
 #if defined(__LP64__) && __LP64__
         //https://mabin004.github.io/2018/06/25/iOS%E5%BA%94%E7%94%A8%E6%B2%99%E7%AE%B1/
@@ -49,7 +52,7 @@
     
     self = [super initWithFrame:frame configuration:configuration];
     
-    if (@available(iOS 11.0.0, *)) {
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_11_0_0]) {
         self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     

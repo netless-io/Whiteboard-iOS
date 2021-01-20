@@ -52,7 +52,9 @@ static NSString *const kJSDeviceType = @"deviceType";
 {
     self = [super init];
     _deviceType = WhiteDeviceTypeTouch;
-    if (@available(iOS 10, *)) {
+    NSOperatingSystemVersion iOS_10_0_0 = (NSOperatingSystemVersion){10, 0, 0};
+
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_10_0_0]) {
         _renderEngine = WhiteSdkRenderEngineCanvas;
     } else {
         _renderEngine = WhiteSdkRenderEngineSvg;
@@ -93,10 +95,10 @@ static NSString *const kJSDeviceType = @"deviceType";
 - (void)setPreloadDynamicPPT:(BOOL)preloadDynamicPPT
 {
     // 动态ppt的预加载在低版本iOS存在兼容性问题
-    if (@available(iOS 13, *)) {
+    NSOperatingSystemVersion iOS_13_0_0 = (NSOperatingSystemVersion){13, 0, 0};
+
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_13_0_0]) {
         _preloadDynamicPPT = preloadDynamicPPT;
-    } else {
-        
     }
 }
 
