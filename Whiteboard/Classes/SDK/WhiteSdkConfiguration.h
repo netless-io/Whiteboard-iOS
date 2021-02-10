@@ -46,6 +46,12 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  */
 @property (nonatomic, copy, nullable) NSString *scheme API_AVAILABLE(ios(11.0));
 
+/**
+ * 2021-02-10 之后转换的动态 ppt 支持服务端排版功能，可以确保不同平台排版一致
+ *
+ */
+@property (nonatomic, assign) BOOL useServerWrap;
+
 @end
 
 
