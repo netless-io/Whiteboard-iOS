@@ -10,7 +10,7 @@
 
 @implementation WhiteUtils
 
-static NSString *APIHost = @"https://shunt-api.netless.link/v5/";
+static NSString *APIHost = @"https://api.netless.link/v5/";
 
 /** FIXME: 此处 tonken 只做 demo 试用。
  实际使用时，请在 https://console.netless.link 注册并获取 sdk token

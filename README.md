@@ -4,7 +4,7 @@
 
 ## TOC
 
-- [文档](#文档)
+- [官方文档](#文档)
 - [Example](#Example)
     - [快速调试](#快速调试)
 - [项目结构](#项目结构)
@@ -14,7 +14,7 @@
 
 ## 文档
 
-[API 文档](https://developer.netless.link)
+[官网文档](https://developer.netless.link) —— [iOS部分](https://developer.netless.link/ios-zh/home)
 
 ## 引用
 
@@ -24,6 +24,7 @@
 pod 'Whiteboard'
 ```
 
+<details><summary>White-SDK-iOS 闭源库迁移</summary>
 ### White-SDK-iOS 迁移
 
 只需要将
@@ -47,6 +48,7 @@ pod 'Whiteboard'
 # 使用白板sdk中任意类
 ```
 
+</details>
 ## Example
 
 * 启动Example
@@ -58,7 +60,7 @@ pod install
 
 进入Example文件夹，打开 `Example.xcworkspace` 项目文件。
 
->同时在 `WhiteUtils.m` 根据代码注释填写内容。
+>同时在 `WhiteUtils.m` 根据代码注释填写`WhiteSDKToken`，`WhiteAppIdentifier`。
 
 ```Objective-C
 /* FIXME: sdkToken
@@ -77,20 +79,17 @@ pod install
 #endif
 ```
 
-### 快速调试
+### 调试特定房间
 
-如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，填写以下代码：
+如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，取消`WhiteRoomUUID`，以及`WhiteRoomToken`注释，同时填入指定的内容。
 
 ```C
-#define WhiteAppIdentifier @"792/uaYcRG0I7ctP9A"
-//有 UUID 和 RoomToken 时，只要不在输入栏填写 UUID，WhiteSDKToken 就不会被使用，直接写空占位，保证不报错即可。
-//如果在这里有填写任意值，WhiteUtils.m 中的值，就不会被使用
-#define WhiteSDKToken @""
-#define WhiteRoomUUID @"xxxx"
-#define WhiteRoomToken @"wwwwwwwww"
+// 如果需要进入特定房间，取消以下两行注释，同时填入对应的 UUID 以及 roomToken
+//#define WhiteRoomUUID  <#Room UUID#>
+//#define WhiteRoomToken <#Room Token#>
 ```
 
-此时，实时/回放房间，如果在加入时，没有填写房间 UUID，都会进入该房间。
+此时，如果在加入或者回放房间时，都会进入该房间。
 
 ### 单元测试
 
@@ -221,6 +220,7 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 
 1. 所需依赖：`add dependency to demo for ppt zip feature`
 2. 代码实现：`implement local zip`
+>注意，当前 demo 中，实现拦截，还需要在`WhiteBaseViewController.m`中，将`WhitePptParams `的 scheme 参数为`kPPTScheme`。
 
 [动态转换资源包](https://developer.netless.link/docs/server/api/server-dynamic-conversion-zip/)
 
