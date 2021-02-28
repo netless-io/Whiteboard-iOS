@@ -161,6 +161,9 @@
         WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken userPayload:payload];
         // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
 //         roomConfig.disableEraseImage = YES;
+        // 设置最大最小缩放比例，不设置成 0，会导致画面极小时，出现一些问题。默认不是 0
+        WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];
+        roomConfig.cameraBound = bound;
         self.roomConfig = roomConfig;
     }
 
