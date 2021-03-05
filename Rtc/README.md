@@ -29,7 +29,7 @@ demo 需要填写以下三样内容：
 extension VideoChatViewController: WhiteAudioMixerBridgeDelegate {
     func startAudioMixing(_ filePath: String, loopback: Bool, replace: Bool, cycle: Int) {
         // 现阶段 iOS 端 rtc 不支持对线上 mp4 文件进行混音。该类文件混音，会出现跳转失败导致混音效果消失的问题。
-        // 如果是 线上 mp4 地址，请提前使用 动态 ppt 资源包下载，或者将 mp4 尾缀，更换为 m4a 进行播放。
+        // 如果是 线上 mp4 地址，请提前使用 动态 ppt 资源包下载
         // 该 filePath 路径会收到初始化 SDK 时，pptParams 中的 scheme 参数影响。请自行恢复。
         let result:Int32 = agoraKit.startAudioMixing(filePath, loopback: true, replace: false, cycle: 1)
         print("\(#function) \(filePath) \(loopback) \(replace) \(cycle) result:\(result)")
@@ -77,4 +77,4 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
 
 ## 混音 API 限制
 
-rtc 目前对于线上 mp4 混音效果不佳，当进行跳转时，会出现混音消失的情况。请提前下载对应 mp4，或者预先转换出同地址 m4a 用于混音使用。
+rtc 目前对于线上 mp4 混音效果不佳，当进行跳转时，会出现混音消失的情况。请提前下载对应 mp4
