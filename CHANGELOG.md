@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.11.22] - 2021-03-08
+- 更新`@netless/iframe-bridge`至2.1.2
 ## [2.11.21] - 2021-03-05
 - 更新`white-web-sdk`至 2.12.2
 - 更新`@netless/white-audio-plugin@1.2.20`,`@netless/white-video-plugin@1.2.20`，优化音视频插件
