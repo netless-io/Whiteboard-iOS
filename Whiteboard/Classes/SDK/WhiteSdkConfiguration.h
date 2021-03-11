@@ -70,7 +70,7 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 /**
  * 监听白板中所有 img 标签图片加载失败事件，默认关闭
- * 2.11.23 新增 API
+ * 2.12.0 新增 API
  */
 @property (nonatomic, assign) BOOL enableImgErrorCallback;
 /**

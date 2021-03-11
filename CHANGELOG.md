@@ -7,8 +7,12 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.12.0] - 2021-03-11
+- `WhiteSdkConfiguration`新增`enableImgErrorCallback`参数，开启图片加载失败事件的监听，该监听，会回调`CommonCallbackDelegate`中新增的`customMessage`方法。事件内容格式，见`customMessage`中注释。
+- 回放时，如果启用了 iframe 插件，自动向 iframe 发送 player 信息。
+- 增加`WhiteboardView`大小变化时，自动调用`refreshViewSize`功能
 ## [2.11.22] - 2021-03-08
-- 更新`@netless/iframe-bridge`至2.1.2
+- 更新`@netless/iframe-bridge`至1.1.2
 ## [2.11.21] - 2021-03-05
 - 更新`white-web-sdk`至 2.12.2
 - 更新`@netless/white-audio-plugin@1.2.20`,`@netless/white-video-plugin@1.2.20`，优化音视频插件
