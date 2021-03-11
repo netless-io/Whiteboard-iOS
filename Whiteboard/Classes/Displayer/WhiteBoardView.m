@@ -92,6 +92,19 @@
     }
 }
 
+- (void)setBounds:(CGRect)bounds
+{
+    [super setBounds:bounds];
+    [self autoRefresh];
+}
+
+- (void)autoRefresh
+{
+    if (self.room || self.player) {
+        [self callHandler:@"displayer.refreshViewSize" arguments:nil];
+    }
+}
+
 #pragma mark - Private.h Methods
 - (void)setupWebSDKWithConfig:(WhiteSdkConfiguration *)config completion:(void (^) (id _Nullable value))completionHandler
 {
