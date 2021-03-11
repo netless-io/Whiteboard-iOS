@@ -69,6 +69,11 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 @property (nonatomic, copy) NSString *appIdentifier;
 
 /**
+ * 监听白板中所有 img 标签图片加载失败事件，默认关闭
+ * 2.11.23 新增 API
+ */
+@property (nonatomic, assign) BOOL enableImgErrorCallback;
+/**
  * 是否开启 iFrame 插件，默认关闭。
  * 2.10.0 版本默认打开，后续版本默认关闭
  */

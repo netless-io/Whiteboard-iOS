@@ -80,16 +80,6 @@
     if (dict && [dict[@"name"] isEqualToString:@"pptImageLoadError"]) {
         NSString *name = dict[@"name"];
         NSString *notificationName = [NSString stringWithFormat:@"DynamicPpt-%@", name];
-        /**
-         名字
-         name: "pptImageLoadError",
-         加载失败的图片网址
-         src: this.props.imageURL,
-         error 事件
-         event: e,
-         错误类型，是直接从网络加载失败，还是从网络连接加载失败
-         type: this.props.preload ? "indexDB" : "url",
-         */
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:dict userInfo:dict];
     }
     if (dict && dict[@"shapeId"] && dict[@"mediaType"]) {
@@ -104,6 +94,9 @@
          其他字段由 iframe 自行决定
         */
         [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:dict];
+    }
+    if (dict && [self.delegate respondsToSelector:@selector(customMessage:)]) {
+        [self.delegate customMessage:dict];
     }
     return @"";
 }
