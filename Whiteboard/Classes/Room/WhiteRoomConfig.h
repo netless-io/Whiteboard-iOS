@@ -68,6 +68,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isWritable;
 
 /**
+ * 2.12.2 默认 false；2.12.3 默认 true，不开启笔锋。
+ * 打开笔锋功能绘制的内容，需要本地客户端 2.12.2 sdk 以上才能看到。
+ */
+@property (nonatomic, assign) BOOL disableNewPencil;
+
+/**
  房间进入重连的最长时间，超时后，会主动断连，并在 phaseChange 中回调。同时还会触发 fireDisconnectWithError，会返回：重连时长超出 xx 毫秒...的提示
  单位：秒。
  */

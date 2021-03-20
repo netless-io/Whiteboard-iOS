@@ -39,6 +39,7 @@
         _userPayload = userPayload;
         _timeout = @45;
         _isWritable = true;
+        _disableNewPencil = true;
         if (_userPayload) {
             NSDictionary *dict = @{@"key": _userPayload};
             if (![NSJSONSerialization isValidJSONObject:dict]) {
