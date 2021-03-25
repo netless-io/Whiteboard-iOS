@@ -118,6 +118,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)scalePptToFit:(WhiteAnimationMode)mode;
 
 /**
+ 将 H5 课件等比例铺满屏幕（参考 UIViewContentModeScaleAspectFit ）。
+ 该操作为一次性操作，不会持续锁定。
+ 如果没有插入 H5 课件，则不会操作
+ 
+ 注意：如果当前用户，已经通过 setViewMode: 设置为 follower ，或者已经是 follower（有用户主动设置为 broadcaster），此 API 可能会造成，当前用户与主播内容不完全一致。
+ @since 12.2.5
+ */
+- (void)scaleIframeToFit;
+
+/**
  @param disable 是否禁止移动，true 为禁止。
  @since 2.11.0
  */

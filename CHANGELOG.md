@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.12.5] - 2021-03-25
+- Displayer 新增`scaleIframeToFit`API，可以将 H5 课件进行铺满操作（类似`scalePptToFit`），详情见`Displayer.h`注释
 ## [2.12.4] - 2021-03-24
 - 更新`@netless/cursor-tool`至 0.0.7
 ## [2.12.3] - 2021-03-20
