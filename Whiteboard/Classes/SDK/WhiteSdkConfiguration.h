@@ -95,7 +95,10 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /** 文档转网页中字体文件映射关系 */
 @property (nonatomic, copy, nullable) NSDictionary *fonts;
 
-/** 是否预加载动态 ppt 资源，默认否 */
+/**
+ * 是否预加载动态 ppt 资源，默认否。
+ * @since 2.12.20 以后，预加载功能通过重构，不在有性能和兼容问题，每次只预加载后一页内容。
+ */
 @property (nonatomic, assign) BOOL preloadDynamicPPT;
 /**
   图片拦截替换功能，实时房间与回放房间通用

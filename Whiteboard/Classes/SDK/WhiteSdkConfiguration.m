@@ -94,12 +94,7 @@ static NSString *const kJSDeviceType = @"deviceType";
 
 - (void)setPreloadDynamicPPT:(BOOL)preloadDynamicPPT
 {
-    // 动态ppt的预加载在低版本iOS存在兼容性问题
-    NSOperatingSystemVersion iOS_13_0_0 = (NSOperatingSystemVersion){13, 0, 0};
-
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_13_0_0]) {
-        _preloadDynamicPPT = preloadDynamicPPT;
-    }
+    _preloadDynamicPPT = preloadDynamicPPT;
 }
 
 static NSString *kLegacyReportLogKey = @"disableReportLog";
