@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.12.21] - 2021-04-28
+- 更新`@netless/white-audio-plugin` 至 1.2.23，修复回放时，音频文件显示问题。
+- 支持`@netless/white-audio-plugin2`,`@netless/white-video-plugin2`插件同步支持，需要在 web 端，调用 insertPlugin 时，注册对应的 `audio2`,`video2` 。
 ## [2.12.20] - 2021-04-22
 - 更新`white-web-sdk`至 2.12.14
 ## [2.12.19] - 2021-04-22
