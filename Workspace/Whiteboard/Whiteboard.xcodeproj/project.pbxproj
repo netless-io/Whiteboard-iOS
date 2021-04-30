@@ -1,0 +1,498 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8A1ECFE6263C14E30045643C /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1ECFE3263C14E30045643C /* SceneDelegate.m */; };
+		8A1ECFE7263C14E30045643C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1ECFE5263C14E30045643C /* ViewController.m */; };
+		8A684829263C040E004EDAAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A684827263C040E004EDAAC /* Main.storyboard */; };
+		8A68482B263C040F004EDAAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A68482A263C040F004EDAAC /* Assets.xcassets */; };
+		8A68482E263C040F004EDAAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A68482C263C040F004EDAAC /* LaunchScreen.storyboard */; };
+		8A684831263C040F004EDAAC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684830263C040F004EDAAC /* main.m */; };
+		8A684921263C0691004EDAAC /* WhiteboardSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A684920263C0691004EDAAC /* WhiteboardSDK.framework */; };
+		8A684922263C0691004EDAAC /* WhiteboardSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8A684920263C0691004EDAAC /* WhiteboardSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8A684937263C0734004EDAAC /* PlayerCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684925263C0734004EDAAC /* PlayerCommandListController.m */; };
+		8A684938263C0734004EDAAC /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684927263C0734004EDAAC /* WhitePureReplayViewController.m */; };
+		8A684939263C0734004EDAAC /* WhiteRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684928263C0734004EDAAC /* WhiteRoomViewController.m */; };
+		8A68493A263C0734004EDAAC /* NETAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684929263C0734004EDAAC /* NETAppDelegate.m */; };
+		8A68493B263C0734004EDAAC /* RoomCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A68492A263C0734004EDAAC /* RoomCommandListController.m */; };
+		8A68493C263C0734004EDAAC /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A68492E263C0734004EDAAC /* StartViewController.m */; };
+		8A68493D263C0734004EDAAC /* WhiteUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684934263C0734004EDAAC /* WhiteUtils.m */; };
+		8A68493E263C0734004EDAAC /* WhitePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684935263C0734004EDAAC /* WhitePlayerViewController.m */; };
+		8A68493F263C0734004EDAAC /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684936263C0734004EDAAC /* WhiteBaseViewController.m */; };
+		BD6F3F0BA83CAD2DAE0C143B /* Pods_Whiteboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAA407D2D24108F62557599F /* Pods_Whiteboard.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8A684923263C0691004EDAAC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8A684922263C0691004EDAAC /* WhiteboardSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8A1ECFE2263C14E30045643C /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		8A1ECFE3263C14E30045643C /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		8A1ECFE4263C14E30045643C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		8A1ECFE5263C14E30045643C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		8A68481B263C040E004EDAAC /* Whiteboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whiteboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A684828263C040E004EDAAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8A68482A263C040F004EDAAC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8A68482D263C040F004EDAAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8A68482F263C040F004EDAAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A684830263C040F004EDAAC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8A684920263C0691004EDAAC /* WhiteboardSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WhiteboardSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A684925263C0734004EDAAC /* PlayerCommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerCommandListController.m; sourceTree = "<group>"; };
+		8A684926263C0734004EDAAC /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
+		8A684927263C0734004EDAAC /* WhitePureReplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePureReplayViewController.m; sourceTree = "<group>"; };
+		8A684928263C0734004EDAAC /* WhiteRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomViewController.m; sourceTree = "<group>"; };
+		8A684929263C0734004EDAAC /* NETAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NETAppDelegate.m; sourceTree = "<group>"; };
+		8A68492A263C0734004EDAAC /* RoomCommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCommandListController.m; sourceTree = "<group>"; };
+		8A68492B263C0734004EDAAC /* WhiteBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBaseViewController.h; sourceTree = "<group>"; };
+		8A68492C263C0734004EDAAC /* WhitePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerViewController.h; sourceTree = "<group>"; };
+		8A68492D263C0734004EDAAC /* WhiteUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteUtils.h; sourceTree = "<group>"; };
+		8A68492E263C0734004EDAAC /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
+		8A68492F263C0734004EDAAC /* PlayerCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerCommandListController.h; sourceTree = "<group>"; };
+		8A684930263C0734004EDAAC /* NETAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NETAppDelegate.h; sourceTree = "<group>"; };
+		8A684931263C0734004EDAAC /* WhiteRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomViewController.h; sourceTree = "<group>"; };
+		8A684932263C0734004EDAAC /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
+		8A684933263C0734004EDAAC /* RoomCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCommandListController.h; sourceTree = "<group>"; };
+		8A684934263C0734004EDAAC /* WhiteUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteUtils.m; sourceTree = "<group>"; };
+		8A684935263C0734004EDAAC /* WhitePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerViewController.m; sourceTree = "<group>"; };
+		8A684936263C0734004EDAAC /* WhiteBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBaseViewController.m; sourceTree = "<group>"; };
+		8B7E9CB64140469C11922868 /* Pods-Whiteboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard.debug.xcconfig"; path = "Target Support Files/Pods-Whiteboard/Pods-Whiteboard.debug.xcconfig"; sourceTree = "<group>"; };
+		C45A70B6A4FF49311BF800A7 /* Pods-Whiteboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard.release.xcconfig"; path = "Target Support Files/Pods-Whiteboard/Pods-Whiteboard.release.xcconfig"; sourceTree = "<group>"; };
+		CAA407D2D24108F62557599F /* Pods_Whiteboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Whiteboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8A684818263C040E004EDAAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A684921263C0691004EDAAC /* WhiteboardSDK.framework in Frameworks */,
+				BD6F3F0BA83CAD2DAE0C143B /* Pods_Whiteboard.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		342307301F402188A2AC6593 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8B7E9CB64140469C11922868 /* Pods-Whiteboard.debug.xcconfig */,
+				C45A70B6A4FF49311BF800A7 /* Pods-Whiteboard.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../Pods;
+			sourceTree = "<group>";
+		};
+		4C43F4BF87D267BC848DC0C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A684920263C0691004EDAAC /* WhiteboardSDK.framework */,
+				CAA407D2D24108F62557599F /* Pods_Whiteboard.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8A684812263C040E004EDAAC = {
+			isa = PBXGroup;
+			children = (
+				8A68481D263C040E004EDAAC /* Whiteboard */,
+				8A68481C263C040E004EDAAC /* Products */,
+				342307301F402188A2AC6593 /* Pods */,
+				4C43F4BF87D267BC848DC0C7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8A68481C263C040E004EDAAC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A68481B263C040E004EDAAC /* Whiteboard.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A68481D263C040E004EDAAC /* Whiteboard */ = {
+			isa = PBXGroup;
+			children = (
+				8A684924263C0734004EDAAC /* Class */,
+				8A1ECFE2263C14E30045643C /* SceneDelegate.h */,
+				8A1ECFE3263C14E30045643C /* SceneDelegate.m */,
+				8A1ECFE4263C14E30045643C /* ViewController.h */,
+				8A1ECFE5263C14E30045643C /* ViewController.m */,
+				8A684827263C040E004EDAAC /* Main.storyboard */,
+				8A68482A263C040F004EDAAC /* Assets.xcassets */,
+				8A68482C263C040F004EDAAC /* LaunchScreen.storyboard */,
+				8A68482F263C040F004EDAAC /* Info.plist */,
+				8A684830263C040F004EDAAC /* main.m */,
+			);
+			path = Whiteboard;
+			sourceTree = "<group>";
+		};
+		8A684924263C0734004EDAAC /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				8A684925263C0734004EDAAC /* PlayerCommandListController.m */,
+				8A684926263C0734004EDAAC /* StartViewController.h */,
+				8A684927263C0734004EDAAC /* WhitePureReplayViewController.m */,
+				8A684928263C0734004EDAAC /* WhiteRoomViewController.m */,
+				8A684929263C0734004EDAAC /* NETAppDelegate.m */,
+				8A68492A263C0734004EDAAC /* RoomCommandListController.m */,
+				8A68492B263C0734004EDAAC /* WhiteBaseViewController.h */,
+				8A68492C263C0734004EDAAC /* WhitePlayerViewController.h */,
+				8A68492D263C0734004EDAAC /* WhiteUtils.h */,
+				8A68492E263C0734004EDAAC /* StartViewController.m */,
+				8A68492F263C0734004EDAAC /* PlayerCommandListController.h */,
+				8A684930263C0734004EDAAC /* NETAppDelegate.h */,
+				8A684931263C0734004EDAAC /* WhiteRoomViewController.h */,
+				8A684932263C0734004EDAAC /* WhitePureReplayViewController.h */,
+				8A684933263C0734004EDAAC /* RoomCommandListController.h */,
+				8A684934263C0734004EDAAC /* WhiteUtils.m */,
+				8A684935263C0734004EDAAC /* WhitePlayerViewController.m */,
+				8A684936263C0734004EDAAC /* WhiteBaseViewController.m */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8A68481A263C040E004EDAAC /* Whiteboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A684834263C040F004EDAAC /* Build configuration list for PBXNativeTarget "Whiteboard" */;
+			buildPhases = (
+				F0AAC442B9C81DC7EA220B4D /* [CP] Check Pods Manifest.lock */,
+				8A684817263C040E004EDAAC /* Sources */,
+				8A684818263C040E004EDAAC /* Frameworks */,
+				8A684819263C040E004EDAAC /* Resources */,
+				6F85A01FCB60B3BCC29CF29F /* [CP] Embed Pods Frameworks */,
+				8A684923263C0691004EDAAC /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Whiteboard;
+			productName = Whiteboard;
+			productReference = 8A68481B263C040E004EDAAC /* Whiteboard.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8A684813263C040E004EDAAC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					8A68481A263C040E004EDAAC = {
+						CreatedOnToolsVersion = 12.4;
+					};
+				};
+			};
+			buildConfigurationList = 8A684816263C040E004EDAAC /* Build configuration list for PBXProject "Whiteboard" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8A684812263C040E004EDAAC;
+			productRefGroup = 8A68481C263C040E004EDAAC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8A68481A263C040E004EDAAC /* Whiteboard */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A684819263C040E004EDAAC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A68482E263C040F004EDAAC /* LaunchScreen.storyboard in Resources */,
+				8A68482B263C040F004EDAAC /* Assets.xcassets in Resources */,
+				8A684829263C040E004EDAAC /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6F85A01FCB60B3BCC29CF29F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard/Pods-Whiteboard-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard/Pods-Whiteboard-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Whiteboard/Pods-Whiteboard-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0AAC442B9C81DC7EA220B4D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Whiteboard-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A684817263C040E004EDAAC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A684937263C0734004EDAAC /* PlayerCommandListController.m in Sources */,
+				8A68493F263C0734004EDAAC /* WhiteBaseViewController.m in Sources */,
+				8A684831263C040F004EDAAC /* main.m in Sources */,
+				8A68493B263C0734004EDAAC /* RoomCommandListController.m in Sources */,
+				8A684939263C0734004EDAAC /* WhiteRoomViewController.m in Sources */,
+				8A68493E263C0734004EDAAC /* WhitePlayerViewController.m in Sources */,
+				8A1ECFE7263C14E30045643C /* ViewController.m in Sources */,
+				8A1ECFE6263C14E30045643C /* SceneDelegate.m in Sources */,
+				8A68493D263C0734004EDAAC /* WhiteUtils.m in Sources */,
+				8A68493C263C0734004EDAAC /* StartViewController.m in Sources */,
+				8A68493A263C0734004EDAAC /* NETAppDelegate.m in Sources */,
+				8A684938263C0734004EDAAC /* WhitePureReplayViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8A684827263C040E004EDAAC /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A684828263C040E004EDAAC /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8A68482C263C040F004EDAAC /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A68482D263C040F004EDAAC /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8A684832263C040F004EDAAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8A684833263C040F004EDAAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8A684835263C040F004EDAAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B7E9CB64140469C11922868 /* Pods-Whiteboard.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S7S2687476;
+				INFOPLIST_FILE = Whiteboard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.agora.netless.Whiteboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A684836263C040F004EDAAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C45A70B6A4FF49311BF800A7 /* Pods-Whiteboard.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S7S2687476;
+				INFOPLIST_FILE = Whiteboard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.agora.netless.Whiteboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8A684816263C040E004EDAAC /* Build configuration list for PBXProject "Whiteboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A684832263C040F004EDAAC /* Debug */,
+				8A684833263C040F004EDAAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A684834263C040F004EDAAC /* Build configuration list for PBXNativeTarget "Whiteboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A684835263C040F004EDAAC /* Debug */,
+				8A684836263C040F004EDAAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8A684813263C040E004EDAAC /* Project object */;
+}

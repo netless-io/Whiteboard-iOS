@@ -1,0 +1,864 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8A68480B263C03EF004EDAAC /* WhiteboardSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684809263C03EF004EDAAC /* WhiteboardSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AA3263C0C5B004EDAAC /* WhiteRoomState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A32263C0C5A004EDAAC /* WhiteRoomState.m */; };
+		8A684AA4263C0C5B004EDAAC /* WhiteRoomCallbacks+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A33263C0C5A004EDAAC /* WhiteRoomCallbacks+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684AA5263C0C5B004EDAAC /* WhiteBroadcastState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A34263C0C5A004EDAAC /* WhiteBroadcastState.m */; };
+		8A684AA6263C0C5B004EDAAC /* WhiteRoom+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A35263C0C5A004EDAAC /* WhiteRoom+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684AA7263C0C5B004EDAAC /* WhiteRoomCallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A36263C0C5A004EDAAC /* WhiteRoomCallbacks.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AA8263C0C5B004EDAAC /* WhiteRoom.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A37263C0C5A004EDAAC /* WhiteRoom.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AA9263C0C5B004EDAAC /* WhiteSDK+Room.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A38263C0C5A004EDAAC /* WhiteSDK+Room.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AAA263C0C5B004EDAAC /* WhiteImageInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A39263C0C5A004EDAAC /* WhiteImageInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AAB263C0C5B004EDAAC /* WhiteRoomConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A3A263C0C5A004EDAAC /* WhiteRoomConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AAC263C0C5B004EDAAC /* WhiteRoomCallbacks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A3B263C0C5A004EDAAC /* WhiteRoomCallbacks.m */; };
+		8A684AAD263C0C5B004EDAAC /* WhiteBroadcastState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A3C263C0C5A004EDAAC /* WhiteBroadcastState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AAE263C0C5B004EDAAC /* WhiteRoomState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A3D263C0C5A004EDAAC /* WhiteRoomState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AAF263C0C5B004EDAAC /* WhiteImageInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A3E263C0C5A004EDAAC /* WhiteImageInformation.m */; };
+		8A684AB0263C0C5B004EDAAC /* WhiteRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A3F263C0C5A004EDAAC /* WhiteRoom.m */; };
+		8A684AB1263C0C5B004EDAAC /* WhiteSDK+Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A40263C0C5A004EDAAC /* WhiteSDK+Room.m */; };
+		8A684AB2263C0C5B004EDAAC /* WhiteRoomConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A41263C0C5A004EDAAC /* WhiteRoomConfig.m */; };
+		8A684AB3263C0C5B004EDAAC /* WhiteConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A43263C0C5A004EDAAC /* WhiteConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AB4263C0C5B004EDAAC /* WhiteConversionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A44263C0C5A004EDAAC /* WhiteConversionInfo.m */; };
+		8A684AB5263C0C5B004EDAAC /* WhiteConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A45263C0C5A004EDAAC /* WhiteConverter.m */; };
+		8A684AB6263C0C5B004EDAAC /* WhiteConversionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A46263C0C5A004EDAAC /* WhiteConversionInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AB9263C0C5B004EDAAC /* WhiteDisplayer+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A4B263C0C5A004EDAAC /* WhiteDisplayer+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684ABA263C0C5B004EDAAC /* WhiteBoardView+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A4C263C0C5A004EDAAC /* WhiteBoardView+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684ABB263C0C5B004EDAAC /* WhiteDisplayerState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A4D263C0C5A004EDAAC /* WhiteDisplayerState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684ABC263C0C5B004EDAAC /* WhiteWebViewInjection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A4E263C0C5A004EDAAC /* WhiteWebViewInjection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684ABD263C0C5B004EDAAC /* WhiteBoardView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A4F263C0C5A004EDAAC /* WhiteBoardView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684ABE263C0C5B004EDAAC /* WhiteCommonCallbacks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A50263C0C5A004EDAAC /* WhiteCommonCallbacks.m */; };
+		8A684ABF263C0C5B004EDAAC /* WhiteGlobalState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A51263C0C5A004EDAAC /* WhiteGlobalState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AC0263C0C5B004EDAAC /* WhiteAudioMixerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A52263C0C5A004EDAAC /* WhiteAudioMixerBridge.m */; };
+		8A684AC1263C0C5B004EDAAC /* WhiteDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A53263C0C5A004EDAAC /* WhiteDisplayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AC2263C0C5B004EDAAC /* WhiteDisplayerState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A54263C0C5A004EDAAC /* WhiteDisplayerState.m */; };
+		8A684AC3263C0C5B004EDAAC /* WhiteWebViewInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A55263C0C5A004EDAAC /* WhiteWebViewInjection.m */; };
+		8A684AC4263C0C5B004EDAAC /* WhiteAudioMixerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A56263C0C5A004EDAAC /* WhiteAudioMixerBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AC5263C0C5B004EDAAC /* WhiteDisplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A57263C0C5A004EDAAC /* WhiteDisplayer.m */; };
+		8A684AC6263C0C5B004EDAAC /* WhiteGlobalState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A58263C0C5A004EDAAC /* WhiteGlobalState.m */; };
+		8A684AC7263C0C5B004EDAAC /* WhiteCommonCallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A59263C0C5A004EDAAC /* WhiteCommonCallbacks.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AC8263C0C5B004EDAAC /* WhiteBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A5A263C0C5A004EDAAC /* WhiteBoardView.m */; };
+		8A684AC9263C0C5B004EDAAC /* WhitePlayerTimeInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A5C263C0C5A004EDAAC /* WhitePlayerTimeInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684ACA263C0C5B004EDAAC /* WhitePlayer+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A5D263C0C5A004EDAAC /* WhitePlayer+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684ACB263C0C5B004EDAAC /* WhitePlayerEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A5E263C0C5A004EDAAC /* WhitePlayerEvent.m */; };
+		8A684ACC263C0C5B004EDAAC /* WhiteSDK+Replayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A5F263C0C5A004EDAAC /* WhiteSDK+Replayer.m */; };
+		8A684ACD263C0C5B004EDAAC /* WhitePlayerEvent+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A60263C0C5A004EDAAC /* WhitePlayerEvent+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684ACE263C0C5B004EDAAC /* WhitePlayerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A61263C0C5A004EDAAC /* WhitePlayerConfig.m */; };
+		8A684ACF263C0C5B004EDAAC /* WhitePlayerState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A62263C0C5A004EDAAC /* WhitePlayerState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AD0263C0C5B004EDAAC /* WhitePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A63263C0C5A004EDAAC /* WhitePlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AD1263C0C5B004EDAAC /* WhitePlayerConsts.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A64263C0C5A004EDAAC /* WhitePlayerConsts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AD2263C0C5B004EDAAC /* WhitePlayerTimeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A65263C0C5A004EDAAC /* WhitePlayerTimeInfo.m */; };
+		8A684AD3263C0C5B004EDAAC /* WhiteSDK+Replayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A66263C0C5A004EDAAC /* WhiteSDK+Replayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AD4263C0C5B004EDAAC /* WhitePlayerEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A67263C0C5A004EDAAC /* WhitePlayerEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AD5263C0C5B004EDAAC /* WhitePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A68263C0C5A004EDAAC /* WhitePlayer.m */; };
+		8A684AD6263C0C5B004EDAAC /* WhitePlayerState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A69263C0C5A004EDAAC /* WhitePlayerState.m */; };
+		8A684AD7263C0C5B004EDAAC /* WhitePlayerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A6A263C0C5A004EDAAC /* WhitePlayerConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AD8263C0C5B004EDAAC /* WhiteScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A6C263C0C5A004EDAAC /* WhiteScene.m */; };
+		8A684AD9263C0C5B004EDAAC /* WhiteRoomMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A6D263C0C5A004EDAAC /* WhiteRoomMember.m */; };
+		8A684ADA263C0C5B004EDAAC /* WhiteConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A6E263C0C5A004EDAAC /* WhiteConsts.m */; };
+		8A684ADB263C0C5B004EDAAC /* WhiteCameraBound.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A6F263C0C5A004EDAAC /* WhiteCameraBound.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684ADC263C0C5B004EDAAC /* WhiteCameraState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A70263C0C5A004EDAAC /* WhiteCameraState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684ADD263C0C5B004EDAAC /* WhitePptPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A71263C0C5A004EDAAC /* WhitePptPage.m */; };
+		8A684ADE263C0C5B004EDAAC /* WhiteSceneState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A72263C0C5A004EDAAC /* WhiteSceneState.m */; };
+		8A684ADF263C0C5B004EDAAC /* WhiteCameraConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A73263C0C5A004EDAAC /* WhiteCameraConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AE0263C0C5B004EDAAC /* WhiteMemberState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A74263C0C5A004EDAAC /* WhiteMemberState.m */; };
+		8A684AE1263C0C5B004EDAAC /* WhiteMemberInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A75263C0C5A004EDAAC /* WhiteMemberInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AE2263C0C5B004EDAAC /* WhitePanEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A76263C0C5A004EDAAC /* WhitePanEvent.m */; };
+		8A684AE3263C0C5B004EDAAC /* WhiteFontFace.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A77263C0C5A004EDAAC /* WhiteFontFace.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AE4263C0C5B004EDAAC /* WhiteEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A78263C0C5A004EDAAC /* WhiteEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AE5263C0C5B004EDAAC /* WhiteRectangleConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A79263C0C5A004EDAAC /* WhiteRectangleConfig.m */; };
+		8A684AE6263C0C5B004EDAAC /* WhiteCameraBound.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A7A263C0C5A004EDAAC /* WhiteCameraBound.m */; };
+		8A684AE7263C0C5B004EDAAC /* WhiteCameraState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A7B263C0C5B004EDAAC /* WhiteCameraState.m */; };
+		8A684AE8263C0C5B004EDAAC /* WhiteConsts.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A7C263C0C5B004EDAAC /* WhiteConsts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AE9263C0C5B004EDAAC /* WhiteRoomMember.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A7D263C0C5B004EDAAC /* WhiteRoomMember.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AEA263C0C5B004EDAAC /* WhiteScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A7E263C0C5B004EDAAC /* WhiteScene.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AEB263C0C5B004EDAAC /* WhiteMemberInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A7F263C0C5B004EDAAC /* WhiteMemberInformation.m */; };
+		8A684AEC263C0C5B004EDAAC /* WhiteMemberState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A80263C0C5B004EDAAC /* WhiteMemberState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AED263C0C5B004EDAAC /* WhiteCameraConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A81263C0C5B004EDAAC /* WhiteCameraConfig.m */; };
+		8A684AEE263C0C5B004EDAAC /* WhiteSceneState.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A82263C0C5B004EDAAC /* WhiteSceneState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AEF263C0C5B004EDAAC /* WhitePptPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A83263C0C5B004EDAAC /* WhitePptPage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AF0263C0C5B004EDAAC /* WhiteEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A84263C0C5B004EDAAC /* WhiteEvent.m */; };
+		8A684AF1263C0C5B004EDAAC /* WhiteFontFace.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A85263C0C5B004EDAAC /* WhiteFontFace.m */; };
+		8A684AF2263C0C5B004EDAAC /* WhitePanEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A86263C0C5B004EDAAC /* WhitePanEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AF3263C0C5B004EDAAC /* WhiteRectangleConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A87263C0C5B004EDAAC /* WhiteRectangleConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AF4263C0C5B004EDAAC /* WhiteSdkConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A89263C0C5B004EDAAC /* WhiteSdkConfiguration.m */; };
+		8A684AF5263C0C5B004EDAAC /* WhiteSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A8A263C0C5B004EDAAC /* WhiteSDK.m */; };
+		8A684AF6263C0C5B004EDAAC /* WhiteSDK+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A8B263C0C5B004EDAAC /* WhiteSDK+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684AF7263C0C5B004EDAAC /* WhiteSdkConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A8C263C0C5B004EDAAC /* WhiteSdkConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AF8263C0C5B004EDAAC /* WhiteSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A8D263C0C5B004EDAAC /* WhiteSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AF9263C0C5B004EDAAC /* WhiteSdkConfiguration+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A8E263C0C5B004EDAAC /* WhiteSdkConfiguration+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8A684AFA263C0C5B004EDAAC /* WhiteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A90263C0C5B004EDAAC /* WhiteObject.m */; };
+		8A684AFB263C0C5B004EDAAC /* WhiteObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A91263C0C5B004EDAAC /* WhiteObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AFC263C0C5B004EDAAC /* Whiteboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A92263C0C5B004EDAAC /* Whiteboard.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684AFD263C0C5B004EDAAC /* WhiteVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A94263C0C5B004EDAAC /* WhiteVideoView.m */; };
+		8A684AFE263C0C5B004EDAAC /* WhiteCombinePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A95263C0C5B004EDAAC /* WhiteCombinePlayer.m */; };
+		8A684AFF263C0C5B004EDAAC /* WhiteSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A684A96263C0C5B004EDAAC /* WhiteSliderView.m */; };
+		8A684B00263C0C5B004EDAAC /* WhiteVideoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A97263C0C5B004EDAAC /* WhiteVideoView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684B01263C0C5B004EDAAC /* WhiteSliderView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A98263C0C5B004EDAAC /* WhiteSliderView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684B02263C0C5B004EDAAC /* WhiteCombinePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A684A99263C0C5B004EDAAC /* WhiteCombinePlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A684B09263C0C5B004EDAAC /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 8A684AA2263C0C5B004EDAAC /* .gitkeep */; };
+		8A684B36263C0D4F004EDAAC /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8A684B35263C0D4F004EDAAC /* Resource.bundle */; };
+		A8F928BB8F4E2004DEA2102F /* Pods_WhiteboardSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01480A3A1F92834C1633350E /* Pods_WhiteboardSDK.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		01480A3A1F92834C1633350E /* Pods_WhiteboardSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhiteboardSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		21A7DF813621DF4CBF7B88A3 /* Pods-WhiteboardSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhiteboardSDK.debug.xcconfig"; path = "Target Support Files/Pods-WhiteboardSDK/Pods-WhiteboardSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		7136BAE215FBD44F2AF853FA /* Pods-WhiteboardSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhiteboardSDK.release.xcconfig"; path = "Target Support Files/Pods-WhiteboardSDK/Pods-WhiteboardSDK.release.xcconfig"; sourceTree = "<group>"; };
+		8A684806263C03EF004EDAAC /* WhiteboardSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WhiteboardSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A684809263C03EF004EDAAC /* WhiteboardSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteboardSDK.h; sourceTree = "<group>"; };
+		8A68480A263C03EF004EDAAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A684A32263C0C5A004EDAAC /* WhiteRoomState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomState.m; sourceTree = "<group>"; };
+		8A684A33263C0C5A004EDAAC /* WhiteRoomCallbacks+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteRoomCallbacks+Private.h"; sourceTree = "<group>"; };
+		8A684A34263C0C5A004EDAAC /* WhiteBroadcastState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBroadcastState.m; sourceTree = "<group>"; };
+		8A684A35263C0C5A004EDAAC /* WhiteRoom+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteRoom+Private.h"; sourceTree = "<group>"; };
+		8A684A36263C0C5A004EDAAC /* WhiteRoomCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomCallbacks.h; sourceTree = "<group>"; };
+		8A684A37263C0C5A004EDAAC /* WhiteRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoom.h; sourceTree = "<group>"; };
+		8A684A38263C0C5A004EDAAC /* WhiteSDK+Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteSDK+Room.h"; sourceTree = "<group>"; };
+		8A684A39263C0C5A004EDAAC /* WhiteImageInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteImageInformation.h; sourceTree = "<group>"; };
+		8A684A3A263C0C5A004EDAAC /* WhiteRoomConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomConfig.h; sourceTree = "<group>"; };
+		8A684A3B263C0C5A004EDAAC /* WhiteRoomCallbacks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomCallbacks.m; sourceTree = "<group>"; };
+		8A684A3C263C0C5A004EDAAC /* WhiteBroadcastState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBroadcastState.h; sourceTree = "<group>"; };
+		8A684A3D263C0C5A004EDAAC /* WhiteRoomState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomState.h; sourceTree = "<group>"; };
+		8A684A3E263C0C5A004EDAAC /* WhiteImageInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteImageInformation.m; sourceTree = "<group>"; };
+		8A684A3F263C0C5A004EDAAC /* WhiteRoom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoom.m; sourceTree = "<group>"; };
+		8A684A40263C0C5A004EDAAC /* WhiteSDK+Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WhiteSDK+Room.m"; sourceTree = "<group>"; };
+		8A684A41263C0C5A004EDAAC /* WhiteRoomConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomConfig.m; sourceTree = "<group>"; };
+		8A684A43263C0C5A004EDAAC /* WhiteConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteConverter.h; sourceTree = "<group>"; };
+		8A684A44263C0C5A004EDAAC /* WhiteConversionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteConversionInfo.m; sourceTree = "<group>"; };
+		8A684A45263C0C5A004EDAAC /* WhiteConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteConverter.m; sourceTree = "<group>"; };
+		8A684A46263C0C5A004EDAAC /* WhiteConversionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteConversionInfo.h; sourceTree = "<group>"; };
+		8A684A4B263C0C5A004EDAAC /* WhiteDisplayer+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteDisplayer+Private.h"; sourceTree = "<group>"; };
+		8A684A4C263C0C5A004EDAAC /* WhiteBoardView+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteBoardView+Private.h"; sourceTree = "<group>"; };
+		8A684A4D263C0C5A004EDAAC /* WhiteDisplayerState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteDisplayerState.h; sourceTree = "<group>"; };
+		8A684A4E263C0C5A004EDAAC /* WhiteWebViewInjection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteWebViewInjection.h; sourceTree = "<group>"; };
+		8A684A4F263C0C5A004EDAAC /* WhiteBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBoardView.h; sourceTree = "<group>"; };
+		8A684A50263C0C5A004EDAAC /* WhiteCommonCallbacks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteCommonCallbacks.m; sourceTree = "<group>"; };
+		8A684A51263C0C5A004EDAAC /* WhiteGlobalState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteGlobalState.h; sourceTree = "<group>"; };
+		8A684A52263C0C5A004EDAAC /* WhiteAudioMixerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteAudioMixerBridge.m; sourceTree = "<group>"; };
+		8A684A53263C0C5A004EDAAC /* WhiteDisplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteDisplayer.h; sourceTree = "<group>"; };
+		8A684A54263C0C5A004EDAAC /* WhiteDisplayerState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteDisplayerState.m; sourceTree = "<group>"; };
+		8A684A55263C0C5A004EDAAC /* WhiteWebViewInjection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteWebViewInjection.m; sourceTree = "<group>"; };
+		8A684A56263C0C5A004EDAAC /* WhiteAudioMixerBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteAudioMixerBridge.h; sourceTree = "<group>"; };
+		8A684A57263C0C5A004EDAAC /* WhiteDisplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteDisplayer.m; sourceTree = "<group>"; };
+		8A684A58263C0C5A004EDAAC /* WhiteGlobalState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteGlobalState.m; sourceTree = "<group>"; };
+		8A684A59263C0C5A004EDAAC /* WhiteCommonCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteCommonCallbacks.h; sourceTree = "<group>"; };
+		8A684A5A263C0C5A004EDAAC /* WhiteBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBoardView.m; sourceTree = "<group>"; };
+		8A684A5C263C0C5A004EDAAC /* WhitePlayerTimeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerTimeInfo.h; sourceTree = "<group>"; };
+		8A684A5D263C0C5A004EDAAC /* WhitePlayer+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhitePlayer+Private.h"; sourceTree = "<group>"; };
+		8A684A5E263C0C5A004EDAAC /* WhitePlayerEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerEvent.m; sourceTree = "<group>"; };
+		8A684A5F263C0C5A004EDAAC /* WhiteSDK+Replayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WhiteSDK+Replayer.m"; sourceTree = "<group>"; };
+		8A684A60263C0C5A004EDAAC /* WhitePlayerEvent+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhitePlayerEvent+Private.h"; sourceTree = "<group>"; };
+		8A684A61263C0C5A004EDAAC /* WhitePlayerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerConfig.m; sourceTree = "<group>"; };
+		8A684A62263C0C5A004EDAAC /* WhitePlayerState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerState.h; sourceTree = "<group>"; };
+		8A684A63263C0C5A004EDAAC /* WhitePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayer.h; sourceTree = "<group>"; };
+		8A684A64263C0C5A004EDAAC /* WhitePlayerConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerConsts.h; sourceTree = "<group>"; };
+		8A684A65263C0C5A004EDAAC /* WhitePlayerTimeInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerTimeInfo.m; sourceTree = "<group>"; };
+		8A684A66263C0C5A004EDAAC /* WhiteSDK+Replayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteSDK+Replayer.h"; sourceTree = "<group>"; };
+		8A684A67263C0C5A004EDAAC /* WhitePlayerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerEvent.h; sourceTree = "<group>"; };
+		8A684A68263C0C5A004EDAAC /* WhitePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayer.m; sourceTree = "<group>"; };
+		8A684A69263C0C5A004EDAAC /* WhitePlayerState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerState.m; sourceTree = "<group>"; };
+		8A684A6A263C0C5A004EDAAC /* WhitePlayerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerConfig.h; sourceTree = "<group>"; };
+		8A684A6C263C0C5A004EDAAC /* WhiteScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteScene.m; sourceTree = "<group>"; };
+		8A684A6D263C0C5A004EDAAC /* WhiteRoomMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomMember.m; sourceTree = "<group>"; };
+		8A684A6E263C0C5A004EDAAC /* WhiteConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteConsts.m; sourceTree = "<group>"; };
+		8A684A6F263C0C5A004EDAAC /* WhiteCameraBound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteCameraBound.h; sourceTree = "<group>"; };
+		8A684A70263C0C5A004EDAAC /* WhiteCameraState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteCameraState.h; sourceTree = "<group>"; };
+		8A684A71263C0C5A004EDAAC /* WhitePptPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePptPage.m; sourceTree = "<group>"; };
+		8A684A72263C0C5A004EDAAC /* WhiteSceneState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteSceneState.m; sourceTree = "<group>"; };
+		8A684A73263C0C5A004EDAAC /* WhiteCameraConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteCameraConfig.h; sourceTree = "<group>"; };
+		8A684A74263C0C5A004EDAAC /* WhiteMemberState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteMemberState.m; sourceTree = "<group>"; };
+		8A684A75263C0C5A004EDAAC /* WhiteMemberInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteMemberInformation.h; sourceTree = "<group>"; };
+		8A684A76263C0C5A004EDAAC /* WhitePanEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePanEvent.m; sourceTree = "<group>"; };
+		8A684A77263C0C5A004EDAAC /* WhiteFontFace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteFontFace.h; sourceTree = "<group>"; };
+		8A684A78263C0C5A004EDAAC /* WhiteEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteEvent.h; sourceTree = "<group>"; };
+		8A684A79263C0C5A004EDAAC /* WhiteRectangleConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRectangleConfig.m; sourceTree = "<group>"; };
+		8A684A7A263C0C5A004EDAAC /* WhiteCameraBound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteCameraBound.m; sourceTree = "<group>"; };
+		8A684A7B263C0C5B004EDAAC /* WhiteCameraState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteCameraState.m; sourceTree = "<group>"; };
+		8A684A7C263C0C5B004EDAAC /* WhiteConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteConsts.h; sourceTree = "<group>"; };
+		8A684A7D263C0C5B004EDAAC /* WhiteRoomMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomMember.h; sourceTree = "<group>"; };
+		8A684A7E263C0C5B004EDAAC /* WhiteScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteScene.h; sourceTree = "<group>"; };
+		8A684A7F263C0C5B004EDAAC /* WhiteMemberInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteMemberInformation.m; sourceTree = "<group>"; };
+		8A684A80263C0C5B004EDAAC /* WhiteMemberState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteMemberState.h; sourceTree = "<group>"; };
+		8A684A81263C0C5B004EDAAC /* WhiteCameraConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteCameraConfig.m; sourceTree = "<group>"; };
+		8A684A82263C0C5B004EDAAC /* WhiteSceneState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteSceneState.h; sourceTree = "<group>"; };
+		8A684A83263C0C5B004EDAAC /* WhitePptPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePptPage.h; sourceTree = "<group>"; };
+		8A684A84263C0C5B004EDAAC /* WhiteEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteEvent.m; sourceTree = "<group>"; };
+		8A684A85263C0C5B004EDAAC /* WhiteFontFace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteFontFace.m; sourceTree = "<group>"; };
+		8A684A86263C0C5B004EDAAC /* WhitePanEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePanEvent.h; sourceTree = "<group>"; };
+		8A684A87263C0C5B004EDAAC /* WhiteRectangleConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRectangleConfig.h; sourceTree = "<group>"; };
+		8A684A89263C0C5B004EDAAC /* WhiteSdkConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteSdkConfiguration.m; sourceTree = "<group>"; };
+		8A684A8A263C0C5B004EDAAC /* WhiteSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteSDK.m; sourceTree = "<group>"; };
+		8A684A8B263C0C5B004EDAAC /* WhiteSDK+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteSDK+Private.h"; sourceTree = "<group>"; };
+		8A684A8C263C0C5B004EDAAC /* WhiteSdkConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteSdkConfiguration.h; sourceTree = "<group>"; };
+		8A684A8D263C0C5B004EDAAC /* WhiteSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteSDK.h; sourceTree = "<group>"; };
+		8A684A8E263C0C5B004EDAAC /* WhiteSdkConfiguration+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhiteSdkConfiguration+Private.h"; sourceTree = "<group>"; };
+		8A684A90263C0C5B004EDAAC /* WhiteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteObject.m; sourceTree = "<group>"; };
+		8A684A91263C0C5B004EDAAC /* WhiteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteObject.h; sourceTree = "<group>"; };
+		8A684A92263C0C5B004EDAAC /* Whiteboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Whiteboard.h; sourceTree = "<group>"; };
+		8A684A94263C0C5B004EDAAC /* WhiteVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteVideoView.m; sourceTree = "<group>"; };
+		8A684A95263C0C5B004EDAAC /* WhiteCombinePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteCombinePlayer.m; sourceTree = "<group>"; };
+		8A684A96263C0C5B004EDAAC /* WhiteSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteSliderView.m; sourceTree = "<group>"; };
+		8A684A97263C0C5B004EDAAC /* WhiteVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteVideoView.h; sourceTree = "<group>"; };
+		8A684A98263C0C5B004EDAAC /* WhiteSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteSliderView.h; sourceTree = "<group>"; };
+		8A684A99263C0C5B004EDAAC /* WhiteCombinePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteCombinePlayer.h; sourceTree = "<group>"; };
+		8A684AA2263C0C5B004EDAAC /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		8A684B35263C0D4F004EDAAC /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8A684803263C03EF004EDAAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8F928BB8F4E2004DEA2102F /* Pods_WhiteboardSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		101DEBD2B9438AC5869E848A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				01480A3A1F92834C1633350E /* Pods_WhiteboardSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		13B9D444331B72AF4119A3BF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				21A7DF813621DF4CBF7B88A3 /* Pods-WhiteboardSDK.debug.xcconfig */,
+				7136BAE215FBD44F2AF853FA /* Pods-WhiteboardSDK.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../Pods;
+			sourceTree = "<group>";
+		};
+		8A6847FC263C03EF004EDAAC = {
+			isa = PBXGroup;
+			children = (
+				8A684808263C03EF004EDAAC /* WhiteboardSDK */,
+				8A684807263C03EF004EDAAC /* Products */,
+				13B9D444331B72AF4119A3BF /* Pods */,
+				101DEBD2B9438AC5869E848A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8A684807263C03EF004EDAAC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A684806263C03EF004EDAAC /* WhiteboardSDK.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A684808263C03EF004EDAAC /* WhiteboardSDK */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A2F263C0C5A004EDAAC /* Whiteboard */,
+				8A684809263C03EF004EDAAC /* WhiteboardSDK.h */,
+				8A68480A263C03EF004EDAAC /* Info.plist */,
+			);
+			path = WhiteboardSDK;
+			sourceTree = "<group>";
+		};
+		8A684A2F263C0C5A004EDAAC /* Whiteboard */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A30263C0C5A004EDAAC /* Classes */,
+				8A684A9A263C0C5B004EDAAC /* Resource */,
+				8A684AA1263C0C5B004EDAAC /* Assets */,
+			);
+			path = Whiteboard;
+			sourceTree = "<group>";
+		};
+		8A684A30263C0C5A004EDAAC /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A31263C0C5A004EDAAC /* Room */,
+				8A684A42263C0C5A004EDAAC /* Converter */,
+				8A684A4A263C0C5A004EDAAC /* Displayer */,
+				8A684A5B263C0C5A004EDAAC /* Replayer */,
+				8A684A6B263C0C5A004EDAAC /* Object */,
+				8A684A88263C0C5B004EDAAC /* SDK */,
+				8A684A8F263C0C5B004EDAAC /* Model */,
+				8A684A92263C0C5B004EDAAC /* Whiteboard.h */,
+				8A684A93263C0C5B004EDAAC /* NativeReplayer */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		8A684A31263C0C5A004EDAAC /* Room */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A32263C0C5A004EDAAC /* WhiteRoomState.m */,
+				8A684A33263C0C5A004EDAAC /* WhiteRoomCallbacks+Private.h */,
+				8A684A34263C0C5A004EDAAC /* WhiteBroadcastState.m */,
+				8A684A35263C0C5A004EDAAC /* WhiteRoom+Private.h */,
+				8A684A36263C0C5A004EDAAC /* WhiteRoomCallbacks.h */,
+				8A684A37263C0C5A004EDAAC /* WhiteRoom.h */,
+				8A684A38263C0C5A004EDAAC /* WhiteSDK+Room.h */,
+				8A684A39263C0C5A004EDAAC /* WhiteImageInformation.h */,
+				8A684A3A263C0C5A004EDAAC /* WhiteRoomConfig.h */,
+				8A684A3B263C0C5A004EDAAC /* WhiteRoomCallbacks.m */,
+				8A684A3C263C0C5A004EDAAC /* WhiteBroadcastState.h */,
+				8A684A3D263C0C5A004EDAAC /* WhiteRoomState.h */,
+				8A684A3E263C0C5A004EDAAC /* WhiteImageInformation.m */,
+				8A684A3F263C0C5A004EDAAC /* WhiteRoom.m */,
+				8A684A40263C0C5A004EDAAC /* WhiteSDK+Room.m */,
+				8A684A41263C0C5A004EDAAC /* WhiteRoomConfig.m */,
+			);
+			path = Room;
+			sourceTree = "<group>";
+		};
+		8A684A42263C0C5A004EDAAC /* Converter */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A43263C0C5A004EDAAC /* WhiteConverter.h */,
+				8A684A44263C0C5A004EDAAC /* WhiteConversionInfo.m */,
+				8A684A45263C0C5A004EDAAC /* WhiteConverter.m */,
+				8A684A46263C0C5A004EDAAC /* WhiteConversionInfo.h */,
+			);
+			path = Converter;
+			sourceTree = "<group>";
+		};
+		8A684A4A263C0C5A004EDAAC /* Displayer */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A4B263C0C5A004EDAAC /* WhiteDisplayer+Private.h */,
+				8A684A4C263C0C5A004EDAAC /* WhiteBoardView+Private.h */,
+				8A684A4D263C0C5A004EDAAC /* WhiteDisplayerState.h */,
+				8A684A4E263C0C5A004EDAAC /* WhiteWebViewInjection.h */,
+				8A684A4F263C0C5A004EDAAC /* WhiteBoardView.h */,
+				8A684A50263C0C5A004EDAAC /* WhiteCommonCallbacks.m */,
+				8A684A51263C0C5A004EDAAC /* WhiteGlobalState.h */,
+				8A684A52263C0C5A004EDAAC /* WhiteAudioMixerBridge.m */,
+				8A684A53263C0C5A004EDAAC /* WhiteDisplayer.h */,
+				8A684A54263C0C5A004EDAAC /* WhiteDisplayerState.m */,
+				8A684A55263C0C5A004EDAAC /* WhiteWebViewInjection.m */,
+				8A684A56263C0C5A004EDAAC /* WhiteAudioMixerBridge.h */,
+				8A684A57263C0C5A004EDAAC /* WhiteDisplayer.m */,
+				8A684A58263C0C5A004EDAAC /* WhiteGlobalState.m */,
+				8A684A59263C0C5A004EDAAC /* WhiteCommonCallbacks.h */,
+				8A684A5A263C0C5A004EDAAC /* WhiteBoardView.m */,
+			);
+			path = Displayer;
+			sourceTree = "<group>";
+		};
+		8A684A5B263C0C5A004EDAAC /* Replayer */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A5C263C0C5A004EDAAC /* WhitePlayerTimeInfo.h */,
+				8A684A5D263C0C5A004EDAAC /* WhitePlayer+Private.h */,
+				8A684A5E263C0C5A004EDAAC /* WhitePlayerEvent.m */,
+				8A684A5F263C0C5A004EDAAC /* WhiteSDK+Replayer.m */,
+				8A684A60263C0C5A004EDAAC /* WhitePlayerEvent+Private.h */,
+				8A684A61263C0C5A004EDAAC /* WhitePlayerConfig.m */,
+				8A684A62263C0C5A004EDAAC /* WhitePlayerState.h */,
+				8A684A63263C0C5A004EDAAC /* WhitePlayer.h */,
+				8A684A64263C0C5A004EDAAC /* WhitePlayerConsts.h */,
+				8A684A65263C0C5A004EDAAC /* WhitePlayerTimeInfo.m */,
+				8A684A66263C0C5A004EDAAC /* WhiteSDK+Replayer.h */,
+				8A684A67263C0C5A004EDAAC /* WhitePlayerEvent.h */,
+				8A684A68263C0C5A004EDAAC /* WhitePlayer.m */,
+				8A684A69263C0C5A004EDAAC /* WhitePlayerState.m */,
+				8A684A6A263C0C5A004EDAAC /* WhitePlayerConfig.h */,
+			);
+			path = Replayer;
+			sourceTree = "<group>";
+		};
+		8A684A6B263C0C5A004EDAAC /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A6C263C0C5A004EDAAC /* WhiteScene.m */,
+				8A684A6D263C0C5A004EDAAC /* WhiteRoomMember.m */,
+				8A684A6E263C0C5A004EDAAC /* WhiteConsts.m */,
+				8A684A6F263C0C5A004EDAAC /* WhiteCameraBound.h */,
+				8A684A70263C0C5A004EDAAC /* WhiteCameraState.h */,
+				8A684A71263C0C5A004EDAAC /* WhitePptPage.m */,
+				8A684A72263C0C5A004EDAAC /* WhiteSceneState.m */,
+				8A684A73263C0C5A004EDAAC /* WhiteCameraConfig.h */,
+				8A684A74263C0C5A004EDAAC /* WhiteMemberState.m */,
+				8A684A75263C0C5A004EDAAC /* WhiteMemberInformation.h */,
+				8A684A76263C0C5A004EDAAC /* WhitePanEvent.m */,
+				8A684A77263C0C5A004EDAAC /* WhiteFontFace.h */,
+				8A684A78263C0C5A004EDAAC /* WhiteEvent.h */,
+				8A684A79263C0C5A004EDAAC /* WhiteRectangleConfig.m */,
+				8A684A7A263C0C5A004EDAAC /* WhiteCameraBound.m */,
+				8A684A7B263C0C5B004EDAAC /* WhiteCameraState.m */,
+				8A684A7C263C0C5B004EDAAC /* WhiteConsts.h */,
+				8A684A7D263C0C5B004EDAAC /* WhiteRoomMember.h */,
+				8A684A7E263C0C5B004EDAAC /* WhiteScene.h */,
+				8A684A7F263C0C5B004EDAAC /* WhiteMemberInformation.m */,
+				8A684A80263C0C5B004EDAAC /* WhiteMemberState.h */,
+				8A684A81263C0C5B004EDAAC /* WhiteCameraConfig.m */,
+				8A684A82263C0C5B004EDAAC /* WhiteSceneState.h */,
+				8A684A83263C0C5B004EDAAC /* WhitePptPage.h */,
+				8A684A84263C0C5B004EDAAC /* WhiteEvent.m */,
+				8A684A85263C0C5B004EDAAC /* WhiteFontFace.m */,
+				8A684A86263C0C5B004EDAAC /* WhitePanEvent.h */,
+				8A684A87263C0C5B004EDAAC /* WhiteRectangleConfig.h */,
+			);
+			path = Object;
+			sourceTree = "<group>";
+		};
+		8A684A88263C0C5B004EDAAC /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A89263C0C5B004EDAAC /* WhiteSdkConfiguration.m */,
+				8A684A8A263C0C5B004EDAAC /* WhiteSDK.m */,
+				8A684A8B263C0C5B004EDAAC /* WhiteSDK+Private.h */,
+				8A684A8C263C0C5B004EDAAC /* WhiteSdkConfiguration.h */,
+				8A684A8D263C0C5B004EDAAC /* WhiteSDK.h */,
+				8A684A8E263C0C5B004EDAAC /* WhiteSdkConfiguration+Private.h */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
+		8A684A8F263C0C5B004EDAAC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A90263C0C5B004EDAAC /* WhiteObject.m */,
+				8A684A91263C0C5B004EDAAC /* WhiteObject.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8A684A93263C0C5B004EDAAC /* NativeReplayer */ = {
+			isa = PBXGroup;
+			children = (
+				8A684A94263C0C5B004EDAAC /* WhiteVideoView.m */,
+				8A684A95263C0C5B004EDAAC /* WhiteCombinePlayer.m */,
+				8A684A96263C0C5B004EDAAC /* WhiteSliderView.m */,
+				8A684A97263C0C5B004EDAAC /* WhiteVideoView.h */,
+				8A684A98263C0C5B004EDAAC /* WhiteSliderView.h */,
+				8A684A99263C0C5B004EDAAC /* WhiteCombinePlayer.h */,
+			);
+			path = NativeReplayer;
+			sourceTree = "<group>";
+		};
+		8A684A9A263C0C5B004EDAAC /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				8A684B35263C0D4F004EDAAC /* Resource.bundle */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		8A684AA1263C0C5B004EDAAC /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				8A684AA2263C0C5B004EDAAC /* .gitkeep */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8A684801263C03EF004EDAAC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A684AA9263C0C5B004EDAAC /* WhiteSDK+Room.h in Headers */,
+				8A684AF7263C0C5B004EDAAC /* WhiteSdkConfiguration.h in Headers */,
+				8A684AEF263C0C5B004EDAAC /* WhitePptPage.h in Headers */,
+				8A684AAE263C0C5B004EDAAC /* WhiteRoomState.h in Headers */,
+				8A684B02263C0C5B004EDAAC /* WhiteCombinePlayer.h in Headers */,
+				8A684AC4263C0C5B004EDAAC /* WhiteAudioMixerBridge.h in Headers */,
+				8A684B01263C0C5B004EDAAC /* WhiteSliderView.h in Headers */,
+				8A684AA7263C0C5B004EDAAC /* WhiteRoomCallbacks.h in Headers */,
+				8A684B00263C0C5B004EDAAC /* WhiteVideoView.h in Headers */,
+				8A684AEE263C0C5B004EDAAC /* WhiteSceneState.h in Headers */,
+				8A684AB3263C0C5B004EDAAC /* WhiteConverter.h in Headers */,
+				8A684AD4263C0C5B004EDAAC /* WhitePlayerEvent.h in Headers */,
+				8A684AD3263C0C5B004EDAAC /* WhiteSDK+Replayer.h in Headers */,
+				8A684AEC263C0C5B004EDAAC /* WhiteMemberState.h in Headers */,
+				8A684AE1263C0C5B004EDAAC /* WhiteMemberInformation.h in Headers */,
+				8A684ADB263C0C5B004EDAAC /* WhiteCameraBound.h in Headers */,
+				8A684AAD263C0C5B004EDAAC /* WhiteBroadcastState.h in Headers */,
+				8A684AD1263C0C5B004EDAAC /* WhitePlayerConsts.h in Headers */,
+				8A684AFB263C0C5B004EDAAC /* WhiteObject.h in Headers */,
+				8A684AAB263C0C5B004EDAAC /* WhiteRoomConfig.h in Headers */,
+				8A684AF8263C0C5B004EDAAC /* WhiteSDK.h in Headers */,
+				8A684ABD263C0C5B004EDAAC /* WhiteBoardView.h in Headers */,
+				8A684ABF263C0C5B004EDAAC /* WhiteGlobalState.h in Headers */,
+				8A684AFC263C0C5B004EDAAC /* Whiteboard.h in Headers */,
+				8A684AD0263C0C5B004EDAAC /* WhitePlayer.h in Headers */,
+				8A684AA8263C0C5B004EDAAC /* WhiteRoom.h in Headers */,
+				8A684AC9263C0C5B004EDAAC /* WhitePlayerTimeInfo.h in Headers */,
+				8A684AF2263C0C5B004EDAAC /* WhitePanEvent.h in Headers */,
+				8A684AE3263C0C5B004EDAAC /* WhiteFontFace.h in Headers */,
+				8A684AE9263C0C5B004EDAAC /* WhiteRoomMember.h in Headers */,
+				8A684AC1263C0C5B004EDAAC /* WhiteDisplayer.h in Headers */,
+				8A684ADC263C0C5B004EDAAC /* WhiteCameraState.h in Headers */,
+				8A684ABB263C0C5B004EDAAC /* WhiteDisplayerState.h in Headers */,
+				8A684ADF263C0C5B004EDAAC /* WhiteCameraConfig.h in Headers */,
+				8A684AE4263C0C5B004EDAAC /* WhiteEvent.h in Headers */,
+				8A684AAA263C0C5B004EDAAC /* WhiteImageInformation.h in Headers */,
+				8A684AC7263C0C5B004EDAAC /* WhiteCommonCallbacks.h in Headers */,
+				8A684AB6263C0C5B004EDAAC /* WhiteConversionInfo.h in Headers */,
+				8A684AF3263C0C5B004EDAAC /* WhiteRectangleConfig.h in Headers */,
+				8A684AEA263C0C5B004EDAAC /* WhiteScene.h in Headers */,
+				8A684AE8263C0C5B004EDAAC /* WhiteConsts.h in Headers */,
+				8A684AD7263C0C5B004EDAAC /* WhitePlayerConfig.h in Headers */,
+				8A684ABC263C0C5B004EDAAC /* WhiteWebViewInjection.h in Headers */,
+				8A684ACF263C0C5B004EDAAC /* WhitePlayerState.h in Headers */,
+				8A68480B263C03EF004EDAAC /* WhiteboardSDK.h in Headers */,
+				8A684ACD263C0C5B004EDAAC /* WhitePlayerEvent+Private.h in Headers */,
+				8A684ABA263C0C5B004EDAAC /* WhiteBoardView+Private.h in Headers */,
+				8A684AF9263C0C5B004EDAAC /* WhiteSdkConfiguration+Private.h in Headers */,
+				8A684AA4263C0C5B004EDAAC /* WhiteRoomCallbacks+Private.h in Headers */,
+				8A684AF6263C0C5B004EDAAC /* WhiteSDK+Private.h in Headers */,
+				8A684AB9263C0C5B004EDAAC /* WhiteDisplayer+Private.h in Headers */,
+				8A684AA6263C0C5B004EDAAC /* WhiteRoom+Private.h in Headers */,
+				8A684ACA263C0C5B004EDAAC /* WhitePlayer+Private.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8A684805263C03EF004EDAAC /* WhiteboardSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A68480E263C03EF004EDAAC /* Build configuration list for PBXNativeTarget "WhiteboardSDK" */;
+			buildPhases = (
+				2B738EA274D60D969174C38C /* [CP] Check Pods Manifest.lock */,
+				8A684801263C03EF004EDAAC /* Headers */,
+				8A684802263C03EF004EDAAC /* Sources */,
+				8A684803263C03EF004EDAAC /* Frameworks */,
+				8A684804263C03EF004EDAAC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WhiteboardSDK;
+			productName = WhiteboardSDK;
+			productReference = 8A684806263C03EF004EDAAC /* WhiteboardSDK.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8A6847FD263C03EF004EDAAC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					8A684805263C03EF004EDAAC = {
+						CreatedOnToolsVersion = 12.4;
+					};
+				};
+			};
+			buildConfigurationList = 8A684800263C03EF004EDAAC /* Build configuration list for PBXProject "WhiteboardSDK" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8A6847FC263C03EF004EDAAC;
+			productRefGroup = 8A684807263C03EF004EDAAC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8A684805263C03EF004EDAAC /* WhiteboardSDK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A684804263C03EF004EDAAC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A684B09263C0C5B004EDAAC /* .gitkeep in Resources */,
+				8A684B36263C0D4F004EDAAC /* Resource.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2B738EA274D60D969174C38C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WhiteboardSDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A684802263C03EF004EDAAC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A684AFF263C0C5B004EDAAC /* WhiteSliderView.m in Sources */,
+				8A684AC6263C0C5B004EDAAC /* WhiteGlobalState.m in Sources */,
+				8A684AAF263C0C5B004EDAAC /* WhiteImageInformation.m in Sources */,
+				8A684AAC263C0C5B004EDAAC /* WhiteRoomCallbacks.m in Sources */,
+				8A684AC5263C0C5B004EDAAC /* WhiteDisplayer.m in Sources */,
+				8A684ADE263C0C5B004EDAAC /* WhiteSceneState.m in Sources */,
+				8A684AD9263C0C5B004EDAAC /* WhiteRoomMember.m in Sources */,
+				8A684AC8263C0C5B004EDAAC /* WhiteBoardView.m in Sources */,
+				8A684AB0263C0C5B004EDAAC /* WhiteRoom.m in Sources */,
+				8A684AD8263C0C5B004EDAAC /* WhiteScene.m in Sources */,
+				8A684ACE263C0C5B004EDAAC /* WhitePlayerConfig.m in Sources */,
+				8A684AE2263C0C5B004EDAAC /* WhitePanEvent.m in Sources */,
+				8A684ADD263C0C5B004EDAAC /* WhitePptPage.m in Sources */,
+				8A684AC0263C0C5B004EDAAC /* WhiteAudioMixerBridge.m in Sources */,
+				8A684AB4263C0C5B004EDAAC /* WhiteConversionInfo.m in Sources */,
+				8A684ADA263C0C5B004EDAAC /* WhiteConsts.m in Sources */,
+				8A684AF4263C0C5B004EDAAC /* WhiteSdkConfiguration.m in Sources */,
+				8A684AE6263C0C5B004EDAAC /* WhiteCameraBound.m in Sources */,
+				8A684AD2263C0C5B004EDAAC /* WhitePlayerTimeInfo.m in Sources */,
+				8A684AFE263C0C5B004EDAAC /* WhiteCombinePlayer.m in Sources */,
+				8A684AED263C0C5B004EDAAC /* WhiteCameraConfig.m in Sources */,
+				8A684AEB263C0C5B004EDAAC /* WhiteMemberInformation.m in Sources */,
+				8A684ACB263C0C5B004EDAAC /* WhitePlayerEvent.m in Sources */,
+				8A684AE7263C0C5B004EDAAC /* WhiteCameraState.m in Sources */,
+				8A684AB5263C0C5B004EDAAC /* WhiteConverter.m in Sources */,
+				8A684AFA263C0C5B004EDAAC /* WhiteObject.m in Sources */,
+				8A684AE5263C0C5B004EDAAC /* WhiteRectangleConfig.m in Sources */,
+				8A684AB1263C0C5B004EDAAC /* WhiteSDK+Room.m in Sources */,
+				8A684ACC263C0C5B004EDAAC /* WhiteSDK+Replayer.m in Sources */,
+				8A684AC2263C0C5B004EDAAC /* WhiteDisplayerState.m in Sources */,
+				8A684AFD263C0C5B004EDAAC /* WhiteVideoView.m in Sources */,
+				8A684AC3263C0C5B004EDAAC /* WhiteWebViewInjection.m in Sources */,
+				8A684AF5263C0C5B004EDAAC /* WhiteSDK.m in Sources */,
+				8A684AB2263C0C5B004EDAAC /* WhiteRoomConfig.m in Sources */,
+				8A684AD5263C0C5B004EDAAC /* WhitePlayer.m in Sources */,
+				8A684AF0263C0C5B004EDAAC /* WhiteEvent.m in Sources */,
+				8A684AE0263C0C5B004EDAAC /* WhiteMemberState.m in Sources */,
+				8A684AA3263C0C5B004EDAAC /* WhiteRoomState.m in Sources */,
+				8A684AA5263C0C5B004EDAAC /* WhiteBroadcastState.m in Sources */,
+				8A684AF1263C0C5B004EDAAC /* WhiteFontFace.m in Sources */,
+				8A684AD6263C0C5B004EDAAC /* WhitePlayerState.m in Sources */,
+				8A684ABE263C0C5B004EDAAC /* WhiteCommonCallbacks.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8A68480C263C03EF004EDAAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		8A68480D263C03EF004EDAAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8A68480F263C03EF004EDAAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21A7DF813621DF4CBF7B88A3 /* Pods-WhiteboardSDK.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = S7S2687476;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = WhiteboardSDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.agora.netless.WhiteboardSDK;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A684810263C03EF004EDAAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7136BAE215FBD44F2AF853FA /* Pods-WhiteboardSDK.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = S7S2687476;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = WhiteboardSDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.agora.netless.WhiteboardSDK;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8A684800263C03EF004EDAAC /* Build configuration list for PBXProject "WhiteboardSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A68480C263C03EF004EDAAC /* Debug */,
+				8A68480D263C03EF004EDAAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A68480E263C03EF004EDAAC /* Build configuration list for PBXNativeTarget "WhiteboardSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A68480F263C03EF004EDAAC /* Debug */,
+				8A684810263C03EF004EDAAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8A6847FD263C03EF004EDAAC /* Project object */;
+}

@@ -1,0 +1,38 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+
+# 如果项目中使用了Swift语言，则此句必须添加
+use_frameworks!
+
+# 设置pods的工作目录为Workspace
+workspace 'Whiteboard.xcworkspace'
+
+# 此处使用宏定义了公用的一些第三方库，方便在多个target中使用
+def common_pods
+
+  pod 'YYModel', '~> 1.0.4'
+  pod 'dsBridge', '~> 3.0.2'
+
+
+end
+
+target 'Whiteboard' do
+
+    # 配置target工作的相对路径
+    project 'Whiteboard/Whiteboard.xcodeproj'
+
+    # 此处使用了上面定义的宏
+    common_pods
+    pod 'Masonry'
+    pod 'NETURLSchemeHandler'
+    pod 'SSZipArchive'
+end
+
+target 'WhiteboardSDK' do
+
+    # 配置target工作的相对路径
+    project 'WhiteboardSDK/WhiteboardSDK.xcodeproj'
+
+    common_pods
+
+end
