@@ -12,20 +12,19 @@ This project is an open source version of White-SDK-IOS. In order to better disp
 ## TOC
 
 
-\- [The official documentation](#文档)
+\- [The official documentation](#documentation)
 
 \- [Example](#Example)
 
-  \- [Rapid debugging](#快速调试)
+\- [Debugging](#Debugging specific rooms)
 
-\- [The project structure](#项目结构)
+\- [The project structure](#The project structure)
 
-\- [Audio and video support](#Native音视频)
+\- [Audio and video support](#Native audio and video)
 
-\- [Dynamic PPT local resource pack](#动态ppt本地资源包)
+\- [Dynamic PPT local resource pack](#Dynamic PPT local resource pack)
 
-\- [Part of the problem](#部分问题)
-
+\- [Part of the problem](#Part of the problem)
 
 
 ## documentation
@@ -339,3 +338,4 @@ For specific implementation, please check the Git record:
 
 
 1. The current SDK keyword is' White ', which is not strictly prefixed by three uppercase letters.
+
