@@ -228,3 +228,29 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 ## 部分问题
 
 1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
+
+
+
+## Whiteboard - Framework 拖拽方式集成
+
+Framework 打包(需安装pod package 插件)：
+1.pod package Whiteboard.podspec --embedded  --force (基于Github源码)
+2. pod package Whiteboard.podspec --force --embedded --local(基于本地源码)
+注意: --local 控制符需要安装以下内容
+gem install specific_install
+gem specific_install https://github.com/CocoaPods/cocoapods-packager
+
+
+关于Framework 手动添加
+Whiteboard.framework  yymodel.framework dsBridge.framework  一并拖入Embed设置为 Do not embed
+
+FAQ：
+遇到问题：have the same architectures (arm64) and can't be in the same fat output file参考
+1.https://github.com/CocoaPods/cocoapods-packager/issues/259
+
+2.“could not build module xxx” 报错：修改工程target  - Allow Non-modular Includes In Framework Modules 
+
+3.Command CodeSign failed with a nonzero exit code报错
+Whiteboard.framework 改为Do not embed
+
+To do:framework bundle 路径有问题
