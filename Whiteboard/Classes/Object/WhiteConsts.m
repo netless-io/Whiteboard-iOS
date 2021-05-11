@@ -16,3 +16,6 @@ NSTimeInterval const WhiteConstsTimeUnitRatio = 1000.0;
 WhiteRegionKey const WhiteRegionDefault = @"cn-hz";
 WhiteRegionKey const WhiteRegionCN = @"cn-hz";
 WhiteRegionKey const WhiteRegionUS = @"us-sv";
+WhiteRegionKey const WhiteRegionIN = @"in-mum";
+WhiteRegionKey const WhiteRegionSG = @"sg";
+WhiteRegionKey const WhiteRegionGB = @"gb-lon";

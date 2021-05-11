@@ -19,5 +19,13 @@ extern NSTimeInterval const WhiteConstsTimeUnitRatio;
 typedef NSString * WhiteRegionKey NS_STRING_ENUM;
 
 extern WhiteRegionKey const WhiteRegionDefault;
+/** 中国 */
 extern WhiteRegionKey const WhiteRegionCN;
+/** 美国 */
 extern WhiteRegionKey const WhiteRegionUS;
+/** 印度 */
+extern WhiteRegionKey const WhiteRegionIN;
+/** 新加坡 */
+extern WhiteRegionKey const WhiteRegionSG;
+/** 英国 */
+extern WhiteRegionKey const WhiteRegionGB;
