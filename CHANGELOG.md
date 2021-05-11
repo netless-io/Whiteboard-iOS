@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.12.23] - 2021-05-11
+- 增加新的 `RegionKey` 字段
 ## [2.12.22] - 2021-04-28
 - 更新`@netless/white-audio-plugin2`,`@netless/white-video-plugin2`插件，修复显示问题
 ## [2.12.21] - 2021-04-28
