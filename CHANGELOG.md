@@ -8,7 +8,7 @@
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.12.24] - 2021-05-13
-- 新增`syncBlockTimstamp`API，详情见`room.syncBlockTimestamp`方法
+- 新增`syncBlockTimestamp`API，详情见`room.syncBlockTimestamp`方法
 - 新增`ApplianceShape`教具，详情见`WhiteApplianceShapeTypeKey`,`WhiteMemberState`的`shapeType`属性
 - 更新`white-web-sdk`至 2.12.17
 ## [2.12.23] - 2021-05-11
