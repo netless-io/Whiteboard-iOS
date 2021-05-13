@@ -154,6 +154,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 延时
 
+/** UTC 时延同步 API
+ 导入 UTC 时间戳（秒）后，白板会根据用户本地时间戳，与传入的 utc 时间戳进行强行同步。
+ 该 API 要求用户本地时间经过校准，否则可能会造成类似 timeDelay 的主动延时。
+ @since 2.12.24
+ */
+- (void)syncBlockTimstamp:(NSTimeInterval)timestamp;
+
 /** 白板延时 API
  配合 rtmp 等有延迟的视频推流，人为延迟白板内容。
  白板内所有内容（包括自定义事件，GlobalState，RoomState 变化），都会被延时，只有当前用户自己的输入行为，不会有延时
