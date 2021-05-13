@@ -9,20 +9,28 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 用于自定义用户信息。 */
 @interface WhiteMemberInformation : WhiteObject
 
+/**
+ `MemberInformation` 构造方法，用于初始化用户信息对象。
+ 
+ @param userId 用户 ID
+ @param nickName 用户昵称
+ @param avatarUrl 用户头像图片地址
+ */
 - (instancetype)initWithUserId:(NSString *)userId name:(NSString *)nickName avatar:(NSString *)avatarUrl;
 
-/** 原样返回的数字，目前无使用 */
+
 @property (nonatomic, assign, readwrite) NSInteger id;
-/** 想显示的名字，native 端，不会显示，web 端自定义时，可以自行读取 */
+
+
+/** 用户昵称 */
 @property (nonatomic, copy, readonly) NSString *nickName;
-/** 鼠标/手指 头像图片地址 */
+/** 头像图片地址 */
 @property (nonatomic, copy, readonly, nullable) NSString *avatar;
 /**
- 用户 uuid，请保证唯一性。否则同一个 UserId 用户，会踢掉。
- 初始化时，一定要存在。
- 但是系统返回时，暂时没有 userId 数据
+ 用户 ID。请保证用户 ID 的唯一性。
  */
 @property (nonatomic, copy, readonly, nullable) NSString *userId;
 

@@ -9,18 +9,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 白板回放的播放时间信息。 */
 @interface WhitePlayerTimeInfo : WhiteObject
 
-/** 当前时长（秒） */
+/** 当前的回放进度（秒）。 */
 @property (nonatomic, assign, readonly) NSTimeInterval scheduleTime;
 
-/** 总时长（秒） */
+/** 回放的总时长（秒）。 */
 @property (nonatomic, assign, readonly) NSTimeInterval timeDuration;
 
-/** 一个回访中，含有的总 frame 数 */
+/** 回放的总 frame 数。 */
 @property (nonatomic, assign, readonly) NSInteger framesCount;
 
-/** 开始时间，UTC 时间戳（秒） */
+/** 回放的起始时间。
+
+ UTC 时间戳（秒），你需要自行转换为 UTC 时间。
+ 
+ 例如，如果返回 `1615370614269`，表示的 UTC 时间为 2021-03-10 18:03:34 GMT+0800。 */
 @property (nonatomic, assign, readonly) NSTimeInterval beginTimestamp;
 
 @end

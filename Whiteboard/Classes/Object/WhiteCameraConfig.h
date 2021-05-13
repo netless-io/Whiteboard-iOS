@@ -10,29 +10,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 移动或缩放视野时的动画模式。 */
 typedef NS_ENUM(NSInteger, WhiteAnimationMode) {
-    /** 带动画，默认 */
+    /**（默认）渐变模式。 */
     WhiteAnimationModeContinuous,
-    /** 瞬间切换 */
+    /** 瞬间切换模式。 */
     WhiteAnimationModeImmediately,
 };
 
 #pragma mark - CameraConfig
 
-/** 白板视角中心配置类
- 除 mode 外，其他均为可选值（NSNumber）。只修改设置过的值
+/** 用于配置白板视角参数。
  */
 @interface WhiteCameraConfig : WhiteObject
 
-/** 白板视角中心 X 坐标，该坐标为中心在白板内部坐标系 X 轴中的坐标 */
+/** 视角的中心点在世界坐标系（以白板初始化时的中心点为原点的坐标系）中的 X 轴坐标。不填则默认为 `0`。 */
 @property (nonatomic, strong, nullable) NSNumber *centerX;
-/** 白板视角中心 Y 坐标，该坐标为中心在白板内部坐标系 Y 轴中的坐标 */
+/** 视角的中心点在世界坐标系（以白板初始化时的中心点为原点的坐标系）中的 Y 轴坐标。不填则默认为 `0`。 */
 @property (nonatomic, strong, nullable) NSNumber *centerY;
 
-/** 缩放比例，白板视觉中心与白板的投影距离 */
+/** 视角的缩放比例。 */
 @property (nonatomic, strong, nullable) NSNumber *scale;
 
-/** 切换时，动画显示方式，默认 WhiteAnimationModeContinuous */
+/** 视角调整时的动画模式，默认值为 `WhiteAnimationModeContinuous`。详见 [WhiteAnimationMode](WhiteAnimationMode)。  */
 @property (nonatomic, assign) WhiteAnimationMode animationMode;
 
 @end

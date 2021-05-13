@@ -378,7 +378,11 @@
 static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
 /**
- * 复制选中内容，不会粘贴，而是存储在内存中
+ 复制选中内容。 
+
+ 该方法会将选中的内容存储到内存中，不会粘贴到白板中。 
+
+ **Note:** 该方法仅当 [disableSerialization](disableSerialization:) 设为 `false` 时生效。
  */
 - (void)copy
 {
@@ -386,7 +390,13 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 }
 
 /**
- * 将 copy API 的复制内容，粘贴到白板中间（用户当前视野的中间）。多次粘贴，会有随机偏移
+ 粘贴复制的内容。
+
+ 该方法会将 [copy](copy) 方法复制的内容粘贴到白板中（用户当前的视角中间）。
+
+ **Note:**
+ - 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
+ - 多次调用该方法时，不能保证粘贴的内容每次都在用户当前的视角中间，可能会出现随机偏移。
  */
 - (void)paste
 {
@@ -394,7 +404,13 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 }
 
 /**
- * copy paste 组合 API
+ 复制并粘贴选中的内容。 
+
+ 该方法会将选中的内容复制并粘贴到白板中（用户当前的视角中间）。 
+ **Note:**
+
+ - 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
+ - 多次调用该方法时，不能保证粘贴的内容每次都在用户当前的视角中间，可能会出现随机偏移。
  */
 - (void)duplicate
 {
@@ -402,7 +418,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 }
 
 /**
- * 删除选中内容
+ * 删除选中内容。
  */
 - (void)deleteOpertion
 {
@@ -410,11 +426,26 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 }
 
 /**
- * 不兼容改动
- * 本地序列化，用于回退与撤销回退
- * 默认 true，即禁止启动本地序列化；无法使用回退与撤销回退功能
- * false 时，则打开序列化，可以对本地操作进行解析，可以执行 该 pragma mark 下的 redo undo 操作
- * 注意：切换 true 时，将导致 web sdk 2.9.2 以下（不包含），native 端 2.9.3 以下（不包含）的客户端崩溃。请确认使用 sdk 版本再进行开启。
+ 开启/禁止本地序列化。 
+
+ 设置 `disableSerialization(YES)` 后，以下方法将不生效：
+
+ - `redo`
+ - `undo`
+ - `duplicate`
+ - `copy`
+ - `paste` 
+
+ **Note:** 如果要设置 `disableSerialization(NO)`，必须确保同一房间内所有用户使用的 SDK 满足以下版本要求，否则会导致 app 客户端崩溃。
+
+ - Web SDK 2.9.2 或之后版本
+ - Android SDK 2.9.3 或之后版本
+ - iOS SDK 2.9.3 或之后版本 
+
+ @param disable 是否禁止本地序列化：
+
+ - `YES`：（默认）禁止开启本地序列化；
+ - `NO`： 开启本地序列化，即可以对本地操作进行解析。
  */
 - (void)disableSerialization:(BOOL)disable
 {

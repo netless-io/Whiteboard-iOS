@@ -24,26 +24,27 @@ extern WhiteApplianceNameKey const ApplianceHand;
 /** 激光笔工具 */
 extern WhiteApplianceNameKey const ApplianceLaserPointer;
 
+/** 互动白板实时房间的工具状态（只读）。初始工具为pencil，无默认值。 */
 @interface WhiteReadonlyMemberState : WhiteObject
 
-/** 教具，初始教具为pencil，无默认值 */
+/** 互动白板实时房间内当前使用的工具名称。初始工具为pencil，无默认值。 */
 @property (nonatomic, copy, readonly) WhiteApplianceNameKey currentApplianceName;
-/** 传入格式为[@(0-255),@(0-255),@(0-255)]的RGB */
+/** 线条颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
 @property (nonatomic, copy, readonly) NSArray<NSNumber *> *strokeColor;
-/** 画笔粗细 */
+/** 线条粗细。 */
 @property (nonatomic, strong, readonly) NSNumber *strokeWidth;
-/** 字体大小 */
+/** 字体大小。 */
 @property (nonatomic, strong, readonly) NSNumber *textSize;
 @end
 
-
+/** 互动白板实时房间的工具状态。初始工具为pencil，无默认值。 */
 @interface WhiteMemberState : WhiteReadonlyMemberState
-/** 教具，初始教具为pencil，无默认值 */
+/** 互动白板实时房间内当前使用的工具名称。初始工具为pencil，无默认值。 */
 @property (nonatomic, copy, readwrite) WhiteApplianceNameKey currentApplianceName;
-/** 传入格式为[@(0-255),@(0-255),@(0-255)]的RGB，均为整型。 */
+/** 线条颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
 @property (nonatomic, copy, readwrite) NSArray<NSNumber *> *strokeColor;
-/** 画笔粗细 */
+/** 线条粗细。 */
 @property (nonatomic, strong, readwrite) NSNumber *strokeWidth;
-/** 字体大小 */
+/** 字体大小。 */
 @property (nonatomic, strong, readwrite) NSNumber *textSize;
 @end

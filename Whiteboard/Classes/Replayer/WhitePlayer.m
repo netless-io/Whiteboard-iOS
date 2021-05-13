@@ -70,6 +70,11 @@
 
 static NSString * const PlayerNamespace = @"player.%@";
 
+/**
+ 设置白板回放的倍速。
+
+ @param playbackSpeed 白板回放的倍速。取值必须大于 0，设为 1 表示按原速播放。
+ */
 - (void)setPlaybackSpeed:(CGFloat)playbackSpeed
 {
     _playbackSpeed = playbackSpeed;
@@ -175,7 +180,6 @@ static NSString * const PlayerStateNamespace = @"player.state.%@";
     }];
 }
 
-/** 播放时的播放速率，正常使用，直接使用同步 API 即可。该 API 主要用作 debug 与测试 */
 - (void)getPlaybackSpeed:(void (^) (CGFloat speed))result {
     [self.bridge callHandler:[NSString stringWithFormat:PlayerStateNamespace, @"playbackSpeed"] completionHandler:^(id  _Nullable value) {
         if (result) {

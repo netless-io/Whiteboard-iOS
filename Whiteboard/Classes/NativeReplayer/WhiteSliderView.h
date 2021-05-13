@@ -12,15 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- 进度条最简实现。更多自定义需求，推荐参考 ZFPlayer 的 ZFSilderView
+ 进度条。
  */
 @interface WhiteSliderView : UIView
 
-/** 当前进度 0.0 ~ 1.0 */
+/** 当前进度。取值范围为 [0.0, 1.0]。 */
 @property (nonatomic, assign) CGFloat value;
 
 
-/** 已缓存进度 0.0 ~ 1.0 */
+/** 已缓存进度。取值范围为 [0.0, 1.0]。 */
 @property (nonatomic, assign) CGFloat bufferValue;
 
 @end

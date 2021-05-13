@@ -9,56 +9,69 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 白板通用回调。 */
 @protocol WhiteCommonCallbackDelegate <NSObject>
 
 @optional
 
-/** 当sdk出现未捕获的全局错误时，会在此处对抛出 NSError 对象 */
+/** SDK 出现未捕获的全局错误回调。
+ 
+ @param error 错误信息。
+ */
 - (void)throwError:(NSError *)error;
 
 
 /**
- 图片拦截替换回调。
- 启用该功能，需要在初始化 SDK 时，配置 WhiteSdkConfiguration enableInterrupterAPI 属性 为 YES；
- 初始化后，无法更改。
- 启用后，在调用插入图片API/插入scene 时，会回调该 API，允许在实际显示时，替换 url
- 在回放中，也会持续调用。
-
- @param url 原始图片地址
- @return 替换后的图片地址
+ 图片拦截回调。
+ 
+ **Note:** 
+ 
+ - 要触发该回调，必须在初始化白板 SDK 时，设置 `enableInterrupterAPI(YES)` 开启图片拦截替换功能。详见 [WhiteSdkConfiguration](WhiteSdkConfiguration)。
+ - 开启图片拦截替换功能后，在白板中插入图片或场景时，会触发该回调。
+ @param url 图片原地址。
+ @return 替换后的图片地址。
  */
 - (NSString *)urlInterrupter:(NSString *)url;
 
 /**
- * 动态 ppt 中的音视频媒体，播放通知
+ 播放动态 PPT 中的音视频回调。
  */
 - (void)pptMediaPlay;
 
 /**
- * 动态 ppt 中的音视频媒体，暂停通知
+ 暂停播放动态 PPT 中的音视频回调。
  */
 - (void)pptMediaPause;
 
 /**
- * 初始化 SDK 时，会根据传入的 App Identifier 向服务器配置信息（最多尝试三次）
- * 如果失败，SDK 处于不可用状态，调用加入房间/回放房间会处于一直无响应状态，需要开发者重新初始化 SDK。
- * 一般触发情况：
- * 1. 初始化 SDK 时候，网络异常，导致获取配置信息失败；
- * 2. 传入了错误不合法的 App Identifier
- * @since 2.9.13
+  SDK 初始化失败回调。
+
+  @since 2.9.13
+
+  如果 SDK 初始化失败，调用加入实时房间或回放房间时会处于一直无响应状态，需要重新初始化 SDK。
+  
+  SDK 初始化失败可能由以下原因导致：
+  
+  - 初始化 SDK 时候，网络异常，导致获取配置信息失败。
+  - 传入了不合法的 App Identifier。
+
+  @param error 错误信息。
+
  */
 - (void)sdkSetupFail:(NSError *)error;
 
 /**
- * 转发一些在 web 端封装的一些自定义事件；
- * 目前存在的事件：
- * 1. iframe 透传信息; 数据格式由 iframe 协商定义，直接透传
- *      限制必须为 字典格式，同时必须存在 name 字段，且值必须为 "iframe"
- * 2. 图片加载失败信息（必须先在初始化先开启），格式：
- *     {name: "imageLoadError",
- *      customMessage: true,
- *      src: 图片地址}
- * 3. ppt 播放，暂停信息（该事件，可以直接监听 pptMediaPlay 和 pptMediaPause，此处不提供具体格式）
+ 接收到网页发送的消息回调。
+ 
+ 消息回调包括：
+
+ - 字典格式的 iframe 数据
+ - 图片加载失败信息
+ - ppt 播放/暂停回调信息
+
+ 当本地用户收到了网页（如 iframe 插件、动态 PPT）发送的消息时会触发该回调。
+
+ @param dict 字典格式的消息。只有当消息为字典格式时，本地用户才能收到。
  */
 - (void)customMessage:(NSDictionary *)dict;
 
@@ -66,10 +79,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- 会自行设置，无需关注
+ 通用回调。
  */
 @interface WhiteCommonCallbacks : NSObject
 
+/**
+ 通用回调。详见 [WhiteCommonCallbackDelegate](WhiteCommonCallbackDelegate)。
+ */
 @property (nonatomic, weak) id<WhiteCommonCallbackDelegate> delegate;
 
 @end

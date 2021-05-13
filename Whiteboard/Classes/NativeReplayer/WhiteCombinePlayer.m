@@ -82,9 +82,9 @@
 #pragma mark - Private Methods
 
 /**
- 并非真正播放，包含缓冲可能性
+ 预播放状态，可能正在缓冲或缓冲结束。
 
- @return video 是否处于想要播放的状态
+ @return 是否处于即将播放的状态。
  */
 - (BOOL)videoDesireToPlay
 {

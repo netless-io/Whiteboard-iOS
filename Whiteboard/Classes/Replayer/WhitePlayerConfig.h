@@ -11,51 +11,65 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 用于配置白板回放房间对象。 */
 @interface WhitePlayerConfig : WhiteObject
 
+
 - (instancetype)init NS_UNAVAILABLE;
+/**
+ 设置 Room Token 并初始化 `WhitePlayerConfig` 对象。
+ 
+ @param roomUuid 房间 UUID，即房间唯一标识符。 
+ @param roomToken 用于鉴权的 Room Token。
+ @return 初始化的 `WhitePlayerConfig` 对象
+ */
 - (instancetype)initWithRoom:(NSString *)roomUuid roomToken:(NSString *)roomToken;
 
-/** 默认为中国数据集群，@since 2.11.0 */
+/** 
+ 待回放的互动白板房间所在的数据中心。默认为中国数据中心。详见 [WhiteRegionKey](WhiteRegionKey)。
+ 
+ @since 2.11.0 */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 
-/** 房间UUID，目前必须要有 */
+/** 房间 UUID，即房间唯一标识符，必须和初始化 `WhitePlayerConfig` 对象时设置的 UUID 一致。 */
 @property (nonatomic, copy) NSString *room;
 
-/** 房间token，目前必须要有 */
+/** 用于鉴权的 Room Token，必须和初始化 `WhitePlayerConfig` 对象时设置的 Room Token 一致。 */
 @property (nonatomic, copy) NSString *roomToken;
 
-/** 分片 ID，可以跳转至特定的房间位置，目前可以不关心。 */
 @property (nonatomic, copy, nullable) NSString *slice;
 
-/** 传入对应的UTC 时间戳(秒)，如果正确，则会在对应的位置开始播放。 */
+/** 白板回放的起始时间。
+
+Unix 时间戳（秒），表示回放的起始 UTC 时间。例如，`1615370614269` 表示 2021-03-10 18:03:34 GMT+0800。 */
 @property (nonatomic, strong, nullable) NSNumber *beginTimestamp;
 
-
-/** 传入持续时间（秒），当播放到对应位置时，就不会再播放。如果不设置，则从开始时间，一直播放到房间结束。 */
+/** 白板回放的持续时长（秒）。如果没有设置，回放会从起始时间一直持续到退出房间。 */
 @property (nonatomic, strong, nullable) NSNumber *duration;
 
-/** 音频地址。
- 传入视频，也只会播放音频部分。设置后，sdk 会负责与白板同步播放 。
- 如需显示视频画面，请使用 WhiteNativePlayer 模块中的 WhiteCombinePlayer。
+/** 白板回放的音频地址。
+
+ **Note:** 
+
+ - 即使传入视频地址，也只会播放音频部分。
+ - 如需显示视频画面，请使用 [WhiteCombinePlayer](WhiteCombinePlayer) 方法。
  */
 @property (nonatomic, strong, nullable) NSString *mediaURL;
 
 /**
- 控制回放时，时间进度的回调频率。默认为 0.5 秒。单位：秒。回调间隔，不会准确为 0.5 秒，只是近似值。
+ SDK 回调播放进度的频率（秒）。默认为 0.5 秒。
  */
 @property (nonatomic, strong) NSNumber *step;
 
-/** 视野范围 */
+/** 视角边界，详见 [WhiteCameraBound](WhiteCameraBound)。 */
 @property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;
 
 @end
 
 @interface WhitePlayerConfig (Deprecated)
 
-/** 音频地址。
- 传入视频，也只会播放音频部分。设置后，sdk 会负责与白板同步播放 。
- 如需播放音频，请使用 WhiteNativePlayer 模块中的 WhiteCombinePlayer。
+/** 
+ 已废弃，请使用 [mediaURL](mediaURL)。
  */
 @property (nonatomic, strong, nullable) NSString *audioUrl DEPRECATED_MSG_ATTRIBUTE("use mediaURL property");
 

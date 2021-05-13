@@ -91,7 +91,11 @@
 
 #pragma mark - CommonCallback
 /**
- 为空，则移除原来的 CommonCallback
+ 设置通用回调事件。
+
+ SDK 通过 [WhiteCommonCallbacks](WhiteCommonCallbacks) 类向 app 报告 SDK 运行时的各项事件。
+ 
+ @param callbackDelegate 通用回调事件，详见 [WhiteCommonCallbackDelegate](WhiteCommonCallbackDelegate)。
  */
 - (void)setCommonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callbackDelegate
 {

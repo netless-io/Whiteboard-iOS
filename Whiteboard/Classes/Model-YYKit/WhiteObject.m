@@ -77,16 +77,7 @@
 
 @implementation NSArray (YYModel)
 
-/**
- Creates and returns an array from a json-array.
- This method is thread-safe.
- 
- @param cls  The instance's class in array.
- @param json  A json array of `NSArray`, `NSString` or `NSData`.
-              Example: [{"name":"Mary"},{name:"Joe"}]
- 
- @return A array, or nil if an error occurs.
- */
+
 + (nullable NSArray *)yy_modelArrayWithClass:(Class _Nullable)cls json:(id _Nullable)json
 {
     return [self modelArrayWithClass:cls json:json];
@@ -96,21 +87,10 @@
 
 
 
-/**
- Provide some data-model method for NSDictionary.
- */
+
 @implementation NSDictionary (YYModel)
 
-/**
- Creates and returns a dictionary from a json.
- This method is thread-safe.
- 
- @param cls  The value instance's class in dictionary.
- @param json  A json dictionary of `NSDictionary`, `NSString` or `NSData`.
-              Example: {"user1":{"name","Mary"}, "user2": {name:"Joe"}}
- 
- @return A dictionary, or nil if an error occurs.
- */
+
 + (nullable NSDictionary *)yy_modelDictionaryWithClass:(Class _Nullable )cls json:(id  _Nullable)json
 {
     return [self modelDictionaryWithClass:cls json:json];

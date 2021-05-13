@@ -32,7 +32,7 @@ static NSString * const kViewModeFreedom = @"Freedom";
 //遗留问题，web端将mode作为属性名称
 static NSString * const kJavascriptModeKey = @"mode";
 
-/** web端，viewMode 属性，是一个字符串枚举值。native 端接收到的是字符串，需要手动转换成枚举类型 */
+//web端，viewMode 属性，是一个字符串枚举值。native 端接收到的是字符串，需要手动转换成枚举类型
 - (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic {
     NSString *string = dic[kJavascriptModeKey];
     string = [string lowercaseString];

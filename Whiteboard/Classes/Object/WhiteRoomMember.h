@@ -11,24 +11,36 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 实时房间内互动模式（具有读写权限）用户信息。 */
 @interface WhiteRoomMember : WhiteObject
 
 @property (nonatomic, copy, readonly) WhiteApplianceNameKey currentApplianceName DEPRECATED_MSG_ATTRIBUTE("使用 memberState.currentApplianceName 获取");
 
-/** 当前用户在该房间中时的序号，为从 0 开始的自增数字 */
+/** 
+用户 ID。
+
+在用户加入互动白板实时房间时，会自动分配用户 ID，用于标识房间内的用户。同一房间中的每个用户具有唯一的用户 ID。
+*/
 @property (nonatomic, assign, readonly) NSInteger memberId;
 
-/** 对应用户的教具信息 */
+/** 用户当前使用的工具。详见 [WhiteReadonlyMemberState。](WhiteReadonlyMemberState) */
 @property (nonatomic, strong, readonly) WhiteReadonlyMemberState *memberState;
 
 /**
- 兼容旧版本， 从 iOS 2.1.0（Android 2.0.0，web 2.0.0）开始，使用 payload 字段
+ @deprecated 已废弃。请使用 `payload`。
+ 
+ 用户加入房间时携带的用户信息。
  */
 @property (nonatomic, strong, readonly, nullable) WhiteMemberInformation *information;
 
 /**
- 从 iOS 2.1.0（Android 2.0.0，web 2.0.0） 开始，加入房间时，允许带入任意数据（限制：允许转换为 JSON，或者单纯的字符串，数字）
- 如果想要使用 SDK 默认头像显示，请全平台使用 avatar 字段设置用户头像。
+ 用户加入房间时携带的自定义用户信息。
+
+ 允许转换为 JSON，字符串或数字。
+
+ @since iOS 2.1.0
+ 
+ **Note:** 如果想要使用 SDK 默认头像显示，请使用 `avatar` 字段设置用户头像。
  */
 @property (nonatomic, strong, readonly, nullable) id payload;
 
