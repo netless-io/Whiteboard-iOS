@@ -129,6 +129,11 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setDisableCameraTransform"] arguments:@[@(disable)]];
 }
 
+- (void)scaleIframeToFit
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"scaleIframeToFit"] arguments:nil];
+}
+
 - (void)scalePptToFit:(WhiteAnimationMode)mode
 {
     NSDictionary *dict = @{@(0): @"continuous", @(1): @"immediately"};

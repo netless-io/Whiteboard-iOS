@@ -7,6 +7,52 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.12.24] - 2021-05-13
+- 新增`syncBlockTimstamp`API，详情见`room.syncBlockTimstamp`方法
+- 新增`ApplianceShape`教具，详情见`WhiteApplianceShapeTypeKey`,`WhiteMemberState`的`shapeType`属性
+- 更新`white-web-sdk`至 2.12.17
+## [2.12.23] - 2021-05-11
+- 增加新的 `RegionKey` 字段
+## [2.12.22] - 2021-04-28
+- 更新`@netless/white-audio-plugin2`,`@netless/white-video-plugin2`插件，修复显示问题
+## [2.12.21] - 2021-04-28
+- 更新`@netless/white-audio-plugin` 至 1.2.23，修复回放时，音频文件显示问题。
+- 支持`@netless/white-audio-plugin2`,`@netless/white-video-plugin2`插件同步支持，需要在 web 端，调用 insertPlugin 时，注册对应的 `audio2`,`video2` 。
+## [2.12.20] - 2021-04-22
+- 更新`white-web-sdk`至 2.12.14
+## [2.12.19] - 2021-04-22
+- 更新`white-web-sdk`至 2.12.13，优化动态 ppt
+- 更新`@netless/iframe-bridge`至 2.0.17，优化回放时 iframe 插件逻辑
+## [2.12.18] - 2021-04-20
+- 更新`@netless/iframe-bridge`至 2.0.16，优化回放时 iframe 插件逻辑
+## [2.12.17] - 2021-04-17
+- 更新`white-web-sdk`至 2.12.12
+## [2.12.16] - 2021-04-14
+- 更新`@netless/iframe-bridge`至 2.0.14，优化 iframe 插件
+## [2.12.15] - 2021-04-13
+- 更新`@netless/iframe-bridge`至 2.0.13，优化 h5 课件消息队列
+## [2.12.14] - 2021-04-13
+- 更新`@netless/iframe-bridge`至 2.0.11，修复 h5 课件显示问题
+## [2.12.13] - 2021-04-10
+- 更新`white-web-sdk`至 2.12.9
+## [2.12.12] - 2021-04-09
+- 更新`@netless/iframe-bridge`至 2.0.9，修复 h5 课件显示问题
+## [2.12.11] - 2021-04-09
+- 更新`@netless/iframe-bridge`至 2.0.8，修复 h5 课件显示问题
+## [2.12.10] - 2021-04-06
+- 更新`white-web-sdk`至 2.12.8，修复 follower 视角可能无法立即同步的问题
+## [2.12.9] - 2021-04-02
+- 更新`white-web-sdk`至 2.12.7，优化动态 ppt 显示
+## [2.12.8] - 2021-03-30
+- 更新`@netless/iframe-bridge`至 2.0.7
+## [2.12.7] - 2021-03-30
+- 更新`white-web-sdk`至 2.12.6
+## [2.12.6] - 2021-03-25
+- 更新`@netless/iframe-bridge`至 2.0.5，优化回放时，H5 课件展示
+## [2.12.5] - 2021-03-25
+- Displayer 新增`scaleIframeToFit`API，可以将 H5 课件进行铺满操作（类似`scalePptToFit`），详情见`Displayer.h`注释
+## [2.12.4] - 2021-03-24
+- 更新`@netless/cursor-tool`至 0.0.7
 ## [2.12.3] - 2021-03-20
 - 默认关闭笔锋功能，开启笔锋后的笔记，需要客户本地 sdk 支持，否则无法显示。如需打开，请参考`WhiteRoomConfig`中的`disableNewPencil`属性。
 ## [2.12.2] - 2021-03-15

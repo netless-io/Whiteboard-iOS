@@ -144,8 +144,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)scalePptToFit:(WhiteAnimationMode)mode;
 
 /**
- 禁止/允许用户调整视角。
+ 调整视角以保证完整显示 H5 课件。
 
+ 该操作为一次性操作。
+
+ @since 2.12.5
+ 
+ **Note:** 如果当前用户已经调用 [setViewMode](setViewMode) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
+ */
+- (void)scaleIframeToFit;
+
+/**
+ 禁止/允许用户调整视角。
+ 
  @since 2.11.0
 
  @param disable 是否禁止用户调整视角：

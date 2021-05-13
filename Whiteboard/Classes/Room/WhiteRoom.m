@@ -256,6 +256,11 @@
 }
 
 #pragma mark - 延时
+- (void)syncBlockTimstamp:(NSTimeInterval)timestamp;
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"syncBlockTimstamp"] arguments:@[@(timestamp * WhiteConstsTimeUnitRatio)]];
+}
+
 - (void)setTimeDelay:(NSTimeInterval)delay
 {
     [self.bridge callHandler:@"room.setTimeDelay" arguments:@[@(delay * WhiteConstsTimeUnitRatio)]];

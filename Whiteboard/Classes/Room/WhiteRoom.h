@@ -244,6 +244,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 延时
 
+/** 同步 UTC 时间与本地时间。
+
+ 导入 UTC 时间戳（s）后，白板会根据用户本地时间戳，与传入的 UTC 时间戳进行强行同步。
+
+ @since 2.12.24
+ 
+ **Note:** 该 API 要求用户本地时间经过校准，否则可能会造成主动延时。
+ */
+- (void)syncBlockTimstamp:(NSTimeInterval)timestamp;
 
 /**
  设置远端白板画面同步延时。
