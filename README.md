@@ -1,230 +1,227 @@
-# Whiteboard
-
-本项目为 White-SDK-iOS 的开源版本，为了更好的显示源码结构，`Whiteboard` 将项目分为了多个`subpod`，更有利于开发者查看项目源码层级。为此需要修改引用关系。
+<div align="center">
+<h1>Whiteboard</h1>
+<p>This project is an open source version of White-SDK-IOS. In order to better display the source code structure, 'Whiteboard' divided the project into several 'subpods', which is more conducive to developers to view the source code level of the project. To do this, you need to modify the reference relationship.</p>
+<p><a href="./README-zh.md">中文</a></p>
+</div>
 
 ## TOC
 
-- [官方文档](#文档)
+
+- [The official documentation](#documentation)
 - [Example](#Example)
-    - [快速调试](#快速调试)
-- [项目结构](#项目结构)
-- [音视频支持](#Native音视频)
-- [动态PPT本地资源包](#动态ppt本地资源包)
-- [部分问题](#部分问题)
+  - [Debugging](#Debugging-specific-rooms)
+- [The project structure](#The-project-structure)
+- [Audio and video support](#Native-audio-and-video)
+- [Dynamic PPT local resource pack](#Dynamic-PPT-local-resource-pack)
+- [Part of the problem](#Part-of-the-problem)
 
-## 文档
+## Documentation
 
-[官网文档](https://developer.netless.link) —— [iOS部分](https://developer.netless.link/ios-zh/home)
+[Official document](https://developer.netless.link) —— [iOS part](https://developer.netless.link/ios-zh/home)
 
-## 引用
+## Reference
 
-在 Podfile 中写入
+Podfile command
 
 ```
 pod 'Whiteboard'
 ```
 
-<details><summary>White-SDK-iOS 闭源库迁移</summary>
-### White-SDK-iOS 迁移
-
-只需要将
-
-```Objective-C
-#import <White-SDK-iOS/WhiteSDK.h>
-```
-
-修改为
-
-```Objective-C
-#import <Whiteboard/Whiteboard.h>
-```
-
-即可。
-
-使用时，只要 import 以下内容即可。
-
-```Objective-C
-#import <Whiteboard/Whiteboard.h>
-# 使用白板sdk中任意类
-```
-
-</details>
 ## Example
 
-* 启动Example
+* Start Example
 
 ```shell
 cd Example
 pod install
 ```
 
-进入Example文件夹，打开 `Example.xcworkspace` 项目文件。
+Go to the Example folder and open the `Example.xcworkspace` project file.
 
->同时在 `WhiteUtils.m` 根据代码注释填写`WhiteSDKToken`，`WhiteAppIdentifier`。
+>At the same time in `WhiteUtils.m`  fill in `WhiteSDKToken`, `WhiteAppIdentifier` according to the code comment
+
 
 ```Objective-C
 /* FIXME: sdkToken
- 请在 https://console.netless.link 注册并获取 sdk token
- 该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
+ Please register at https://console.netless.link and get the SDK token
+This SDK token should not be stored on the client side, and all requests involving SDK tokens (all requests in the current class) should be placed on the server to avoid unnecessary risks caused by leaks.
  */
 #ifndef WhiteSDKToken
 #define WhiteSDKToken <#@sdk Token#>
 #endif
 
-/** FIXME: 2.8.0 新增必填项 AppIdentitier，通过该 API 可以避免大量预先的网络请求，极大增加异常网络下，用户的连通率。
- 请在 https://console.netless.link 中进行获取。
+/** FIXME: 2.8.0 Added mandatory AppIdentiTier, which can avoid a large number of network requests in advance and greatly increase the connectivity rate of users under abnormal network conditions.
+Please get in https://console.netless.link.
  */
 #ifndef WhiteAppIdentifier
 #define WhiteAppIdentifier <#@App identifier#>
 #endif
 ```
 
-### 调试特定房间
+### Debugging specific rooms
 
-如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，取消`WhiteRoomUUID`，以及`WhiteRoomToken`注释，同时填入指定的内容。
+If you need to go to a specific room for debugging, go to the `Whiteboard-Prefix.pch` file, uncomment `WhiteRoomUUID` and `WhiteRoomToken` and fill in the specified contents.
+
+
 
 ```C
-// 如果需要进入特定房间，取消以下两行注释，同时填入对应的 UUID 以及 roomToken
-//#define WhiteRoomUUID  <#Room UUID#>
+// If you need access to a specific room, uncomment the following two lines and fill in the corresponding UUID and RoomToken
+//#define WhiteRoomUUID <#Room UUID#>
 //#define WhiteRoomToken <#Room Token#>
 ```
 
-此时，如果在加入或者回放房间时，都会进入该房间。
+At this point, if you add or replay a room, you will enter that room.
 
-### 单元测试
 
-单元测试需要对某些特殊行为进行测试，所以需要对应房间有以下操作：
+### Unit testing
 
-1. 调用过插入图片接口（从单元测试启动的房间，已经开启了图片拦截功能）
-1. 发送过特定的自定义事件（已定义在单元测试代码中）
-1. 发送过大量自定义事件
+Unit tests need to test some special behaviors, so the following operations are required for the corresponding room:
 
-## 要求设备
 
-运行设备：iOS 9 + (推荐iOS 10以上使用，以获得更佳体验)
-开发环境：Xcode 10+
+1. Inserted image interface (from the room that unit test started, image blocking is already enabled)
+1. Sent specific custom events (defined in the unit test code)
+1. Sent a lot of custom events
 
-## 项目结构
 
-SDK由多个`subpod`组成，依赖结构如下图所示：
 
-![项目依赖结构](./struct.jpeg)
+## Device required
 
->参数配置类：用于描述和存储API参数，返回值，状态等配置项的类。主要用于与`webview`进行交互。
 
-1. Object：主要作用是通过`YYModel`处理`JSON`转换。包含以下部分：
-    1. `Object`基类，所有`sdk`中使用的参数配置类的基类。
-    2. `Room`，`Player`中API所涉及到的一些参数配置类。
-2. Base：包含`SDK``Displayer`以及部分相关类，主要为以下部分：
-    1. `WhiteSDK`以及其初始化参数类。
-    2. `WhiteSDK`设置的通用回调`WhiteCommonCallbacks`
-    3. `Room`与`Player`共同的父类`Displayer`类的实现。
-    4. `Displayer`中API所使用的一些参数配置类。
-    5. `Displayer`用来描述当前房间状态的类，为`RoomState`,`PlayerState`的基类。
-3. Room：实时房间相关内容：
-    1. `Room`类，及其相关事件回调类。
-    1. `WhiteSDK+Room`，使用`SDK`创建`Room`的API。
-    1. `Room`特有的参数配置类。
-    1. 描述`Room`状态相关的类。
-4. Player：回放房间相关内容：
-    1. `Player`类，及其相关事件回调类。
-    1. `WhiteSDK+Player`，使用`SDK`创建`Player`的API。
-    1. `Player`特有的参数配置类。
-    1. 描述`Player`状态相关的类。
-5. NativePlayer：在`iOS`端播放音视频，并与白板播放状态做同步
-    1. `WhiteCombinePlayer`类，及其相关部分类。
-6. Converter：动静态转换请求封装类。
-    * 动静态转换计费以QPS（日并发）计算，客户端无法控制并发，不推荐在生产环境下使用。详情请参考文档。
+Running device: iOS 9 + (iOS 10 or above is recommended for a better experience)
+Development environment: Xcode 10+
 
-## Native音视频
 
-sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会负责音视频与白板回放的状态同步。
-具体代码示例，可以参看 `WhitePlayerViewController`
+## The project structure
 
->m3u8 格式的音视频，可能需要经过一次 combinePlayerEndBuffering 调用后，才能进行`seek`播放。（否则可能仍然从初始位置开始播放）
+
+SDK is composed of multiple `subpods`, and the dependency structure is shown in the following figure:
+
+![Project dependency structure](./struct.jpeg)
+
+> parameter configuration class: A class used to describe and store API parameters, return values, status, and other configuration items. Mainly used to interact with `webview`.
+
+1. Object: The main function of Object is to handle the `JSON` conversion via `YYModel`. Contains the following parts:
+    1. The `Object` base class, the base class of all the parameters used in the `SDK` configuration class.
+    2. Some of the parameter configuration classes in `Room` and `Player` API.
+2. Base: includes` SDK ` `Displayer` and some related classes, mainly as follows:
+    1. `WhiteSDK` and its initialization parameter class.
+    2. Generic callback `whiteCommonCallbacks` set by`WhiteSDK`
+    3. Implementation of the same parent class `Displayer` as `Room` and `Player`.
+    4. Some of the parameter configuration classes used by the `Displayer` API.
+    5. `Displayer` is a class used to describe the current RoomState. It is the base class of `RoomState` and `PlayerState`.
+3. Real-time Room
+    1. `Room` class, and its related event callback class.
+    2. `WhiteSDK+Room`, using the `SDK` API to create `Room`.
+    3. Parameter configuration class unique to `Room`.
+    4. Describe the class related to `Room`.
+4. You can play back the contents of the room.
+    1. `Player` class, and its related event callback class.
+    2. `WhiteSDK+Player`, using the `SDK` API to create `Player`.
+    3. The `Player` specific parameter configuration class.
+    4. Describe the class related to the status of `Player`.
+5. NativePlayer: Play audio and video on the `iOS` side, and synchronize with the whiteboard playing state
+    1. `WhiteCombinePlayer` class, and some of its related classes.
+6. Converter: Convert the request to the wrapper class.
+* Charging for dynamic and static conversion is based on QPS (daily concurrency). The client cannot control the concurrency, so it is not recommended to use in production environment. Please refer to the documentation for details.
+
+
+
+## Native audio and video
+
+
+SDK now supports CombinePlayer to play audio and video in the Native end, and SDK will be responsible for synchronizing the state of audio and video with the whiteboard playback.
+
+Specific code examples, see ` WhitePlayerViewController `
+>m3u8 format of the audio and video, may need to be after a combinePlayerEndBuffering calls to ` seek `. (otherwise it may still start playing from the original position)
 
 ```Objective-C
+
 #import <Whiteboard/Whiteboard.h>
 
 @implementation WhitePlayerViewController
-
 - (void)initPlayer
 {
 
-    // 创建 WhitePlayer逻辑
-    // 1. 配置 SDK 初始化参数，更多参数，可见 WhiteSdkConfiguration 头文件
-    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
-    // 2. 初始化 SDK
-    self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:config commonCallbackDelegate:self.commonDelegate];
+  // Create WhitePlayer logic
 
-    // 3. 配置 WhitePlayerConfig，room uuid 与 roomToken 为必须。其他更多参数，见 WhitePlayerConfig.h 头文件
-    WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
-    
-    //音视频，白板混合播放处理类
-    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]];
-    //显示 AVPlayer 画面
-    [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
-    //配置代理
-    self.combinePlayer.delegate = self;
-    
-    [self.sdk createReplayerWithConfig:playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
-        if (self.playBlock) {
-            self.playBlock(player, error);
-        } else if (error) {
-            NSLog(@"创建回放房间失败 error:%@", [error localizedDescription]);
-        } else {
-            self.player = player;
-            [self.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            
-            //配置 WhitePlayer
-            self.combinePlayer.whitePlayer = player;
-            //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
-            [player seekToScheduleTime:0];
-        }
-    }];
+  // 1. Configure SDK initialization parameters, more parameters, see the WhitesdkConfiguration header file
+  WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
+  // 2. Initialize the SDK
+  self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:config commonCallbackDelegate:self.commonDelegate];
+  // 3. WhitePlayerConfig, Room UUID and RoomToken are required. For more parameters, see the WhitePlayerConfig.h header file
+  WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
+
+
+  // This is an example of how to do this
+  self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]];
+
+  // Display the AVPlayer screen
+  [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
+
+  // Configure the Delegate
+  self.combinePlayer.delegate = self;
+
+   
+  [self.sdk createReplayerWithConfig:playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
+​    if (self.playBlock) {
+​      self.playBlock(player, error);
+​    } else if (error) {
+​      NSLog(@"Failed to create playback room error:%@", [error localizedDescription]);
+​    } else {
+​      self.player = player;
+​      [self.player addHighFrequencyEventListener:@"a" fireInterval:1000];
+
+​      //Config WhitePlayer
+​      self.combinePlayer.whitePlayer = player;
+​      //WhitePlayer  need to manually seek to 0 to trigger the buffering behavior
+​      [player seekToScheduleTime:0];
+​    }
+  }];
 }
 
 #pragma mark - WhitePlayerEventDelegate
 
 - (void)phaseChanged:(WhitePlayerPhase)phase
 {
-    NSLog(@"player %s %ld", __FUNCTION__, (long)phase);
-    // 注意！必须完成该操作，WhiteCombinePlayer 才能正确同步状态
-    [self.combinePlayer updateWhitePlayerPhase:phase];
+  NSLog(@"player %s %ld", __FUNCTION__, (long)phase);
+  // Attention! This must be done for the WhiteCombinePlayer to properly synchronize the state
+  [self.combinePlayer updateWhitePlayerPhase:phase];
 }
 
-// 其他回调方法...
+// Other callback methods...
 
 #pragma mark - WhiteCombinePlayerDelegate
+
 - (void)combinePlayerStartBuffering
 {
-    //任意一端进入缓冲
-    NSLog(@"combinePlayerStartBuffering");
+  //Either end goes into the buffer
+  NSLog(@"combinePlayerStartBuffering");
 }
 
 - (void)combinePlayerEndBuffering
 {
-    //两端都结束缓冲
-    NSLog(@"combinePlayerEndBuffering");
+  //Both ends end buffering
+  NSLog(@"combinePlayerEndBuffering");
 }
 
 @end
 
 ```
 
-## 动态ppt本地资源包
-
-原理：提前下载动态转换所有需要的资源包，使用 WKWebView iOS 11 开始支持的自定义 scheme 请求，拦截 webView 请求，返回 native 端本地资源。
-
-具体实现，请查看 git 记录：
-
-1. 所需依赖：`add dependency to demo for ppt zip feature`
-2. 代码实现：`implement local zip`
->注意，当前 demo 中，实现拦截，还需要在`WhiteBaseViewController.m`中，将`WhitePptParams `的 scheme 参数为`kPPTScheme`。
-
-[动态转换资源包](https://developer.netless.link/docs/server/api/server-dynamic-conversion-zip/)
+## Dynamic PPT local resource pack
 
 
-## 部分问题
+Principle: Download all the required dynamic-conversion-zip in advance, use the custom Scheme request supported by WKWebView iOS 11, intercept the WebView request, and return the local resources on the local side.
 
-1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
+For specific implementation, please check the Git record:
+
+1. Dependencies required：`add dependency to demo for ppt zip feature`
+2. Code implementation：`implement local zip`
+
+> Note that the current demo, realizes the interception, also need to `WhiteBaseViewController. M` , the `WhitePptParams` scheme parameter of the to `kPPTScheme`.
+
+[dynamic-conversion-zip](https://developer.netless.link/server-zh/home/server-dynamic-conversion-zip)
+
+## Part of the problem
+
+1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
