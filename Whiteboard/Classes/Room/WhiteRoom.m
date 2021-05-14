@@ -408,12 +408,17 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
 /**
  * 删除选中内容
+ *
  */
 - (void)deleteOpertion
 {
     [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
 }
 
+- (void)deleteOperation
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
+}
 /**
  * 不兼容改动
  * 本地序列化，用于回退与撤销回退

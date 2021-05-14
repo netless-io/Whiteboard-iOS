@@ -91,16 +91,16 @@
     return self.nativePlayer.rate != 0;
 }
 
-- (BOOL)isLoaded:(NSArray<NSValue *> *)timeranges
+- (BOOL)isLoaded:(NSArray<NSValue *> *)timeRanges
 {
-    if ([timeranges count] == 0) {
+    if ([timeRanges count] == 0) {
         return NO;
     }
-    CMTimeRange timerange = [[timeranges firstObject] CMTimeRangeValue];
-    CMTime bufferdTime = CMTimeAdd(timerange.start, timerange.duration);
-    CMTime milestone = CMTimeAdd(self.nativePlayer.currentTime, CMTimeMakeWithSeconds(5.0f, timerange.duration.timescale));
+    CMTimeRange timeRange = [[timeRanges firstObject] CMTimeRangeValue];
+    CMTime bufferTime = CMTimeAdd(timeRange.start, timeRange.duration);
+    CMTime milestone = CMTimeAdd(self.nativePlayer.currentTime, CMTimeMakeWithSeconds(5.0f, timeRange.duration.timescale));
     
-    if (CMTIME_COMPARE_INLINE(bufferdTime , >, milestone) && self.nativePlayer.currentItem.status == AVPlayerItemStatusReadyToPlay && !self.isInterruptedWhilePlaying && !self.isRouteChangedWhilePlaying) {
+    if (CMTIME_COMPARE_INLINE(bufferTime , >, milestone) && self.nativePlayer.currentItem.status == AVPlayerItemStatusReadyToPlay && !self.isInterruptedWhilePlaying && !self.isRouteChangedWhilePlaying) {
         return YES;
     }
     return NO;
@@ -159,15 +159,15 @@
 
 - (void)interruption:(NSNotification *)notification
 {
-    NSDictionary *interuptionDict = notification.userInfo;
-    NSInteger interruptionType = [interuptionDict[AVAudioSessionInterruptionTypeKey] integerValue];
+    NSDictionary *interruptionDict = notification.userInfo;
+    NSInteger interruptionType = [interruptionDict[AVAudioSessionInterruptionTypeKey] integerValue];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (interruptionType == AVAudioSessionInterruptionTypeBegan && [self videoDesireToPlay]) {
             self.interruptedWhilePlaying = YES;
             [self pause];
         } else if (interruptionType == AVAudioSessionInterruptionTypeEnded && self.isInterruptedWhilePlaying) {
             self.interruptedWhilePlaying = NO;
-            NSInteger resume = [interuptionDict[AVAudioSessionInterruptionOptionKey] integerValue];
+            NSInteger resume = [interruptionDict[AVAudioSessionInterruptionOptionKey] integerValue];
             if (resume == AVAudioSessionInterruptionOptionShouldResume) {
                 [self play];
             }
@@ -448,11 +448,11 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
 - (void)updateWhitePlayerPhase:(WhitePlayerPhase)phase
 {
     DLog(@"first updateWhitePlayerPhase %ld pauseReason:%ld", phase, self.pauseReason);
-    // WhitePlay 处于缓冲状态，pauseReson 加上 whitePlayerBuffering
+    // WhitePlay 处于缓冲状态，pauseReason 加上 whitePlayerBuffering
     if (phase == WhitePlayerPhaseBuffering || phase == WhitePlayerPhaseWaitingFirstFrame) {
         [self whitePlayerStartBuffing];
     }
-    // 进入暂停状态，whitePlayer 已经完成缓冲，移除 whitePlayerBufferring
+    // 进入暂停状态，whitePlayer 已经完成缓冲，移除 whitePlayerBuffering
     else if (phase == WhitePlayerPhasePause || phase == WhitePlayerPhasePlaying) {
         [self whitePlayerEndBuffering];
     }

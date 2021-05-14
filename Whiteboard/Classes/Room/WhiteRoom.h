@@ -270,7 +270,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 删除选中内容
  */
-- (void)deleteOpertion;
+- (void)deleteOpertion DEPRECATED_MSG_ATTRIBUTE("use deleteOperation");
+- (void)deleteOperation;
 
 /**
  * 不兼容改动
