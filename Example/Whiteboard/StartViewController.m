@@ -65,7 +65,7 @@
         [view setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     }
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeybroader:)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     [self.view addGestureRecognizer:tap];
 
     [self downloadZip:@"https://convertcdn.netless.link/publicFiles.zip"];
@@ -73,7 +73,7 @@
     [self downloadZip:[NSString stringWithFormat:@"https://convertcdn.netless.link/dynamicConvert/%@.zip", @"93b0bee742774cd58f6fef6ec5e12b92"]];
 }
 
-- (void)dismissKeybroader:(id)sender
+- (void)dismissKeyboard:(id)sender
 {
     [self.inputV resignFirstResponder];
 }

@@ -19,7 +19,7 @@
 typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypePlay,
     CommandTypePause,
-    CommondTypeSpeed,
+    CommandTypeSpeed,
     CommandTypeSeek,
     CommandTypeObserver,
     CommandTypeInfo,
@@ -98,7 +98,7 @@ static NSString *kReuseCell = @"reuseCell";
             }
             break;
         }
-        case CommondTypeSpeed:
+        case CommandTypeSpeed:
         {
             if (self.combinePlayer) {
                 self.combinePlayer.playbackSpeed = 1.25;
