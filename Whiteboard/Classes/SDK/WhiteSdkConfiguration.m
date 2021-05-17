@@ -12,6 +12,12 @@
 
 @implementation WhitePptParams
 
+- (instancetype)init {
+    self = [super init];
+    _useServerWrap = YES;
+    return self;
+}
+
 @end
 
 WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg = @"svg";
@@ -66,6 +72,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     _platform = @"ios";
     _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", deviceModel, currentDevice.systemVersion]};
     _appIdentifier = appIdentifier;
+    _pptParams = [[WhitePptParams alloc] init];
     return self;
 }
 

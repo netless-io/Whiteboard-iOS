@@ -48,7 +48,7 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 /**
  * 2021-02-10 之后转换的动态 ppt 支持服务端排版功能，可以确保不同平台排版一致
- *
+ * @since 2.12.25 开始，该功能默认打开，为 YES
  */
 @property (nonatomic, assign) BOOL useServerWrap;
 
