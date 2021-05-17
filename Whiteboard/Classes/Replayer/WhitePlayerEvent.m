@@ -68,7 +68,7 @@
         errorInfo[NSLocalizedDescriptionKey] = message;
         errorInfo[NSLocalizedFailureReasonErrorKey] = err;
         errorInfo[NSDebugDescriptionErrorKey] = description;
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-101 userInfo:errorInfo];
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-101 userInfo:errorInfo];
         [self.delegate stoppedWithError:error];
     }
     return @"";
@@ -76,7 +76,7 @@
 
 - (NSString *)onScheduleTimeChanged:(NSNumber *)time
 {
-    NSTimeInterval scheduleTime = (([time doubleValue]) / WhiteConstsTimeUnitRatio);
+    NSTimeInterval scheduleTime = (([time doubleValue]) / WhiteConstTimeUnitRatio);
     [self.player updateScheduleTime:scheduleTime];
     if ([self.delegate respondsToSelector:@selector(scheduleTimeChanged:)]) {
         [self.delegate scheduleTimeChanged:scheduleTime];
@@ -90,7 +90,7 @@
         NSData *data = [errInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"添加帧时，出现错误", nil), NSDebugDescriptionErrorKey: dict};
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-100 userInfo:userInfo];
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-100 userInfo:userInfo];
         [self.delegate errorWhenAppendFrame:error];
     }
     return @"";
@@ -102,7 +102,7 @@
         NSData *data = [errInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"渲染时，出现错误", nil), NSDebugDescriptionErrorKey: dict};
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-100 userInfo:userInfo];
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-100 userInfo:userInfo];
         [self.delegate errorWhenRender:error];
     }
     return @"";

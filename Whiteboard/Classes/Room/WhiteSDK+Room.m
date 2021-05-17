@@ -55,7 +55,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstsErrorDomain code:-100 userInfo:userInfo]);
+                completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-100 userInfo:userInfo]);
             } else {
                 room.observerId = dict[@"observerId"];
                 room.writable = [dict[@"isWritable"] boolValue];

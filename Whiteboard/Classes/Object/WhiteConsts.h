@@ -9,11 +9,11 @@
 
 #pragma mark - Domain
 
-extern NSString * const WhiteConstsErrorDomain;
-extern NSString * const WhiteConstsConvertDomain;
+extern NSString * const WhiteConstErrorDomain;
+extern NSString * const WhiteConstConvertDomain;
 
 #pragma mark - Ratio
-extern NSTimeInterval const WhiteConstsTimeUnitRatio;
+extern NSTimeInterval const WhiteConstTimeUnitRatio;
 
 #pragma mark - Region
 typedef NSString * WhiteRegionKey NS_STRING_ENUM;

@@ -171,7 +171,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             } else {
                 completionHandler(YES, nil);
             }
@@ -190,7 +190,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             } else {
                 completionHandler(YES, nil);
             }
@@ -209,7 +209,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             } else {
                 BOOL isWritable = [dict[@"isWritable"] boolValue];
                 self.writable = isWritable;
@@ -263,7 +263,7 @@
 
 - (void)setTimeDelay:(NSTimeInterval)delay
 {
-    [self.bridge callHandler:@"room.setTimeDelay" arguments:@[@(delay * WhiteConstsTimeUnitRatio)]];
+    [self.bridge callHandler:@"room.setTimeDelay" arguments:@[@(delay * WhiteConstTimeUnitRatio)]];
     self.delay = delay;
 }
 

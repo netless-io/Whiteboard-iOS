@@ -28,12 +28,12 @@
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
 {
     if (self.beginTimestamp) {
-        dic[NSStringFromSelector(@selector(beginTimestamp))] = @([self.beginTimestamp integerValue] * WhiteConstsTimeUnitRatio);
+        dic[NSStringFromSelector(@selector(beginTimestamp))] = @([self.beginTimestamp integerValue] * WhiteConstTimeUnitRatio);
     }
     if (self.duration) {
-        dic[NSStringFromSelector(@selector(duration))] = @([self.duration integerValue] * WhiteConstsTimeUnitRatio);
+        dic[NSStringFromSelector(@selector(duration))] = @([self.duration integerValue] * WhiteConstTimeUnitRatio);
     }
-    dic[@"step"] = @([self.step floatValue] * WhiteConstsTimeUnitRatio);
+    dic[@"step"] = @([self.step floatValue] * WhiteConstTimeUnitRatio);
     return true;
 }
 

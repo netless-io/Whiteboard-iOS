@@ -43,7 +43,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstsErrorDomain code:-101 userInfo:userInfo]);
+                completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-101 userInfo:userInfo]);
             } else {
                 WhitePlayer *player = [[WhitePlayer alloc] initWithUuid:config.room bridge:weakBridge];
                 weakBridge.playerEvent.player = player;

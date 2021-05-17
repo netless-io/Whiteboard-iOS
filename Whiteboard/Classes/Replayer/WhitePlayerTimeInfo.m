@@ -23,7 +23,7 @@
     NSMutableDictionary *modifyDict = [dic mutableCopy];
     [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         if (![key isEqualToString:@"framesCount"] && [obj isKindOfClass:[NSNumber class]]) {
-            modifyDict[key] = @([obj doubleValue] / WhiteConstsTimeUnitRatio);
+            modifyDict[key] = @([obj doubleValue] / WhiteConstTimeUnitRatio);
         }
     }];
     return modifyDict;

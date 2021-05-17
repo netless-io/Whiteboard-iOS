@@ -29,7 +29,7 @@
         info[kMessageKey] = nil;
         info[kErrorKey] = nil;
         
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:NSIntegerMax userInfo:info];
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:NSIntegerMax userInfo:info];
         [self.delegate throwError:error];
     }
     return @"";
@@ -66,7 +66,7 @@
         NSString *desc = info[@"message"] ? : @"";
         NSString *description = info[@"jsStack"] ? : @"";
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-        NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-400 userInfo:userInfo];
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-400 userInfo:userInfo];
         [self.delegate sdkSetupFail:error];
     }
     

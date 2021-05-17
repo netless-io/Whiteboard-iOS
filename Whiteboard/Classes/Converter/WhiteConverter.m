@@ -212,7 +212,7 @@ static NSString * const kErrorDomain = @"errorDomain";
             NSMutableDictionary *mutableDict = [(error.userInfo ? : @{}) mutableCopy];
             mutableDict[kErrorDomain] = error.domain;
             mutableDict[kErrorCode] = @(error.code);
-            NSError *error = [NSError errorWithDomain:WhiteConstsConvertDomain code:ConverterErrorCodeCreatedFail userInfo:mutableDict];
+            NSError *error = [NSError errorWithDomain:WhiteConstConvertDomain code:ConverterErrorCodeCreatedFail userInfo:mutableDict];
             result(NO, nil, error);
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -221,13 +221,13 @@ static NSString * const kErrorDomain = @"errorDomain";
                 NSString *taskId = responseObject[@"msg"][@"taskUUID"];
                 !result ? : result(YES, taskId, nil);
             } else {
-                NSError *error = [NSError errorWithDomain:WhiteConstsConvertDomain code:ConverterErrorCodeCreatedFail userInfo:responseObject];
+                NSError *error = [NSError errorWithDomain:WhiteConstConvertDomain code:ConverterErrorCodeCreatedFail userInfo:responseObject];
                 !result ? : result(NO, nil, error);
             }
         } else {
             NSMutableDictionary *responseObject = [([NSJSONSerialization JSONObjectWithData:data options:0 error:nil] ? : @{}) mutableCopy];
             responseObject[kHttpCode] = @(httpResponse.statusCode);
-            NSError *error = [NSError errorWithDomain:WhiteConstsConvertDomain code:ConverterErrorCodeCreatedFail userInfo:responseObject];
+            NSError *error = [NSError errorWithDomain:WhiteConstConvertDomain code:ConverterErrorCodeCreatedFail userInfo:responseObject];
             !result ? : result(NO, nil, error);
         }
     }];
@@ -259,7 +259,7 @@ static NSString * const kErrorDomain = @"errorDomain";
                 converting = NO;
                 self.status = ConverterStatusFail;
                 ConverterErrorCode errorCode = info.convertStatus == ServerConversionStatusFail ? ConverterErrorCodeConvertFail : ConverterErrorCodeNotFound;
-                error = error ? error : [NSError errorWithDomain:WhiteConstsConvertDomain code:errorCode userInfo:@{@"reason": info.reason ? : @""}];
+                error = error ? error : [NSError errorWithDomain:WhiteConstConvertDomain code:errorCode userInfo:@{@"reason": info.reason ? : @""}];
                 !result ? : result(info, error);
             } else if (info.convertStatus == ServerConversionStatusFinished) {
                 !progress ? : progress(1, info);
@@ -280,7 +280,7 @@ static NSString * const kErrorDomain = @"errorDomain";
     }
     if (self.status == ConverterStatusWaitingForNextCheck) {
         self.status = ConverterStatusTimeout;
-        NSError *error = [NSError errorWithDomain:WhiteConstsConvertDomain code:ConverterErrorCodeCheckTimeout userInfo:nil];
+        NSError *error = [NSError errorWithDomain:WhiteConstConvertDomain code:ConverterErrorCodeCheckTimeout userInfo:nil];
         !result ? : result(lastInfo, error);
     }
 }
@@ -310,7 +310,7 @@ static NSString * const kErrorDomain = @"errorDomain";
             NSMutableDictionary *mutableDict = [(error.userInfo ? : @{}) mutableCopy];
             mutableDict[kErrorDomain] = error.domain;
             mutableDict[kErrorCode] = @(error.code);
-            NSError *error = [NSError errorWithDomain:WhiteConstsConvertDomain code:ConverterErrorCodeCheckFail userInfo:mutableDict];
+            NSError *error = [NSError errorWithDomain:WhiteConstConvertDomain code:ConverterErrorCodeCheckFail userInfo:mutableDict];
             result(nil, error);
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -320,7 +320,7 @@ static NSString * const kErrorDomain = @"errorDomain";
         } else {
             NSMutableDictionary *responseObject = [([NSJSONSerialization JSONObjectWithData:data options:0 error:nil] ? : @{}) mutableCopy];
             responseObject[kHttpCode] = @(httpResponse.statusCode);
-            NSError *error = [NSError errorWithDomain:WhiteConstsConvertDomain code:ConverterErrorCodeCheckFail userInfo:responseObject];
+            NSError *error = [NSError errorWithDomain:WhiteConstConvertDomain code:ConverterErrorCodeCheckFail userInfo:responseObject];
             !result ? : result(nil, error);
         }
     }];

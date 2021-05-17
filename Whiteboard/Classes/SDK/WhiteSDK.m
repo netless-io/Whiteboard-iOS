@@ -71,7 +71,7 @@
             if (success) {
                 completionHandler(YES, fontFace, nil);
             } else {
-                NSError *error = [NSError errorWithDomain:WhiteConstsErrorDomain code:-400 userInfo:info[@"fontFace"]];
+                NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-400 userInfo:info[@"fontFace"]];
                 completionHandler(NO, fontFace, error);
             }
         }

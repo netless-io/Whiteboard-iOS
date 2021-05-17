@@ -93,7 +93,7 @@ static NSString * const PlayerNamespace = @"player.%@";
 
 - (void)seekToScheduleTime:(NSTimeInterval)beginTime
 {
-    [self.bridge callHandler:[NSString stringWithFormat:PlayerNamespace, @"seekToScheduleTime"] arguments:@[@(beginTime * WhiteConstsTimeUnitRatio)]];
+    [self.bridge callHandler:[NSString stringWithFormat:PlayerNamespace, @"seekToScheduleTime"] arguments:@[@(beginTime * WhiteConstTimeUnitRatio)]];
 }
 
 - (void)setObserverMode:(WhiteObserverMode)mode

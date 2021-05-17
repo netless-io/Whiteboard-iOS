@@ -52,7 +52,7 @@
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
 {
-    dic[@"timeout"] = @([self.timeout floatValue] * WhiteConstsTimeUnitRatio);
+    dic[@"timeout"] = @([self.timeout floatValue] * WhiteConstTimeUnitRatio);
     return true;
 }
 
