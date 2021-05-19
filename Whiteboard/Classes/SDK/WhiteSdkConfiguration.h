@@ -52,9 +52,13 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 /**
  动态 PPT 服务端排版功能的开启状态。
+ 
+ @since 2.12.25
 
  - `YES`：开启。
  - `NO`：关闭。
+
+ @note 2021-02-10 之后转换的动态 PPT 支持服务端排版功能，可以确保不同平台排版一致。
  */
 @property (nonatomic, assign) BOOL useServerWrap;
 
@@ -103,9 +107,19 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 @property (nonatomic, assign) WhiteDeviceType deviceType;
 
-/** 数据中心。默认为中国数据中心。详见 [WhiteRegionKey](WhiteRegionKey)。
+/** 
+ 待回放的互动白板房间所在的数据中心。
 
- @since 2.11.0 */
+ 数据中心包括：
+
+ - `"cn-hz"`：中国大陆
+ - `"us-sv"`：美国
+ - `"in-mum"`：印度
+ - `"sg"`：新加坡
+ - `"gb-lon"`：英国
+ 
+ @since 2.11.0 
+ */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 /**
  画笔教具的渲染引擎模式。详见 [WhiteSdkRenderEngineKey](WhiteSdkRenderEngineKey)。

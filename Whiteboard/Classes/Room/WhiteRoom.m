@@ -171,7 +171,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             } else {
                 completionHandler(YES, nil);
             }
@@ -190,7 +190,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             } else {
                 completionHandler(YES, nil);
             }
@@ -209,7 +209,7 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
-                completionHandler(NO, [NSError errorWithDomain:WhiteConstsErrorDomain code:-1000 userInfo:userInfo]);
+                completionHandler(NO, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             } else {
                 BOOL isWritable = [dict[@"isWritable"] boolValue];
                 self.writable = isWritable;
@@ -256,14 +256,14 @@
 }
 
 #pragma mark - 延时
-- (void)syncBlockTimstamp:(NSTimeInterval)timestamp;
+- (void)syncBlockTimestamp:(NSTimeInterval)timestamp;
 {
-    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"syncBlockTimstamp"] arguments:@[@(timestamp * WhiteConstsTimeUnitRatio)]];
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"syncBlockTimestamp"] arguments:@[@(timestamp * WhiteConstTimeUnitRatio)]];
 }
 
 - (void)setTimeDelay:(NSTimeInterval)delay
 {
-    [self.bridge callHandler:@"room.setTimeDelay" arguments:@[@(delay * WhiteConstsTimeUnitRatio)]];
+    [self.bridge callHandler:@"room.setTimeDelay" arguments:@[@(delay * WhiteConstTimeUnitRatio)]];
     self.delay = delay;
 }
 
@@ -430,7 +430,10 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
 }
 
-/**
+- (void)deleteOperation
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
+}/**
  开启/禁止本地序列化。 
 
  设置 `disableSerialization(YES)` 后，以下方法将不生效：

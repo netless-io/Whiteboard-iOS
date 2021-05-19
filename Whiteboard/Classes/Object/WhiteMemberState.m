@@ -20,11 +20,8 @@ WhiteApplianceNameKey const ApplianceLaserPointer = @"laserPointer";
 WhiteApplianceNameKey const ApplianceShape = @"shape";
 
 WhiteApplianceShapeTypeKey const ApplianceShapeTypeTriangle = @"triangle";
-/** Shape 图形性状：菱形 */
 WhiteApplianceShapeTypeKey const ApplianceShapeTypeRhombus = @"rhombus";
-/** Shape 图形性状：五角星 */
 WhiteApplianceShapeTypeKey const ApplianceShapeTypePentagram = @"pentagram";
-/** Shape 图形性状：说话泡泡 */
 WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBalloon";
 
 

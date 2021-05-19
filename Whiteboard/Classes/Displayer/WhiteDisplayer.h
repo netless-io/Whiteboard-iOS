@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteDisplayer : NSObject
 
 /**
- 白板背景色。
+ 白板背景色。加入房间前，可以更改房间背景色。
  */
 @property (nonatomic, strong) UIColor *backgroundColor;
 
@@ -137,7 +137,10 @@ NS_ASSUME_NONNULL_BEGIN
 
  @since 2.5.1
  
- **Note:** 如果当前用户已经调用 [setViewMode](setViewMode) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
+ **Note:** 
+ 
+ - 如果当前用户已经调用 [setViewMode](setViewMode) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
+ - 如果没有插入 PPT，调用该方法不生效。
 
  @param mode 视角调整时的动画模式，详见 [WhiteAnimationMode](WhiteAnimationMode)。
  */
@@ -146,7 +149,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  调整视角以保证完整显示 H5 课件。
 
- 该操作为一次性操作。
+ 该方法为一次性操作。如果没有插入 H5 课件，调用该方法不生效。
 
  @since 2.12.5
  
@@ -156,7 +159,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  禁止/允许用户调整视角。
- 
+
  @since 2.11.0
 
  @param disable 是否禁止用户调整视角：
@@ -176,9 +179,7 @@ NS_ASSUME_NONNULL_BEGIN
  - 图片支持：只有当图片服务器支持跨域，才可以显示在截图中。（请真机中运行）
 
  @param scenePath 场景路径。
- @param completionHandler 你可以通过该接口获取 `getScenePreviewImage` 方法的调用结果：
-  - 如果方法调用成功，将返回指定场景的预览图。
-  - 如果方法调用失败，将返回错误码。
+ @param completionHandler 返回指定场景的预览图。
  */
 - (void)getScenePreviewImage:(NSString *)scenePath completion:(void (^)(UIImage * _Nullable image))completionHandler;
 
@@ -190,8 +191,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param scenePath 场景路径。
  @param completionHandler 你可以通过该接口获取 `getSceneSnapshotImage` 方法的调用结果：
- 如果方法调用成功，将返回指定场景的截图。
- 如果方法调用失败，将返回错误信息。
+
+ - 如果方法调用成功，将返回指定场景的截图。
+ - 如果方法调用失败，将返回错误信息。
  */
 - (void)getSceneSnapshotImage:(NSString *)scenePath completion:(void (^)(UIImage * _Nullable image))completionHandler;
 

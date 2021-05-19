@@ -437,10 +437,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)duplicate;
 
+
+- (void)deleteOpertion DEPRECATED_MSG_ATTRIBUTE("use deleteOperation");
 /**
  * 删除选中内容。
  */
-- (void)deleteOpertion;
+- (void)deleteOperation;
 
 /**
  开启/禁止本地序列化。 

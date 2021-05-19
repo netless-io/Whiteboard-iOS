@@ -26,22 +26,30 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithRoom:(NSString *)roomUuid roomToken:(NSString *)roomToken;
 
 /** 
- 待回放的互动白板房间所在的数据中心。默认为中国数据中心。详见 [WhiteRegionKey](WhiteRegionKey)。
+ 待回放的互动白板房间所在的数据中心。
+
+ 数据中心包括：
+
+ - `"cn-hz"`：中国大陆
+ - `"us-sv"`：美国
+ - `"in-mum"`：印度
+ - `"sg"`：新加坡
+ - `"gb-lon"`：英国
  
  @since 2.11.0 */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 
-/** 房间 UUID，即房间唯一标识符，必须和初始化 `WhitePlayerConfig` 对象时设置的 UUID 一致。 */
+/** 房间 UUID，即房间唯一标识符。 */
 @property (nonatomic, copy) NSString *room;
 
-/** 用于鉴权的 Room Token，必须和初始化 `WhitePlayerConfig` 对象时设置的 Room Token 一致。 */
+/** 用于鉴权的 Room Token。 */
 @property (nonatomic, copy) NSString *roomToken;
 
 @property (nonatomic, copy, nullable) NSString *slice;
 
 /** 白板回放的起始时间。
 
-Unix 时间戳（秒），表示回放的起始 UTC 时间。例如，`1615370614269` 表示 2021-03-10 18:03:34 GMT+0800。 */
+Unix 时间戳（毫秒），表示回放的起始 UTC 时间。例如，`1615370614269` 表示 2021-03-10 18:03:34 GMT+0800。 */
 @property (nonatomic, strong, nullable) NSNumber *beginTimestamp;
 
 /** 白板回放的持续时长（秒）。如果没有设置，回放会从起始时间一直持续到退出房间。 */
