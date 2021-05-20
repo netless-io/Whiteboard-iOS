@@ -90,9 +90,6 @@
 }
 
 #pragma mark - CommonCallback
-/**
- 为空，则移除原来的 CommonCallback
- */
 - (void)setCommonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callbackDelegate
 {
     self.bridge.commonCallbacks.delegate = callbackDelegate;

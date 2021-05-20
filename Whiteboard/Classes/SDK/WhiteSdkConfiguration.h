@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WhiteConsts.h"
 
+
 typedef NS_ENUM(NSInteger, WhiteDeviceType) {
     WhiteDeviceTypeTouch,
     WhiteDeviceTypeDesktop,
@@ -21,9 +22,9 @@ typedef NSString * WhiteSdkRenderEngineKey NS_STRING_ENUM;
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg;
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 
-
+/** 日志类型 */
 typedef NSString * WhiteSDKLoggerOptionLevelKey NS_STRING_ENUM;
-/** debug 为最详细的日志，目前内容与 info 一致 */
+/** Debug 为最详细的日志，目前内容与 Info 一致 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelDebug;
 /** info 主要为连接日志 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelInfo;
@@ -32,109 +33,157 @@ FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelWa
 /** error 报错，直接导致 sdk 无法正常运行的信息 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelError;
 
+/** 是否上报日志 */
 typedef NSString * WhiteSDKLoggerReportModeKey NS_STRING_ENUM;
-/** 总是上报 */
+/** 总是上报日志 */
 FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportAlways;
-/** 不上报 */
+/** 不上报日志 */
 FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
+/** 设置动态 PPT 参数。 */
 @interface WhitePptParams : WhiteObject
 
 /**
- 如果传入，则所有 ppt 的网络请求，以及图片地址，都会从 https 换成该值。
- 该属性，配合 iOS 11 WebKit 中 WKWebViewConfiguration 类的 setURLSchemeHandler:forURLScheme: 方法，就可以对 ppt 的资源进行拦截，选择使用本地资源
+ 更改动态 ppt 请求时的请求协议，可以将 https://www.exmaple.com/1.pptx 更改成 scheme://www.example.com/1.pptx
+
+ 该属性配合 iOS 11 WebKit 中 `WKWebViewConfiguration` 类的 `setURLSchemeHandler:forURLScheme:` 方法，可以对 PPT 的资源进行拦截，选择使用本地资源。
  */
 @property (nonatomic, copy, nullable) NSString *scheme API_AVAILABLE(ios(11.0));
 
 /**
- * 2021-02-10 之后转换的动态 ppt 支持服务端排版功能，可以确保不同平台排版一致
- * @since 2.12.25 开始，该功能默认打开，为 YES
+ 动态 PPT 服务端排版功能的开启状态。
+ 
+ @since 2.12.25
+
+ - `YES`：开启。
+ - `NO`：关闭。
+
+ @note 2021-02-10 之后转换的动态 PPT 支持服务端排版功能，可以确保不同平台排版一致。
  */
 @property (nonatomic, assign) BOOL useServerWrap;
 
 @end
 
-
+/** 用于配置 `WhiteSdk` 对象。*/
 @interface WhiteSdkConfiguration : WhiteObject
 
-/** 请使用 initWithApp: 方法，传入 appIdentifier 进行初始化，否则无法连接房间。 */
 //+ (instancetype)defaultConfig;
 - (instancetype)init NS_UNAVAILABLE;
 
+/**
+ 初始化 `WhiteSdkConfiguration` 对象。
+
+ @param appIdentifier 白板项目的唯一标识。详见[获取白板项目的 App Identifier](https://docs.agora.io/cn/whiteboard/enable_whiteboard?platform=iOS#获取-app-identifier)。
+ @return 初始化的 `WhiteSdkConfiguration` 对象。
+*/
 - (instancetype)initWithApp:(NSString *)appIdentifier NS_DESIGNATED_INITIALIZER;
 
 /**
- 白板 APP id，2.8.0 开始，强制要求。可以在管理控制台 console.netless.link 中登录后查看
+ 白板项目的唯一标识。
+ 
+ @since 2.8.0 
  */
 @property (nonatomic, copy) NSString *appIdentifier;
 
 /**
- * 监听白板中所有 img 标签图片加载失败事件，默认关闭
- * 2.12.0 新增 API
+ 是否监听图片加载失败事件。
+
+  - `YES`：开启监听。
+  - `NO`：（默认）关闭。
+
+ @since 2.12.0
  */
 @property (nonatomic, assign) BOOL enableImgErrorCallback;
 /**
- * 是否开启 iFrame 插件，默认关闭。
- * 2.10.0 版本默认打开，后续版本默认关闭
+ 是否启用 iframe 插件。
+
+ - `YES`：开启。
+ - `NO`：未启用。
+
+ 2.10.0 默认打开，后续版本默认关闭。
  */
 @property (nonatomic, assign) BOOL enableIFramePlugin;
 
-/** default value: Touch。native 端，无需关注该属性。 */
+
 @property (nonatomic, assign) WhiteDeviceType deviceType;
 
-/** 默认为中国数据集群，@since 2.11.0 */
+/** 
+ 待回放的互动白板房间所在的数据中心。
+
+ 数据中心包括：
+
+ - `"cn-hz"`：中国大陆
+ - `"us-sv"`：美国
+ - `"in-mum"`：印度
+ - `"sg"`：新加坡
+ - `"gb-lon"`：英国
+ 
+ @since 2.11.0 
+ */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 /**
- 画笔教具的渲染模式。
- 2.8.0 新增 canvas 渲染引擎，性能更好。2.9.0 开始，默认为 WhiteSdkRenderEngineCanvas。
+ 画笔教具的渲染引擎模式。详见 [WhiteSdkRenderEngineKey](WhiteSdkRenderEngineKey)。
+
+ @since 2.8.0
+ 
+ 2.8.0 版本新增 `canvas` 渲染引擎。从 2.9.0 版本开始，默认值为 `WhiteSdkRenderEngineCanvas`。
  */
 @property (nonatomic, copy) WhiteSdkRenderEngineKey renderEngine;
 
-/** 显示操作用户头像(需要在加入房间时，配置 userPayload，并确保存在 avatar 字段) */
+/** 
+ 是否显示用户头像。
+
+ - `YES`：显示。
+ - `NO`：（默认）不显示。
+ */
 @property (nonatomic, assign) BOOL userCursor;
-/** 文档转网页中字体文件映射关系 */
+/** 自定义字体名称和地址。 */
 @property (nonatomic, copy, nullable) NSDictionary *fonts;
 
-/**
- * 是否预加载动态 ppt 资源，默认否。
- * @since 2.12.20 以后，预加载功能通过重构，不在有性能和兼容问题，每次只预加载后一页内容。
+/** 
+ 一次性加载动态 PPT 中的所有图片资源开启状态。
+
+ - `YES`：开启。
+ - `NO`: （默认）未开启。
  */
 @property (nonatomic, assign) BOOL preloadDynamicPPT;
 /**
-  图片拦截替换功能，实时房间与回放房间通用
-  当开启图片拦截后，最后显示图片时，会回调初始化 sdk 时，传入的 WhiteCommonCallbackDelegate 对象。
+ 是否开启图片拦截和替换功能。
+
+ - `YES`：开启。
+ - `NO`：关闭。
  */
 @property (nonatomic, assign) BOOL enableInterrupterAPI;
 
-/** 设置后，SDK 会打印大部分 房间中的 function，以及收到的参数 */
+/** 是否开启调试日志回调。
+
+ - `YES`：开启。
+ - `NO`：（默认）关闭。 
+ */
 @property (nonatomic, assign) BOOL log;
 
 /**
- 
-{
-    // SDK 日志信息上报模式（可选，默认 info）
-    @"reportDebugLogMode": WhiteSDKLoggerOptionLevelKey;
- 
-    // 客户端本地，用户连接质量上报模式（可选，默认上报）
-    @"reportQualityMode": WhiteSDKLoggerReportModeKey;
+ 日志等级。
 
-    // SDK 日志上报等级（可选，默认 info）
-    @"reportLevelMask": Level;
-    // webview 控制台打印日志等级（可选，默认 info）
-    @"printLevelMask": Level;
- };
+ 日志级别顺序依次为 `error`、`warn`、`info`、和 `debug`。选择一个级别，你就可以看到在该级别之前所有级别的日志信息。
+ 
+ 例如，你选择 `info` 级别，就可以看到在 `error`、`warn`、`info` 级别上的所有日志信息。
 
- 关闭日志上传功能，默认开启。
+ - 日志信息上报模式：可选，默认为 `info`。
+ - 客户端本地：用户连接质量上报模式，默认为`上报`。
+ - 日志上报等级：可选，默认为 `info`。
+ - webview 控制台打印日志等级：可选，默认为 `info`。
+ - 关闭日志上传功能：默认开启。
  */
 @property (nonatomic, copy) NSDictionary *loggerOptions;
 
-/** 多路由操作，针对部分 dns 污染情况，临时提供的 native 端解决方案 */
+
 @property (nonatomic, assign) BOOL routeBackup;
 
-/** 动态 ppt 参数，目前可以修改动态 ppt 发起的所有网络请求的 scheme，然后在 iOS11 及其以上，可以通过 WKWebview 的接口，对其进行拦截 */
+/** 动态 ppt 参数。详见 [WhitePptParams](WhitePptParams)。 */
 @property (nonatomic, strong) WhitePptParams *pptParams;
 
-/** 禁止教具操作 */
+
 @property (nonatomic, assign) BOOL disableDeviceInputs;
 
 @end

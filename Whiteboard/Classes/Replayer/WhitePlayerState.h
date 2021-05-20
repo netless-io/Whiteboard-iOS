@@ -11,9 +11,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 互动白板实时房间和回放房间共有的状态。 */
 @interface WhitePlayerState : WhiteDisplayerState
 
-/** 用户观察状态 */
+/** 白板回放的查看模式。详见 [WhiteObserverMode](WhiteObserverMode)。 */
 @property (nonatomic, assign, readonly) WhiteObserverMode observerMode;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation WhiteRoomConfig
 
-/** never use this */
+
 - (instancetype)init
 {
     NSAssert(false, @"please never use this method.");

@@ -16,6 +16,7 @@ extern NSString * const WhiteConstConvertDomain;
 extern NSTimeInterval const WhiteConstTimeUnitRatio;
 
 #pragma mark - Region
+/** 数据中心 */
 typedef NSString * WhiteRegionKey NS_STRING_ENUM;
 
 extern WhiteRegionKey const WhiteRegionDefault;

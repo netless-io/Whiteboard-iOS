@@ -12,15 +12,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 房间状态。 */
 @interface WhiteRoomState : WhiteDisplayerState
 
-/** 当前用户的教具状态 */
+/** 实时房间内当前的工具状态。详见 [WhiteReadonlyMemberState](WhiteReadonlyMemberState)。 */
 @property (nonatomic, strong, readonly, nullable) WhiteReadonlyMemberState *memberState;
 
-/** 视野信息 */
+/** 实时房间内当前的视角状态。详见 [WhiteBroadcastState](WhiteBroadcastState)。 */
 @property (nonatomic, strong, readonly, nullable) WhiteBroadcastState *broadcastState;
 
-/** 缩放比例 */
+/** 实时房间内当前的视角缩放比例。*/
 @property (nonatomic, strong, readonly, nullable) NSNumber *zoomScale;
 
 @end

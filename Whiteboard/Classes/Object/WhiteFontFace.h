@@ -10,13 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- * 该类的属性，均会等效转换成 CCS FontFace 中的对应字段，所有字段的值，均需与原始字段一致。
- *
- * @font-face {
- *  font-family: "Times New Roman";
- *  src: url("https://white-pan.oss-cn-shanghai.aliyuncs.com/Pacifico-Regular.ttf");
- *  font-style: italic;
- * }
+ 字体配置文件，与 CSS 中的 FontFace 属性对应。
  */
 @interface WhiteFontFace : WhiteObject
 
@@ -25,32 +19,27 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFontFamily:(NSString *)name src:(NSString *)src;
 
 /**
- * 字体名称，匹配时，需要完全一致
+ 字体名称，需要和 CSS 中 `font-family` 字段的值对应。
  */
 @property (nonatomic, strong) NSString *fontFamily;
 
 /**
- * 对应，CSS FontFace 中 font-style 字段
- * 该值为 italic，bold，或者 normal，默认值为 normal
+ 字体样式，需要和 CSS 中 `font-style` 字段的值对应。默认值为 `normal`。
  */
 @property (nonatomic, strong, nullable) NSString *fontStyle;
 
 /**
- * 字重，CSS FontFace 中 font-weight 字段
- * 传入数字即可，普通字重为 400，也是默认字体
- * 粗体在 动态 ppt 会被解析成 500 的字重，style 为 normal 的 css
+ 字体粗细，需要和 CSS 中 `font-weight` 字段的值对应。
  */
 @property (nonatomic, strong, nullable) NSString *fontWeight;
 
 /**
- * 对应 CSS FontFace 中 src 字段
- * 传入类似 url("https://white-pan.oss-cn-shanghai.aliyuncs.com/Pacifico-Regular.ttf")
- * 也可以根据 CSS FontFace 支持的其他格式进行填写
+ 字体文件的地址，需要和 CSS 中 `src` 字段的值对应。
  */
 @property (nonatomic, strong) NSString *src;
 
 /**
- * 对应 CSS FontFace unicode range 字段
+ 字体的字符编码范围，需要和 CSS 中 `unicode-range` 字段的值对应。
  */
 @property (nonatomic, strong, nullable) NSString *unicodeRange;
 
