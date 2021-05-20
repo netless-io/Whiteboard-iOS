@@ -7,6 +7,7 @@
 
 #import "WhiteMemberState.h"
 
+WhiteApplianceNameKey const ApplianceClicker = @"clicker";
 WhiteApplianceNameKey const AppliancePencil = @"pencil";
 WhiteApplianceNameKey const ApplianceSelector = @"selector";
 WhiteApplianceNameKey const ApplianceText = @"text";

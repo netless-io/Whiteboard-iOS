@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - ApplianceName
 
 typedef NSString * WhiteApplianceNameKey NS_STRING_ENUM;
-
+extern WhiteApplianceNameKey const ApplianceClicker;
 extern WhiteApplianceNameKey const AppliancePencil;
 extern WhiteApplianceNameKey const ApplianceSelector;
 extern WhiteApplianceNameKey const ApplianceText;
