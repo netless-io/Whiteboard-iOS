@@ -55,7 +55,7 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  
  @since 2.12.25
 
- - `YES`：开启。
+ - `YES`：开启(默认开启)。
  - `NO`：关闭。
 
  @note 2021-02-10 之后转换的动态 PPT 支持服务端排版功能，可以确保不同平台排版一致。
@@ -142,7 +142,8 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 /** 
  一次性加载动态 PPT 中的所有图片资源开启状态。
-
+ 2.12.20 以后，预加载功能通过重构，不在有性能和兼容问题，每次只预加载后一页内容。
+ 
  - `YES`：开启。
  - `NO`: （默认）未开启。
  */
