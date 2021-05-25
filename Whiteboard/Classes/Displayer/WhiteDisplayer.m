@@ -163,10 +163,10 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"addMagixEventListener"] arguments:@[eventName]];
 }
 
-- (void)addHighFrequencyEventListener:(NSString *)eventName fireInterval:(NSUInteger)millseconds
+- (void)addHighFrequencyEventListener:(NSString *)eventName fireInterval:(NSUInteger)millSeconds
 {
-    NSAssert(millseconds >= 500, @"millsecond should not less than 500");
-    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"addHighFrequencyEventListener"] arguments:@[eventName, @(millseconds)]];
+    NSAssert(millSeconds >= 500, @"millSecond should not less than 500");
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"addHighFrequencyEventListener"] arguments:@[eventName, @(millSeconds)]];
 }
 
 - (void)removeMagixEventListener:(NSString *)eventName
