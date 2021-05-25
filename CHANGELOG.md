@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.12.28] - 2021-05-25
+- 更新`@netless/cursor-tool`至 0.0.9
 ## [2.12.27] - 2021-05-24
 - 更新`white-web-sdk`至 2.12.20
 - 添加`@netless/video-js-plugin`插件支持
