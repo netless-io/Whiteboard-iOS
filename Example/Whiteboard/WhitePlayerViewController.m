@@ -66,6 +66,7 @@
 {
     if (!_playerConfig) {
         _playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
+        _playerConfig.region = WhiteRegionCN;
     }
     return _playerConfig;
 }

@@ -138,7 +138,7 @@ static NSString *kPPTScheme = @"netless";
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;
         config.log = YES;
-        
+        config.region = WhiteRegionCN;
         //自定义 netless 协议，所有 ppt 请求，都由 https 更改为 kPPTScheme，需要配合 NETURLSchemeHandler 进行操作
         if (@available(iOS 11.0, *)) {
 //            WhitePptParams *pptParams = [[WhitePptParams alloc] init];
