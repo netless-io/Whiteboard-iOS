@@ -92,15 +92,15 @@ NS_ASSUME_NONNULL_BEGIN
  `WhiteCombinePlayer` 播放状态及暂停原因。
  */
 typedef NS_OPTIONS(NSUInteger, WhiteSyncManagerPauseReason) {
-    //正常播放。
+    /** 正常播放。*/
     WhiteSyncManagerPauseReasonNone                           = 0,
-    //暂停，暂停原因：白板缓冲。
+    /** 暂停，暂停原因：白板缓冲。*/
     WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering    = 1 << 0,
-    //暂停，暂停原因：音视频缓冲。
+     /** 暂停，暂停原因：音视频缓冲。*/
     WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering   = 1 << 1,
-    //暂停，暂停原因：主动暂停。
+    /** 暂停，暂停原因：主动暂停。*/
     SyncManagerWaitingPauseReasonPlayerPause                  = 1 << 2,
-    //初始状态：暂停，白板和音视频缓冲。
+    /**初始状态：暂停，白板和音视频缓冲。*/
     WhiteSyncManagerPauseReasonInit                           = WhiteSyncManagerPauseReasonWaitingWhitePlayerBuffering | WhiteSyncManagerPauseReasonWaitingNativePlayerBuffering | SyncManagerWaitingPauseReasonPlayerPause,
 };
 
@@ -197,7 +197,9 @@ typedef NS_OPTIONS(NSUInteger, WhiteSyncManagerPauseReason) {
 
  @param phase [WhitePlayer](WhitePlayer) 的播放状态。
  
- **Note:** 在该回调中，需要主动调用 [WhitePlayerPhase](WhitePlayerPhase) 方法，将状态同步给 [WhitePlayer](WhitePlayer)。
+ **Note:** 
+ 
+ 在该回调中，需要主动调用 [WhitePlayerPhase](WhitePlayerPhase) 方法，将状态同步给 [WhitePlayer](WhitePlayer)。
  */
 - (void)updateWhitePlayerPhase:(WhitePlayerPhase)phase;
 

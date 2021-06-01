@@ -164,6 +164,7 @@
         // 设置最大最小缩放比例，不设置成 0，会导致画面极小时，出现一些问题。默认不是 0
         WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];
         roomConfig.cameraBound = bound;
+        roomConfig.region = WhiteRegionCN;
         self.roomConfig = roomConfig;
     }
 

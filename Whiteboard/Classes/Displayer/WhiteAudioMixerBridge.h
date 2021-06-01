@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  用 RTC SDK 的混音方法播放动态 PPT 中的音频文件。
  
- 在使用如下方法前，需要先调用 [initWithBridge](initWithBridge:) 方法，详见 [WhiteAudioMixerBridge](WhiteAudioMixerBridge)。
+ 在使用如下方法前，需要先调用 [initWithBridge]([WhiteAudioMixerBridge initWithBridge:deletegate:]) 方法。
  */
 @protocol WhiteAudioMixerBridgeDelegate <NSObject>
 
@@ -68,7 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  为解决上述问题，你可以使用该类以调用 RTC SDK 的混音方法播放动态 PPT 中的音频文件。
 
- **Note:** 该类基于 Agora RTC SDK 的混音方法设计，如果你使用的实时音视频 SDK 不是 Agora RTC SDK，但也具有混音接口和混音状态回调，你也可以调用该类。
+ **Note:** 
+ 
+ 该类基于 Agora RTC SDK 的混音方法设计，如果你使用的实时音视频 SDK 不是 Agora RTC SDK，但也具有混音接口和混音状态回调，你也可以调用该类。
  */
 @interface WhiteAudioMixerBridge : NSObject
 
@@ -89,7 +91,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  PPT 根据收到的音频播放状态判断是否显示画面，以确保音画同步。
 
- **Note:** 如果你使用的实时音视频 SDK 没有混音状态回调方法，会导致播放的 PPT 音画不同步。
+ **Note:** 
+ 
+ 如果你使用的实时音视频 SDK 没有混音状态回调方法，会导致播放的 PPT 音画不同步。
 
  @param stateCode 音乐文件播放状态：
 

@@ -42,7 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  停止白板回放。
- **Note:** 白板回放停止后，`WhitePlayer` 资源会被释放。如果想要重新播放，需要重新初始化 `WhitePlayer` 对象。
+
+ **Note:** 
+ 
+ 白板回放停止后，`WhitePlayer` 资源会被释放。如果想要重新播放，需要重新初始化 `WhitePlayer` 对象。
  */
 - (void)stop;
 

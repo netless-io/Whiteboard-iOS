@@ -30,11 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 
  数据中心包括：
 
- - `"cn-hz"`：中国大陆
- - `"us-sv"`：美国
- - `"in-mum"`：印度
- - `"sg"`：新加坡
- - `"gb-lon"`：英国
+ - `"cn-hz"`：中国杭州。该数据中心为其他数据中心服务区未覆盖的地区提供服务。
+ - `"us-sv"`：美国硅谷。该数据中心为北美洲、南美洲地区提供服务。
+ - `"in-mum"`：印度孟买。该数据中心为印度地区提供服务。
+ - `"sg"`：新加坡。该数据中心为新加坡、东亚、东南亚地区提供服务。
+ - `"gb-lon"`：英国伦敦。该数据中心为欧洲地区提供服务。
  
  @since 2.11.0 */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;

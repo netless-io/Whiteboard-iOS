@@ -23,11 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 */
 @property (nonatomic, assign, readonly) NSInteger memberId;
 
-/** 用户当前使用的工具。详见 [WhiteReadonlyMemberState。](WhiteReadonlyMemberState) */
+/** 用户当前使用的工具。详见 [WhiteReadonlyMemberState](WhiteReadonlyMemberState)。 */
 @property (nonatomic, strong, readonly) WhiteReadonlyMemberState *memberState;
 
 /**
- @deprecated 已废弃。请使用 `payload`。
+ 已废弃。请使用 `payload`。
  
  用户加入房间时携带的用户信息。
  */
@@ -38,9 +38,11 @@ NS_ASSUME_NONNULL_BEGIN
 
  允许转换为 JSON，字符串或数字。
 
- @since iOS 2.1.0
+ @since 2.1.0
  
- **Note:** 如果想要使用 SDK 默认头像显示，请使用 `avatar` 字段设置用户头像。
+ **Note:** 
+ 
+ 如果想要使用 SDK 默认头像显示，请使用 `avatar` 字段设置用户头像。
  */
 @property (nonatomic, strong, readonly, nullable) id payload;
 

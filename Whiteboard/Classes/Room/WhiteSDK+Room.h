@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completionHandler 调用结果：
 
  - 如果方法调用成功，将返回房间对象，详见 [WhiteRoom](WhiteRoom)。
- - 如果方法调用失败，将返回错误信息，详见 NSError。
+ - 如果方法调用失败，将返回错误信息。
  */
 - (void)joinRoomWithConfig:(WhiteRoomConfig *)config callbacks:(nullable id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(void (^) (BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error))completionHandler;
 
@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completionHandler 调用结果：
 
  - 如果方法调用成功，将返回房间对象，详见 [WhiteRoom](WhiteRoom)。
- - 如果方法调用失败，将返回错误信息，详见 NSError。
+ - 如果方法调用失败，将返回错误信息。
  */
 - (void)joinRoomWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken completionHandler:(void (^)(BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error))completionHandler;
 
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completionHandler 调用结果：
 
  - 如果方法调用成功，将返回房间对象，详见 [WhiteRoom](WhiteRoom)。
- - 如果方法调用失败，将返回错误信息，详见 NSError。
+ - 如果方法调用失败，将返回错误信息。
  */
 - (void)joinRoomWithRoomUuid:(NSString *)roomUuid roomToken:(NSString *)roomToken callbacks:(nullable id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(void (^) (BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error))completionHandler;
 

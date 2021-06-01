@@ -24,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param clazz 自定义全局状态类，自定义的 `WhiteGlobalState` 类必须继承 [WhiteGlobalState](WhiteGlobalState)，否则会清空该配置。
 
- **Note:** 如果你使用 Swift，在配置 [WhiteGlobalState](WhiteGlobalState) 子类属性时，需要对属性添加 `@objc` 修饰符。
+ **Note:** 
+ 
+ 如果你使用 Swift，在配置 [WhiteGlobalState](WhiteGlobalState) 子类属性时，需要对属性添加 `@objc` 修饰符。
 
  @return 
  

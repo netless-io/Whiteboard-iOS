@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  - 当房间内不存在主播模式的用户时，所有用户的视角都默认为自由模式。
  - 当一个用户的视角设置为主播模式后，房间内其他所有用户（包括新加入房间的用户）的视角会被自动设置为跟随模式。
- - 当跟随模式的用户进行白板操作时，其视角会自动切换为自由模式。你可以调用 disableOperations(true) 禁止跟随模式的用户操作白板，以保证其保持跟随模式。
+ - 当跟随模式的用户进行白板操作时，其视角会自动切换为自由模式。你可以调用 [disableOperations]([WhiteRoom disableOperations:]) 禁止跟随模式的用户操作白板，以保证其保持跟随模式。
  
  @param viewMode 视角模式，详见 [WhiteViewMode](WhiteViewMode)。
  */
@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 
  主动断开与互动白板实时房间的连接。 
 
- 该方法会把与当前房间对象相关的所有资源释放掉。如果要再次加入房间，需要重新调用 [joinRoomWithConfig](joinRoomWithConfig)。
+ 该方法会把与当前房间对象相关的所有资源释放掉。如果要再次加入房间，需要重新调用 [joinRoomWithConfig]([WhiteSDK joinRoomWithConfig:callbacks:completionHandler:])。
 
  @param completeHandler 你可以通过该接口获取 `disconnect` 的调用结果：
 
@@ -125,19 +125,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)disconnect:(void (^ _Nullable) (void))completeHandler;
 
-/** 用户是否主动断开与白板房间的连接。在调用 `disconnect` 主动断连时，该值会被立即赋值为 `YES`。 */
+/** 用户是否主动断开与白板房间的连接。在调用 [disconnect]([WhiteRoom disconnect:]) 主动断连时，该值会被立即赋值为 `YES`。 */
 @property (nonatomic, assign, readonly) BOOL disconnectedBySelf;
 
 /**
  设置用户在房间中是否为互动模式。
- 在加入房间前，就可以在 [WhiteRoomConfig](WhiteRoomConfig) 中设置 `isWritable` ，来决定该模式。
+ 在加入房间前，就可以在 [WhiteRoomConfig](WhiteRoomConfig) 中设置 [isWritable]([WhiteRoomConfig isWritable]) ，来决定该模式。
 
  @param writable 用户在房间中是否为互动模式：
 
   - `YES`：互动模式，即具有读写权限。
   - `NO`：订阅模式，即具有只读权限。
 
- @param completionHandler 你可以通过该接口获取 `setWritable` 的调用结果：
+ @param completionHandler 调用结果：
 
  - 如果方法调用成功，则返回用户在房间中的读写状态。
  - 如果方法调用失败，则返回错误信息。
@@ -204,7 +204,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  SDK 会根据你传入的 `imageInfo` 在白板上设置并插入图片的显示区域。
 
- **Note:** 你也可以调用 [insertImage](insertImage:src:) 方法同时传入图片信息和图片的 URL 地址，在白板中插入并展示图片。 
+ **Note:** 
+ 
+ 你也可以调用 [insertImage]([WhiteRoom insertImage:src:]) 方法同时传入图片信息和图片的 URL 地址，在白板中插入并展示图片。 
 
  @param imageInfo 图片信息，详见 [WhiteImageInformation](WhiteImageInformation)。
  @param src 图片 URL 地址，详见 [WhiteImageInformation](WhiteImageInformation)。
@@ -225,9 +227,11 @@ NS_ASSUME_NONNULL_BEGIN
  
  该方法可以将指定的网络图片展示到指定的图片显示区域。
 
- **Note:** 调用该方法前，请确保你已经调用 [insertImage](insertImage:src:) 方法在白板上插入了图片的显示区域。
+ **Note:** 
+ 
+ 调用该方法前，请确保你已经调用 [insertImage]([WhiteRoom insertImage:src:]) 方法在白板上插入了图片的显示区域。
 
- @param uuid 图片显示区域的 UUID, 即在 [insertImage](insertImage:src:) 方法的 `imageInfo` 中传入的图片 UUID。
+ @param uuid 图片显示区域的 UUID, 即在 [insertImage]([WhiteRoom insertImage:src:]) 方法的 `imageInfo` 中传入的图片 UUID。
  @param src 图片的 URL 地址。必须确保 app 客户端能访问该 URL，否则无法正常展示图片。
  */
 - (void)completeImageUploadWithUuid:(NSString *)uuid src:(NSString *)src;
@@ -249,8 +253,12 @@ NS_ASSUME_NONNULL_BEGIN
  导入 UTC 时间戳（s）后，白板会根据用户本地时间戳，与传入的 UTC 时间戳进行强行同步。
 
  @since 2.12.24
+
+ @param timestamp UTC 时间戳（秒）
  
- **Note:** 该 API 要求用户本地时间经过校准，否则可能会造成主动延时。
+ **Note:** 
+ 
+ 该 API 要求用户本地时间经过校准，否则可能会造成主动延时。
  */
 - (void)syncBlockTimstamp:(NSTimeInterval)timestamp;
 
@@ -260,7 +268,9 @@ NS_ASSUME_NONNULL_BEGIN
  调用该方法后，SDK 会延迟同步远端白板画面。
  
  在 CDN 直播场景，设置远端白板画面同步延时，可以防止用户感知错位。  
- **Note:** 该方法不影响本地白板画面的显示，即用户在本地白板上的操作，会立即在本地白板上显示。  
+ **Note:** 
+ 
+ 该方法不影响本地白板画面的显示，即用户在本地白板上的操作，会立即在本地白板上显示。  
 
  @param delay 延时时长，单位为秒。
  */
@@ -297,7 +307,7 @@ NS_ASSUME_NONNULL_BEGIN
  **Note:**
 
   - 该方法为同步调用。
-  - 调用以下方法修改或新增场景后，无法通过 [setScenePath:](setScenePath:) 立即获取最新的场景状态。此时，如果需要立即获取最新的场景状态，可以调用 [setScenePath:completionHandler:()](setScenePath:completionHandler:)。
+  - 调用以下方法修改或新增场景后，无法通过 [setScenePath]([WhiteRoom setScenePath:]) 立即获取最新的场景状态。此时，如果需要立即获取最新的场景状态，可以调用 [setScenePath:completionHandler:]([WhiteRoom setScenePath:completionHandler:])。
 
  场景切换失败可能有以下原因：
 
@@ -324,7 +334,7 @@ NS_ASSUME_NONNULL_BEGIN
  - 场景路径对应的场景不存在。
  - 传入的路径是场景组的路径，而不是场景路径。 
  @param dirOrPath    想要切换到的场景的场景路径，请确保场景路径以 "/"，由场景组和场景名构成，例如，`/math/classA`.
- @param completionHandler 你可以通过该接口获取 `setScenePath` 的调用结果：
+ @param completionHandler 调用结果：
 
  - 如果方法调用成功，则返回 `YES`.
  - 如果方法调用失败，则返回错误信息。
@@ -337,10 +347,12 @@ NS_ASSUME_NONNULL_BEGIN
  
  方法调用成功后，房间内的所有用户看到的白板都会切换到指定场景。
  
- **Note:** 指定的场景必须在当前场景组中，否则，方法调用会失败。  
+ **Note:** 
+ 
+ 指定的场景必须在当前场景组中，否则，方法调用会失败。  
  
  @param index   目标场景在当前场景组下的索引号。
- @param completionHandler 你可以通过该接口获取 `setSceneIndex` 的调用结果：
+ @param completionHandler 调用结果：
    - 如果方法调用成功，则返回 `YES`.
    - 如果方法调用失败，则返回错误信息。
  */
@@ -348,7 +360,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  在指定场景组下插入多个场景。 
- **Note:** 调用该方法插入多个场景后不会切换到新插入的场景。如果要切换至新插入的场景，需要调用 [setScenePath](setScenePath)。 
+
+ **Note:** 
+ 
+ 调用该方法插入多个场景后不会切换到新插入的场景。如果要切换至新插入的场景，需要调用 [setScenePath]([WhiteRoom setScenePath:])。 
 
  @param dir    场景组名称，必须以 `/` 开头。不能为场景路径。
  @param scenes 由多个场景构成的数组。单个场景的字段详见 [WhiteScene](WhiteScene)。
@@ -369,6 +384,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  删除场景或者场景组。 
  @param dirOrPath 场景组路径或者场景路径。如果传入的是场景组，则会删除该场景组下的所有场景。
+
  **Note:**
 
  - 互动白板实时房间内必须至少有一个场景。当删除所有的场景后，SDK 会自动生成一个路径为 `/init` 初始场景（房间初始化时的默认场景）。
@@ -388,6 +404,7 @@ NS_ASSUME_NONNULL_BEGIN
  移动场景。
  
  成功移动场景后，场景路径也会改变。 
+
  **Note:**
 
  - 该方法只能移动场景，不能移动场景组，即 `source` 只能是场景路径，不能是场景组路径。
@@ -411,7 +428,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  该方法会将选中的内容存储到内存中，不会粘贴到白板中。
 
- **Note:** 该方法仅当 [disableSerialization](disableSerialization) 设为 `NO` 时生效。
+ **Note:** 
+ 
+ 该方法仅当 [disableSerialization](disableSerialization) 设为 `NO` 时生效。
  */
 - (void)copy;
 
@@ -419,6 +438,7 @@ NS_ASSUME_NONNULL_BEGIN
  粘贴复制的内容。
 
  该方法会将 [copy](copy) 方法复制的内容粘贴到白板中（用户当前的视角中间）。
+
  **Note:**
 
  - 该方法仅当 [disableSerialization](disableSerialization) 设为 `NO` 时生效。
@@ -430,6 +450,7 @@ NS_ASSUME_NONNULL_BEGIN
  复制并粘贴选中的内容。 
 
  该方法会将选中的内容复制并粘贴到白板中（用户当前的视角中间）。 
+
  **Note:**
 
  - 该方法仅当 [disableSerialization](disableSerialization) 设为 `NO` 时生效。
@@ -439,6 +460,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 - (void)deleteOpertion DEPRECATED_MSG_ATTRIBUTE("use deleteOperation");
+
 /**
  * 删除选中内容。
  */
@@ -449,11 +471,11 @@ NS_ASSUME_NONNULL_BEGIN
 
  设置 `disableSerialization(true)` 后，以下方法将不生效：
 
- - `redo`
- - `undo`
- - `duplicate`
- - `copy`
- - `paste` 
+ - [redo]([WhiteRoom redo]) 
+ - [undo]([WhiteRoom undo]) 
+ - [duplicate]([WhiteRoom duplicate]) 
+ - [copy]([WhiteRoom copy]) 
+ - [paste]([WhiteRoom paste])
 
  @warning
  如果要设置 `disableSerialization(false)`，必须确保同一房间内所有用户使用的 SDK 满足以下版本要求，否则会导致 app 客户端崩溃。
@@ -472,14 +494,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  重做，即回退撤销操作。
 
- **Note:** 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
+ **Note:** 
+
+ 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
  */
 - (void)redo;
 
 /**
  撤销上一步操作。
 
- **Note:** 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
+ **Note:** 
+ 
+ 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
  */
 - (void)undo;
 
@@ -495,16 +521,19 @@ NS_ASSUME_NONNULL_BEGIN
  **Note:**
 
  - 该方法为异步调用。
- - 通过 [setCustomGlobalStateClass](setCustomGlobalStateClass) 设置自定义状态后，如需异步获取，可以通过 [getRoomStateWithResult](getRoomStateWithResult) 获取自定义 [GlobalState](GlobalState)。
- - 调用 [setGlobalState](setGlobalState) 方法后，可以立刻调用该方法。 
- @param result 回调。返回房间的全局状态，详见 [GlobalState](GlobalState)。 
+ - 通过 [setCustomGlobalStateClass]([WhiteDisplayerState setCustomGlobalStateClass:]) 设置自定义状态后，如需异步获取，可以通过 `getRoomStateWithResult` 获取自定义的当前房间状态。
+ - 调用 [setGlobalState]([WhiteRoom setGlobalState:]) 方法后，可以立刻调用该方法。 
+ @param result 回调。返回房间的全局状态，详见 [WhiteGlobalState](WhiteGlobalState)。 
  */
 - (void)getGlobalStateWithResult:(void (^) (WhiteGlobalState *state))result;
 /** 
  获取当前的工具状态。
- **Note:** 该方法为异步调用。调用 [setMemberState](setMemberState:) 方法后，可以立刻调用该方法。 
+
+ **Note:** 
  
- @param result 回调。返回当前的工具状态，详见 [MemberState](MemberState)。 
+ 该方法为异步调用。调用 [setMemberState](setMemberState:) 方法后，可以立刻调用该方法。 
+ 
+ @param result 回调。返回当前的工具状态，详见 [WhiteMemberState](WhiteMemberState) 。 
  */
 - (void)getMemberStateWithResult:(void (^) (WhiteMemberState *state))result;
 /** 
@@ -521,7 +550,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 
  获取用户视角状态。
  
- **Note:** 该方法为异步调用。
+ **Note:** 
+ 
+ 该方法为异步调用。
 
  @param result 回调。返回当前用户视角状态，详见 [WhiteBroadcastState](WhiteBroadcastState)。 
  */
@@ -529,7 +560,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 
  获取房间连接状态。
 
- **Note:** 该方法为异步调用。
+ **Note:** 
+ 
+ 该方法为异步调用。
  
  @param result 回调。返回当前房间连接状态，详见 [WhiteRoomPhase](WhiteRoomPhase)。 
  */
@@ -543,7 +576,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 
  获取当前房间状态。
 
- **Note:** 该方法为异步调用。
+ **Note:** 
+ 
+ 该方法为异步调用。
  
  @param result 回调。返回当前房间状态，详见 [WhiteRoomState](WhiteRoomState)。
  */
@@ -555,7 +590,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteRoom (Deprecated)
 
 /**
- @deprecated 该方法已废弃，请使用 [disableDeviceInputs](disableDeviceInputs:) 和 [disableCameraTransform](disableCameraTransform:)。
+ 该方法已废弃，请使用 [disableDeviceInputs]([WhiteRoom disableDeviceInputs:]) 和 [disableCameraTransform]([WhiteDisplayer disableCameraTransform:])。
 
  禁止操作。
  @param disable 是否禁止操作，true 为禁止。
@@ -563,7 +598,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)disableOperations:(BOOL)disable DEPRECATED_MSG_ATTRIBUTE("use disableDeviceInputs and disableCameraTransform");
 
 /**
- @deprecated 该方法已废弃，请使用 [moveCamera](moveCamera:)。
+ 该方法已废弃，请使用 [moveCamera]([WhiteDisplayer moveCamera:])。
 
  缩小放大白板。
  @param scale 相对于原始大小的比例。
@@ -571,7 +606,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)zoomChange:(CGFloat)scale DEPRECATED_MSG_ATTRIBUTE("use moveCamera:");
 
 /**
- @deprecated 该方法已废弃，请使用 [getScenesWithResult](getScenesWithResult:)。
+ 该方法已废弃，请使用 [getScenesWithResult]([WhiteRoom getScenesWithResult:])。
 
  获取所有 ppt 图片。
  @param result 回调。返回所有 ppt 图片的地址。

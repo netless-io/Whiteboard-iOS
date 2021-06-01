@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 白板绘图工具。 */
 typedef NSString * WhiteApplianceNameKey NS_STRING_ENUM;
 
+/** 点选工具。目前主要用于 H5 课件操作交互。 */
+extern WhiteApplianceNameKey const ApplianceClicker;
 /** 铅笔。 */
 extern WhiteApplianceNameKey const AppliancePencil;
 /** 选择工具。 */
@@ -57,10 +59,10 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 
 #pragma mark - ReadonlyMemberState
 
-/** 互动白板实时房间的工具状态（只读）。初始工具为pencil，无默认值。 */
+/** 互动白板实时房间的工具状态（只读）。初始工具为 `pencil`，无默认值。 */
 @interface WhiteReadonlyMemberState : WhiteObject
 
-/** 互动白板实时房间内当前使用的工具名称。初始工具为pencil，无默认值。 */
+/** 互动白板实时房间内当前使用的工具名称。初始工具为 `pencil`，无默认值。 */
 @property (nonatomic, copy, readonly) WhiteApplianceNameKey currentApplianceName;
 /** 线条颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
 @property (nonatomic, copy, readonly) NSArray<NSNumber *> *strokeColor;
@@ -75,9 +77,9 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 
 #pragma mark - MemberState
 
-/** 互动白板实时房间的工具状态。初始工具为pencil，无默认值。 */
+/** 互动白板实时房间的工具状态。初始工具为 `pencil`，无默认值。 */
 @interface WhiteMemberState : WhiteReadonlyMemberState
-/** 互动白板实时房间内当前使用的工具名称。初始工具为pencil，无默认值。 */
+/** 互动白板实时房间内当前使用的工具名称。初始工具为 `pencil`，无默认值。 */
 @property (nonatomic, copy, readwrite, nullable) WhiteApplianceNameKey currentApplianceName;
 /** 线条颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
 @property (nonatomic, copy, readwrite, nullable) NSArray<NSNumber *> *strokeColor;

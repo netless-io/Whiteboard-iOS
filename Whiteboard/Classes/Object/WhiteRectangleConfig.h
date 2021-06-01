@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param width 白板视觉矩形的宽度。视觉矩形的宽度不能小于实际展示内容的宽度，否则用户将看不见超出的部分。
  @param height 白板视觉矩形的高度。视觉矩形的高度不能小于实际展示内容的宽度，否则用户将看不见超出的部分。
- @param mode 视觉矩形的动画模式，详见 [AnimationMode](AnimationMode)。
+ @param mode 视觉矩形的动画模式，详见 [WhiteAnimationMode](WhiteAnimationMode)。
  @return 初始化的 `WhiteRectangleConfig` 对象
  */
 - (instancetype)initWithInitialPosition:(CGFloat)width height:(CGFloat)height animation:(WhiteAnimationMode)mode;

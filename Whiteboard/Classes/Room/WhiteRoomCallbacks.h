@@ -72,7 +72,9 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
 /**
  同步用户行为发生错误回调。
 
- **Note:** 该回调通常是可以忽略的，你可以根据业务情况自行决定是否监听。
+ **Note:** 
+ 
+ 该回调通常是可以忽略的，你可以根据业务情况自行决定是否监听。
  
  @param userId 用户 ID。
  @param error 错误原因。
@@ -82,7 +84,7 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
 /**
  可撤销次数发生变化回调。
 
- 当本地用户调用 [undo](undo) 撤销上一步操作时，会触发该回调，报告剩余的可撤销次数。
+ 当本地用户调用 [undo]([WhiteRoom undo]) 撤销上一步操作时，会触发该回调，报告剩余的可撤销次数。
  
  @param canUndoSteps 剩余的可撤销次数。
  */
@@ -91,7 +93,7 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
  /**
  可重做次数发生变化回调。
 
- 当本地用户调用 [redo](redo) 重做上一步操作时，会触发该回调，报告剩余的可重做次数。
+ 当本地用户调用 [redo]([WhiteRoom redo]) 重做上一步操作时，会触发该回调，报告剩余的可重做次数。
  
  @param canRedoSteps 剩余的可重做次数。
  */

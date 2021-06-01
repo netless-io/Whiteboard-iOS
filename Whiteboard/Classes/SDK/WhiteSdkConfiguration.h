@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WhiteConsts.h"
 
-
+//文档中隐藏
 typedef NS_ENUM(NSInteger, WhiteDeviceType) {
     WhiteDeviceTypeTouch,
     WhiteDeviceTypeDesktop,
@@ -17,34 +17,51 @@ typedef NS_ENUM(NSInteger, WhiteDeviceType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-
+/**
+ 笔迹的渲染引擎模式。
+ */
 typedef NSString * WhiteSdkRenderEngineKey NS_STRING_ENUM;
+/**
+ * SVG 渲染模式。
+ * 2.8.0 及之前版本的 `WhiteSdk` 默认使用的渲染模式，该模式兼容性较好，但性能较差。
+ */
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineSvg;
+/**
+ * Canvas 渲染模式。
+ * <p>
+ * 2.8.0 版本起新增 `canvas` 渲染模式，该模式性能较好，但兼容性较差。
+ * 2.9.0 及之后版本的 `WhiteSdk` 默认使用 `canvas` 渲染模式。
+ *
+ */
 FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 
 /** 日志类型 */
 typedef NSString * WhiteSDKLoggerOptionLevelKey NS_STRING_ENUM;
-/** Debug 为最详细的日志，目前内容与 Info 一致 */
+/**  Debug 调试日志：最详细的日志，目前内容与 `info` 一致。 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelDebug;
-/** info 主要为连接日志 */
+/** Info 信息日志：主要为连接状态。 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelInfo;
-/** warn 主要为对开发者传入的部分不符合 sdk 参数时，进行自动调整的警告（API 弃用警告不会在上报） */
+/** Warn 警告日志：当传入的参数不符合 SDK 要求时，SDK 会自动调整并发出警告。
+
+ **Note：** 
+ 
+ 如果调用废弃 API，SDK 不会发出警告信息。 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelWarn;
-/** error 报错，直接导致 sdk 无法正常运行的信息 */
+/** Error 报错日志：直接导致 SDK 无法正常运行的错误。 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelError;
 
-/** 是否上报日志 */
+/** 日志上报模式。 */
 typedef NSString * WhiteSDKLoggerReportModeKey NS_STRING_ENUM;
-/** 总是上报日志 */
+/** 总是上报日志（默认）。 */
 FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportAlways;
-/** 不上报日志 */
+/** 禁止上报日志。 */
 FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 /** 设置动态 PPT 参数。 */
 @interface WhitePptParams : WhiteObject
 
 /**
- 更改动态 ppt 请求时的请求协议，可以将 https://www.exmaple.com/1.pptx 更改成 scheme://www.example.com/1.pptx
+ `scheme`：更改动态 ppt 请求时的请求协议，可以将 https://www.exmaple.com/1.pptx 更改成 scheme://www.example.com/1.pptx
 
  该属性配合 iOS 11 WebKit 中 `WKWebViewConfiguration` 类的 `setURLSchemeHandler:forURLScheme:` 方法，可以对 PPT 的资源进行拦截，选择使用本地资源。
  */
@@ -58,7 +75,9 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  - `YES`：开启。
  - `NO`：关闭。
 
- @note 2021-02-10 之后转换的动态 PPT 支持服务端排版功能，可以确保不同平台排版一致。
+ **Note：**
+ 
+ 2021-02-10 之后转换的动态 PPT 支持服务端排版功能，可以确保不同平台排版一致。
  */
 @property (nonatomic, assign) BOOL useServerWrap;
 
@@ -108,18 +127,21 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 @property (nonatomic, assign) WhiteDeviceType deviceType;
 
 /** 
- 待回放的互动白板房间所在的数据中心。
+ 互动白板房间所在的数据中心。
 
  数据中心包括：
 
- - `"cn-hz"`：中国大陆
- - `"us-sv"`：美国
- - `"in-mum"`：印度
- - `"sg"`：新加坡
- - `"gb-lon"`：英国
+ - `"cn-hz"`：中国杭州。该数据中心为其他数据中心服务区未覆盖的地区提供服务。
+ - `"us-sv"`：美国硅谷。该数据中心为北美洲、南美洲地区提供服务。
+ - `"in-mum"`：印度孟买。该数据中心为印度地区提供服务。
+ - `"sg"`：新加坡。该数据中心为新加坡、东亚、东南亚地区提供服务。
+ - `"gb-lon"`：英国伦敦。该数据中心为欧洲地区提供服务。
+
+ **Note:**
  
- @since 2.11.0 
- */
+ SDK 初始化时设置的 region 必须和创建房间时指定的 region 一致；否则，SDK 无法连接到房间。
+ 
+ @since 2.11.0 */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 /**
  画笔教具的渲染引擎模式。详见 [WhiteSdkRenderEngineKey](WhiteSdkRenderEngineKey)。
@@ -133,6 +155,8 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /** 
  是否显示用户头像。
 
+ 要显示用户头像，请确保你在 [initWithUuid]([WhiteRoomConfig initWithUuid:roomToken:userPayload:]) 时 在`userPayload` 对象中传入了头像的键值对。
+
  - `YES`：显示。
  - `NO`：（默认）不显示。
  */
@@ -141,7 +165,11 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 @property (nonatomic, copy, nullable) NSDictionary *fonts;
 
 /** 
- 一次性加载动态 PPT 中的所有图片资源开启状态。
+ 是否在加载动态 PPT 首页时，一次性加载动态 PPT 中的所有图片资源。
+
+ **Note：** 
+ 
+ Agora 不推荐设置 setPreloadDynamicPPT(true)，这样会使 PPT 显示缓慢。
 
  - `YES`：开启。
  - `NO`: （默认）未开启。

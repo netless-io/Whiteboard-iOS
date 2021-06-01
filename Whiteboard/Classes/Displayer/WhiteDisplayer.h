@@ -12,6 +12,7 @@
 #import "WhitePanEvent.h"
 #import "WhiteFontFace.h"
 
+/** 白板场景路径类型。 */
 typedef NS_ENUM(NSInteger, WhiteScenePathType) {
     /** 路径对应的内容为空。 */
     WhiteScenePathTypeEmpty,
@@ -29,7 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteDisplayer : NSObject
 
 /**
- 白板背景色。加入房间前，可以更改房间背景色。
+ 白板背景色。该属性为加入房间后设置房间背景色。
+
+ 如需在加入房间前设置背景色，步骤如下：
+
+ 1. 将 `WhiteBoardView` 对象属性 `opaque` 设置为 `NO`。 
+
+ 2. 设置 `WhiteBoardView` 的背景色。
+
+ 3. 初始化实时房间或回放房间后，通过 `backgroundColor` 属性再次设置背景色。
+
+ 4. 将 `WhiteBoardView` 对象属性 `opaque` 设置为 `YES`。
  */
 @property (nonatomic, strong) UIColor *backgroundColor;
 
@@ -66,7 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  成功注册后，你可以接收到对应的自定义事件通知。
 
- **Note:** 对于同名的自定义事件，SDK 仅支持触发一个回调。
+ **Note:** 
+ 
+ 对于同名的自定义事件，SDK 仅支持触发一个回调。
  
  @param eventName 想要监听的自定义事件名称。
 */
@@ -76,7 +89,9 @@ NS_ASSUME_NONNULL_BEGIN
  
  成功注册后，你可以接收到对应的自定义事件通知。
 
- **Note:** 对于同名的自定义事件，SDK 仅支持触发一个回调。
+ **Note:** 
+ 
+ 对于同名的自定义事件，SDK 仅支持触发一个回调。
 
  @param eventName 想要监听的自定义事件名称。
  
@@ -102,7 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  该方法可以将 iOS 内部坐标系中的坐标转换为世界坐标系（以白板初始化时的中点为原点，横轴为 X 轴，正方向向右，纵轴为 Y 轴，正方向向下）坐标。
 
- @param point 点在 iOS 坐标系中的坐标。
+ @param point 点在 iOS 坐标系中的坐标。详见 [WhitePanEvent](WhitePanEvent)。
  @param result 回调。返回点在世界坐标系上的坐标，详见 [WhitePanEvent](WhitePanEvent)。
  */
 - (void)convertToPointInWorld:(WhitePanEvent *)point result:(void (^) (WhitePanEvent *convertPoint))result;
@@ -139,7 +154,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  **Note:** 
  
- - 如果当前用户已经调用 [setViewMode](setViewMode) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
+ - 如果当前用户已经调用 [setViewMode]([WhiteRoom setViewMode:]) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
  - 如果没有插入 PPT，调用该方法不生效。
 
  @param mode 视角调整时的动画模式，详见 [WhiteAnimationMode](WhiteAnimationMode)。
@@ -153,7 +168,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @since 2.12.5
  
- **Note:** 如果当前用户已经调用 [setViewMode](setViewMode) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
+ **Note:** 
+
+ 如果当前用户已经调用 [setViewMode]([WhiteRoom setViewMode:]) 方法并设置为 `follower`，调用该方法可能造成当前用户与主播内容不完全一致。
  */
 - (void)scaleIframeToFit;
 
@@ -173,10 +190,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  获取特定场景的预览图。
- **Note:** 
- 
- - 截取用户切换时，看到的场景内容，不是场景内全部内容。
- - 图片支持：只有当图片服务器支持跨域，才可以显示在截图中。（请真机中运行）
 
  @param scenePath 场景路径。
  @param completionHandler 返回指定场景的预览图。
@@ -187,10 +200,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  获取特定场景的截图。
 
- **Note:** 只有当前图片服务器支持跨区域，才能显示截图。
+ **Note:** 
+ 
+ 只有当前图片服务器支持跨区域，才能显示截图。
 
  @param scenePath 场景路径。
- @param completionHandler 你可以通过该接口获取 `getSceneSnapshotImage` 方法的调用结果：
+ @param completionHandler 调用结果：
 
  - 如果方法调用成功，将返回指定场景的截图。
  - 如果方法调用失败，将返回错误信息。

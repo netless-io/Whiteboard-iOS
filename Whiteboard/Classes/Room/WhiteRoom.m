@@ -387,7 +387,9 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
  该方法会将选中的内容存储到内存中，不会粘贴到白板中。 
 
- **Note:** 该方法仅当 [disableSerialization](disableSerialization:) 设为 `false` 时生效。
+ **Note:** 
+ 
+ 该方法仅当 [disableSerialization](disableSerialization:) 设为 `false` 时生效。
  */
 - (void)copy
 {
@@ -400,6 +402,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
  该方法会将 [copy](copy) 方法复制的内容粘贴到白板中（用户当前的视角中间）。
 
  **Note:**
+
  - 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
  - 多次调用该方法时，不能保证粘贴的内容每次都在用户当前的视角中间，可能会出现随机偏移。
  */
@@ -412,6 +415,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
  复制并粘贴选中的内容。 
 
  该方法会将选中的内容复制并粘贴到白板中（用户当前的视角中间）。 
+
  **Note:**
 
  - 该方法仅当 [disableSerialization](disableSerialization:) 设为 `NO` 时生效。
@@ -444,7 +448,9 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
  - `copy`
  - `paste` 
 
- **Note:** 如果要设置 `disableSerialization(NO)`，必须确保同一房间内所有用户使用的 SDK 满足以下版本要求，否则会导致 app 客户端崩溃。
+ **Note:** 
+ 
+ 如果要设置 `disableSerialization(NO)`，必须确保同一房间内所有用户使用的 SDK 满足以下版本要求，否则会导致 app 客户端崩溃。
 
  - Web SDK 2.9.2 或之后版本
  - Android SDK 2.9.3 或之后版本

@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 
  配置实时房间的参数。 
 
- **Note:** `WhiteRoomConfig` 类中所有的方法都必须在加入房间前调用；成功加入房间后，调用该类中的任何方法都不会生效。
+ **Note:** 
+ 
+ `WhiteRoomConfig` 类中所有的方法都必须在加入房间前调用；成功加入房间后，调用该类中的任何方法都不会生效。
  */
 @interface WhiteRoomConfig : WhiteObject
 
@@ -27,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken;
 /**
- @deprecated 该方法已经废弃。请使用 [initWithUuid:roomToken:userPayload:](initWithUuid:roomToken:userPayload:)。
+ 该方法已废弃。请使用 [initWithUuid:roomToken:userPayload:]([WhiteRoomConfig initWithUuid:roomToken:userPayload:])。
 
  设置房间 UUID 和用户信息并初始化 `WhiteRoomConfig` 对象。
  @param uuid 房间 UUID，即房间唯一标识符。
@@ -50,18 +52,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *roomToken;
 
 /** 
- 待回放的互动白板房间所在的数据中心。
+ 互动白板房间所在的数据中心。
 
  数据中心包括：
 
- - `"cn-hz"`：中国大陆
- - `"us-sv"`：美国
- - `"in-mum"`：印度
- - `"sg"`：新加坡
- - `"gb-lon"`：英国
+ - `"cn-hz"`：中国杭州。该数据中心为其他数据中心服务区未覆盖的地区提供服务。
+ - `"us-sv"`：美国硅谷。该数据中心为北美洲、南美洲地区提供服务。
+ - `"in-mum"`：印度孟买。该数据中心为印度地区提供服务。
+ - `"sg"`：新加坡。该数据中心为新加坡、东亚、东南亚地区提供服务。
+ - `"gb-lon"`：英国伦敦。该数据中心为欧洲地区提供服务。
  
- @since 2.11.0 
- */
+ @since 2.11.0 */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 
 /**
@@ -89,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL disableBezier;
 
 /**
- @deprecated 该方法已废弃。请使用 [disableDeviceInputs](disableDeviceInputs:) 和 [disableCameraTransform](disableCameraTransform:)。
+ 该方法已废弃。请使用 [disableDeviceInputs]([WhiteRoom disableDeviceInputs:]) 和 [disableCameraTransform]([WhiteDisplayer disableCameraTransform:])。
 
  允许/禁止白板响应用户任何操作。
 
@@ -115,9 +116,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  **Note:**
 
- - 必须使用 [WhiteRoomConfig](WhiteRoomConfig) 子类，以保证字段结构正确。
+ - 必须使用 `WhiteRoomConfig` 子类，以保证字段结构正确。
  - 自定义的用户信息会被完整透传。
- 如果要在白板房间中显示用户头像，请在 `userPayload` 中传入 `avatar` 字段并添加用户头像的地址，例如 `"avatar", "https://example.com/user.png")`。
+ 如果要在白板房间中显示用户头像，请在 `userPayload` 中传入 `avatar` 字段并添加用户头像的地址，例如 "avatar", "https://example.com/user.png")。
  - 从 [WhiteMemberInformation](WhiteMemberInformation) 迁移，只需要在 `userPayload` 中，传入相同字段即可。
  */
 @property (nonatomic, copy, nullable) id userPayload;
@@ -132,7 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  用户是否以互动模式加入白板房间。
 
- 在加入房间后，也可以通过 [setWritable](setWritable:completionHandler:) 方法切换读写模式。
+ 在加入房间后，也可以通过 [setWritable]([WhiteRoom setWritable:completionHandler:]) 方法切换读写模式。
 
  - `YES`：以互动模式加入白板房间，即具有读写权限。
  - `NO`：以订阅模式加入白板房间，即具有只读权限。不能操作工具、修改房间状态，当前用户也不会出现在 `roomMembers` 列表中。
@@ -161,7 +162,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  加入房间的超时时间。单位为毫秒。
 
- SDK 超时后会主动断连，并触发 [firePhaseChanged](firePhaseChanged:) 回调。同时触发 [fireDisconnectWithError](fireDisconnectWithError:) 回调并返回”重连时长超出 xx 毫秒”的提示。
+ SDK 超时后会主动断连，并触发 [firePhaseChanged]([WhiteRoomCallbackDelegate firePhaseChanged:]) 回调。同时触发 [fireDisconnectWithError]([WhiteRoomCallbackDelegate fireDisconnectWithError:]) 回调并返回”重连时长超出 xx 毫秒”的提示。
  */
 @property (nonatomic, strong) NSNumber *timeout;
 

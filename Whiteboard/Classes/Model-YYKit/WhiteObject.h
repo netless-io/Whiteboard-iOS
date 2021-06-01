@@ -42,19 +42,18 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- Provide some data-model method for NSArray.
+ 为 NSArray 提供一些数据模型方法。
  */
 @interface NSArray (YYModel)
 
 /**
- Creates and returns an array from a json-array.
- This method is thread-safe.
+ 从 JSON Array 创建并返回一个数组。
  
- @param cls  The instance's class in array.
- @param json  A json array of `NSArray`, `NSString` or `NSData`.
-              Example: [{"name":"Mary"},{name:"Joe"}]
+ @param cls  数组中实例的类。
+ @param json  `NSArray`，`NSString` 或 `NSData` 的 JSON 数组。
+              例如： `[{"name":"Mary"},{name:"Joe"}]`。
  
- @return A array, or nil if an error occurs.
+ @return 一个数组，如果发生错误，则返回 `nil`。
  */
 + (nullable NSArray *)yy_modelArrayWithClass:(Class _Nullable)cls json:(id _Nullable)json;
 
@@ -63,19 +62,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- Provide some data-model method for NSDictionary.
+ 为 NSDictionary 提供一些数据模型方法。
  */
 @interface NSDictionary (YYModel)
 
 /**
- Creates and returns a dictionary from a json.
- This method is thread-safe.
+ 从 JSON 创建并返回字典。
  
- @param cls  The value instance's class in dictionary.
- @param json  A json dictionary of `NSDictionary`, `NSString` or `NSData`.
-              Example: {"user1":{"name","Mary"}, "user2": {name:"Joe"}}
+ @param cls  值实例在字典中的类。
+ @param json  `NSArray`，`NSString` 或 `NSData` 的 JSON 字典。
+              例如： `{"user1":{"name","Mary"}, "user2": {name:"Joe"}}`。
  
- @return A dictionary, or nil if an error occurs.
+ @return 字典，如果发生错误，则为 `nil`。
  */
 + (nullable NSDictionary *)yy_modelDictionaryWithClass:(Class _Nullable )cls json:(id  _Nullable)json;
 

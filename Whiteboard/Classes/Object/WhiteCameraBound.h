@@ -42,9 +42,9 @@ typedef NS_ENUM(NSUInteger, WhiteContentMode) {
 
 /** 视角边界的缩放模式和缩放比例。详见 [WhiteContentMode](WhiteContentMode)。 */
 @property (nonatomic, assign, readonly) WhiteContentMode contentMode;
-/** 视角边界的缩放比例。只有当 scaleMode 的值为 `WhiteContentModeScale`、`WhiteContentModeAspectFitScale`、`WhiteContentModeAspectFillScale` 时设置生效。 */
+/** 视角边界的缩放比例。只有当 `scaleMode` 的值为 `WhiteContentModeScale`、`WhiteContentModeAspectFitScale`、`WhiteContentModeAspectFillScale` 时设置生效。 */
 @property (nonatomic, assign) CGFloat scale;
-/** 视角边界的缩放模式。只有当 scaleMode 为 `WhiteContentModeAspectFitSpace` 时设置生效。 */
+/** 视角边界的缩放模式。只有当 `scaleMode` 为 `WhiteContentModeAspectFitSpace` 时设置生效。 */
 @property (nonatomic, assign) CGFloat space;
 
 @end
