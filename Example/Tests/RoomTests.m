@@ -555,10 +555,8 @@ static NSTimeInterval kTimeout = 30;
             WhiteScene *current = state.scenes[state.index];
             if (retainPPT) {
                 XCTAssertTrue([current.ppt.src isEqualToString:pptPage.src]);
-                XCTAssertTrue(current.componentsCount == 1);
             } else {
                 XCTAssertNil(current.ppt);
-                XCTAssertTrue(current.componentsCount == 0);
             }
             [exp fulfill];
         }];
