@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
  3. 在成功初始化 实时房间 / 回放房间 后，通过该 API 再次设置 backgroundColor
  4. 将 WhiteBoardView opaque 属性，恢复为 YES。（由于 displayer 的 background API 实际上是异步的，所以建议延迟恢复 opaque 属性）
  
- 之所以最后又把 opaque 设置为 NO，是因为 iOS 系统会进行颜色合成计算。保持为 YES，比较影响性能。
+ 之所以最后又把 opaque 设置为 YES，是因为 iOS 系统会进行颜色合成计算。保持为 YES，比较影响性能。
  白板背景色。加入房间前，可以更改房间背景色。
  */
 @property (nonatomic, strong) UIColor *backgroundColor;
