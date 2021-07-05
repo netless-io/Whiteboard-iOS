@@ -51,6 +51,7 @@
                 completionHandler(YES, player, nil);
             }
         }
+        weakBridge.opaque = YES;
     }];
 }
 

@@ -29,18 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteDisplayer : NSObject
 
 /**
- 修改白板背景色 API
- 如需在显示 WhiteBoardView，未加入房间时，就改变颜色，请通过以下步骤：
- 
- 1. 先将 whiteboardView 实例属性 opaque 为 NO
- 2. 再设置 WhiteboardView backgroundColor
- 3. 在成功初始化 实时房间 / 回放房间 后，通过该 API 再次设置 backgroundColor
- 4. 将 WhiteBoardView opaque 属性，恢复为 YES。（由于 displayer 的 background API 实际上是异步的，所以建议延迟恢复 opaque 属性）
- 
- 之所以最后又把 opaque 设置为 YES，是因为 iOS 系统会进行颜色合成计算。保持为 YES，比较影响性能。
- 白板背景色。加入房间前，可以更改房间背景色。
+ @deprecated 该方法已弃用，修改白板背景色，现在可以直接设置 WhiteboardView backgroundColor 属性即可。
  */
-@property (nonatomic, strong) UIColor *backgroundColor;
+@property (nonatomic, strong) UIColor *backgroundColor __deprecated_msg("use WhiteboardView's backgroundColor property");
 
 #pragma mark - iframe
 

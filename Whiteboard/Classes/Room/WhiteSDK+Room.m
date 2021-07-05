@@ -47,6 +47,7 @@
     self.bridge.roomCallbacks.room = room;
     
     [self.bridge callHandler:@"sdk.joinRoom" arguments:@[config] completionHandler:^(id _Nullable value) {
+       
         if (completionHandler) {
             NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -65,6 +66,7 @@
                 completionHandler(YES, room, nil);
             }
         }
+        weakBridge.opaque = YES;
     }];
 }
 
