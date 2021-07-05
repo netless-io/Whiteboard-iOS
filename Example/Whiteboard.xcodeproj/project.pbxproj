@@ -51,6 +51,7 @@
 		0253522B7137279AE1FE150B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EF0269B81A485649497C862 /* Whiteboard.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Whiteboard.podspec; path = ../Whiteboard.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		3907B0F4268F598400A70158 /* README-zh.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = "README-zh.md"; path = "../README-zh.md"; sourceTree = "<group>"; };
 		398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		39A82CE6242700BB00FC1FD6 /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
 		39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhitePureReplayViewController.m; sourceTree = "<group>"; };
@@ -226,6 +227,7 @@
 			children = (
 				2EF0269B81A485649497C862 /* Whiteboard.podspec */,
 				398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */,
+				3907B0F4268F598400A70158 /* README-zh.md */,
 				0253522B7137279AE1FE150B /* README.md */,
 				71FA1F4860720C219B686ED8 /* LICENSE */,
 			);

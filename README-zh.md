@@ -60,22 +60,14 @@ pod install
 
 进入Example文件夹，打开 `Example.xcworkspace` 项目文件。
 
->同时在 `WhiteUtils.m` 根据代码注释填写`WhiteSDKToken`，`WhiteAppIdentifier`。
+>同时在`Whiteboard-Prefix.pch` 根据代码注释填写`WhiteSDKToken`，`WhiteAppIdentifier`。
 
 ```Objective-C
 /* FIXME: sdkToken
- 请在 https://console.netless.link 注册并获取 sdk token
  该 sdk token 不应该保存在客户端中，所有涉及 sdk token 的请求（当前类中所有请求），都应该放在服务器中进行，以免泄露产生不必要的风险。
  */
-#ifndef WhiteSDKToken
-#define WhiteSDKToken <#@sdk Token#>
-#endif
-
-/** FIXME: 2.8.0 新增必填项 AppIdentitier，通过该 API 可以避免大量预先的网络请求，极大增加异常网络下，用户的连通率。
- 请在 https://console.netless.link 中进行获取。
- */
-#ifndef WhiteAppIdentifier
-#define WhiteAppIdentifier <#@App identifier#>
+//#define WhiteSDKToken <#@sdk Token#>
+//#define WhiteAppIdentifier <#@App identifier#>
 #endif
 ```
 
@@ -84,6 +76,10 @@ pod install
 如果需要进入确定的房间进行调试，找到`Whiteboard-Prefix.pch`文件中，取消`WhiteRoomUUID`，以及`WhiteRoomToken`注释，同时填入指定的内容。
 
 ```C
+# 如果填写了 WhiteRoomUUID WhiteRoomToken，WhiteSDKToken 可以填写为空字符串
+//#define WhiteSDKToken <#@sdk Token#>
+//#define WhiteAppIdentifier <#@App identifier#>
+
 // 如果需要进入特定房间，取消以下两行注释，同时填入对应的 UUID 以及 roomToken
 //#define WhiteRoomUUID  <#Room UUID#>
 //#define WhiteRoomToken <#Room Token#>

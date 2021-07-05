@@ -46,16 +46,8 @@ Go to the Example folder and open the `Example.xcworkspace` project file.
  Please register at https://console.netless.link and get the SDK token
 This SDK token should not be stored on the client side, and all requests involving SDK tokens (all requests in the current class) should be placed on the server to avoid unnecessary risks caused by leaks.
  */
-#ifndef WhiteSDKToken
 #define WhiteSDKToken <#@sdk Token#>
-#endif
-
-/** FIXME: 2.8.0 Added mandatory AppIdentiTier, which can avoid a large number of network requests in advance and greatly increase the connectivity rate of users under abnormal network conditions.
-Please get in https://console.netless.link.
- */
-#ifndef WhiteAppIdentifier
 #define WhiteAppIdentifier <#@App identifier#>
-#endif
 ```
 
 ### Debugging specific rooms
@@ -65,6 +57,11 @@ If you need to go to a specific room for debugging, go to the `Whiteboard-Prefix
 
 
 ```C
+
+// If you add WhiteRoomUUID and WhiteRoomToken, then, you can define WhiteSDKToken as @""
+//#define WhiteSDKToken <#@sdk Token#>
+//#define WhiteAppIdentifier <#@App identifier#>
+
 // If you need access to a specific room, uncomment the following two lines and fill in the corresponding UUID and RoomToken
 //#define WhiteRoomUUID <#Room UUID#>
 //#define WhiteRoomToken <#Room Token#>

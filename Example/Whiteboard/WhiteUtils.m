@@ -7,7 +7,7 @@
 //
 
 #import "WhiteUtils.h"
-
+#import <Whiteboard/Whiteboard.h>
 @implementation WhiteUtils
 
 static NSString *APIHost = @"https://api.netless.link/v5/";
@@ -94,7 +94,9 @@ static NSString *APIHost = @"https://api.netless.link/v5/";
     [modifyRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     //在 header 中加入身份鉴权
     [modifyRequest addValue:self.sdkToken forHTTPHeaderField:@"token"];
-    
+    //需要根据需要，设置 region 字段，新用户必须设置该字段，没有默认值
+    [modifyRequest addValue:WhiteRegionCN forHTTPHeaderField:@"region"];
+
     //@"isRecord": @YES 是否开启录制，YES 为可回放房间，默认为持久化房间。
     NSDictionary *params = @{@"name": @"whiteboard-example-ios", @"limit": @110, @"isRecord": @YES};
     NSData *postData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
