@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.13.6] - 2021-07-06
+- 更新`white-web-sdk`至 2.13.9。主要优化 ppt 前端展示逻辑，优化书写性能，以及时间戳同步功能。
+- 优化`WhiteboardView`的`backgroundColor`属性，现在修改 WhiteboardView 颜色，可以直接使用修改`backgroundColor`，弃用`WhiteDisplayer`中`backgroundColor`方法。
 ## [2.13.5] - 2021-06-21
 - 更新`white-web-sdk`至 2.13.6
 ## [2.13.4] - 2021-06-15
