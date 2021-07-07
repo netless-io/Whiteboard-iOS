@@ -35,7 +35,7 @@
         _bridge.commonCallbacks.delegate = callback;
         if ([mixer conformsToProtocol:@protocol(WhiteAudioMixerBridgeDelegate)]) {
             config.enableRtcIntercept = YES;
-            _audioMixer = [[WhiteAudioMixerBridge alloc] initWithBridge:boardView deletegate:mixer];
+            _audioMixer = [[WhiteAudioMixerBridge alloc] initWithBridge:boardView delegate:mixer];
             [self.bridge addJavascriptObject:_audioMixer namespace:@"rtc"];
         }
         [self setupWebSdk];

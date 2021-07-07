@@ -18,6 +18,11 @@
 
 - (instancetype)initWithBridge:(WhiteBoardView *)bridge deletegate:(id<WhiteAudioMixerBridgeDelegate>)delegate;
 {
+    return [self initWithBridge:bridge delegate:delegate];
+}
+
+- (instancetype)initWithBridge:(WhiteBoardView *)bridge delegate:(id<WhiteAudioMixerBridgeDelegate>)delegate
+{
     self = [super init];
     _bridge = bridge;
     _delegate = delegate;
