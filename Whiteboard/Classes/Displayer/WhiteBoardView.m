@@ -98,6 +98,14 @@
     [self autoRefresh];
 }
 
+- (void)layoutSubviews {
+    // workaround：WKWebView 空项目，不需要这么操作，只需要 opaque 设置后即可，不知道为何在当前项目，会有一个白色的 OverlayView 一瞬间出现在最前面。
+    if (self.backgroundColor && self.subviews.count > 0) {
+        self.subviews.lastObject.backgroundColor = self.backgroundColor;
+    }
+    [super layoutSubviews];
+}
+
 - (void)autoRefresh
 {
     if (self.room || self.player) {
