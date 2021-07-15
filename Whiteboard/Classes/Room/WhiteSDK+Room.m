@@ -66,7 +66,9 @@
                 completionHandler(YES, room, nil);
             }
         }
-        weakBridge.opaque = YES;
+        if (weakBridge.backgroundColor) {
+            weakBridge.backgroundColor = weakBridge.backgroundColor;
+        }
     }];
 }
 

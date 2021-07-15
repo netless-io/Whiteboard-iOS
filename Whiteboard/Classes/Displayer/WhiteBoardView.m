@@ -154,8 +154,11 @@
         NSUInteger G = floorf(g * 255.0);
         NSUInteger B = floorf(b * 255.0);
         NSString *js = [NSString stringWithFormat:@"setBackgroundColor(%@, %@, %@)", @(R), @(G), @(B)];
+        __weak typeof(self) weakSelf = self;
         [self evaluateJavaScript:js completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-            
+            if (!error) {
+                weakSelf.opaque = YES;
+            }
         }];
     } else {
         self.opaque = NO;
