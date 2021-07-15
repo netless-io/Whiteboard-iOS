@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.13.14] - 2021-07-15
+- 更新`@netless/video-js-plugin`至 0.3.3
+- 修复`WhiteboardView`的`backgroundColor`属性，修复设置颜色后，加入房间颜色重置，修复颜色闪烁问题。
 ## [2.13.13] - 2021-07-14
 - 更新`@netless/video-js-plugin`至 0.3.2
 ## [2.13.12] - 2021-07-13
