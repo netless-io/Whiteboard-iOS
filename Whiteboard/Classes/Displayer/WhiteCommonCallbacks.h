@@ -75,6 +75,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)customMessage:(NSDictionary *)dict;
 
+/**
+ * @param dict {funName: string, message: id} funName 为对应 API 的名称
+ */
+- (void)logger:(NSDictionary *)dict;
+
 @end
 
 

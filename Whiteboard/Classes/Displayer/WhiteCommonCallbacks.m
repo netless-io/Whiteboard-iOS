@@ -11,9 +11,13 @@
 
 @implementation WhiteCommonCallbacks
 
-- (NSString *)logger:(id)log
+- (NSString *)logger:(NSDictionary *)log
 {
-    NSLog(@"%@", log);
+    if ([self.delegate respondsToSelector:@selector(logger:)]) {
+        [self.delegate logger:log];
+    } else {
+        NSLog(@"[White]: %@", log);
+    }
     return @"";
 }
 
