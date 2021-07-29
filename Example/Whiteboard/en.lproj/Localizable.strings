@@ -1,0 +1,207 @@
+/* No comment provided by engineer. */
+"next" = "next";
+
+/* No comment provided by engineer. */
+"ppt 铺满屏幕" = "scale ppt to fit";
+
+/* No comment provided by engineer. */
+"pre" = "pre";
+
+/* No comment provided by engineer. */
+"WhiteRoomPhase:%ld" = "WhiteRoomPhase:%ld";
+
+/* No comment provided by engineer. */
+"下一页" = "next page";
+
+/* No comment provided by engineer. */
+"主动断连" = "disconnect";
+
+/* No comment provided by engineer. */
+"主播" = "broadcaster";
+
+/* No comment provided by engineer. */
+"分享" = "share";
+
+/* No comment provided by engineer. */
+"创建失败" = "create failed";
+
+/* No comment provided by engineer. */
+"创建房间中..." = "creating a room...";
+
+/* No comment provided by engineer. */
+"创建房间失败，error:" = "fail to create a room，error:";
+
+/* No comment provided by engineer. */
+"创建新房间" = "create new room";
+
+/* No comment provided by engineer. */
+"初始化" = "Initializing";
+
+/* No comment provided by engineer. */
+"删除" = "delete";
+
+/* No comment provided by engineer. */
+"加入失败" = "join room failed";
+
+/* No comment provided by engineer. */
+"加入房间" = "join room";
+
+/* No comment provided by engineer. */
+"加入房间中..." = "entering the room...";
+
+/* No comment provided by engineer. */
+"加入房间失败" = "join room failed";
+
+/* No comment provided by engineer. */
+"加速" = "Speed up";
+
+/* No comment provided by engineer. */
+"发送自定义事件" = "dispatch custom message";
+
+/* No comment provided by engineer. */
+"回放失败" = "replay failed";
+
+/* No comment provided by engineer. */
+"回放房间" = "replay a room with video";
+
+/* No comment provided by engineer. */
+"坐标转换" = "coordinate conversion";
+
+/* No comment provided by engineer. */
+"当前视角状态" = "current view mode";
+
+/* No comment provided by engineer. */
+"当前连接状态" = "current connecting phase";
+
+/* No comment provided by engineer. */
+"快进" = "speed up";
+
+/* No comment provided by engineer. */
+"恢复操作" = "redo action";
+
+/* No comment provided by engineer. */
+"我的白板" = "my whiteboard";
+
+/* No comment provided by engineer. */
+"房间 UUID: %@" = "room UUID: %@";
+
+/* No comment provided by engineer. */
+"插入 PPT" = "insert PPT";
+
+/* No comment provided by engineer. */
+"插入动态 PPT" = "insert dynamic PPT";
+
+/* No comment provided by engineer. */
+"插入动态 PPT(有zip)" = "insert dynamic PPT(with zip)";
+
+/* No comment provided by engineer. */
+"插入图片" = "insert image";
+
+/* No comment provided by engineer. */
+"插入新页面" = "insert new page";
+
+/* No comment provided by engineer. */
+"插入静态 PPT" = "insert PPT page";
+
+/* No comment provided by engineer. */
+"播放" = "play";
+
+/* No comment provided by engineer. */
+"操作" = "action";
+
+/* No comment provided by engineer. */
+"改变布局" = "change frame";
+
+/* No comment provided by engineer. */
+"数据未初始化" = "data is not ready";
+
+/* No comment provided by engineer. */
+"文本" = "text";
+
+/* No comment provided by engineer. */
+"暂停" = "pause";
+
+/* No comment provided by engineer. */
+"橡皮擦" = "eraser";
+
+/* No comment provided by engineer. */
+"正在连接房间" = "connecting to the room";
+
+/* No comment provided by engineer. */
+"清屏" = "clean whiteboard";
+
+/* No comment provided by engineer. */
+"画笔" = "pencil";
+
+/* No comment provided by engineer. */
+"矩形" = "rectangle";
+
+/* No comment provided by engineer. */
+"确定" = "yes";
+
+/* No comment provided by engineer. */
+"确认" = "yes";
+
+/* No comment provided by engineer. */
+"禁止操作" = "disable operation";
+
+/* No comment provided by engineer. */
+"移动整体视角" = "move";
+
+/* No comment provided by engineer. */
+"箭头" = "arrows";
+
+/* No comment provided by engineer. */
+"纯白板回放房间" = "replay room only whiteboard";
+
+/* No comment provided by engineer. */
+"缩放" = "scale";
+
+/* No comment provided by engineer. */
+"获取 RoomToken 失败" = "get RoomToken failed";
+
+/* No comment provided by engineer. */
+"获取PPT" = "get PPT";
+
+/* No comment provided by engineer. */
+"获取信息" = "get information";
+
+/* No comment provided by engineer. */
+"获取场景完整封面" = "get screenshot with all content";
+
+/* No comment provided by engineer. */
+"获取连接状态" = "get connect phase";
+
+/* No comment provided by engineer. */
+"获取页面数据" = "get page info";
+
+/* No comment provided by engineer. */
+"获取预览截图" = "get preview";
+
+/* No comment provided by engineer. */
+"观众" = "audience";
+
+/* No comment provided by engineer. */
+"观察模式" = "Observation mode";
+
+/* No comment provided by engineer. */
+"视野锁定" = "lock view";
+
+/* No comment provided by engineer. */
+"设置" = "setting";
+
+/* No comment provided by engineer. */
+"设置 API" = "setting";
+
+/* No comment provided by engineer. */
+"输入房间ID，加入房间" = "enter room uuid";
+
+/* No comment provided by engineer. */
+"连接房间失败，room uuid:%@ roomToken:%@" = "join room failed，room uuid:%1$@ roomToken:%2$@";
+
+/* No comment provided by engineer. */
+"选择" = "selector";
+
+/* No comment provided by engineer. */
+"颜色" = "color";
+

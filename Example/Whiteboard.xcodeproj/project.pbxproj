@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */; };
 		39A82CE8242700BB00FC1FD6 /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */; };
+		39DFDFB826B23B3500A4DFE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39DFDFBA26B23B3500A4DFE8 /* Localizable.strings */; };
 		39E4205023A37DCF002B9B38 /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204523A37DCE002B9B38 /* WhiteBaseViewController.m */; };
 		39E4205123A37DCF002B9B38 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204623A37DCE002B9B38 /* StartViewController.m */; };
 		39E4205223A37DCF002B9B38 /* WhitePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204A23A37DCF002B9B38 /* WhitePlayerViewController.m */; };
@@ -55,6 +56,7 @@
 		398B6E9B23A7AA8A00950A57 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		39A82CE6242700BB00FC1FD6 /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
 		39A82CE7242700BB00FC1FD6 /* WhitePureReplayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhitePureReplayViewController.m; sourceTree = "<group>"; };
+		39DFDFB926B23B3500A4DFE8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		39E4204223A37DCE002B9B38 /* WhiteRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomViewController.h; sourceTree = "<group>"; };
 		39E4204323A37DCE002B9B38 /* PlayerCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerCommandListController.h; sourceTree = "<group>"; };
 		39E4204423A37DCE002B9B38 /* WhiteBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBaseViewController.h; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 			children = (
 				6003F595195388D20070C39A /* Whiteboard-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
+				39DFDFBA26B23B3500A4DFE8 /* Localizable.strings */,
 				6003F599195388D20070C39A /* main.m */,
 				6003F59B195388D20070C39A /* Whiteboard-Prefix.pch */,
 			);
@@ -327,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
+				39DFDFB826B23B3500A4DFE8 /* Localizable.strings in Resources */,
 				398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
@@ -449,6 +453,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		39DFDFBA26B23B3500A4DFE8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				39DFDFB926B23B3500A4DFE8 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		6003F596195388D20070C39A /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
