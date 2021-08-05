@@ -10,7 +10,7 @@
 NSString * const WhiteConstErrorDomain = @"com.herewhite.white";
 NSString * const WhiteConstConvertDomain = @"convert.com.herewhite.white";
 
-WhiteFunName const WhiteVidePluginName = @"videoJsPlugin";
+WhiteFunName const WhiteVideoPluginName = @"videoJsPlugin";
 //javascript 端，使用的是毫秒；iOS 端，习惯使用秒，使用 NSTimeInterval
 NSTimeInterval const WhiteConstTimeUnitRatio = 1000.0;
 

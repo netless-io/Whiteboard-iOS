@@ -15,7 +15,7 @@ extern NSString * const WhiteConstConvertDomain;
 #pragma mark - Name
 
 typedef NSString * WhiteFunName NS_STRING_ENUM;
-extern WhiteFunName const WhiteVidePluginName;
+extern WhiteFunName const WhiteVideoPluginName;
 
 #pragma mark - Ratio
 extern NSTimeInterval const WhiteConstTimeUnitRatio;

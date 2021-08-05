@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.13.17] - 2021-08-05
+- 更新`white-web-sdk`至 2.13.14
+- `WhiteCommonCallbackDelegate`新增日志输出接口`- (void)logger:(NSDictionary *)dict`。具体见 API 注释
 ## [2.13.16] - 2021-07-26
 - 更新`white-web-sdk`至 2.13.12
 ## [2.13.15] - 2021-07-17
