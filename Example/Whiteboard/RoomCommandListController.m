@@ -199,17 +199,23 @@ static NSString *kReuseCell = @"reuseCell";
         }
         case CommandTypeInsertDynamic:
         {
-            WhiteConverter *converter = [[WhiteConverter alloc] initWithRoomToken:self.roomToken];
-            [converter startConvertTask:@"https://white-cn-edge-doc-convert.oss-cn-hangzhou.aliyuncs.com/-1/1.pptx" type:ConvertTypeDynamic progress:^(CGFloat progress, WhiteConversionInfo * _Nullable info) {
-                NSLog(@"progress:%f", progress);
-            } completionHandler:^(BOOL success, ConvertedFiles * _Nullable ppt, WhiteConversionInfo * _Nullable info, NSError * _Nullable error) {
-                NSLog(@"success:%d ppt: %@ error:%@", success, [ppt yy_modelDescription], error);
-                
-                if (ppt) {
-                    [self.room putScenes:@"/dynamic" scenes:ppt.scenes index:0];
-                    [self.room setScenePath:@"/dynamic/1"];
-                }
+            WhitePptPage *page = [[WhitePptPage alloc] initWithSrc:@"pptx://convertcdn.netless.link/dynamicConvert/17510b2000c411ecbfbbb9230f6dd80f/1.slide" size:CGSizeMake(960, 720)];
+            WhiteScene *scene = [[WhiteScene alloc] initWithName:@"1" ppt:page];
+            [self.room addApp:@"/dynamic" scenes:@[scene] title:@"ppt" completionHandler:^(NSString * _Nonnull appId) {
+                NSLog(@"app id: %@", appId);
             }];
+            
+            [self.room safeSetAttributes:@{@"a": @"aaaa", @"b": @{@"ba": @"bababa"}}];
+            
+            [self.room getSyncedState:^(NSDictionary * _Nonnull state) {
+                NSLog(@"state1: %@", state);
+            }];
+            
+            [self.room safeUpdateAttributes:@[@"b", @"ba"] attributes:@"cccc"];
+            [self.room getSyncedState:^(NSDictionary * _Nonnull state) {
+                NSLog(@"state2: %@", state);
+            }];
+            
             break;
         }
         case CommandTypeInsertDynamicZip:

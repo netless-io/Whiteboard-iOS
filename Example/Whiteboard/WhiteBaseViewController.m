@@ -134,6 +134,7 @@ static NSString *kPPTScheme = @"netless";
         // 4. 初始化 SDK 配置项，根据需求配置属性
         WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
         config.renderEngine = WhiteSdkRenderEngineCanvas;
+        config.enableSyncedStore = YES;
         
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;

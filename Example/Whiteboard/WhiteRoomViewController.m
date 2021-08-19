@@ -165,6 +165,7 @@
         WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];
         roomConfig.cameraBound = bound;
         roomConfig.region = WhiteRegionCN;
+        roomConfig.useMultiViews = YES;
         self.roomConfig = roomConfig;
     }
 
@@ -269,6 +270,11 @@
 - (void)fireHighFrequencyEvent:(NSArray<WhiteEvent *>*)events
 {
     NSLog(@"%s", __func__);
+}
+
+- (void)fireAttributesUpdate:(NSDictionary *)state
+{
+    NSLog(@"%s %@", __func__, state);
 }
 
 @end
