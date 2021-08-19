@@ -165,6 +165,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) NSNumber *timeout;
 
+/** 是否开启多窗口，默认为 false，开启后，各种 API 会进行更改。*/
+@property (nonatomic, assign) BOOL useMultiViews;
+
 @end
 
 NS_ASSUME_NONNULL_END

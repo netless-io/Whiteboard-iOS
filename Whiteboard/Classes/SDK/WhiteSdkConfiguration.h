@@ -187,6 +187,9 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 @property (nonatomic, assign) BOOL disableDeviceInputs;
 
+/** 独立的 SyncedStore 状态，与 globalState 类似，但是没有任何 SDK 内部的状态 */
+@property (nonatomic, assign) BOOL enableSyncedStore;
+
 @end
 
 @implementation WhiteSdkConfiguration (Deleted)

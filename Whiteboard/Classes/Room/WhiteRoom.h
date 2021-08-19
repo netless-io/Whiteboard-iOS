@@ -515,6 +515,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface WhiteRoom(MainView)
+
+/**
+ * 添加窗口
+ * @param dir 场景目录
+ * @param scenes 动静态转换出来的 WhiteScenes
+ * @param title 窗口名称
+ */
+- (void)addApp:(NSString *)dir scenes:(NSArray<WhiteScene *>*)scenes title:(NSString *)title completionHandler:(void (^)(NSString *appId))completionHandler;
+
+/** 获取 syncedState 所有状态值 */
+- (void)getSyncedState:(void (^)(NSDictionary *state))result;
+
+/** 更新 syncedState 中的值，逻辑与 GlobalState 相似，只会更新有值的 key value。room writable false 时，不会任何效果。 */
+- (void)safeSetAttributes:(NSDictionary *)result;
+
+/** 更新 syncedState 特定 key 的值，逻辑与 GlobalState 相似。
+ * 只会更新有值的 key value。room writable false 时，不会任何效果。
+ * keyPaths 参考 KVC 的效果
+ */
+- (void)safeUpdateAttributes:(NSArray<NSString *>*)keyPaths attributes:(id)attributes;
+
+@end
+
 #pragma mark - 弃用方法
 @interface WhiteRoom (Deprecated)
 
