@@ -432,6 +432,15 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     }];
 }
 
+- (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
+{
+    [self.bridge callHandler:@"room.addApp" arguments:@[appParams.kind, appParams.options, appParams.attrs] completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            completionHandler(value);
+        }
+    }];
+}
+
 - (void)getSyncedState:(void (^)(NSDictionary *state))result {
     [self.bridge callHandler:@"room.getSyncedState" completionHandler:^(id  _Nullable value) {
         NSString *string = value;

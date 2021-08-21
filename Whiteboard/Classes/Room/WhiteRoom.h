@@ -20,6 +20,7 @@
 #import "WhitePanEvent.h"
 #import "WhiteDisplayer.h"
 #import "WhiteSDK+Room.h"
+#import "WhiteAppParam.h"
 
 @class WhiteBoardView;
 
@@ -519,11 +520,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * 添加窗口
- * @param dir 场景目录
- * @param scenes 动静态转换出来的 WhiteScenes
- * @param title 窗口名称
+ * @param kind app 类型
+ * @param options app 所需要的通用设置
+ * @param attrs 各类 app 各自的配置项
  */
-- (void)addApp:(NSString *)dir scenes:(NSArray<WhiteScene *>*)scenes title:(NSString *)title completionHandler:(void (^)(NSString *appId))completionHandler;
+- (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
+
 
 /** 获取 syncedState 所有状态值 */
 - (void)getSyncedState:(void (^)(NSDictionary *state))result;
