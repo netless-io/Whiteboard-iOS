@@ -201,7 +201,8 @@ static NSString *kReuseCell = @"reuseCell";
         {
             WhitePptPage *page = [[WhitePptPage alloc] initWithSrc:@"pptx://convertcdn.netless.link/dynamicConvert/17510b2000c411ecbfbbb9230f6dd80f/1.slide" size:CGSizeMake(960, 720)];
             WhiteScene *scene = [[WhiteScene alloc] initWithName:@"1" ppt:page];
-            [self.room addApp:@"/dynamic" scenes:@[scene] title:@"ppt" completionHandler:^(NSString * _Nonnull appId) {
+            WhiteAppParam *app = [WhiteAppParam createDocsViewerApp:@"/www" scenes:@[scene] title:@"tt"];
+            [self.room addApp:app completionHandler:^(NSString * _Nonnull appId) {
                 NSLog(@"app id: %@", appId);
             }];
             
