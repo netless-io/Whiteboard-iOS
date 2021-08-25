@@ -168,6 +168,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 是否开启多窗口，默认为 false，开启后，各种 API 会进行更改。*/
 @property (nonatomic, assign) BOOL useMultiViews;
 
+/** 驼峰形式的 CSS，透传给多窗口时，最小化 div 的 css */
+@property (nonatomic, copy) NSDictionary *collectionStyle;
+
 @end
 
 NS_ASSUME_NONNULL_END
