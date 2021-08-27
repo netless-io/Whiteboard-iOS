@@ -424,6 +424,10 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
 #pragma mark - MainView
 
+- (void)disableWindowOperation:(BOOL)disable {
+    [self.bridge callHandler:@"room.disableWindowOperation" arguments:@[@(disable)]];
+}
+
 - (void)addApp:(NSString *)dir scenes:(NSArray<WhiteScene *>*)scenes title:(NSString *)title completionHandler:(void (^)(NSString *appId))completionHandler {
     [self.bridge callHandler:@"room.addApp" arguments:@[dir, scenes, title] completionHandler:^(id  _Nullable value) {
         if (completionHandler) {

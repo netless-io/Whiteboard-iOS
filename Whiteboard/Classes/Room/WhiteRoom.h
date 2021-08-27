@@ -518,11 +518,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoom(MainView)
 
+- (void)disableWindowOperation:(BOOL)disable;
+
 /**
  * 添加窗口
- * @param kind app 类型
- * @param options app 所需要的通用设置
- * @param attrs 各类 app 各自的配置项
+ * @param appParams app 类型以及配置内容
  */
 - (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
 

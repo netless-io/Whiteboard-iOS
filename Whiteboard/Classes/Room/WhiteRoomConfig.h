@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL useMultiViews;
 
 /** 多窗口用的本地参数，只影响本地客户 */
-@property (nonatomic, strong) WhiteWindowParams *windowParams;
+@property (nonatomic, strong, nullable) WhiteWindowParams *windowParams;
 
 @end
 
