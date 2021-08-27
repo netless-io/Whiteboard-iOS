@@ -8,6 +8,18 @@
 #import "WhiteRoomConfig.h"
 #import "WhiteConsts.h"
 
+@implementation WhiteWindowParams
+
+- (instancetype)init {
+    self = [super init];
+    _chessboard = YES;
+    _containerSizeRatio = @(9/16);
+    _debug = YES;
+    return self;
+}
+
+@end
+
 @implementation WhiteRoomConfig
 
 

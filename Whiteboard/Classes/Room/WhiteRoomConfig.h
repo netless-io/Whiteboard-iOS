@@ -12,6 +12,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface WhiteWindowParams : WhiteObject
+
+/** 各个端本地显示多窗口内容时，高与宽比例，默认为 9:16。该值应该各个端保持统一，否则会有不可预见的情况。 */
+@property (nonatomic, strong) NSNumber *containerSizeRatio;
+/** 多窗口区域（主窗口）以外的空间显示 PS 棋盘背景，默认 YES */
+@property (nonatomic, assign) BOOL chessboard;
+/** 驼峰形式的 CSS，透传给多窗口时，最小化 div 的 css */
+@property (nonatomic, copy, nullable) NSDictionary *collectorStyles;
+/** 是否在网页控制台打印日志，默认 YES */
+@property (nonatomic, assign) BOOL debug;
+
+@end
+
 /** 
  配置实时房间的参数。 
 
@@ -168,8 +181,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 是否开启多窗口，默认为 false，开启后，各种 API 会进行更改。*/
 @property (nonatomic, assign) BOOL useMultiViews;
 
-/** 驼峰形式的 CSS，透传给多窗口时，最小化 div 的 css */
-@property (nonatomic, copy) NSDictionary *collectionStyle;
+/** 多窗口用的本地参数，只影响本地客户 */
+@property (nonatomic, strong) WhiteWindowParams *windowParams;
 
 @end
 
