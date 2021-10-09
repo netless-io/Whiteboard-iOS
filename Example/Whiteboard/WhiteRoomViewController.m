@@ -165,7 +165,6 @@
         WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];
         roomConfig.cameraBound = bound;
         roomConfig.region = WhiteRegionCN;
-        roomConfig.useMultiViews = YES;
         self.roomConfig = roomConfig;
     }
 

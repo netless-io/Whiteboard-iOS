@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *roomUuid;
 @property (nonatomic, strong) WhiteBoardView *boardView;
 @property (nonatomic, strong) WhiteSDK *sdk;
+@property (nonatomic, assign) BOOL useMultiViews;
 
 @property (nonatomic, strong, nonnull) WhiteSdkConfiguration *sdkConfig;
 

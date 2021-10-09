@@ -135,6 +135,7 @@ static NSString *kPPTScheme = @"netless";
         WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
         config.renderEngine = WhiteSdkRenderEngineCanvas;
         config.enableSyncedStore = YES;
+        config.useMultiViews = self.useMultiViews;
         
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;

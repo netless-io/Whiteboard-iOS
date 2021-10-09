@@ -44,6 +44,11 @@
     [joinBtn addTarget:self action:@selector(joinRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:joinBtn];
     
+    UIButton *joinWindowBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [joinWindowBtn setTitle:NSLocalizedString(@"加入多窗口房间", nil) forState:UIControlStateNormal];
+    [joinWindowBtn addTarget:self action:@selector(joinWindowRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:joinWindowBtn];
+    
     UIButton *createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [createBtn setTitle:NSLocalizedString(@"创建新房间", nil) forState:UIControlStateNormal];
     [createBtn addTarget:self action:@selector(createRoom:) forControlEvents:UIControlEventTouchUpInside];
@@ -117,6 +122,13 @@
 {
     WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
     vc.roomUuid = self.inputV.text;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)joinWindowRoom:(UIButton *)sender {
+    WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
+    vc.roomUuid = self.inputV.text;
+    vc.useMultiViews = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
