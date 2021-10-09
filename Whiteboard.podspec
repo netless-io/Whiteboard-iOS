@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Whiteboard'
-  s.version          = '2.13.21-beta1'
+  s.version          = '2.14.0'
   s.summary          = 'netless.io Whiteboard API on iOS'
 
   s.description      = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.author           = { 'leavesster' => 'yleaf@herewhite.com' }
   s.source           = { :git => 'https://github.com/netless-io/Whiteboard-iOS.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '10.0'
   
   s.resource_bundles = {
     'Whiteboard' => ['Whiteboard/Resource/*']
