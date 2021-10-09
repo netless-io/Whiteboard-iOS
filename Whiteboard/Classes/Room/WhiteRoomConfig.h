@@ -178,8 +178,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) NSNumber *timeout;
 
-/** 是否开启多窗口，默认为 false，开启后，各种 API 会进行更改。*/
-@property (nonatomic, assign) BOOL useMultiViews;
+///** 是否开启多窗口，默认为 false，开启后，各种 API 会进行更改。正式版该 API 已经迁移到 WhiteSDKConfiguration 中 */
+//@property (nonatomic, assign) BOOL useMultiViews;
 
 /** 多窗口用的本地参数，只影响本地客户 */
 @property (nonatomic, strong, nullable) WhiteWindowParams *windowParams;
