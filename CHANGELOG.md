@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.14.1] - 2021-10-11
+- 更新`white-web-sdk`至 2.14.4。
 ## [2.14.0] - 2021-10-09
 - 更新`white-web-sdk`至 2.14.3，支持多窗口模式。具体见 `WhiteSdkConfiguration` 类中的`useMultiViews` 以及`WhiteRoomConfig`的`windowParams` 属性注释，多窗口暂时不支持回放。 
 - <span style="color: red">不再兼容 iOS 9</span> 
