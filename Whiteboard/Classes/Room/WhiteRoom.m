@@ -45,8 +45,10 @@
 - (void)setMemberState:(WhiteMemberState *)modifyState
 {
     [self.bridge callHandler:@"room.setMemberState" arguments:@[modifyState]];
-    NSDictionary *update = [modifyState jsonDict];
-    [_memberState yy_modelSetWithJSON:update];
+}
+
+- (WhiteReadonlyMemberState *)memberState {
+    return self.state.memberState;
 }
 
 - (NSArray<WhiteRoomMember *>*)roomMembers
