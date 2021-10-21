@@ -7,8 +7,10 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## [2.14.2] - 2021-10-15
+## [2.14.3] - 2021-10-21
 - 更新`white-web-sdk`至 2.14.5
+## [2.14.2] - 2021-10-15
+- 更新`white-web-sdk`至 2.14.4
 - 更新`@netlesss/window-manager`至 0.2.5，修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，`WhiteRoomConfig`的 `disableCameraTransform` true 无法生效的问题。
 ## [2.14.1] - 2021-10-11
 - 更新`white-web-sdk`至 2.14.4
