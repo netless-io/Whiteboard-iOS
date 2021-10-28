@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.14.6] - 2021-10-28
+- 更新`white-web-sdk`至 2.14.7
+- 多窗口支持显示单页模式 ppt
 ## [2.14.5] - 2021-10-22
 - 更新`@netlesss/window-manager`至 0.2.9,修复`WhiteSdkConfiguration`中`useMultiViews`为 true，writable 为 false，userCursor 为 true 进入一个没有多窗口内容的房间后，再切换回 writable 为 true 时，无法绘制的问题。
 ## [2.14.4] - 2021-10-22
