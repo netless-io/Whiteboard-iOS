@@ -134,13 +134,14 @@ static NSString *kPPTScheme = @"netless";
         // 4. 初始化 SDK 配置项，根据需求配置属性
         WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
         config.renderEngine = WhiteSdkRenderEngineCanvas;
-        config.enableSyncedStore = YES;
+//        config.enableSyncedStore = YES;
         config.useMultiViews = self.useMultiViews;
         
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;
         config.log = YES;
         config.region = WhiteRegionCN;
+        config.enableIFramePlugin = YES;
         //自定义 netless 协议，所有 ppt 请求，都由 https 更改为 kPPTScheme，需要配合 NETURLSchemeHandler 进行操作
         if (@available(iOS 11.0, *)) {
 //            WhitePptParams *pptParams = [[WhitePptParams alloc] init];
