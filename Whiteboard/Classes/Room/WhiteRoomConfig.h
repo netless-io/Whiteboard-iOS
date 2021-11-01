@@ -33,35 +33,30 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteRoomConfig : WhiteObject
 
 /**
- 设置房间 UUID 并初始化 `WhiteRoomConfig` 对象。
+ 设置房间 UUID 和用户信息并初始化 `WhiteRoomConfig` 对象。
  @param uuid 房间 UUID，即房间唯一标识符。
  @param roomToken 用于鉴权的 Room Token。生成该 Room Token 的房间 UUID 必须和上面传入的房间 UUID 一致。
+ @param uid 用户标识，可以为任意 string。
  @return 初始化的 `WhiteRoomConfig` 对象。
  */
-- (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken;
-/**
- @deprecated 该方法已经废弃。请使用 [initWithUuid:roomToken:userPayload:](initWithUuid:roomToken:userPayload:)。
+- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid;
 
- 设置房间 UUID 和用户信息并初始化 `WhiteRoomConfig` 对象。
- @param uuid 房间 UUID，即房间唯一标识符。
- @param roomToken 用于鉴权的 Room Token。生成该 Room Token 的房间 UUID 必须和上面传入的房间 UUID 一致。
- @param memberInfo 用户信息。
- @return 初始化的 `WhiteRoomConfig` 对象。
- */
-- (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken memberInfo:(WhiteMemberInformation * _Nullable)memberInfo  __attribute__((deprecated("memberInfo is deprecated, please use userPayload")));
 /**
  设置房间 UUID 和用户信息并初始化 `WhiteRoomConfig` 对象。
  @param uuid 房间 UUID，即房间唯一标识符。
  @param roomToken 用于鉴权的 Room Token。生成该 Room Token 的房间 UUID 必须和上面传入的房间 UUID 一致。
- @param userPayload 自定义用户信息。
+ @param uid 用户标识，可以为任意 string，字符串长度不能超过 1024，2.15.0 后必须填写。
+ @param userPayload 自定义用户信息内容，必须为字典或者 WhiteObject 子类。
+ @return 初始化的 `WhiteRoomConfig` 对象。
  */
-- (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken userPayload:(id _Nullable)userPayload NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid userPayload:(id _Nullable)userPayload NS_DESIGNATED_INITIALIZER;
 
 /** 房间 UUID，即房间唯一标识符。 */
-@property (nonatomic, copy) NSString *uuid;
+@property (nonatomic, copy, readonly) NSString *uuid;
 /** 用于鉴权的 Room Token。 */
-@property (nonatomic, copy) NSString *roomToken;
-
+@property (nonatomic, copy, readonly) NSString *roomToken;
+/** 用户标识记录，*/
+@property (nonatomic, copy, readonly) NSString *uid;
 /** 
  待回放的互动白板房间所在的数据中心。
 

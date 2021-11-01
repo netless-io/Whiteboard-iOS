@@ -20,30 +20,29 @@
 
 @end
 
+@interface WhiteRoomConfig ()
+
+@property (nonatomic, copy, readwrite) NSString *uuid;
+@property (nonatomic, copy, readwrite) NSString *roomToken;
+@property (nonatomic, copy, readwrite) NSString *uid;
+
+@end
+
 @implementation WhiteRoomConfig
 
 
 - (instancetype)init
 {
     NSAssert(false, @"please never use this method.");
-    return [self initWithUuid:nil roomToken:nil userPayload:nil];
+    return [self initWithUUID:nil roomToken:nil uid:@"" userPayload:nil];
 }
 
-- (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken
+- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid
 {
-    return [self initWithUuid:uuid roomToken:roomToken userPayload:nil];
+    return [self initWithUUID:uuid roomToken:roomToken uid:uid userPayload:nil];
 }
 
-- (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken memberInfo:(WhiteMemberInformation *)memberInfo
-{
-    self = [self initWithUuid:uuid roomToken:roomToken userPayload:memberInfo];
-    if (self) {
-        _memberInfo = memberInfo;
-    }
-    return self;
-}
-
-- (instancetype)initWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken userPayload:(id)userPayload
+- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid userPayload:(id _Nullable)userPayload
 {
     if (self = [super init]) {
         _uuid = uuid;
@@ -51,6 +50,7 @@
         _userPayload = userPayload;
         _timeout = @45;
         _isWritable = true;
+        _uid = uid;
         _disableNewPencil = true;
         if (_userPayload) {
             NSDictionary *dict = @{@"key": _userPayload};

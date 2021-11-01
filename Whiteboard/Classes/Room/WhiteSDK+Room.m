@@ -17,17 +17,6 @@
 
 #pragma mark - Room API
 
-- (void)joinRoomWithUuid:(NSString *)uuid roomToken:(NSString *)roomToken completionHandler:(nonnull void (^)(BOOL, WhiteRoom * _Nullable, NSError * _Nullable))completionHandler
-{
-    [self joinRoomWithRoomUuid:uuid roomToken:roomToken callbacks:nil completionHandler:completionHandler];
-}
-
-- (void)joinRoomWithRoomUuid:(NSString *)roomUuid roomToken:(NSString *)roomToken callbacks:(nullable id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(nonnull void (^)(BOOL, WhiteRoom * _Nullable, NSError * _Nullable))completionHandler
-{
-    WhiteRoomConfig *config = [[WhiteRoomConfig alloc] initWithUuid:roomUuid roomToken:roomToken userPayload:nil];
-    [self joinRoomWithConfig:config callbacks:callbacks completionHandler:completionHandler];
-}
-
 - (void)joinRoomWithConfig:(WhiteRoomConfig *)config callbacks:(nullable id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(void (^) (BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error))completionHandler
 {
     NSAssert([config.roomToken length] > 0 && [config.uuid length] > 0, NSLocalizedString(@"room uuid 和 token 不能为空", nil));
