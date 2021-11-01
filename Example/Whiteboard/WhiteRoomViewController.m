@@ -158,7 +158,7 @@
     
     if (!self.roomConfig) {
         NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg"};
-        WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken userPayload:payload];
+        WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUUID:self.roomUuid roomToken:roomToken uid:@"1" userPayload:payload];
         // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
 //         roomConfig.disableEraseImage = YES;
         // 设置最大最小缩放比例，不设置成 0，会导致画面极小时，出现一些问题。默认不是 0
@@ -216,7 +216,7 @@
     
     if (phase == WhiteRoomPhaseDisconnected && self.roomUuid && self.roomToken) {
         self.reconnecting = YES;
-        [self.sdk joinRoomWithUuid:self.roomUuid roomToken:self.roomToken completionHandler:^(BOOL success, WhiteRoom *room, NSError *error) {
+        [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self completionHandler:^(BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error) {
             self.reconnecting = NO;
             NSLog(@"reconnected");
             if (error) {
