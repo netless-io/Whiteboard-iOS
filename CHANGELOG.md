@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.15.1] - 2021-11-09
+- 更新`white-web-sdk`至 2.15.3
+- 更新`@netlesss/window-manager`至 0.2.17
 ## [2.15.0] - 2021-11-01
 - 更新`white-web-sdk`至 2.15.1
 - <span style="color: red">WhiteRoomConfig 现在需要强制配置 UID</span>，其初始化方法，更改为`- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid userPayload:(id _Nullable)userPayload`和`- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid`，移除旧的初始化 API。
