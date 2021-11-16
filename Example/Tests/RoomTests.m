@@ -101,8 +101,7 @@ typedef void(^InterrupterBlock)(NSString *url);
 {
     if (!_roomConfig) {
         NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
-        _roomConfig = [[WhiteRoomConfig alloc] initWithUuid:WhiteRoomUUID roomToken:WhiteRoomToken userPayload:payload];
-
+        _roomConfig = [[WhiteRoomConfig alloc] initWithUUID:WhiteRoomUUID roomToken:WhiteRoomToken uid:@"1"];
     }
     return _roomConfig;
 }
