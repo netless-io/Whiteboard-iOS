@@ -7,22 +7,25 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.15.5] - 2021-11-24
+- 更新`white-web-sdk`至 2.15.7
+- 更新`@netless/window-manager`至 0.3.7
 ## [2.15.4] - 2021-11-23
 - 更新`white-web-sdk`至 2.15.6
-- 更新`@netlesss/window-manager`至 0.3.5
+- 更新`@netless/window-manager`至 0.3.5
 - 更新`@netless/app-slide`至 0.0.27
 ## [2.15.3] - 2021-11-22
 - 更新`white-web-sdk`至 2.15.6
-- 更新`@netlesss/window-manager`至 0.3.2
+- 更新`@netless/window-manager`至 0.3.2
 - 更新`@netless/app-slide`至 0.0.25
 ## [2.15.2] - 2021-11-17
 - 更新`white-web-sdk`至 2.15.4
-- 更新`@netlesss/window-manager`至 0.2.19
+- 更新`@netless/window-manager`至 0.2.19
 - 更新`@netless/app-slide`至 0.0.22
 - 优化 `useMultiViews` 为 true 时，cameraState 状态回调
 ## [2.15.1] - 2021-11-09
 - 更新`white-web-sdk`至 2.15.3
-- 更新`@netlesss/window-manager`至 0.2.17
+- 更新`@netless/window-manager`至 0.2.17
 ## [2.15.0] - 2021-11-01
 - 更新`white-web-sdk`至 2.15.1
 - <span style="color: red">WhiteRoomConfig 现在需要强制配置 UID</span>，其初始化方法，更改为`- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid userPayload:(id _Nullable)userPayload`和`- (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid`，移除旧的初始化 API。
@@ -33,14 +36,14 @@
 - 更新`white-web-sdk`至 2.14.7
 - 多窗口支持显示单页模式 ppt
 ## [2.14.5] - 2021-10-22
-- 更新`@netlesss/window-manager`至 0.2.9,修复`WhiteSdkConfiguration`中`useMultiViews`为 true，writable 为 false，userCursor 为 true 进入一个没有多窗口内容的房间后，再切换回 writable 为 true 时，无法绘制的问题。
+- 更新`@netless/window-manager`至 0.2.9,修复`WhiteSdkConfiguration`中`useMultiViews`为 true，writable 为 false，userCursor 为 true 进入一个没有多窗口内容的房间后，再切换回 writable 为 true 时，无法绘制的问题。
 ## [2.14.4] - 2021-10-22
-- 更新`@netlesss/window-manager`至 0.2.8,修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，以 writable 为 false 进入一个没有多窗口内容的房间时，出现报错，或者无回调的问题。
+- 更新`@netless/window-manager`至 0.2.8,修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，以 writable 为 false 进入一个没有多窗口内容的房间时，出现报错，或者无回调的问题。
 ## [2.14.3] - 2021-10-21
 - 更新`white-web-sdk`至 2.14.5
 ## [2.14.2] - 2021-10-15
 - 更新`white-web-sdk`至 2.14.4
-- 更新`@netlesss/window-manager`至 0.2.5，修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，`WhiteRoomConfig`的 `disableCameraTransform` true 无法生效的问题。
+- 更新`@netless/window-manager`至 0.2.5，修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，`WhiteRoomConfig`的 `disableCameraTransform` true 无法生效的问题。
 ## [2.14.1] - 2021-10-11
 - 更新`white-web-sdk`至 2.14.4
 ## [2.14.0] - 2021-10-09
