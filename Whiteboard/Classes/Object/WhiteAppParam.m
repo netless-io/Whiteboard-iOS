@@ -45,7 +45,7 @@
     param.options = ops;
     
     NSAssert(src.length > 0, @"src cann't be nil");
-    param.attrs = @{@"src": src ? @"" : src};
+    param.attrs = @{@"src": src ? src : @""};
     
     return param;
 }
