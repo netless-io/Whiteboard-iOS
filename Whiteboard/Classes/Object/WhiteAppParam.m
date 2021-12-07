@@ -49,4 +49,19 @@
     
     return param;
 }
+
++ (instancetype)createSlideApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title {
+    WhiteAppParam *param = [[WhiteAppParam alloc] init];
+    param.kind = @"Slide";
+    
+    WhiteAppOptions *ops = [[WhiteAppOptions alloc] init];
+    ops.scenePath = dir;
+    ops.scenes = scenes;
+    ops.title = title;
+    param.options = ops;
+    
+    param.attrs = @{};
+    
+    return param;
+}
 @end
