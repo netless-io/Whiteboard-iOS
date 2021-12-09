@@ -178,8 +178,7 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  */
 @property (nonatomic, copy) NSDictionary *loggerOptions;
 
-
-@property (nonatomic, assign) BOOL routeBackup;
+@property (nonatomic, assign) BOOL routeBackup __deprecated_msg("this api has no effect");
 
 /** 动态 ppt 参数。详见 [WhitePptParams](WhitePptParams)。 */
 @property (nonatomic, strong) WhitePptParams *pptParams;
