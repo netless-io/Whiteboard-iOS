@@ -70,10 +70,10 @@ static NSString *const kJSDeviceType = @"deviceType";
     uname(&systemInfo);
     NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
     _platform = @"ios";
-    _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@", deviceModel, currentDevice.systemVersion]};
+    _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@ %@", _platform, deviceModel, currentDevice.systemVersion]};
     _appIdentifier = appIdentifier;
     _pptParams = [[WhitePptParams alloc] init];
-    return self;
+    return self;
 }
 
 + (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper
