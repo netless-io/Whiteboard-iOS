@@ -7,7 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-
+## [2.15.20] - 2022-01-04
+- 多窗口模式，增加最大化，最小化，普通模式回调，具体见`WhiteRoomState`类`windowBoxState`属性。
+- 多窗口窗体初始化时，支持配置夜间模式主题，具体见`WhiteRoomConfig`配置类中`WhiteWindowParams`的`prefersColorScheme`属性。
 ## [2.15.19] - 2021-12-29
 - 更新`@netless/app-slide`至 0.5.53
 ## [2.15.18] - 2021-12-28
