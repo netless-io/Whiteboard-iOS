@@ -92,7 +92,7 @@ Pod::Spec.new do |s|
   # ---------
   # -YYModel-
   # ---------
-#  s.default_subspec = 'Converter', 'Room', 'Replayer', 'NativeReplayer'
+  s.default_subspec = 'Converter', 'Room', 'Replayer', 'NativeReplayer'
   
   # ---------
   # --YYKit--
