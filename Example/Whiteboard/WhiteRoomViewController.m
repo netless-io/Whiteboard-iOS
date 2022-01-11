@@ -19,6 +19,7 @@
 #import <Masonry/Masonry.h>
 #import "RoomCommandListController.h"
 #import "WhiteUtils.h"
+#import "WhiteFPA.h"
 
 @implementation WhiteRoomViewController
 
@@ -39,6 +40,10 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor orangeColor];
+    
+    if (@available(iOS 13, *)) {
+        [WhiteFPA setupFpa:[WhiteFPA defaultFpaConfig] chain:[WhiteFPA defaultChain]];
+    }
 
     if ([self.roomUuid length] > 0) {
         [self joinExistRoom];
@@ -165,6 +170,11 @@
         WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];
         roomConfig.cameraBound = bound;
         roomConfig.region = WhiteRegionCN;
+        if (@available(iOS 13.0, *)) {
+            // 将 web端的 webSocket 转成从 native 发起
+            // roomConfig.nativeWebSocket = YES;
+        }
+
         self.roomConfig = roomConfig;
     }
 
