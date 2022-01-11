@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *roomToken;
 /** 用户标识记录，*/
 @property (nonatomic, copy, readonly) NSString *uid;
+/** 将 WhiteboardView 中的 webSocket 迁移到 WhiteSocket 中连接实现  */
+@property (nonatomic, assign) BOOL nativeWebSocket API_AVAILABLE(ios(13.0));
 /** 
  待回放的互动白板房间所在的数据中心。
 
