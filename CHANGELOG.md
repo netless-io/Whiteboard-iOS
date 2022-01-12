@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.15.21] - 2022-01-12
+- 更新`white-web-sdk`至 2.15.15
 ## [2.15.20] - 2022-01-04
 - 多窗口模式，增加最大化，最小化，普通模式回调，具体见`WhiteRoomState`类`windowBoxState`属性。
 - 多窗口窗体初始化时，支持配置夜间模式主题，具体见`WhiteRoomConfig`配置类中`WhiteWindowParams`的`prefersColorScheme`属性。
