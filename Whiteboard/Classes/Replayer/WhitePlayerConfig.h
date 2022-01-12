@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 白板回放的起始时间。
 
-Unix 时间戳（毫秒），表示回放的起始 UTC 时间。例如，`1615370614269` 表示 2021-03-10 18:03:34 GMT+0800。 */
+Unix 时间戳（秒），表示回放的起始 UTC 时间。例如，`1615370614` 表示 2021-03-10 18:03:34 GMT+0800。 */
 @property (nonatomic, strong, nullable) NSNumber *beginTimestamp;
 
 /** 白板回放的持续时长（秒）。如果没有设置，回放会从起始时间一直持续到退出房间。 */
