@@ -1,3 +1,5 @@
+set -exo pipefail
+
 len() {
   echo ${#1}
 }
