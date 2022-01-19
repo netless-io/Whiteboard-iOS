@@ -8,7 +8,7 @@
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.15.23] - 2022-01-18
-- 更新`@netless/window-manager`至 0.3.22
+- 更新`@netless/window-manager`至 0.3.23
 - 更新`white-web-sdk`至2.15.16
 - 更新`@netless/video-js-plugin` 至 0.3.8
 ## [2.15.22] - 2022-01-13
