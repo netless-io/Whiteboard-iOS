@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeScalePptToFit,
     CommandTypeOperation,
     CommandTypeDeleteOperation,
-    CommandTypeMoveRectange,
+    CommandTypeMoveRectangle,
     CommandTypeCurrentViewMode,
     CommandTypeCustomEvent,
     CommandTypeCleanScene,
@@ -145,10 +145,10 @@ static NSString *kReuseCell = @"reuseCell";
             [self.room duplicate];
             [self.room copy];
             [self.room paste];
-            [self.room deleteOpertion];
+            [self.room deleteOperation];
             break;
         }
-        case CommandTypeMoveRectange:
+        case CommandTypeMoveRectangle:
         {
             WhiteRectangleConfig *config = [[WhiteRectangleConfig alloc] initWithInitialPosition:200 height:400];
             [self.room moveCameraToContainer:config];
