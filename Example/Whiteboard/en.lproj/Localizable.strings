@@ -2,7 +2,7 @@
 "next" = "next";
 
 /* No comment provided by engineer. */
-"ppt 铺满屏幕" = "scale ppt to fit";
+"铺满屏幕" = "scale to fit";
 
 /* No comment provided by engineer. */
 "pre" = "pre";
@@ -58,7 +58,7 @@
 "加速" = "Speed up";
 
 /* No comment provided by engineer. */
-"发送自定义事件" = "dispatch custom message";
+"自定义事件" = "custom message";
 
 /* No comment provided by engineer. */
 "回放失败" = "replay failed";
@@ -88,10 +88,10 @@
 "房间 UUID: %@" = "room UUID: %@";
 
 /* No comment provided by engineer. */
-"插入 PPT" = "insert PPT";
+"插入已转换 PPT" = "insert converted PPT";
 
 /* No comment provided by engineer. */
-"插入动态 PPT" = "insert dynamic PPT";
+"发起动态转码" = "start dynamic conversion";
 
 /* No comment provided by engineer. */
 "插入动态 PPT(有zip)" = "insert dynamic PPT(with zip)";
@@ -103,13 +103,13 @@
 "插入新页面" = "insert new page";
 
 /* No comment provided by engineer. */
-"插入静态 PPT" = "insert PPT page";
+"发起静态转码" = "start static conversion";
 
 /* No comment provided by engineer. */
 "播放" = "play";
 
 /* No comment provided by engineer. */
-"操作" = "action";
+"撤销重做" = "redo undo";
 
 /* No comment provided by engineer. */
 "改变布局" = "change frame";
@@ -118,13 +118,13 @@
 "数据未初始化" = "data is not ready";
 
 /* No comment provided by engineer. */
-"文本" = "text";
+"文本教具" = "text";
 
 /* No comment provided by engineer. */
 "暂停" = "pause";
 
 /* No comment provided by engineer. */
-"橡皮擦" = "eraser";
+"橡皮擦教具" = "eraser";
 
 /* No comment provided by engineer. */
 "正在连接房间" = "connecting to the room";
@@ -133,10 +133,10 @@
 "清屏" = "clean whiteboard";
 
 /* No comment provided by engineer. */
-"画笔" = "pencil";
+"画笔教具" = "pencil";
 
 /* No comment provided by engineer. */
-"矩形" = "rectangle";
+"矩形教具" = "rectangle";
 
 /* No comment provided by engineer. */
 "确定" = "yes";
@@ -151,7 +151,7 @@
 "移动整体视角" = "move";
 
 /* No comment provided by engineer. */
-"箭头" = "arrows";
+"箭头教具" = "arrows";
 
 /* No comment provided by engineer. */
 "纯白板回放房间" = "replay room only whiteboard";
@@ -187,7 +187,7 @@
 "观察模式" = "Observation mode";
 
 /* No comment provided by engineer. */
-"视野锁定" = "lock view";
+"锁定视野" = "lock view";
 
 /* No comment provided by engineer. */
 "设置" = "setting";
@@ -202,8 +202,8 @@
 "连接房间失败，room uuid:%@ roomToken:%@" = "join room failed，room uuid:%1$@ roomToken:%2$@";
 
 /* No comment provided by engineer. */
-"选择" = "selector";
+"选择教具" = "selector";
 
 /* No comment provided by engineer. */
-"颜色" = "color";
+"随机颜色" = "random color";
 
