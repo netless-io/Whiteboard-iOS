@@ -7,8 +7,8 @@
 //
 
 #import "WhiteBaseViewController.h"
-#import <Masonry/Masonry.h>
-#import <NETURLSchemeHandler/NETURLSchemeHandler.h>
+#import "Masonry.h"
+#import "NETURLSchemeHandler.h"
 #import "WhiteUtils.h"
 
 @interface WhiteBaseViewController ()<WhiteCommonCallbackDelegate>
@@ -225,6 +225,10 @@ static NSString *kPPTScheme = @"netless";
 - (NSString *)urlInterrupter:(NSString *)url
 {
     return @"https://white-pan.oss-cn-shanghai.aliyuncs.com/124/image/beauty2.png";
+}
+
+- (void)sdkSetupFail:(NSError *)error {
+    return;
 }
 
 - (void)pptMediaPlay

@@ -16,7 +16,6 @@
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 @end
 
-#import <Masonry/Masonry.h>
 #import "RoomCommandListController.h"
 #import "WhiteUtils.h"
 

@@ -7,7 +7,7 @@
 //
 
 #import "RoomCommandListController.h"
-#import <Whiteboard/Whiteboard.h>
+#import "Whiteboard.h"
 #import <YYModel.h>
 
 typedef NS_ENUM(NSInteger, CommandType) {

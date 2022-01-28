@@ -8,7 +8,7 @@
 
 @import UIKit;
 #import "WhiteBaseViewController.h"
-#import <Whiteboard/Whiteboard.h>
+#import "Whiteboard.h"
 
 typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror);
 
