@@ -11,8 +11,12 @@
 #import "WhitePlayerViewController.h"
 #import "Whiteboard.h"
 #import "WhitePureReplayViewController.h"
-#import "ZipArchive.h"
 #import "NETURLSchemeHandler.h"
+#if IS_SPM
+#import "ZipArchive.h"
+#else
+#import "SSZipArchive.h"
+#endif
 
 @interface StartViewController ()
 @property (nonatomic, strong) UITextField *inputV;
