@@ -1,0 +1,61 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DSBridge-IOS",
+        "repositoryURL": "https://github.com/vince-hz/DSBridge-IOS.git",
+        "state": {
+          "branch": null,
+          "revision": "160b9d21de8a5a5b5241ae45d91b04ab592784a5",
+          "version": "3.1.0"
+        }
+      },
+      {
+        "package": "Masonry",
+        "repositoryURL": "https://github.com/vince-hz/Masonry",
+        "state": {
+          "branch": "master",
+          "revision": "3ef76e2802ff31e615deeec4e666a13b589b0e82",
+          "version": null
+        }
+      },
+      {
+        "package": "NETURLSchemeHandler",
+        "repositoryURL": "https://github.com/vince-hz/NETURLSchemeHandler",
+        "state": {
+          "branch": "master",
+          "revision": "11549aef98311a8d84aeaef99903032660dac3ec",
+          "version": null
+        }
+      },
+      {
+        "package": "Whiteboard",
+        "repositoryURL": "https://github.com/vince-hz/Whiteboard-iOS.git",
+        "state": {
+          "branch": "swift-package-manager",
+          "revision": "fe8728ab60f54eb13b74ddd4fb54b41cb458683b",
+          "version": null
+        }
+      },
+      {
+        "package": "YYModel",
+        "repositoryURL": "https://github.com/vince-hz/YYModel.git",
+        "state": {
+          "branch": null,
+          "revision": "9debfef44bcd46557e2b6e3eade95b89eeffeb62",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "ZipArchive",
+        "repositoryURL": "https://github.com/ZipArchive/ZipArchive.git",
+        "state": {
+          "branch": "master",
+          "revision": "825ff12a74a94c54e737e279604c27e6740e8a2c",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

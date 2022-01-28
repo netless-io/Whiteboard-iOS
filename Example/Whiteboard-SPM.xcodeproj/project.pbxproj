@@ -1,0 +1,510 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8A60AE3127A3FB3B005BCDD3 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 8A60AE3027A3FB3B005BCDD3 /* ZipArchive */; };
+		8A80057E27A3F263002A624B /* Whiteboard in Frameworks */ = {isa = PBXBuildFile; productRef = 8A80057D27A3F263002A624B /* Whiteboard */; };
+		8A80058427A3F36E002A624B /* Masonry in Frameworks */ = {isa = PBXBuildFile; productRef = 8A80058327A3F36E002A624B /* Masonry */; };
+		8AC5C6CB27A3F1460002D430 /* PlayerCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6AD27A3F1460002D430 /* PlayerCommandListController.m */; };
+		8AC5C6CC27A3F1460002D430 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6AF27A3F1460002D430 /* Localizable.strings */; };
+		8AC5C6CD27A3F1460002D430 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B127A3F1460002D430 /* InfoPlist.strings */; };
+		8AC5C6CE27A3F1460002D430 /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B327A3F1460002D430 /* WhitePureReplayViewController.m */; };
+		8AC5C6CF27A3F1460002D430 /* WhiteRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B427A3F1460002D430 /* WhiteRoomViewController.m */; };
+		8AC5C6D027A3F1460002D430 /* NETAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B527A3F1460002D430 /* NETAppDelegate.m */; };
+		8AC5C6D127A3F1460002D430 /* Whiteboard-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B627A3F1460002D430 /* Whiteboard-Info.plist */; };
+		8AC5C6D227A3F1460002D430 /* RoomCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B727A3F1460002D430 /* RoomCommandListController.m */; };
+		8AC5C6D327A3F1460002D430 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6BB27A3F1460002D430 /* LaunchScreen.storyboard */; };
+		8AC5C6D427A3F1460002D430 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6BD27A3F1460002D430 /* Main.storyboard */; };
+		8AC5C6D527A3F1460002D430 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6BF27A3F1460002D430 /* StartViewController.m */; };
+		8AC5C6D627A3F1460002D430 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6C027A3F1460002D430 /* main.m */; };
+		8AC5C6D727A3F1460002D430 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6C327A3F1460002D430 /* Images.xcassets */; };
+		8AC5C6D827A3F1460002D430 /* WhiteUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6C827A3F1460002D430 /* WhiteUtils.m */; };
+		8AC5C6D927A3F1460002D430 /* WhitePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6C927A3F1460002D430 /* WhitePlayerViewController.m */; };
+		8AC5C6DA27A3F1460002D430 /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6CA27A3F1460002D430 /* WhiteBaseViewController.m */; };
+		8AC5C6E027A3F1940002D430 /* NETURLSchemeHandler in Frameworks */ = {isa = PBXBuildFile; productRef = 8AC5C6DF27A3F1940002D430 /* NETURLSchemeHandler */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		8AC5C69027A3F0870002D430 /* Whiteboard-SPM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Whiteboard-SPM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AC5C6AD27A3F1460002D430 /* PlayerCommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerCommandListController.m; sourceTree = "<group>"; };
+		8AC5C6AE27A3F1460002D430 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
+		8AC5C6B027A3F1460002D430 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8AC5C6B227A3F1460002D430 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8AC5C6B327A3F1460002D430 /* WhitePureReplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePureReplayViewController.m; sourceTree = "<group>"; };
+		8AC5C6B427A3F1460002D430 /* WhiteRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomViewController.m; sourceTree = "<group>"; };
+		8AC5C6B527A3F1460002D430 /* NETAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NETAppDelegate.m; sourceTree = "<group>"; };
+		8AC5C6B627A3F1460002D430 /* Whiteboard-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Whiteboard-Info.plist"; sourceTree = "<group>"; };
+		8AC5C6B727A3F1460002D430 /* RoomCommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCommandListController.m; sourceTree = "<group>"; };
+		8AC5C6B827A3F1460002D430 /* WhiteBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBaseViewController.h; sourceTree = "<group>"; };
+		8AC5C6B927A3F1460002D430 /* WhitePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerViewController.h; sourceTree = "<group>"; };
+		8AC5C6BA27A3F1460002D430 /* WhiteUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteUtils.h; sourceTree = "<group>"; };
+		8AC5C6BC27A3F1460002D430 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8AC5C6BE27A3F1460002D430 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8AC5C6BF27A3F1460002D430 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
+		8AC5C6C027A3F1460002D430 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8AC5C6C127A3F1460002D430 /* PlayerCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerCommandListController.h; sourceTree = "<group>"; };
+		8AC5C6C227A3F1460002D430 /* NETAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NETAppDelegate.h; sourceTree = "<group>"; };
+		8AC5C6C327A3F1460002D430 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		8AC5C6C427A3F1460002D430 /* WhiteRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRoomViewController.h; sourceTree = "<group>"; };
+		8AC5C6C527A3F1460002D430 /* WhitePureReplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePureReplayViewController.h; sourceTree = "<group>"; };
+		8AC5C6C627A3F1460002D430 /* Whiteboard-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Whiteboard-Prefix.pch"; sourceTree = "<group>"; };
+		8AC5C6C727A3F1460002D430 /* RoomCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCommandListController.h; sourceTree = "<group>"; };
+		8AC5C6C827A3F1460002D430 /* WhiteUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteUtils.m; sourceTree = "<group>"; };
+		8AC5C6C927A3F1460002D430 /* WhitePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerViewController.m; sourceTree = "<group>"; };
+		8AC5C6CA27A3F1460002D430 /* WhiteBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBaseViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8AC5C68D27A3F0870002D430 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A80058427A3F36E002A624B /* Masonry in Frameworks */,
+				8AC5C6E027A3F1940002D430 /* NETURLSchemeHandler in Frameworks */,
+				8A80057E27A3F263002A624B /* Whiteboard in Frameworks */,
+				8A60AE3127A3FB3B005BCDD3 /* ZipArchive in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8AC5C68727A3F0870002D430 = {
+			isa = PBXGroup;
+			children = (
+				8AC5C6AC27A3F1460002D430 /* Whiteboard */,
+				8AC5C69127A3F0870002D430 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8AC5C69127A3F0870002D430 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8AC5C69027A3F0870002D430 /* Whiteboard-SPM.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8AC5C6AC27A3F1460002D430 /* Whiteboard */ = {
+			isa = PBXGroup;
+			children = (
+				8AC5C6AD27A3F1460002D430 /* PlayerCommandListController.m */,
+				8AC5C6AE27A3F1460002D430 /* StartViewController.h */,
+				8AC5C6AF27A3F1460002D430 /* Localizable.strings */,
+				8AC5C6B127A3F1460002D430 /* InfoPlist.strings */,
+				8AC5C6B327A3F1460002D430 /* WhitePureReplayViewController.m */,
+				8AC5C6B427A3F1460002D430 /* WhiteRoomViewController.m */,
+				8AC5C6B527A3F1460002D430 /* NETAppDelegate.m */,
+				8AC5C6B627A3F1460002D430 /* Whiteboard-Info.plist */,
+				8AC5C6B727A3F1460002D430 /* RoomCommandListController.m */,
+				8AC5C6B827A3F1460002D430 /* WhiteBaseViewController.h */,
+				8AC5C6B927A3F1460002D430 /* WhitePlayerViewController.h */,
+				8AC5C6BA27A3F1460002D430 /* WhiteUtils.h */,
+				8AC5C6BB27A3F1460002D430 /* LaunchScreen.storyboard */,
+				8AC5C6BD27A3F1460002D430 /* Main.storyboard */,
+				8AC5C6BF27A3F1460002D430 /* StartViewController.m */,
+				8AC5C6C027A3F1460002D430 /* main.m */,
+				8AC5C6C127A3F1460002D430 /* PlayerCommandListController.h */,
+				8AC5C6C227A3F1460002D430 /* NETAppDelegate.h */,
+				8AC5C6C327A3F1460002D430 /* Images.xcassets */,
+				8AC5C6C427A3F1460002D430 /* WhiteRoomViewController.h */,
+				8AC5C6C527A3F1460002D430 /* WhitePureReplayViewController.h */,
+				8AC5C6C627A3F1460002D430 /* Whiteboard-Prefix.pch */,
+				8AC5C6C727A3F1460002D430 /* RoomCommandListController.h */,
+				8AC5C6C827A3F1460002D430 /* WhiteUtils.m */,
+				8AC5C6C927A3F1460002D430 /* WhitePlayerViewController.m */,
+				8AC5C6CA27A3F1460002D430 /* WhiteBaseViewController.m */,
+			);
+			path = Whiteboard;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8AC5C68F27A3F0870002D430 /* Whiteboard-SPM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AC5C6A927A3F0880002D430 /* Build configuration list for PBXNativeTarget "Whiteboard-SPM" */;
+			buildPhases = (
+				8AC5C68C27A3F0870002D430 /* Sources */,
+				8AC5C68D27A3F0870002D430 /* Frameworks */,
+				8AC5C68E27A3F0870002D430 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Whiteboard-SPM";
+			packageProductDependencies = (
+				8AC5C6DF27A3F1940002D430 /* NETURLSchemeHandler */,
+				8A80057D27A3F263002A624B /* Whiteboard */,
+				8A80058327A3F36E002A624B /* Masonry */,
+				8A60AE3027A3FB3B005BCDD3 /* ZipArchive */,
+			);
+			productName = "Whiteboard-SPM";
+			productReference = 8AC5C69027A3F0870002D430 /* Whiteboard-SPM.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8AC5C68827A3F0870002D430 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					8AC5C68F27A3F0870002D430 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 8AC5C68B27A3F0870002D430 /* Build configuration list for PBXProject "Whiteboard-SPM" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8AC5C68727A3F0870002D430;
+			packageReferences = (
+				8AC5C6DE27A3F1940002D430 /* XCRemoteSwiftPackageReference "NETURLSchemeHandler" */,
+				8A80057C27A3F263002A624B /* XCRemoteSwiftPackageReference "Whiteboard-iOS" */,
+				8A80058227A3F36E002A624B /* XCRemoteSwiftPackageReference "Masonry" */,
+				8A60AE2F27A3FB3B005BCDD3 /* XCRemoteSwiftPackageReference "ZipArchive" */,
+			);
+			productRefGroup = 8AC5C69127A3F0870002D430 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8AC5C68F27A3F0870002D430 /* Whiteboard-SPM */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8AC5C68E27A3F0870002D430 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AC5C6D127A3F1460002D430 /* Whiteboard-Info.plist in Resources */,
+				8AC5C6D427A3F1460002D430 /* Main.storyboard in Resources */,
+				8AC5C6D327A3F1460002D430 /* LaunchScreen.storyboard in Resources */,
+				8AC5C6D727A3F1460002D430 /* Images.xcassets in Resources */,
+				8AC5C6CC27A3F1460002D430 /* Localizable.strings in Resources */,
+				8AC5C6CD27A3F1460002D430 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8AC5C68C27A3F0870002D430 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AC5C6CB27A3F1460002D430 /* PlayerCommandListController.m in Sources */,
+				8AC5C6DA27A3F1460002D430 /* WhiteBaseViewController.m in Sources */,
+				8AC5C6D827A3F1460002D430 /* WhiteUtils.m in Sources */,
+				8AC5C6D227A3F1460002D430 /* RoomCommandListController.m in Sources */,
+				8AC5C6CE27A3F1460002D430 /* WhitePureReplayViewController.m in Sources */,
+				8AC5C6D927A3F1460002D430 /* WhitePlayerViewController.m in Sources */,
+				8AC5C6D527A3F1460002D430 /* StartViewController.m in Sources */,
+				8AC5C6D027A3F1460002D430 /* NETAppDelegate.m in Sources */,
+				8AC5C6D627A3F1460002D430 /* main.m in Sources */,
+				8AC5C6CF27A3F1460002D430 /* WhiteRoomViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8AC5C6AF27A3F1460002D430 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8AC5C6B027A3F1460002D430 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		8AC5C6B127A3F1460002D430 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8AC5C6B227A3F1460002D430 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8AC5C6BB27A3F1460002D430 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8AC5C6BC27A3F1460002D430 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8AC5C6BD27A3F1460002D430 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8AC5C6BE27A3F1460002D430 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8AC5C6A727A3F0880002D430 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8AC5C6A827A3F0880002D430 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8AC5C6AA27A3F0880002D430 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_PREFIX_HEADER = "Whiteboard/Whiteboard-Prefix.pch";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Whiteboard/Whiteboard-Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.Whiteboard-SPM";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8AC5C6AB27A3F0880002D430 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_PREFIX_HEADER = "Whiteboard/Whiteboard-Prefix.pch";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Whiteboard/Whiteboard-Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.Whiteboard-SPM";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8AC5C68B27A3F0870002D430 /* Build configuration list for PBXProject "Whiteboard-SPM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AC5C6A727A3F0880002D430 /* Debug */,
+				8AC5C6A827A3F0880002D430 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AC5C6A927A3F0880002D430 /* Build configuration list for PBXNativeTarget "Whiteboard-SPM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AC5C6AA27A3F0880002D430 /* Debug */,
+				8AC5C6AB27A3F0880002D430 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A60AE2F27A3FB3B005BCDD3 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZipArchive/ZipArchive.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		8A80057C27A3F263002A624B /* XCRemoteSwiftPackageReference "Whiteboard-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vince-hz/Whiteboard-iOS.git";
+			requirement = {
+				branch = "swift-package-manager";
+				kind = branch;
+			};
+		};
+		8A80058227A3F36E002A624B /* XCRemoteSwiftPackageReference "Masonry" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vince-hz/Masonry";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		8AC5C6DE27A3F1940002D430 /* XCRemoteSwiftPackageReference "NETURLSchemeHandler" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vince-hz/NETURLSchemeHandler";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A60AE3027A3FB3B005BCDD3 /* ZipArchive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A60AE2F27A3FB3B005BCDD3 /* XCRemoteSwiftPackageReference "ZipArchive" */;
+			productName = ZipArchive;
+		};
+		8A80057D27A3F263002A624B /* Whiteboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A80057C27A3F263002A624B /* XCRemoteSwiftPackageReference "Whiteboard-iOS" */;
+			productName = Whiteboard;
+		};
+		8A80058327A3F36E002A624B /* Masonry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A80058227A3F36E002A624B /* XCRemoteSwiftPackageReference "Masonry" */;
+			productName = Masonry;
+		};
+		8AC5C6DF27A3F1940002D430 /* NETURLSchemeHandler */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8AC5C6DE27A3F1940002D430 /* XCRemoteSwiftPackageReference "NETURLSchemeHandler" */;
+			productName = NETURLSchemeHandler;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8AC5C68827A3F0870002D430 /* Project object */;
+}
