@@ -25,7 +25,7 @@ let package = Package(
                 ],
                 sources: ["Classes"],
                 resources: [
-                    .copy("Resource")
+                    .process("Resource")
                 ],
                 publicHeadersPath: "Classes/include",
                 cSettings: .headers
