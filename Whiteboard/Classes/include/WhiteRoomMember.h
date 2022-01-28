@@ -1,0 +1,1 @@
+../Object/WhiteRoomMember.h
