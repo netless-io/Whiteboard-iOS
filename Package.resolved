@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DSBridge-IOS",
+        "repositoryURL": "https://github.com/vince-hz/DSBridge-IOS.git",
+        "state": {
+          "branch": null,
+          "revision": "160b9d21de8a5a5b5241ae45d91b04ab592784a5",
+          "version": "3.1.0"
+        }
+      },
+      {
+        "package": "YYModel",
+        "repositoryURL": "https://github.com/vince-hz/YYModel.git",
+        "state": {
+          "branch": null,
+          "revision": "9debfef44bcd46557e2b6e3eade95b89eeffeb62",
+          "version": "1.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
