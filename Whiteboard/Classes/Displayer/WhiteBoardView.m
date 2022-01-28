@@ -172,7 +172,13 @@
 {
     // 1. 脱离 Cocoapods 时，打包成同名 bundle 就可以保证读取一致性
     // 2. 使用字符串，是为了保证使用子类时，self calss 的路径不会变化
-    return [NSBundle bundleWithPath:[[NSBundle bundleForClass:NSClassFromString(@"WhiteBoardView")] pathForResource:@"Whiteboard" ofType:@"bundle"]];
+    NSBundle *podBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:NSClassFromString(@"WhiteBoardView")] pathForResource:@"Whiteboard" ofType:@"bundle"]];
+    if (podBundle) {
+        return podBundle;
+    } else {
+        // SPM bundle
+        return [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"Whiteboard_Whiteboard" ofType:@"bundle"]];
+    }
 }
 
 @end
