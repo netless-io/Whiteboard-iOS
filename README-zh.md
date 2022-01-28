@@ -18,10 +18,17 @@
 
 ## 引用
 
-在 Podfile 中写入
+- ### CocoaPods
 
 ```
 pod 'Whiteboard'
+```
+
+- ### Swift Package Manager
+```swift
+ dependencies: [
+    .package(url: "https://github.com/netless-io/Whiteboard-iOS.git", .upToNextMajor(from: "2.15.0"))
+]
 ```
 
 <details><summary>White-SDK-iOS 闭源库迁移</summary>
