@@ -5,7 +5,7 @@
 //  Created by leavesster on 2018/8/15.
 //
 
-#import <dsbridge/dsbridge.h>
+#import "dsbridge.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
