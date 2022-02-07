@@ -7,12 +7,17 @@
 
 #import "WhiteDisplayerState.h"
 
+WhiteWindowBoxState const WhiteWindowBoxStateNormal = @"normal";
+WhiteWindowBoxState const WhiteWindowBoxStateMini = @"minimized";
+WhiteWindowBoxState const WhiteWindowBoxStateMax = @"maximized";
+
 @interface WhiteDisplayerState ()
 
 @property (nonatomic, strong, readwrite) WhiteGlobalState *globalState;
 @property (nonatomic, strong, readwrite) WhiteSceneState *sceneState;
 @property (nonatomic, strong, readwrite) NSArray<WhiteRoomMember *> *roomMembers;
 @property (nonatomic, strong, readwrite) WhiteCameraState *cameraState;
+@property (nonatomic, copy, nullable, readwrite) WhiteWindowBoxState windowBoxState;
 
 @end
 
