@@ -1,6 +1,7 @@
 #use_frameworks!
 
 platform :ios, '10.0'
+project 'Whiteboard.xcodeproj'
 
 target 'Whiteboard_Example' do
   pod 'Whiteboard', :path => '../'
