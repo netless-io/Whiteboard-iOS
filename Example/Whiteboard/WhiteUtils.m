@@ -7,7 +7,12 @@
 //
 
 #import "WhiteUtils.h"
+#if IS_SPM
 #import "Whiteboard.h"
+#else
+#import <Whiteboard/Whiteboard.h>
+#endif
+
 @implementation WhiteUtils
 
 static NSString *APIHost = @"https://api.netless.link/v5/";

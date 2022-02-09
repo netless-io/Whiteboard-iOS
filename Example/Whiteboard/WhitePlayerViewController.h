@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "WhiteBaseViewController.h"
+#if IS_SPM
 #import "Whiteboard.h"
+#else
+#import <Whiteboard/Whiteboard.h>
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^PlayBlock)(WhitePlayer * _Nullable player, NSError * _Nullable eroror);

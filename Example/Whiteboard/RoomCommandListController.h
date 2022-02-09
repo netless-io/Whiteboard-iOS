@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#if IS_SPM
 #import "Whiteboard.h"
+#else
+#import <Whiteboard/Whiteboard.h>
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -9,12 +9,13 @@
 #import "StartViewController.h"
 #import "WhiteRoomViewController.h"
 #import "WhitePlayerViewController.h"
-#import "Whiteboard.h"
 #import "WhitePureReplayViewController.h"
 #import "NETURLSchemeHandler.h"
 #if IS_SPM
 #import "ZipArchive.h"
+#import "Whiteboard.h"
 #else
+#import <Whiteboard/Whiteboard.h>
 #import "SSZipArchive.h"
 #endif
 

@@ -7,8 +7,12 @@
 //
 
 #import "RoomCommandListController.h"
-#import "Whiteboard.h"
 #import <YYModel.h>
+#if IS_SPM
+#import "Whiteboard.h"
+#else
+#import <Whiteboard/Whiteboard.h>
+#endif
 
 typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeResize,
