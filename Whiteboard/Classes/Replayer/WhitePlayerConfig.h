@@ -8,6 +8,7 @@
 #import "WhiteObject.h"
 #import "WhiteConsts.h"
 #import "WhiteCameraBound.h"
+#import "WhiteWindowParams.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -80,6 +81,9 @@ Unix 时间戳（秒），表示回放的起始 UTC 时间。例如，`161537061
  已废弃，请使用 [mediaURL](mediaURL)。
  */
 @property (nonatomic, strong, nullable) NSString *audioUrl DEPRECATED_MSG_ATTRIBUTE("use mediaURL property");
+
+/** 多窗口用的本地参数，只影响本地客户 */
+@property (nonatomic, strong, nullable) WhiteWindowParams *windowParams;
 
 @end
 
