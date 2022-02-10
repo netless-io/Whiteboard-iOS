@@ -103,6 +103,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL disableEraseImage;
 
 /**
+ 是否关闭 ``insertText`` 与 ``updateText`` 操作权限
+ 
+ - `YES`：不允许``insertText`` 与 ``updateText``。
+ - `NO`：允许``insertText`` 与 ``updateText``。
+ */
+@property (nonatomic, assign) BOOL disableTextOperations;
+
+/**
  本地用户的视角边界。详见 [WhiteCameraBound](WhiteCameraBound)。
  */
 @property (nonatomic, strong, nullable) WhiteCameraBound *cameraBound;

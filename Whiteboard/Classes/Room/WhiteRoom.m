@@ -233,6 +233,12 @@
     [self.bridge callHandler:@"room.moveScene" arguments:@[source, target]];
 }
 
+#pragma mark - Text API
+
+- (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^)(NSString * _Nonnull))completionHandler {
+    [self.bridge callHandler:@"room.insertText" arguments:@[@(x), @(y), textContent] completionHandler:completionHandler];
+}
+
 #pragma mark - Image API
 
 - (void)insertImage:(WhiteImageInformation *)imageInfo;
