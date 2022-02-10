@@ -162,6 +162,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)pptPreviousStep;
 
+#pragma mark - Text API
+
+/**
+ * 在指定位置插入文字
+ * @param x 第一个字的的左侧边中点，世界坐标系中的 x 坐标
+ * @param y 第一个字的的左侧边中点，世界坐标系中的 y 坐标
+ * @param textContent 初始化文字的内容
+ * @param completionHandler 返回该文字的标识符
+ */
+- (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^) (NSString * textId))completionHandler;
+
 #pragma mark - Image API
 
 /**
