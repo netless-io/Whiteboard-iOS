@@ -5,7 +5,7 @@
 //  Created by yleaf on 2022/2/9.
 //
 
-#import <Whiteboard/Whiteboard.h>
+#import "WhiteObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
