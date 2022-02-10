@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeInsertDynamic,
     CommandTypeInsertDynamicZip,
     CommandTypeInsertImage,
+    CommandTypeInsertText,
     CommandTypeGetPreviewImage,
     CommandTypeGetSnapshot,
     CommandTypeGetPpt,
@@ -86,6 +87,7 @@ static NSString *kReuseCell = @"reuseCell";
                       @(CommandTypeInsertDynamic): NSLocalizedString(@"发起动态转码", nil),
                       @(CommandTypeInsertDynamicZip): NSLocalizedString(@"插入动态 PPT(有zip)", nil),
                       @(CommandTypeInsertImage): NSLocalizedString(@"插入图片", nil),
+                      @(CommandTypeInsertText): NSLocalizedString(@"插入文字", nil),
                       @(CommandTypeGetPreviewImage): NSLocalizedString(@"获取预览截图", nil),
                       @(CommandTypeGetSnapshot): NSLocalizedString(@"获取场景完整封面", nil),
                       @(CommandTypeGetPpt): NSLocalizedString(@"获取PPT", nil),
@@ -277,6 +279,11 @@ static NSString *kReuseCell = @"reuseCell";
 //            [self.room completeImageUploadWithUuid:info.uuid src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
             break;
         }
+        case CommandTypeInsertText:
+            [self.room insertText:0 y:0 textContent:@"Hello text!" completionHandler:^(NSString * _Nonnull textId) {
+                NSLog(@"insert with textId %@", textId);
+            }];
+            break;
         case CommandTypeGetPpt:
         {
             //v2.0 新API，通过获取每个 scene，再去查询 ppt 属性，如果没有 ppt，则 ppt 属性会为空
