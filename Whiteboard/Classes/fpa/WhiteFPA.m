@@ -58,10 +58,24 @@
 }
 
 #pragma mark - FpaProxyServiceDelegate
-
-- (void)fpaProxyService:(FpaProxyService * _Nonnull)service didReceiveProxyEvent:(FpaProxyServiceProxyEvent)event connectionInfo:(FpaProxyServiceConnectionInfo * _Nonnull)connectionInfo errorCode:(FpaProxyServiceError)errorCode;
+- (void)onAccelerationSuccess:(FpaProxyServiceConnectionInfo * _Nonnull)connectionInfo;
 {
-    NSLog(@"event: %ld",(long)event);
+    NSLog(@"fpa: %s %@", __func__, connectionInfo);
+}
+
+- (void)onConnected:(FpaProxyServiceConnectionInfo * _Nonnull)connectionInfo;
+{
+    NSLog(@"fpa: %s %@", __func__, connectionInfo);
+}
+
+- (void)onDisconnectedAndFallback:(FpaProxyServiceConnectionInfo * _Nonnull)connectionInfo reason:(FpaFailedReason)reason;
+{
+    NSLog(@"fpa: %s %@ fail reason %ld", __func__, connectionInfo, (long)reason);
+}
+
+- (void)onConnectionFailed:(FpaProxyServiceConnectionInfo * _Nonnull)connectionInfo reason:(FpaFailedReason)reason;
+{
+    NSLog(@"fpa: %s %@ fail reason %ld", __func__, connectionInfo, (long)reason);
 }
 
 @end

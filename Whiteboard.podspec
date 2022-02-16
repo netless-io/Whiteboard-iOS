@@ -69,7 +69,7 @@ Pod::Spec.new do |s|
     socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
     socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
     socket.dependency 'Whiteboard/Room'
-    socket.dependency 'AgoraFPA_iOS', '~> 0.1.14.0'
+    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
   end
 
   # 回放房间
