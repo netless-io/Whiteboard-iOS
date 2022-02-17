@@ -132,24 +132,27 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
     self.webSocket = [self.session webSocketTaskWithURL:url];
     [self.webSocket resume];
 
-    [self receiveMessageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
+    __weak typeof(self)weakSelf = self;
+    [self receiveSocket:self.webSocket messageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
         if (error) {
-            [self.bridge callHandler:@"ws.onError" arguments:@[@{kPayloadKey: key}]];
+            [weakSelf.bridge callHandler:@"ws.onError" arguments:@[@{kPayloadKey: key}]];
         } else if (message.type == NSURLSessionWebSocketMessageTypeString) {
-            [self.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: key, kPayloadData: message.string, kPayloadType: PayloadTypeString}]];
+            [weakSelf.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: key, kPayloadData: message.string, kPayloadType: PayloadTypeString}]];
         } else if (message.type == NSURLSessionWebSocketMessageTypeData) {
-            [self.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: key, kPayloadData: [message.data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], kPayloadType: PayloadArrayBuffer}]];
+            [weakSelf.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: key, kPayloadData: [message.data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], kPayloadType: PayloadArrayBuffer}]];
         }
     }];
 }
 
-- (void)receiveMessageWithCompletionHandler:(void (^)(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error))completionHandler {
+- (void)receiveSocket:(NSURLSessionWebSocketTask *)task messageWithCompletionHandler:(void (^)(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error))completionHandler {
     __weak typeof(self)weakSelf = self;
-    [self.webSocket receiveMessageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
-        if (completionHandler) {
-            completionHandler(message, error);
+    [task receiveMessageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
+        if (task.closeCode == NSURLSessionWebSocketCloseCodeInvalid) {
+            if (completionHandler) {
+                completionHandler(message, error);
+            }
+            [weakSelf receiveSocket:task messageWithCompletionHandler:completionHandler];
         }
-        [weakSelf receiveMessageWithCompletionHandler:completionHandler];
     }];
 }
 
