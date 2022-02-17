@@ -14,6 +14,10 @@
 #import "WhiteRoom.h"
 #import "WhiteSocket.h"
 #import "WhiteSocket+Private.h"
+#if __has_include ("WhiteRoomConfig+FPA.h")
+#import "WhiteRoomConfig+FPA.h"
+#endif
+
 
 @implementation WhiteSDK (Room)
 
@@ -29,10 +33,14 @@
         self.bridge.roomCallbacks = roomCallbacks;
         [self.bridge addJavascriptObject:roomCallbacks namespace:@"room"];
         
+#if __has_include ("WhiteRoomConfig+FPA.h")
         if (@available(iOS 13.0, *)) {
-            WhiteSocket *socket = [[WhiteSocket alloc] initWithBridge:self.bridge];
-            [self.bridge addJavascriptObject:socket namespace:@"ws"];
+            if (config.nativeWebSocket) {
+                WhiteSocket *socket = [[WhiteSocket alloc] initWithBridge:self.bridge];
+                [self.bridge addJavascriptObject:socket namespace:@"ws"];
+            }
         }
+#endif
     }
 
     
