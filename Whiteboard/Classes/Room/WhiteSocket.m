@@ -160,11 +160,10 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
         // 出现已关闭的socket，但是又没有被记录过关闭
         // 说明是在后台关闭的
         // 这时候需要主动通知调起关闭通知
-        if (weakSelf.webSocket.state == NSURLSessionTaskStateCompleted
-            && ![weakSelf.socketClosedDic[weakSelf.webSocket.taskDescription] boolValue]) {
-            [weakSelf processBackgroundClosedSocket:weakSelf.webSocket socketKey:weakSelf.key];
-        }
-        if (weakSelf.webSocket.state == NSURLSessionTaskStateRunning) {
+        if (task.state == NSURLSessionTaskStateCompleted
+            && ![weakSelf.socketClosedDic[task.taskDescription] boolValue]) {
+            [weakSelf processBackgroundClosedSocket:task];
+        } else if (task.state == NSURLSessionTaskStateRunning) {
             if (completionHandler) {
                 completionHandler(message, error);
             }
