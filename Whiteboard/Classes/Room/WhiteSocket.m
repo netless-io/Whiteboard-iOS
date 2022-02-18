@@ -12,7 +12,6 @@
 @property (nonatomic, weak, readonly) WhiteBoardView *bridge;
 @property (nonatomic, strong) NSURLSessionWebSocketTask *webSocket;
 @property (nonatomic, strong) NSURLSession *session;
-@property (nonatomic, copy) NSNumber *key;
 /// 手动记录socket的开关状态，因为前后台切换的时候，不能保证所有回调都被正确调用
 @property (nonatomic, copy) NSMutableDictionary *socketClosedDic;
 
@@ -62,7 +61,7 @@ static NSDictionary *_proxyConfig = nil;
 #pragma mark - private
 
 - (BOOL)isCurrentSocket:(NSDictionary *)payload {
-    return [self.key isEqual:payload[kPayloadKey]];
+    return [self.webSocket.taskDescription isEqual:[payload[kPayloadKey] description]];
 }
 
 - (void)releaseSocket {
@@ -133,23 +132,22 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 - (void)setupWebSocket:(NSDictionary *)dict {
     [self releaseSocketIfNeeded];
     
-    self.key = dict[kPayloadKey];
-    NSNumber *key = self.key;
-    NSString *socketId = [key description];
+    NSString *key = [dict[kPayloadKey] description];
+    NSNumber *numberKey = @([key intValue]);
     NSURL *url = [NSURL URLWithString:dict[@"url"]];
     self.webSocket = [self.session webSocketTaskWithURL:url];
-    self.webSocket.taskDescription = socketId;
+    self.webSocket.taskDescription = key;
     [self.webSocket resume];
-    self.socketClosedDic[socketId] = @(FALSE);
+    self.socketClosedDic[key] = @(FALSE);
 
     __weak typeof(self)weakSelf = self;
     [self receiveSocket:self.webSocket messageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
         if (error) {
-            [weakSelf.bridge callHandler:@"ws.onError" arguments:@[@{kPayloadKey: key}]];
+            [weakSelf.bridge callHandler:@"ws.onError" arguments:@[@{kPayloadKey: numberKey}]];
         } else if (message.type == NSURLSessionWebSocketMessageTypeString) {
-            [weakSelf.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: key, kPayloadData: message.string, kPayloadType: PayloadTypeString}]];
+            [weakSelf.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: numberKey, kPayloadData: message.string, kPayloadType: PayloadTypeString}]];
         } else if (message.type == NSURLSessionWebSocketMessageTypeData) {
-            [weakSelf.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: key, kPayloadData: [message.data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], kPayloadType: PayloadArrayBuffer}]];
+            [weakSelf.bridge callHandler:@"ws.onMessage" arguments:@[@{kPayloadKey: numberKey, kPayloadData: [message.data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], kPayloadType: PayloadArrayBuffer}]];
         }
     }];
 }
@@ -173,11 +171,11 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 }
 
 // 处理在后台被关闭的Socket
-- (void)processBackgroundClosedSocket:(NSURLSessionWebSocketTask *)socket socketKey:(NSNumber *)key {
+- (void)processBackgroundClosedSocket:(NSURLSessionWebSocketTask *)socket {
     self.socketClosedDic[socket.taskDescription] = @(TRUE);
     NSDictionary *payload = @{@"code": @(-9999),
                               @"reason": @"backgroundKilledWebSocket",
-                              kPayloadKey: key,
+                              kPayloadKey: @([socket.taskDescription intValue]),
                               @"wasClean": @(YES)};
     [self.bridge callHandler:@"ws.onClose" arguments:@[payload]];
 }
@@ -191,7 +189,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 - (void)URLSession:(NSURLSession *)session webSocketTask:(NSURLSessionWebSocketTask *)webSocketTask didOpenWithProtocol:(nullable NSString *) protocol;
 {
     if (self.webSocket == webSocketTask) {
-        [self.bridge callHandler:@"ws.onOpen" arguments:@[@{kPayloadKey: self.key}]];
+        [self.bridge callHandler:@"ws.onOpen" arguments:@[@{kPayloadKey: @([webSocketTask.taskDescription intValue])}]];
     }
 }
 
@@ -200,7 +198,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
     self.socketClosedDic[webSocketTask.taskDescription] = @(YES);
     if (self.webSocket == webSocketTask) {
         NSString *r = reason ? @"" : [[NSString alloc] initWithData:reason encoding:NSUTF8StringEncoding];
-        NSDictionary *payload = @{@"code": @(closeCode), @"reason": r, kPayloadKey: self.key, @"wasClean": @(YES)};
+        NSDictionary *payload = @{@"code": @(closeCode), @"reason": r, kPayloadKey: @([webSocketTask.taskDescription intValue]), @"wasClean": @(YES)};
         [self.bridge callHandler:@"ws.onClose" arguments:@[payload]];
     }
 }
