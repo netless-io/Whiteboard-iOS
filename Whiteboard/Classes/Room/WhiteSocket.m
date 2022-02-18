@@ -13,6 +13,8 @@
 @property (nonatomic, strong) NSURLSessionWebSocketTask *webSocket;
 @property (nonatomic, strong) NSURLSession *session;
 @property (nonatomic, copy) NSNumber *key;
+/// 手动记录socket的开关状态，因为前后台切换的时候，不能保证所有回调都被正确调用
+@property (nonatomic, copy) NSMutableDictionary *socketClosedDic;
 
 @end
 
@@ -38,6 +40,13 @@ static NSDictionary *_proxyConfig = nil;
     self = [super init];
     _bridge = bridge;
     return self;
+}
+
+- (NSMutableDictionary *)socketClosedDic {
+    if (!_socketClosedDic) {
+        _socketClosedDic = [NSMutableDictionary dictionary];
+    }
+    return _socketClosedDic;
 }
 
 - (NSURLSession *)session {
@@ -122,15 +131,16 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 #pragma mark - WebSocket
 
 - (void)setupWebSocket:(NSDictionary *)dict {
-    
     [self releaseSocketIfNeeded];
     
     self.key = dict[kPayloadKey];
     NSNumber *key = self.key;
-
+    NSString *socketId = [key description];
     NSURL *url = [NSURL URLWithString:dict[@"url"]];
     self.webSocket = [self.session webSocketTaskWithURL:url];
+    self.webSocket.taskDescription = socketId;
     [self.webSocket resume];
+    self.socketClosedDic[socketId] = @(FALSE);
 
     __weak typeof(self)weakSelf = self;
     [self receiveSocket:self.webSocket messageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
@@ -147,13 +157,30 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 - (void)receiveSocket:(NSURLSessionWebSocketTask *)task messageWithCompletionHandler:(void (^)(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error))completionHandler {
     __weak typeof(self)weakSelf = self;
     [task receiveMessageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
-        if (task.closeCode == NSURLSessionWebSocketCloseCodeInvalid) {
+        // 出现已关闭的socket，但是又没有被记录过关闭
+        // 说明是在后台关闭的
+        // 这时候需要主动通知调起关闭通知
+        if (weakSelf.webSocket.state == NSURLSessionTaskStateCompleted
+            && ![weakSelf.socketClosedDic[weakSelf.webSocket.taskDescription] boolValue]) {
+            [weakSelf processBackgroundClosedSocket:weakSelf.webSocket socketKey:weakSelf.key];
+        }
+        if (weakSelf.webSocket.state == NSURLSessionTaskStateRunning) {
             if (completionHandler) {
                 completionHandler(message, error);
             }
             [weakSelf receiveSocket:task messageWithCompletionHandler:completionHandler];
         }
     }];
+}
+
+// 处理在后台被关闭的Socket
+- (void)processBackgroundClosedSocket:(NSURLSessionWebSocketTask *)socket socketKey:(NSNumber *)key {
+    self.socketClosedDic[socket.taskDescription] = @(TRUE);
+    NSDictionary *payload = @{@"code": @(-9999),
+                              @"reason": @"backgroundKilledWebSocket",
+                              kPayloadKey: key,
+                              @"wasClean": @(YES)};
+    [self.bridge callHandler:@"ws.onClose" arguments:@[payload]];
 }
 
 #pragma mark - NSURLSessionWebSocketDelegate
@@ -171,6 +198,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 
 - (void)URLSession:(NSURLSession *)session webSocketTask:(NSURLSessionWebSocketTask *)webSocketTask didCloseWithCode:(NSURLSessionWebSocketCloseCode)closeCode reason:(nullable NSData *)reason;
 {
+    self.socketClosedDic[webSocketTask.taskDescription] = @(YES);
     if (self.webSocket == webSocketTask) {
         NSString *r = reason ? @"" : [[NSString alloc] initWithData:reason encoding:NSUTF8StringEncoding];
         NSDictionary *payload = @{@"code": @(closeCode), @"reason": r, kPayloadKey: self.key, @"wasClean": @(YES)};
