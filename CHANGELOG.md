@@ -7,6 +7,9 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.2] - 2022-02-22
+- 更新`white-web-sdk`至2.16.10
+- 修复WhiteRoom的`undoSteps`和`redoSteps`的回调错误
 ## [2.16.1] - 2022-02-16
 - 更新`white-web-sdk`至2.16.9
 - 更新`window-manager`至0.4.5
