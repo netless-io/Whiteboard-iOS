@@ -19,6 +19,7 @@
 - 增加`WhiteRoom`调用日志逻辑。开关跟随`WhiteSdkConfiguration`中的 log 参数（默认关闭），上报等级为 info，上报配置跟随`loggerOptions`配置项。
 - 回放支持多窗口模式，需要在初始化 SDK 时，配置`WhiteSdkConfiguration`开启 useMultipleView 参数。
 - `WhiteRoom`新增`insertText`方法，可以通过该方法在指定位置插入文字。
+- 修复多窗口模式下，`Redo`和`Undo`不生效的问题。
 ## [2.15.25] - 2022-01-20
 - 更新`@netless/window-manager`至 0.3.25
 - 更新`@netless/app-slide`至 0.0.56
