@@ -109,6 +109,11 @@ static NSString * const kErrorDomain = @"errorDomain";
                                                                       region:obj.region
                                                                     taskType:obj.type
                                                                       result:^(WhiteConversionInfoV5 *info, NSError *error) {
+            if (error) {
+                obj.completionHandler(NO, nil, error);
+                [weakSelf cancelPollingTaskWithTaskUUID:key];
+                return;
+            }
             if ([info.status isEqualToString:WhiteConvertStatusV5Fail]) {
                 obj.completionHandler(NO, info, error);
                 [weakSelf cancelPollingTaskWithTaskUUID:key];
