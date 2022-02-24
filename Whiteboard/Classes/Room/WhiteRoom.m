@@ -233,6 +233,44 @@
     [self.bridge callHandler:@"room.moveScene" arguments:@[source, target]];
 }
 
+- (void)addPage
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    [self addPageAfterCurrentScene:YES sceneName:nil pptDescription:nil];
+#pragma clang diagnostic pop
+}
+
+- (void)addPageAfterCurrentScene:(BOOL)afterCurrentScene sceneName:(NSString *)sceneName pptDescription:(NSString *)pptDescription
+{
+    if (!sceneName && !pptDescription) {
+        [self.bridge callHandler:@"room.addPage" arguments:@[@{@"after": @(afterCurrentScene)}]];
+    } else if (sceneName && pptDescription) {
+        [self.bridge callHandler:@"room.addPage"
+                       arguments:@[@{@"after": @(afterCurrentScene),
+                                     @"scene": @{
+                                         @"name": sceneName,
+                                         @"ppt": pptDescription}
+                       }]];
+    } else {
+        NSLog(@"sceneName and pptDescription should be all nil or all not nil.");
+    }
+}
+
+- (void)nextPage:(void(^ _Nullable)(BOOL success))completionHandler
+{
+    [self.bridge callHandler:@"room.nextPage" completionHandler:^(id  _Nullable value) {
+        if (completionHandler) { completionHandler([value boolValue]); }
+    }];
+}
+
+- (void)prevPage:(void(^ _Nullable)(BOOL success))completionHandler
+{
+    [self.bridge callHandler:@"room.prevPage" completionHandler:^(id  _Nullable value) {
+        if (completionHandler) { completionHandler([value boolValue]); }
+    }];
+}
+
 #pragma mark - Text API
 
 - (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^)(NSString * _Nonnull))completionHandler {

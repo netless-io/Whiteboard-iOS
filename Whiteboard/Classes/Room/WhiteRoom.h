@@ -376,6 +376,37 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)moveScene:(NSString *)source target:(NSString *)target;
 
+/**
+ 插入一个新页面
+ 该新页面会位于当前的页面之后
+ */
+- (void)addPage;
+
+/**
+ 插入一个新页面
+ 
+ **Note:**
+ 
+ @param afterCurrentScene 是否在当前页面之后。YES: 是，在当前页面之后。 NO: 否，在当前页面之前。
+ @param sceneName 新插入的页面名
+ @param pptDescription ppt的描述
+ */
+- (void)addPageAfterCurrentScene:(BOOL)afterCurrentScene sceneName:(NSString *)sceneName pptDescription:(NSString *)pptDescription;
+
+/**
+ 切换到下一页场景
+ 
+ **Note: **
+ @param completionHandler 回调，success代表切换是否成功
+ */
+- (void)nextPage:(void(^ _Nullable)(BOOL success))completionHandler;
+/**
+ 切换到上一页场景
+ 
+ **Note: **
+ @param completionHandler 回调，success代表切换是否成功
+ */
+- (void)prevPage:(void(^ _Nullable)(BOOL success))completionHandler;
 
 /**
  * 以下方法可以对使用【选择框】的工具进行操作。
