@@ -35,6 +35,7 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		789AF49F9FB06918748A94DC /* Pods-Whiteboard_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Whiteboard_Tests/Pods-Whiteboard_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8470081D613A7C8DF8376FBA /* Pods-Whiteboard_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard_Example.release.xcconfig"; path = "Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -209,6 +211,7 @@
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
+				8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */,
 				39E4205F23A3B861002B9B38 /* WhiteObjectTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
@@ -436,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
+				8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */,
 				39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */,
 				39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */,
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
