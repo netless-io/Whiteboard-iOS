@@ -149,16 +149,20 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - PPT
 
 /**
- 播放动态 PPT 下一页。
+ 播放动态 PPT 下一步。
 
  当前 PPT 页面的动画已全部执行完成时，SDK 会将场景切换至下一页 PPT。
+ 
+ 注意，多窗口模式下该接口不再生效
  */
 - (void)pptNextStep;
 
 /**
- 返回动态 PPT 上一页。
+ 返回动态 PPT 上一步。
  
  当前 PPT 页面的动画全部回退完成时，SDK 会将场景切回至上一页 PPT。
+ 
+ 注意，多窗口模式下该接口不再生效
  */
 - (void)pptPreviousStep;
 
