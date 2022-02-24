@@ -115,6 +115,28 @@ static NSString * const pdfFileURL = @"https://flat-storage.oss-accelerate.aliyu
     }];
 }
 
+- (void)testErrorUUIDTask
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.foo.converter insertPollingTaskWithTaskUUID:@"xxxxxx"
+                                                token:exampleTaskToken
+                                               region:WhiteRegionCN
+                                             taskType:WhiteConvertTypeStatic
+                                             progress:^(CGFloat progress, WhiteConversionInfoV5 * _Nullable info) {
+        XCTAssert(@"Should not progress");
+    } result:^(BOOL success, WhiteConversionInfoV5 * _Nullable info, NSError * _Nullable error) {
+        if (error) {
+            [exp fulfill];
+        } else {
+            XCTAssert(@"Should not success");
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        NSLog(@"%@", error);
+    }];
+}
+
 - (void)testPausePolling
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
