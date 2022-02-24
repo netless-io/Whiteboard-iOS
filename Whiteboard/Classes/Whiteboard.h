@@ -18,5 +18,6 @@
 #import "WhitePlayer.h"
 #import "WhiteConverter.h"
 #import "WhiteCombinePlayer.h"
+#import "WhiteConverterV5.h"
 
 #endif /* Whiteboard_h */

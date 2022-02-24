@@ -32,7 +32,8 @@
 }
 
 + (NSDictionary *)modelCustomPropertyMapper {
-    return @{@"src" : @[@"src", @"conversionFileUrl"]};
+    return @{@"src" : @[@"src", @"conversionFileUrl"],
+             @"previewURL" : @[@"previewURL", @"preview"]};
 }
 
 @end
