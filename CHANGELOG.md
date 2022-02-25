@@ -7,6 +7,8 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.4] - 2022-02-24
+- 新增`Whiteboard/fpa`subspec。在 podfile 添加 `pod 'Whiteboard/fpa'` 依赖，并且配置 WhiteRoomConfig 的 `nativeWebSocket` 为 YES 即可进行加速。
 ## [2.16.3] - 2022-02-24
 - 更新`window-manager`至0.4.7
 - 新增`WhiteConverterV5`, 用于查询文件转码进度
