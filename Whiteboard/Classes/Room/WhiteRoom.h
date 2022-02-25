@@ -149,16 +149,20 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - PPT
 
 /**
- 播放动态 PPT 下一页。
+ 播放动态 PPT 下一步。
 
  当前 PPT 页面的动画已全部执行完成时，SDK 会将场景切换至下一页 PPT。
+ 
+ 注意，多窗口模式下该接口不再生效
  */
 - (void)pptNextStep;
 
 /**
- 返回动态 PPT 上一页。
+ 返回动态 PPT 上一步。
  
  当前 PPT 页面的动画全部回退完成时，SDK 会将场景切回至上一页 PPT。
+ 
+ 注意，多窗口模式下该接口不再生效
  */
 - (void)pptPreviousStep;
 
@@ -376,6 +380,36 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)moveScene:(NSString *)source target:(NSString *)target;
 
+/**
+ 插入一个新页面
+ 该新页面会位于当前的页面的下一页
+ */
+- (void)addPage;
+
+/**
+ 插入一个新页面
+ 
+ **Note:**
+ 
+ @param scene 新插入的场景对象
+ @param afterCurrentScene 是否在当前页面之后。YES: 插入到当前页面之后。 NO: 在插入到最后一页的后面
+ */
+- (void)addPageWithScene:(WhiteScene * _Nullable )scene afterCurrentScene:(BOOL)afterCurrentScene;
+
+/**
+ 切换到下一页场景
+ 
+ **Note: **
+ @param completionHandler 回调，success代表切换是否成功
+ */
+- (void)nextPage:(void(^ _Nullable)(BOOL success))completionHandler;
+/**
+ 切换到上一页场景
+ 
+ **Note: **
+ @param completionHandler 回调，success代表切换是否成功
+ */
+- (void)prevPage:(void(^ _Nullable)(BOOL success))completionHandler;
 
 /**
  * 以下方法可以对使用【选择框】的工具进行操作。

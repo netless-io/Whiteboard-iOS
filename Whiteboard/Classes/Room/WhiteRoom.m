@@ -233,6 +233,34 @@
     [self.bridge callHandler:@"room.moveScene" arguments:@[source, target]];
 }
 
+- (void)addPage
+{
+    [self addPageWithScene:nil afterCurrentScene:YES];
+}
+
+- (void)addPageWithScene:(WhiteScene *)scene afterCurrentScene:(BOOL)afterCurrentScene
+{
+    if (scene) {
+        [self.bridge callHandler:@"room.addPage" arguments:@[@{@"after": @(afterCurrentScene), @"scene": scene}]];
+    } else {
+        [self.bridge callHandler:@"room.addPage" arguments:@[@{@"after": @(afterCurrentScene)}]];
+    }
+}
+
+- (void)nextPage:(void(^ _Nullable)(BOOL success))completionHandler
+{
+    [self.bridge callHandler:@"room.nextPage" completionHandler:^(id  _Nullable value) {
+        if (completionHandler) { completionHandler([value boolValue]); }
+    }];
+}
+
+- (void)prevPage:(void(^ _Nullable)(BOOL success))completionHandler
+{
+    [self.bridge callHandler:@"room.prevPage" completionHandler:^(id  _Nullable value) {
+        if (completionHandler) { completionHandler([value boolValue]); }
+    }];
+}
+
 #pragma mark - Text API
 
 - (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^)(NSString * _Nonnull))completionHandler {

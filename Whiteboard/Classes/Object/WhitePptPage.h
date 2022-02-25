@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** 用于在初始化场景时配置场景的图片。 */
+/**
+ 用于插入白板的文件类型
+ pdf, doc, ppt, pptx均用这个类型表示
+ */
 @interface WhitePptPage : WhiteObject
 
 /** 设置场景的图片信息并初始化一个 `WhitePptPage` 对象。
