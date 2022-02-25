@@ -15,6 +15,7 @@
 #import "WhiteSocket.h"
 #import "WhiteSocket+Private.h"
 #if __has_include ("WhiteRoomConfig+FPA.h")
+#import "WhiteFPA.h"
 #import "WhiteRoomConfig+FPA.h"
 #endif
 
@@ -36,6 +37,7 @@
 #if __has_include ("WhiteRoomConfig+FPA.h")
         if (@available(iOS 13.0, *)) {
             if (config.nativeWebSocket) {
+                [WhiteFPA setupFpa:[WhiteFPA defaultFpaConfig] chain:[WhiteFPA defaultChain]];
                 WhiteSocket *socket = [[WhiteSocket alloc] initWithBridge:self.bridge];
                 [self.bridge addJavascriptObject:socket namespace:@"ws"];
             }
