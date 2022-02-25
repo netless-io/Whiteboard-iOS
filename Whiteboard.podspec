@@ -70,6 +70,9 @@ Pod::Spec.new do |s|
     socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
     socket.dependency 'Whiteboard/Room'
     socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
+    # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
+    socket.ios.deployment_target = '11.0'
+    # 这个config是因为fpa的framework没有simulator-arm64的版本，需要手动剔除
     socket.pod_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
     socket.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
   end
