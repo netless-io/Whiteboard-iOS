@@ -62,6 +62,15 @@ Pod::Spec.new do |s|
     room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h'
     room.dependency 'Whiteboard/Base'
   end
+  
+  # socket 代理
+  s.subspec 'fpa' do |socket|
+    socket.source_files = 'Whiteboard/Classes/fpa/**'
+    socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
+    socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
+    socket.dependency 'Whiteboard/Room'
+    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
+  end
 
   # 回放房间
   s.subspec 'Replayer' do |replayer|
@@ -83,7 +92,7 @@ Pod::Spec.new do |s|
   # ---------
   # -YYModel-
   # ---------
-#  s.default_subspec = 'Converter', 'Room', 'Replayer', 'NativeReplayer'
+  s.default_subspec = 'Converter', 'Room', 'Replayer', 'NativeReplayer'
   
   # ---------
   # --YYKit--
