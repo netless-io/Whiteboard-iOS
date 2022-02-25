@@ -225,9 +225,7 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 
 1. podfile 添加 `pod 'Whiteboard/fpa'` 依赖
 2. 配置 WhiteRoomConfig 的 `nativeWebSocket` 为 YES
-3. 引用 `WhiteFPA.h` 文件
-4. 在调用 joinRoom 之前配置好 `[WhiteFPA setupFpa:[WhiteFPA defaultFpaConfig] chain:[WhiteFPA defaultChain]];`
-5. 在调用以上操作后，可以调用 `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];` 主动接管 fpa 的代理，从而获取到 fpa 的连接状态。
+3. 如需监听FPA连接状态，可以调用 `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];`
 
 ## 部分问题
 

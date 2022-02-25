@@ -219,6 +219,12 @@ For specific implementation, please check the Git record:
 
 [dynamic-conversion-zip](https://developer.netless.link/server-zh/home/server-dynamic-conversion-zip)
 
+## FPA Network Acceleration (iOS 13 and above)
+
+1. Add `pod 'Whiteboard/fpa'` dependency in podfile
+2. configure WhiteRoomConfig with `nativeWebSocket` as YES
+3. If you want to listen to FPA connection status, you can call `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];`
+
 ## Part of the problem
 
 1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
