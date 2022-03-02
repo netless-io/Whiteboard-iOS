@@ -3,28 +3,28 @@ PODS:
   - Masonry (1.1.0)
   - NETURLSchemeHandler (0.1.5)
   - SSZipArchive (2.4.2)
-  - Whiteboard (2.15.22):
-    - Whiteboard/Base (= 2.15.22)
-    - Whiteboard/Converter (= 2.15.22)
-    - Whiteboard/Model (= 2.15.22)
-    - Whiteboard/NativeReplayer (= 2.15.22)
-    - Whiteboard/Object (= 2.15.22)
-    - Whiteboard/Replayer (= 2.15.22)
-    - Whiteboard/Room (= 2.15.22)
-  - Whiteboard/Base (2.15.22):
+  - Whiteboard (2.15.25):
+    - Whiteboard/Base (= 2.15.25)
+    - Whiteboard/Converter (= 2.15.25)
+    - Whiteboard/Model (= 2.15.25)
+    - Whiteboard/NativeReplayer (= 2.15.25)
+    - Whiteboard/Object (= 2.15.25)
+    - Whiteboard/Replayer (= 2.15.25)
+    - Whiteboard/Room (= 2.15.25)
+  - Whiteboard/Base (2.15.25):
     - dsBridge (~> 3.0.2)
     - Whiteboard/Object
-  - Whiteboard/Converter (2.15.22):
+  - Whiteboard/Converter (2.15.25):
     - Whiteboard/Object
-  - Whiteboard/Model (2.15.22):
+  - Whiteboard/Model (2.15.25):
     - YYModel (~> 1.0.4)
-  - Whiteboard/NativeReplayer (2.15.22):
+  - Whiteboard/NativeReplayer (2.15.25):
     - Whiteboard/Replayer
-  - Whiteboard/Object (2.15.22):
+  - Whiteboard/Object (2.15.25):
     - Whiteboard/Model
-  - Whiteboard/Replayer (2.15.22):
+  - Whiteboard/Replayer (2.15.25):
     - Whiteboard/Base
-  - Whiteboard/Room (2.15.22):
+  - Whiteboard/Room (2.15.25):
     - Whiteboard/Base
   - YYModel (1.0.4)
 
@@ -51,7 +51,7 @@ SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   NETURLSchemeHandler: 7e3b68bea1d06062f22adf8fbcb971149cbc1379
   SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
-  Whiteboard: 68d6bb3ba5161a4217c86e3a8f1dae9190cc0d37
+  Whiteboard: 4722433d4534f081da6282f17063de7ee2e479e4
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: 2b14747d3f634242b0498fc52dceaefd858363a4
