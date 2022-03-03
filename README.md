@@ -225,6 +225,14 @@ For specific implementation, please check the Git record:
 2. configure WhiteRoomConfig with `nativeWebSocket` as YES
 3. If you want to listen to FPA connection status, you can call `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];`
 
+> Note that if you want to debug with iPhoneSimulator from M1 Device, please add the following statement to the Podfile.
+```ruby
+  post_install do |installer|
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
+```
+
 ## Part of the problem
 
 1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
