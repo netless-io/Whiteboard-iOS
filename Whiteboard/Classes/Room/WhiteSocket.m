@@ -83,6 +83,7 @@ static NSDictionary *_proxyConfig = nil;
 static NSString * const kPayloadKey = @"key";
 static NSString * const kPayloadData = @"data";
 static NSString * const kPayloadType = @"type";
+static NSString * const kPayloadCode = @"code";
 
 typedef NSString * WhiteSocketPayloadType NS_STRING_ENUM;
 WhiteSocketPayloadType const PayloadArrayBuffer = @"arraybuffer";
@@ -118,12 +119,15 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
     return @"";
 }
 
+/// Called by JS
 - (NSString *)close:(NSDictionary *)payload {
-    if ([self isCurrentSocket:payload]) {
+    if (![self isCurrentSocket:payload]) {
         return @"";
     }
     
     [self.webSocket cancelWithCloseCode:NSURLSessionWebSocketCloseCodeNormalClosure reason:nil];
+    NSInteger closeCode = [payload[kPayloadCode] integerValue];
+    [self reportToJsWebSocketClose:self.webSocket reason:[payload[kPayloadKey] stringValue] closeCode:closeCode];
     return @"";
 }
 
@@ -173,9 +177,14 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 // 处理在后台被关闭的Socket
 - (void)processBackgroundClosedSocket:(NSURLSessionWebSocketTask *)socket {
     self.socketClosedDic[socket.taskDescription] = @(TRUE);
-    NSDictionary *payload = @{@"code": @(-9999),
-                              @"reason": @"backgroundKilledWebSocket",
-                              kPayloadKey: @([socket.taskDescription intValue]),
+    [self reportToJsWebSocketClose:socket reason:@"backgroundKilledWebSocket" closeCode:-9999];
+}
+
+- (void)reportToJsWebSocketClose:(NSURLSessionWebSocketTask *)webSocket reason:(NSString *)reason closeCode:(NSInteger)closeCode
+{
+    NSDictionary *payload = @{@"code": @(closeCode),
+                              @"reason": reason,
+                              kPayloadKey: @([webSocket.taskDescription intValue]),
                               @"wasClean": @(YES)};
     [self.bridge callHandler:@"ws.onClose" arguments:@[payload]];
 }
@@ -198,8 +207,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
     self.socketClosedDic[webSocketTask.taskDescription] = @(YES);
     if (self.webSocket == webSocketTask) {
         NSString *r = reason ? @"" : [[NSString alloc] initWithData:reason encoding:NSUTF8StringEncoding];
-        NSDictionary *payload = @{@"code": @(closeCode), @"reason": r, kPayloadKey: @([webSocketTask.taskDescription intValue]), @"wasClean": @(YES)};
-        [self.bridge callHandler:@"ws.onClose" arguments:@[payload]];
+        [self reportToJsWebSocketClose:webSocketTask reason:r closeCode:closeCode];
     }
 }
 
