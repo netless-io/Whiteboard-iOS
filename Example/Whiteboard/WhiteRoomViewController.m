@@ -40,10 +40,6 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor orangeColor];
-    
-    if (@available(iOS 13, *)) {
-        [WhiteFPA setupFpa:[WhiteFPA defaultFpaConfig] chain:[WhiteFPA defaultChain]];
-    }
 
     if ([self.roomUuid length] > 0) {
         [self joinExistRoom];
