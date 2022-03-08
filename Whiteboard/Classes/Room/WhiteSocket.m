@@ -73,6 +73,12 @@ static NSDictionary *_proxyConfig = nil;
 - (void)releaseSocketIfNeeded {
     if (self.webSocket) {
         NSURLSessionWebSocketTask *webSocket = self.webSocket;
+        if (!self.socketClosedDic[webSocket.taskDescription]) {
+            // 现在只有js能创建socket
+            // js会有启动两个socket的行为， 但目前使用的代理方案只有一个socket实例存在。所以现在在创建新socket的时候，会把旧的socket取消掉
+            // 使用代理之后，永远只有一个socket存在
+            [self reportToJsWebSocketClose:webSocket reason:@"release when setup" closeCode:-8888];
+        }
         self.webSocket = nil;
         [webSocket cancelWithCloseCode:NSURLSessionWebSocketCloseCodeNormalClosure reason:nil];
     }
