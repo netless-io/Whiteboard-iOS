@@ -5,6 +5,7 @@
 //  Created by yleaf on 2019/9/5.
 //
 
+#import <CoreGraphics/CoreGraphics.h>
 #import "WhiteObject.h"
 
 NS_ASSUME_NONNULL_BEGIN

@@ -11,7 +11,11 @@
 #import "WhiteUtils.h"
 #import "PlayerCommandListController.h"
 #import "RoomCommandListController.h"
+#if IS_SPM
+#import "Whiteboard.h"
+#else
 #import <Whiteboard/Whiteboard.h>
+#endif
 
 @interface WhitePureReplayViewController ()<WhiteCommonCallbackDelegate, WhitePlayerEventDelegate, UIPopoverPresentationControllerDelegate>
 

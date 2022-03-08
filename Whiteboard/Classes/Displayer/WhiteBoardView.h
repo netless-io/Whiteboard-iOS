@@ -5,7 +5,11 @@
 //  Created by leavesster on 2018/8/15.
 //
 
+#if __has_include(<dsbridge/dsbridge.h>)
 #import <dsbridge/dsbridge.h>
+#else
+#import "dsbridge.h"
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 

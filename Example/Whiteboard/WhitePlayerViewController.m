@@ -11,7 +11,11 @@
 #import "WhiteUtils.h"
 #import "PlayerCommandListController.h"
 #import "RoomCommandListController.h"
+#if IS_SPM
+#import "Whiteboard.h"
+#else
 #import <Whiteboard/Whiteboard.h>
+#endif
 
 @interface WhitePlayerViewController ()<WhiteCommonCallbackDelegate, WhitePlayerEventDelegate, WhiteCombineDelegate, UIPopoverPresentationControllerDelegate>
 @property (nonatomic, nullable, strong) WhitePlayer *player;
@@ -20,7 +24,8 @@
 @property (nonatomic, nullable, strong) WhiteVideoView *videoView;
 @end
 
-#import <Masonry/Masonry.h>
+#import "Masonry.h"
+//#import <Masonry/Masonry.h>
 
 @implementation WhitePlayerViewController
 

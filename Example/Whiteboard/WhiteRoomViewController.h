@@ -8,7 +8,11 @@
 
 @import UIKit;
 #import "WhiteBaseViewController.h"
+#if IS_SPM
+#import "Whiteboard.h"
+#else
 #import <Whiteboard/Whiteboard.h>
+#endif
 
 typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror);
 typedef void(^BeginJoinRoomBlock)();

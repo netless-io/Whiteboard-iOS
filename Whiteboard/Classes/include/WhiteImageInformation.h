@@ -1,0 +1,1 @@
+../Room/WhiteImageInformation.h

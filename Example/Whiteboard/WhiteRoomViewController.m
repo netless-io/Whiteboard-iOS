@@ -17,10 +17,8 @@
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @end
 
-#import <Masonry/Masonry.h>
 #import "RoomCommandListController.h"
 #import "WhiteUtils.h"
-#import "WhiteFPA.h"
 
 @implementation WhiteRoomViewController
 
