@@ -228,11 +228,24 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 [动态转换资源包](https://developer.netless.link/server-zh/home/server-dynamic-conversion-zip)
 
 
+## fpa加速（iOS 13 及其以上）
+
+1. podfile 添加 `pod 'Whiteboard/fpa'` 依赖
+2. 配置 WhiteRoomConfig 的 `nativeWebSocket` 为 YES
+3. 如需监听FPA连接状态，可以调用 `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];`
+
+注意：如果是M1的电脑想要在模拟器调试，请在Podfile里加入如下声明：
+```ruby
+  post_install do |installer|
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
+```
+
+
 ## 部分问题
 
 1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
-
-
 
 ## Whiteboard - Framework 拖拽方式集成
 

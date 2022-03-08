@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Whiteboard'
-  s.version          = '2.15.25'
+  s.version          = '2.16.5'
   s.summary          = 'netless.io Whiteboard API on iOS'
 
   s.description      = <<-DESC
@@ -62,6 +62,20 @@ Pod::Spec.new do |s|
     room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h'
     room.dependency 'Whiteboard/Base'
   end
+  
+  # socket 代理
+  s.subspec 'fpa' do |socket|
+    socket.source_files = 'Whiteboard/Classes/fpa/**'
+    socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
+    socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
+    socket.dependency 'Whiteboard/Room'
+    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
+    # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
+    socket.ios.deployment_target = '11.0'
+    # 这个config是因为fpa的framework没有simulator-arm64的版本，需要手动剔除
+    socket.pod_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
+    socket.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
+  end
 
   # 回放房间
   s.subspec 'Replayer' do |replayer|
@@ -83,7 +97,7 @@ Pod::Spec.new do |s|
   # ---------
   # -YYModel-
   # ---------
-#  s.default_subspec = 'Converter', 'Room', 'Replayer', 'NativeReplayer'
+  s.default_subspec = 'Converter', 'Room', 'Replayer', 'NativeReplayer'
   
   # ---------
   # --YYKit--

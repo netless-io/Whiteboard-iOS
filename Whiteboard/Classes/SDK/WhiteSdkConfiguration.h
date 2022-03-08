@@ -166,15 +166,20 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /**
  日志等级。
 
- 日志级别顺序依次为 `error`、`warn`、`info`、和 `debug`。选择一个级别，你就可以看到在该级别之前所有级别的日志信息。
+ 日志级别顺序依次为 `error`、`warn`、`info`、和 `debug`。
  
- 例如，你选择 `info` 级别，就可以看到在 `error`、`warn`、`info` 级别上的所有日志信息。
-
- - 日志信息上报模式：可选，默认为 `info`。
- - 客户端本地：用户连接质量上报模式，默认为`上报`。
- - 日志上报等级：可选，默认为 `info`。
- - webview 控制台打印日志等级：可选，默认为 `info`。
- - 关闭日志上传功能：默认开启。
+ 例如，选择 `info` 级别，就可以看到在 `error`、`warn`、`info` 级别上的所有日志信息。
+ 
+ 字段：值
+ 
+ 上报 debug 日志的模式，默认为`上报`。
+ @"reportDebugLogMode": WhiteSDKLoggerReportModeKey
+ 上报质量数据的模式，默认为`上报`。
+ @"reportQualityMode": WhiteSDKLoggerReportModeKey
+ 上报 debug 日志的等级过滤，默认为 `info`。
+ @"reportLevelMask": WhiteSDKLoggerOptionLevelKey;
+ 在 webView console 打印 debug 日志的等级过滤，默认为 `info`。
+ @"printLevelMask": WhiteSDKLoggerOptionLevelKey;
  */
 @property (nonatomic, copy) NSDictionary *loggerOptions;
 

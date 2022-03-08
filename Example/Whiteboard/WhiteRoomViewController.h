@@ -15,6 +15,7 @@
 #endif
 
 typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror);
+typedef void(^BeginJoinRoomBlock)();
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoomViewController (UnitTest)
 
+@property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 

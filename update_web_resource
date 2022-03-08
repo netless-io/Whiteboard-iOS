@@ -1,5 +1,4 @@
 #!/bin/bash
-
 BASEDIR=$(cd $(dirname "$0"); pwd -P)
 set -exo pipefail
 cd $BASEDIR
@@ -7,12 +6,16 @@ cd $BASEDIR
 # 更新本地White-bridge build
 cd ../Whiteboard-bridge
 yarn
+if [ $1 = 'debug' ]; then
+yarn buildDev
+else
 yarn build
+fi
 cd $BASEDIR
 
 # 设置 white-sdk web 资源的目标
-export TargetPath=${1-"./Whiteboard/Resource"}
-export SourcePath=${2-"../whiteboard-bridge/build"}
+export TargetPath="./Whiteboard/Resource"
+export SourcePath="../whiteboard-bridge/build"
 
 # 删除并创建文件目录
 rm -rf $TargetPath

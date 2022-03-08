@@ -7,6 +7,29 @@
 # `Whiteboard` 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.5] - 2022-03-01
+- 更新`window-manager`至0.4.9
+## [2.16.4] - 2022-02-24
+- 新增`Whiteboard/fpa`subspec。在 podfile 添加 `pod 'Whiteboard/fpa'` 依赖，并且配置 WhiteRoomConfig 的 `nativeWebSocket` 为 YES 即可进行加速。
+## [2.16.3] - 2022-02-24
+- 更新`window-manager`至0.4.7
+- 新增`WhiteConverterV5`, 用于查询文件转码进度
+- `WhiteRoom`新增`addPage`, `prevPage` 和 `nextPage`方法
+## [2.16.2] - 2022-02-22
+- 更新`white-web-sdk`至2.16.10
+- 修复WhiteRoom的`undoSteps`和`redoSteps`的回调错误
+## [2.16.1] - 2022-02-16
+- 更新`white-web-sdk`至2.16.9
+- 更新`window-manager`至0.4.5
+## [2.16.0] - 2022-02-11
+- 更新`@netless/window-manager`至 0.4.1
+- 更新`white-web-sdk`至2.16.7
+- 增加`WhiteRoom`调用日志逻辑。开关跟随`WhiteSdkConfiguration`中的 log 参数（默认关闭），上报等级为 info，上报配置跟随`loggerOptions`配置项。
+- 回放支持多窗口模式，需要在初始化 SDK 时，配置`WhiteSdkConfiguration`开启 useMultipleView 参数。
+- `WhiteRoom`新增`insertText`方法，可以通过该方法在指定位置插入文字。
+- 修复多窗口模式下，`Redo`和`Undo`不生效的问题。
+## [2.15.26] - 2022-03-02
+- 更新`@netless/window-manager`至 0.3.26
 ## [2.15.25] - 2022-01-20
 - 更新`@netless/window-manager`至 0.3.25
 - 更新`@netless/app-slide`至 0.0.56

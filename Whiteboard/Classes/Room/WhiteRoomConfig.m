@@ -8,33 +8,6 @@
 #import "WhiteRoomConfig.h"
 #import "WhiteConsts.h"
 
-WhitePrefersColorScheme const WhitePrefersColorSchemeAuto = @"auto";
-WhitePrefersColorScheme const WhitePrefersColorSchemeLight = @"light";
-WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
-
-@implementation WhiteWindowParams
-
-- (instancetype)init {
-    self = [super init];
-    _chessboard = YES;
-    _containerSizeRatio = @(9/16);
-    _debug = YES;
-    _prefersColorScheme = WhitePrefersColorSchemeLight;
-    return self;
-}
-
-- (void)setPrefersColorScheme:(WhitePrefersColorScheme)prefersColorScheme {
-    if (@available(iOS 13, *)) {
-        _prefersColorScheme = prefersColorScheme;
-    } else if ([prefersColorScheme isEqualToString:WhitePrefersColorSchemeAuto]) {
-        NSLog(@"WhitePrefersColorSchemeAuto is not available before iOS 13");
-        return;
-    } else {
-        _prefersColorScheme = prefersColorScheme;
-    }
-}
-
-@end
 
 @interface WhiteRoomConfig ()
 
@@ -90,5 +63,15 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     _disableDeviceInputs = disableOperations;
     _disableCameraTransform = disableOperations;
 }
+
+#if __has_include("WhiteRoomConfig+FPA.h")
+- (void)setNativeWebSocket:(BOOL)nativeWebSocket {
+    if (@available(iOS 13.0, *)) {
+        _nativeWebSocket = nativeWebSocket;
+    } else {
+        _nativeWebSocket = NO;
+    }
+}
+#endif
 
 @end

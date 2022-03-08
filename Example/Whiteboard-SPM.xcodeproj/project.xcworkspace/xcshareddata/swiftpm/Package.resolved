@@ -29,15 +29,6 @@
         }
       },
       {
-        "package": "Whiteboard",
-        "repositoryURL": "https://github.com/vince-hz/Whiteboard-iOS.git",
-        "state": {
-          "branch": "swift-package-manager",
-          "revision": "fe8728ab60f54eb13b74ddd4fb54b41cb458683b",
-          "version": null
-        }
-      },
-      {
         "package": "YYModel",
         "repositoryURL": "https://github.com/vince-hz/YYModel.git",
         "state": {

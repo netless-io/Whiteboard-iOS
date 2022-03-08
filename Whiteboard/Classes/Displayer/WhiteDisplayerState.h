@@ -14,6 +14,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NSString * WhiteWindowBoxState NS_STRING_ENUM;
+
+FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateNormal;
+FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMini;
+FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMax;
+
 /** 互动白板实时房间和回放房间共有的状态。 */
 @interface WhiteDisplayerState : WhiteObject<YYModel>
 
@@ -44,6 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 白板内部视角状态。详见 [WhiteCameraState](WhiteCameraState)。 */
 @property (nonatomic, strong, readonly, nullable) WhiteCameraState *cameraState;
+
+@property (nonatomic, copy, readonly, nullable) WhiteWindowBoxState windowBoxState;
 
 @end
 

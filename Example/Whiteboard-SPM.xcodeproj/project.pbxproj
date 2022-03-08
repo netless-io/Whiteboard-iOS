@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8A60AE3127A3FB3B005BCDD3 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 8A60AE3027A3FB3B005BCDD3 /* ZipArchive */; };
-		8A80057E27A3F263002A624B /* Whiteboard in Frameworks */ = {isa = PBXBuildFile; productRef = 8A80057D27A3F263002A624B /* Whiteboard */; };
 		8A80058427A3F36E002A624B /* Masonry in Frameworks */ = {isa = PBXBuildFile; productRef = 8A80058327A3F36E002A624B /* Masonry */; };
 		8AC5C6CB27A3F1460002D430 /* PlayerCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6AD27A3F1460002D430 /* PlayerCommandListController.m */; };
 		8AC5C6CC27A3F1460002D430 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6AF27A3F1460002D430 /* Localizable.strings */; };
@@ -27,6 +26,7 @@
 		8AC5C6D927A3F1460002D430 /* WhitePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6C927A3F1460002D430 /* WhitePlayerViewController.m */; };
 		8AC5C6DA27A3F1460002D430 /* WhiteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6CA27A3F1460002D430 /* WhiteBaseViewController.m */; };
 		8AC5C6E027A3F1940002D430 /* NETURLSchemeHandler in Frameworks */ = {isa = PBXBuildFile; productRef = 8AC5C6DF27A3F1940002D430 /* NETURLSchemeHandler */; };
+		8AC8B95427D731CA002F1D53 /* Whiteboard in Frameworks */ = {isa = PBXBuildFile; productRef = 8AC8B95327D731CA002F1D53 /* Whiteboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +57,7 @@
 		8AC5C6C827A3F1460002D430 /* WhiteUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteUtils.m; sourceTree = "<group>"; };
 		8AC5C6C927A3F1460002D430 /* WhitePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerViewController.m; sourceTree = "<group>"; };
 		8AC5C6CA27A3F1460002D430 /* WhiteBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBaseViewController.m; sourceTree = "<group>"; };
+		8AC8B95127D731C2002F1D53 /* Whiteboard-iOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "Whiteboard-iOS"; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,8 +67,8 @@
 			files = (
 				8A80058427A3F36E002A624B /* Masonry in Frameworks */,
 				8AC5C6E027A3F1940002D430 /* NETURLSchemeHandler in Frameworks */,
-				8A80057E27A3F263002A624B /* Whiteboard in Frameworks */,
 				8A60AE3127A3FB3B005BCDD3 /* ZipArchive in Frameworks */,
+				8AC8B95427D731CA002F1D53 /* Whiteboard in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,8 +78,10 @@
 		8AC5C68727A3F0870002D430 = {
 			isa = PBXGroup;
 			children = (
+				8AC8B95027D731C2002F1D53 /* Packages */,
 				8AC5C6AC27A3F1460002D430 /* Whiteboard */,
 				8AC5C69127A3F0870002D430 /* Products */,
+				8AC8B95227D731CA002F1D53 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +126,21 @@
 			path = Whiteboard;
 			sourceTree = "<group>";
 		};
+		8AC8B95027D731C2002F1D53 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				8AC8B95127D731C2002F1D53 /* Whiteboard-iOS */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		8AC8B95227D731CA002F1D53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -141,9 +159,9 @@
 			name = "Whiteboard-SPM";
 			packageProductDependencies = (
 				8AC5C6DF27A3F1940002D430 /* NETURLSchemeHandler */,
-				8A80057D27A3F263002A624B /* Whiteboard */,
 				8A80058327A3F36E002A624B /* Masonry */,
 				8A60AE3027A3FB3B005BCDD3 /* ZipArchive */,
+				8AC8B95327D731CA002F1D53 /* Whiteboard */,
 			);
 			productName = "Whiteboard-SPM";
 			productReference = 8AC5C69027A3F0870002D430 /* Whiteboard-SPM.app */;
@@ -174,7 +192,6 @@
 			mainGroup = 8AC5C68727A3F0870002D430;
 			packageReferences = (
 				8AC5C6DE27A3F1940002D430 /* XCRemoteSwiftPackageReference "NETURLSchemeHandler" */,
-				8A80057C27A3F263002A624B /* XCRemoteSwiftPackageReference "Whiteboard-iOS" */,
 				8A80058227A3F36E002A624B /* XCRemoteSwiftPackageReference "Masonry" */,
 				8A60AE2F27A3FB3B005BCDD3 /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
@@ -462,14 +479,6 @@
 				kind = branch;
 			};
 		};
-		8A80057C27A3F263002A624B /* XCRemoteSwiftPackageReference "Whiteboard-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vince-hz/Whiteboard-iOS.git";
-			requirement = {
-				branch = "swift-package-manager";
-				kind = branch;
-			};
-		};
 		8A80058227A3F36E002A624B /* XCRemoteSwiftPackageReference "Masonry" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vince-hz/Masonry";
@@ -494,11 +503,6 @@
 			package = 8A60AE2F27A3FB3B005BCDD3 /* XCRemoteSwiftPackageReference "ZipArchive" */;
 			productName = ZipArchive;
 		};
-		8A80057D27A3F263002A624B /* Whiteboard */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8A80057C27A3F263002A624B /* XCRemoteSwiftPackageReference "Whiteboard-iOS" */;
-			productName = Whiteboard;
-		};
 		8A80058327A3F36E002A624B /* Masonry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8A80058227A3F36E002A624B /* XCRemoteSwiftPackageReference "Masonry" */;
@@ -508,6 +512,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8AC5C6DE27A3F1940002D430 /* XCRemoteSwiftPackageReference "NETURLSchemeHandler" */;
 			productName = NETURLSchemeHandler;
+		};
+		8AC8B95327D731CA002F1D53 /* Whiteboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Whiteboard;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,0 +1,24 @@
+name: bridge-check
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - "carrot.yml"
+      - "carrot.yaml"
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - "carrot.yml"
+      - "carrot.yaml"
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3.0.0
+        with: 
+          cache: "yarn"
+      - run: npm install rabbit-tools -g
+      - run: rabbit clone

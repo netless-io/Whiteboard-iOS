@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
     CommandTypeInsertDynamic,
     CommandTypeInsertDynamicZip,
     CommandTypeInsertImage,
+    CommandTypeInsertText,
     CommandTypeGetPreviewImage,
     CommandTypeGetSnapshot,
     CommandTypeGetPpt,
@@ -54,7 +55,7 @@ typedef NS_ENUM(NSInteger, CommandType) {
 
 @interface RoomCommandListController ()
 
-@property (nonatomic, strong) NSArray<NSString *> *commands;
+@property (nonatomic, strong) NSDictionary<NSNumber *, NSString *> *commands;
 @property (nonatomic, weak) WhiteRoom *room;
 @property (nonatomic, assign, getter=isReadonly) BOOL readonly;
 
@@ -74,19 +75,42 @@ static NSString *kReuseCell = @"reuseCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.commands = @[NSLocalizedString(@"改变布局", nil), NSLocalizedString(@"主播", nil), NSLocalizedString(@"观众", nil),
-                      NSLocalizedString(@"ppt 铺满屏幕", nil),  NSLocalizedString(@"操作", nil), NSLocalizedString(@"删除", nil),
-                      NSLocalizedString(@"移动整体视角", nil), NSLocalizedString(@"当前视角状态", nil), NSLocalizedString(@"发送自定义事件", nil),
-                      NSLocalizedString(@"清屏", nil), NSLocalizedString(@"插入新页面", nil), NSLocalizedString(@"插入 PPT", nil),
-                      NSLocalizedString(@"插入静态 PPT", nil),NSLocalizedString(@"插入动态 PPT", nil), NSLocalizedString(@"插入动态 PPT(有zip)", nil),
-                      NSLocalizedString(@"插入图片", nil), NSLocalizedString(@"获取预览截图", nil), NSLocalizedString(@"获取场景完整封面", nil),
-                      NSLocalizedString(@"获取PPT", nil), NSLocalizedString(@"获取页面数据", nil),  NSLocalizedString(@"下一页", nil),
-                      NSLocalizedString(@"获取连接状态", nil),NSLocalizedString(@"主动断连", nil), NSLocalizedString(@"视野锁定", nil),
-                      NSLocalizedString(@"禁止操作", nil), NSLocalizedString(@"恢复操作", nil), NSLocalizedString(@"文本", nil),
-                      NSLocalizedString(@"选择", nil), NSLocalizedString(@"画笔", nil),NSLocalizedString(@"箭头", nil),
-                      NSLocalizedString(@"橡皮擦", nil),NSLocalizedString(@"矩形", nil), NSLocalizedString(@"颜色", nil),
-                      NSLocalizedString(@"坐标转换", nil), NSLocalizedString(@"缩放", nil)];
+    self.commands = @{@(CommandTypeResize): NSLocalizedString(@"改变布局", nil),
+                      @(CommandTypeBroadcast): NSLocalizedString(@"主播", nil),
+                      @(CommandTypeFollower): NSLocalizedString(@"观众", nil),
+                      @(CommandTypeScalePptToFit): NSLocalizedString(@"铺满屏幕", nil),
+                      @(CommandTypeOperation): NSLocalizedString(@"撤销重做", nil),
+                      @(CommandTypeDeleteOperation): NSLocalizedString(@"删除", nil),
+                      @(CommandTypeMoveRectangle): NSLocalizedString(@"移动整体视角", nil),
+                      @(CommandTypeCurrentViewMode): NSLocalizedString(@"当前视角状态", nil),
+                      @(CommandTypeCustomEvent): NSLocalizedString(@"自定义事件", nil),
+                      @(CommandTypeCleanScene): NSLocalizedString(@"清屏", nil),
+                      @(CommandTypeInsertNewScene): NSLocalizedString(@"插入新页面", nil),
+                      @(CommandTypeInsertPpt): NSLocalizedString(@"插入已转换 PPT", nil),
+                      @(CommandTypeInsertStatic): NSLocalizedString(@"发起静态转码", nil),
+                      @(CommandTypeInsertDynamic): NSLocalizedString(@"发起动态转码", nil),
+                      @(CommandTypeInsertDynamicZip): NSLocalizedString(@"插入动态 PPT(有zip)", nil),
+                      @(CommandTypeInsertImage): NSLocalizedString(@"插入图片", nil),
+                      @(CommandTypeInsertText): NSLocalizedString(@"插入文字", nil),
+                      @(CommandTypeGetPreviewImage): NSLocalizedString(@"获取预览截图", nil),
+                      @(CommandTypeGetSnapshot): NSLocalizedString(@"获取场景完整封面", nil),
+                      @(CommandTypeGetPpt): NSLocalizedString(@"获取PPT", nil),
+                      @(CommandTypeGetScene): NSLocalizedString(@"获取页面数据", nil),
+                      @(CommandTypeNextScene): NSLocalizedString(@"下一页", nil),
+                      @(CommandTypeGetRoomPhase): NSLocalizedString(@"获取连接状态", nil),
+                      @(CommandTypeDisconnect): NSLocalizedString(@"主动断连", nil),
+                      @(CommandTypeDisableCamera): NSLocalizedString(@"锁定视野", nil),
+                      @(CommandTypeReadonly): NSLocalizedString(@"禁止操作", nil),
+                      @(CommandTypeEnable): NSLocalizedString(@"恢复操作", nil),
+                      @(CommandTypeText): NSLocalizedString(@"文本教具", nil),
+                      @(CommandTypeSelector): NSLocalizedString(@"选择教具", nil),
+                      @(CommandTypePencil): NSLocalizedString(@"画笔教具", nil),
+                      @(CommandTypeArrow): NSLocalizedString(@"箭头教具", nil),
+                      @(CommandTypeEraser): NSLocalizedString(@"橡皮擦教具", nil),
+                      @(CommandTypeRectangle): NSLocalizedString(@"矩形教具", nil),
+                      @(CommandTypeColor): NSLocalizedString(@"随机颜色", nil),
+                      @(CommandTypeConvertP): NSLocalizedString(@"坐标转换", nil),
+                      @(CommandTypeScale): NSLocalizedString(@"缩放", nil)};
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kReuseCell];
 }
 
@@ -108,7 +132,7 @@ static NSString *kReuseCell = @"reuseCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kReuseCell forIndexPath:indexPath];
     
-    cell.textLabel.text = self.commands[indexPath.row];
+    cell.textLabel.text = self.commands[@(indexPath.row)];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     
     return cell;
@@ -259,6 +283,11 @@ static NSString *kReuseCell = @"reuseCell";
 //            [self.room completeImageUploadWithUuid:info.uuid src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
             break;
         }
+        case CommandTypeInsertText:
+            [self.room insertText:0 y:0 textContent:@"Hello text!" completionHandler:^(NSString * _Nonnull textId) {
+                NSLog(@"insert with textId %@", textId);
+            }];
+            break;
         case CommandTypeGetPpt:
         {
             //v2.0 新API，通过获取每个 scene，再去查询 ppt 属性，如果没有 ppt，则 ppt 属性会为空
@@ -359,7 +388,7 @@ static NSString *kReuseCell = @"reuseCell";
         {
             WhiteMemberState *mState = [[WhiteMemberState alloc] init];
             mState.currentApplianceName = AppliancePencil;
-            mState.strokeColor = @[@200, @200, @200];
+            mState.strokeColor = @[@(arc4random_uniform(255) / 255), @(arc4random_uniform(255) / 255), @(arc4random_uniform(255) / 255)];
             mState.strokeWidth = @10;
             [self.room setMemberState:mState];
             break;
@@ -379,9 +408,9 @@ static NSString *kReuseCell = @"reuseCell";
         case CommandTypeScale:
         {
             [self.room getZoomScaleWithResult:^(CGFloat scale) {
-                WhiteCameraConfig *camerConfgi = [[WhiteCameraConfig alloc] init];
-                camerConfgi.scale = scale == 1 ? @5 : @1;
-                [self.room moveCamera:camerConfgi];
+                WhiteCameraConfig *camerConfig = [[WhiteCameraConfig alloc] init];
+                camerConfig.scale = scale == 1 ? @5 : @1;
+                [self.room moveCamera:camerConfig];
             }];
             break;
         }

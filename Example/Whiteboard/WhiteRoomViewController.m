@@ -14,10 +14,12 @@
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
+@property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @end
 
 #import "RoomCommandListController.h"
 #import "WhiteUtils.h"
+#import "WhiteFPA.h"
 
 @implementation WhiteRoomViewController
 
@@ -164,6 +166,11 @@
         WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];
         roomConfig.cameraBound = bound;
         roomConfig.region = WhiteRegionCN;
+        if (@available(iOS 13.0, *)) {
+            // 将 web端的 webSocket 转成从 native 发起
+            // roomConfig.nativeWebSocket = YES;
+        }
+
         self.roomConfig = roomConfig;
     }
 
@@ -191,6 +198,7 @@
             [self presentViewController:alertVC animated:YES completion:nil];
         }
     }];
+    if (self.beginJoinRoomBlock) { self.beginJoinRoomBlock(); };
 }
 
 #pragma mark - Keyboard

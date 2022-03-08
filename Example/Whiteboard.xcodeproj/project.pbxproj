@@ -35,6 +35,9 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */; };
+		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
+		8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +101,10 @@
 		789AF49F9FB06918748A94DC /* Pods-Whiteboard_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Whiteboard_Tests/Pods-Whiteboard_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8470081D613A7C8DF8376FBA /* Pods-Whiteboard_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whiteboard_Example.release.xcconfig"; path = "Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8A05A21C27D5FE1B00B3F329 /* WhiteTestSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteTestSocket.h; sourceTree = "<group>"; };
+		8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteTestSocket.m; sourceTree = "<group>"; };
+		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
+		8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FpaTest.m; sourceTree = "<group>"; };
 		AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -209,7 +216,11 @@
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
+				8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */,
+				8A05A21C27D5FE1B00B3F329 /* WhiteTestSocket.h */,
+				8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */,
 				39E4205F23A3B861002B9B38 /* WhiteObjectTests.m */,
+				8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -260,6 +271,7 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				14A9084D4375BECEF3DF2A52 /* [CP] Copy Pods Resources */,
+				1EC5B71996415158B3087EEB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -300,6 +312,7 @@
 				ORGANIZATIONNAME = leavesster;
 				TargetAttributes = {
 					6003F5AD195388D20070C39A = {
+						LastSwiftMigration = 1320;
 						TestTargetID = 6003F589195388D20070C39A;
 					};
 				};
@@ -389,6 +402,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1EC5B71996415158B3087EEB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh",
+				"${PODS_ROOT}/AgoraFPA_iOS/AgoraFPA.framework",
+				"${PODS_ROOT}/AgoraFPA_iOS/AgoraFpaProxyService.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFPA.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFpaProxyService.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6961D961CB4C3851A2CEE5A4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -436,6 +469,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
+				8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */,
+				8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */,
+				8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */,
 				39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */,
 				39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */,
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
@@ -600,6 +636,7 @@
 			baseConfigurationReference = 789AF49F9FB06918748A94DC /* Pods-Whiteboard_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -612,8 +649,11 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Whiteboard_Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Whiteboard_Example.app/Whiteboard_Example";
 				WRAPPER_EXTENSION = xctest;
@@ -625,6 +665,7 @@
 			baseConfigurationReference = 4CB02330C08AD98B832844A9 /* Pods-Whiteboard_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -633,8 +674,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Whiteboard_Tests-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Whiteboard_Example.app/Whiteboard_Example";
 				WRAPPER_EXTENSION = xctest;

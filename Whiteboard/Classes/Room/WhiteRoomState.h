@@ -12,12 +12,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * WhiteWindowBoxState NS_STRING_ENUM;
-
-FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateNormal;
-FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMini;
-FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMax;
-
 /** 房间状态。 */
 @interface WhiteRoomState : WhiteDisplayerState
 
@@ -30,7 +24,6 @@ FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMax;
 /** 实时房间内当前的视角缩放比例。*/
 @property (nonatomic, strong, readonly, nullable) NSNumber *zoomScale;
 
-@property (nonatomic, copy, readonly, nullable) WhiteWindowBoxState windowBoxState;
 
 @end
 
