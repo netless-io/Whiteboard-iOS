@@ -21,7 +21,8 @@ let package = Package(
                 path: "Whiteboard",
                 exclude: [
                     "Classes/Model-YYKit",
-                    "Classes/include/cpScript.sh"
+                    "Classes/include/cpScript.sh",
+                    "Classes/fpa"
                 ],
                 sources: ["Classes"],
                 resources: [
