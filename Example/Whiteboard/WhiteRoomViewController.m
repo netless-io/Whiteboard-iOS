@@ -14,6 +14,7 @@
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
+@property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @end
 
 #import <Masonry/Masonry.h>
@@ -198,6 +199,7 @@
             [self presentViewController:alertVC animated:YES completion:nil];
         }
     }];
+    if (self.beginJoinRoomBlock) { self.beginJoinRoomBlock(); };
 }
 
 #pragma mark - Keyboard
