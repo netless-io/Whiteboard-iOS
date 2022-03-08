@@ -12,8 +12,8 @@
 @property (nonatomic, weak, readonly) WhiteBoardView *bridge;
 @property (nonatomic, strong) NSURLSessionWebSocketTask *webSocket;
 @property (nonatomic, strong) NSURLSession *session;
-/// 手动记录socket的开关状态，因为前后台切换的时候，不能保证所有回调都被正确调用
-@property (nonatomic, copy) NSMutableDictionary *socketClosedDic;
+/// 手动记录活动的sockets，因为前后台切换的时候，不能保证所有socket关闭回调都被正确调用
+@property (nonatomic, strong) NSMutableSet<NSString *> *workingSocketsIdSet;
 
 @end
 
@@ -35,17 +35,19 @@ static NSDictionary *_proxyConfig = nil;
     NSLog(@"white socket dealloc");
 }
 
-- (instancetype)initWithBridge:(WhiteBoardView *)bridge {
+- (instancetype)initWithBridge:(WhiteBoardView *)bridge
+{
     self = [super init];
     _bridge = bridge;
     return self;
 }
 
-- (NSMutableDictionary *)socketClosedDic {
-    if (!_socketClosedDic) {
-        _socketClosedDic = [NSMutableDictionary dictionary];
+- (NSMutableSet<NSString *> *)workingSocketsIdSet
+{
+    if (!_workingSocketsIdSet) {
+        _workingSocketsIdSet = [NSMutableSet set];
     }
-    return _socketClosedDic;
+    return _workingSocketsIdSet;
 }
 
 - (NSURLSession *)session {
@@ -73,7 +75,7 @@ static NSDictionary *_proxyConfig = nil;
 - (void)releaseSocketIfNeeded {
     if (self.webSocket) {
         NSURLSessionWebSocketTask *webSocket = self.webSocket;
-        if (!self.socketClosedDic[webSocket.taskDescription]) {
+        if ([self.workingSocketsIdSet containsObject:webSocket.taskDescription]) {
             // 现在只有js能创建socket
             // js会有启动两个socket的行为， 但目前使用的代理方案只有一个socket实例存在。所以现在在创建新socket的时候，会把旧的socket取消掉
             // 使用代理之后，永远只有一个socket存在
@@ -148,7 +150,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
     self.webSocket = [self.session webSocketTaskWithURL:url];
     self.webSocket.taskDescription = key;
     [self.webSocket resume];
-    self.socketClosedDic[key] = @(FALSE);
+    [self.workingSocketsIdSet addObject:key];
 
     __weak typeof(self)weakSelf = self;
     [self receiveSocket:self.webSocket messageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
@@ -165,11 +167,11 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 - (void)receiveSocket:(NSURLSessionWebSocketTask *)task messageWithCompletionHandler:(void (^)(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error))completionHandler {
     __weak typeof(self)weakSelf = self;
     [task receiveMessageWithCompletionHandler:^(NSURLSessionWebSocketMessage * _Nullable message, NSError * _Nullable error) {
-        // 出现已关闭的socket，但是又没有被记录过关闭
+        // 出现已关闭的socket，但是仍然在活动列表里
         // 说明是在后台关闭的
         // 这时候需要主动通知调起关闭通知
-        if (task.state == NSURLSessionTaskStateCompleted
-            && ![weakSelf.socketClosedDic[task.taskDescription] boolValue]) {
+        if (task.state == NSURLSessionTaskStateCompleted &&
+            [weakSelf.workingSocketsIdSet containsObject:task.taskDescription]) {
             [weakSelf processBackgroundClosedSocket:task];
         } else if (task.state == NSURLSessionTaskStateRunning) {
             if (completionHandler) {
@@ -182,7 +184,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 
 // 处理在后台被关闭的Socket
 - (void)processBackgroundClosedSocket:(NSURLSessionWebSocketTask *)socket {
-    self.socketClosedDic[socket.taskDescription] = @(TRUE);
+    [self.workingSocketsIdSet removeObject:socket.taskDescription];
     [self reportToJsWebSocketClose:socket reason:@"backgroundKilledWebSocket" closeCode:-9999];
 }
 
@@ -210,7 +212,7 @@ WhiteSocketPayloadType const PayloadTypeString = @"string";
 
 - (void)URLSession:(NSURLSession *)session webSocketTask:(NSURLSessionWebSocketTask *)webSocketTask didCloseWithCode:(NSURLSessionWebSocketCloseCode)closeCode reason:(nullable NSData *)reason;
 {
-    self.socketClosedDic[webSocketTask.taskDescription] = @(YES);
+    [self.workingSocketsIdSet removeObject:webSocketTask.taskDescription];
     if (self.webSocket == webSocketTask) {
         NSString *r = reason ? @"" : [[NSString alloc] initWithData:reason encoding:NSUTF8StringEncoding];
         [self reportToJsWebSocketClose:webSocketTask reason:r closeCode:closeCode];
