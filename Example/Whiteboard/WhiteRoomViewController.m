@@ -19,7 +19,6 @@
 
 #import "RoomCommandListController.h"
 #import "WhiteUtils.h"
-#import "WhiteFPA.h"
 
 @implementation WhiteRoomViewController
 
