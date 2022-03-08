@@ -8,7 +8,9 @@
 
 #import <XCTest/XCTest.h>
 #import <Whiteboard/Whiteboard.h>
+#import <Whiteboard/WhiteFpa.h>
 #import "WhiteRoomViewController.h"
+#import "WhiteTestSocket.h"
 
 typedef enum : NSUInteger {
     SocketReadyStateCONNECTING = 0,
@@ -17,19 +19,26 @@ typedef enum : NSUInteger {
     SocketReadyStateCLOSED = 3,
 } SocketReadyState;
 
+static NSTimeInterval kTimeout = 30;
+
 @interface WhiteRoom ()
 @property (nonatomic, weak, readonly) WhiteBoardView *bridge;
 @end
 
 @implementation WhiteRoom
-
 @end
 
-static NSTimeInterval kTimeout = 30;
+@interface WhiteSDK ()
+@property (nonatomic, weak) WhiteBoardView *bridge;
+@end
+
+@implementation WhiteSDK
+@end
 
 @interface FpaTest : XCTestCase
 @property (nonatomic, strong) WhiteRoomViewController *roomVC;
 @property (nonatomic, strong) WhiteRoomConfig *roomConfig;
+@property (nonatomic, weak) WhiteTestSocket *testSocket;
 @end
 
 @implementation FpaTest
@@ -105,6 +114,37 @@ static NSTimeInterval kTimeout = 30;
     }];
 }
 
+- (void)testTimeout
+{
+    // 启动第一个socket, 3秒成功之后，模拟网络没有响应，切断第一个socket的sendMessage
+    // js会启动第二个socket, 这个socket的通信不会被切断
+    // 结果会有两个socket，并且两个socket都被正确关闭
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self) weakSelf = self;
+    self.roomVC.roomBlock = ^(WhiteRoom * _Nullable room, NSError * _Nullable eroror) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            weakSelf.testSocket.testAbandonMessageDic[@"0"] = @"";
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.roomVC.room disconnect:^{
+                    NSDictionary *dic = [weakSelf.testSocket valueForKey:@"socketClosedDic"];
+                    XCTAssertTrue(dic.count == 2);
+                    for (int i = 0; i < 2; i++) {
+                        NSString *key = [NSString stringWithFormat:@"%d", i];
+                        XCTAssertTrue([dic[key] boolValue]);
+                    }
+                    [exp fulfill];
+                }];
+            });
+        });
+    };
+    
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
 #pragma mark - Prepare
 
 - (void)refreshRoomVC
@@ -113,6 +153,13 @@ static NSTimeInterval kTimeout = 30;
     _roomVC.roomCallbackDelegate = self;
     _roomVC.commonDelegate = self;
     _roomVC.roomConfig = self.roomConfig;
+    __weak typeof(self) weakSelf = self;
+    _roomVC.beginJoinRoomBlock = ^{
+        [WhiteFPA setupFpa:[WhiteFPA defaultFpaConfig] chain:[WhiteFPA defaultChain]];
+        WhiteTestSocket *socket = [[WhiteTestSocket alloc] initWithBridge:weakSelf.roomVC.boardView];
+        [weakSelf.roomVC.boardView addJavascriptObject:socket namespace:@"ws"];
+        weakSelf.testSocket = socket;
+    };
     
     //Webview 在视图栈中才能正确执行 js
     __unused UIView *view = [self.roomVC view];
