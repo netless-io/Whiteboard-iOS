@@ -16,6 +16,8 @@ API_AVAILABLE(ios(13.0))
 /** 配置 WhiteSocket 使用的 NSURLSession 代理 */
 + (void)setProxyConfig:(NSDictionary *)proxyConfig;
 
+- (instancetype)initWithBridge:(WhiteBoardView *)bridge;
+
 @end
 
 NS_ASSUME_NONNULL_END
