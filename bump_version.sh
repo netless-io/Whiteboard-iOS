@@ -24,6 +24,14 @@ echo 'Add resource to git'
 git add .
 echo 'commit resource'
 git commit -m 'Update bridge resource'
+echo 'Update spm headers'
+cd ./Whiteboard/Classes/include
+sh cpScript.sh
+echo 'Add new headers to git'
+git add .
+echo 'commit headers'
+git commit -m 'Update spm headers'
+cd ....
 echo 'star bump version to' $NEWVERSION
 sed -i '' 's/'$OLDTAG'/'$NEWVERSION'/g' Whiteboard.podspec
 echo 'update version text in podspec'
