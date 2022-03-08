@@ -126,12 +126,8 @@ static NSTimeInterval kTimeout = 30;
             weakSelf.testSocket.testAbandonMessageDic[@"0"] = @"";
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [weakSelf.roomVC.room disconnect:^{
-                    NSDictionary *dic = [weakSelf.testSocket valueForKey:@"socketClosedDic"];
-                    XCTAssertTrue(dic.count == 2);
-                    for (int i = 0; i < 2; i++) {
-                        NSString *key = [NSString stringWithFormat:@"%d", i];
-                        XCTAssertTrue([dic[key] boolValue]);
-                    }
+                    NSMutableSet *set = [weakSelf.testSocket valueForKey:@"workingSocketsIdSet"];
+                    XCTAssertTrue(set.count == 0);
                     [exp fulfill];
                 }];
             });
