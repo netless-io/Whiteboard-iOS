@@ -28,6 +28,8 @@
 - 回放支持多窗口模式，需要在初始化 SDK 时，配置`WhiteSdkConfiguration`开启 useMultipleView 参数。
 - `WhiteRoom`新增`insertText`方法，可以通过该方法在指定位置插入文字。
 - 修复多窗口模式下，`Redo`和`Undo`不生效的问题。
+## [2.15.27] - 2022-03-09
+- 更新`@netless/window-manager`至 0.3.27
 ## [2.15.26] - 2022-03-02
 - 更新`@netless/window-manager`至 0.3.26
 ## [2.15.25] - 2022-01-20
