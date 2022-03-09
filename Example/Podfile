@@ -1,4 +1,5 @@
 #use_frameworks!
+project 'Whiteboard.xcodeproj'
 
 platform :ios, '10.0'
 
