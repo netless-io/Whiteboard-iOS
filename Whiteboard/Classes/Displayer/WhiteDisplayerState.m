@@ -18,6 +18,7 @@ WhiteWindowBoxState const WhiteWindowBoxStateMax = @"maximized";
 @property (nonatomic, strong, readwrite) NSArray<WhiteRoomMember *> *roomMembers;
 @property (nonatomic, strong, readwrite) WhiteCameraState *cameraState;
 @property (nonatomic, copy, nullable, readwrite) WhiteWindowBoxState windowBoxState;
+@property (nonatomic, strong, readwrite) WhitePageState *pageState;
 
 @end
 
