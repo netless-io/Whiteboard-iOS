@@ -11,6 +11,7 @@
 #import "WhiteSceneState.h"
 #import "WhiteCameraState.h"
 #import "WhiteObject.h"
+#import "WhitePageState.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -52,6 +53,9 @@ FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMax;
 @property (nonatomic, strong, readonly, nullable) WhiteCameraState *cameraState;
 
 @property (nonatomic, copy, readonly, nullable) WhiteWindowBoxState windowBoxState;
+
+/** 开启多窗口后，代表主白板的页面状态。详见 [WhitePageState](WhitePageState) 。 */
+@property (nonatomic, strong, readonly, nullable) WhitePageState *pageState;
 
 @end
 

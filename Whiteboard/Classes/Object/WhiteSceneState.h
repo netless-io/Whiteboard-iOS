@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** 场景状态。 */
+/** 场景状态。如果开启了多窗口，需要查看主白板页面数量状态变化，该对象不再有效，需要查看 [WhitePageState](WhitePageState) */
 @interface WhiteSceneState : WhiteObject
 
 /** 当前场景组下所有场景的列表。 */
