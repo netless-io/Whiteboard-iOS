@@ -18,7 +18,5 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3.0.0
-        with: 
-          cache: "yarn"
       - run: npm install rabbit-tools -g
       - run: rabbit clone
