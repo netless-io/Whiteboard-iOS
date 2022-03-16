@@ -1,5 +1,14 @@
 set -exo pipefail
 
+git_dirty() {
+if [[ -n $(git diff --stat) ]]
+then
+ echo 1
+else
+ echo 0
+fi
+}
+
 len() {
   echo ${#1}
 }
@@ -18,20 +27,21 @@ exit 0
 else echo 'version enable'
 fi
 
-echo 'update local build'
 ./update_web_resource
-echo 'Add resource to git'
-git add .
-echo 'commit resource'
-git commit -m 'Update bridge resource'
+if [ $(git_dirty) = '1' ]
+then
+git add . && git commit -m 'Update bridge resource'
+fi
+
 echo 'Update spm headers'
 cd ./Whiteboard/Classes/include
 sh cpScript.sh
-echo 'Add new headers to git'
-git add .
-echo 'commit headers'
-git commit -m 'Update spm headers'
-cd ....
+cd ../../..
+if [ $(git_dirty) = '1' ]
+then
+git add . && git commit -m 'Update spm headers'
+fi
+
 echo 'star bump version to' $NEWVERSION
 sed -i '' 's/'$OLDTAG'/'$NEWVERSION'/g' Whiteboard.podspec
 echo 'update version text in podspec'
