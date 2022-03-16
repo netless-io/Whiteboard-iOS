@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.7] - 2022-03-16
+- 更新`@netless/window-manager`至 0.4.13
+- 修复 多窗口模式下，只读状态时 `viewMode` 无法从 `freedom` 切换回 `broadcaster` 问题
 ## [2.16.6] - 2022-03-10
 - 更新`window-manager`至0.4.11
 - `WhiteRoom`新增`WhitePageState`属性，开启多窗口之后，主白板的页面数状态需要在该属性中读取。
