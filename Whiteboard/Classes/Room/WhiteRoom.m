@@ -30,6 +30,7 @@
     _state = [[WhiteRoomState alloc] init];
     _globalState = [[WhiteGlobalState alloc] init];
     _uuid = uuid;
+    _isUpdatingWritable = NO;
     return self;
 }
 
@@ -202,7 +203,10 @@
 
 - (void)setWritable:(BOOL)writable completionHandler:(void (^ _Nullable)(BOOL isWritable, NSError * _Nullable error))completionHandler;
 {
+    NSAssert(!self.isUpdatingWritable, @"Do not set writable when you are setting writable");
+    self.isUpdatingWritable = YES;
     [self.bridge callHandler:@"room.setWritable" arguments:@[@(writable)] completionHandler:^(id  _Nullable value) {
+        self.isUpdatingWritable = NO;
         if (completionHandler) {
             NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];

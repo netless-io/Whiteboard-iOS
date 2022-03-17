@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readwrite) NSNumber *observerId;
 @property (nonatomic, assign, readwrite, getter=isWritable) BOOL writable;
+@property (nonatomic, assign) BOOL shouldCheckingRepeatSetWritable;
+@property (nonatomic, assign) BOOL isUpdatingWritable;
 
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge;
 - (void)updatePhase:(WhiteRoomPhase)phase;
