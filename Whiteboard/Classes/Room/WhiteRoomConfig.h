@@ -176,6 +176,13 @@ NS_ASSUME_NONNULL_BEGIN
 /** 多窗口用的本地参数，只影响本地客户 */
 @property (nonatomic, strong, nullable) WhiteWindowParams *windowParams;
 
+/** 是否启用可写状态监控。
+ 若开启，在非可写状态调用需要可写权限的房间操作会触发NSAssert，以此来强制正确的api调用。
+ 监控仅在开发环境生效，生产环境自动失效。
+ 该参数默认为`YES`
+ */
+@property (nonatomic, assign) BOOL enableWritableAssert;
+
 @end
 
 NS_ASSUME_NONNULL_END
