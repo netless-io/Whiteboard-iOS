@@ -88,12 +88,13 @@ static NSMutableArray* assertableMethodNames;
             [name hasPrefix:@"disable"] ||
             [name hasPrefix:@"insert"] ||
             [name hasPrefix:@"add"]) {
-            const char *types = method_getTypeEncoding(method);
             
-            [assertableMethodNames addObject:name];
+            const char *types = method_getTypeEncoding(method);
             SEL newSel = NSSelectorFromString([WritableDetectRoom newMethodNameForMethodName:name]);
             class_addMethod(newCls, newSel, method_getImplementation(method), types);
             class_addMethod(newCls, selector, _objc_msgForward, types);
+            
+            [assertableMethodNames addObject:name];
         }
     }
 }

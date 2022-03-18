@@ -57,7 +57,13 @@
     WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:config.uuid bridge:weakBridge];
     self.bridge.roomCallbacks.room = room;
 #if DEBUG
-    [WritableDetectRoom startObserveRoom:room];
+    if (config.enableWritableAssert) {
+        [WritableDetectRoom startObserveRoom:room];
+    }
+    
+    room.shouldCheckingRepeatSetWritable = config.enableWritableAssert;
+#else
+    room.shouldCheckingRepeatSetWritable = false;
 #endif
     
     [self.bridge callHandler:@"sdk.joinRoom" arguments:@[config] completionHandler:^(id _Nullable value) {
