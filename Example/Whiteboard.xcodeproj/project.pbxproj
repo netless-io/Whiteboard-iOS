@@ -36,6 +36,7 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */; };
+		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
@@ -103,6 +104,7 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8A05A21C27D5FE1B00B3F329 /* WhiteTestSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteTestSocket.h; sourceTree = "<group>"; };
 		8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteTestSocket.m; sourceTree = "<group>"; };
+		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FpaTest.m; sourceTree = "<group>"; };
 		AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +223,7 @@
 				8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */,
 				39E4205F23A3B861002B9B38 /* WhiteObjectTests.m */,
 				8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */,
+				8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -470,6 +473,7 @@
 			files = (
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
 				8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */,
+				8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */,
 				8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */,
 				8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */,
 				39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */,

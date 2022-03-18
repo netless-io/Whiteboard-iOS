@@ -36,7 +36,8 @@ static NSMutableArray* assertableMethodNames;
              @"setTimeDelay",
              @"disableSerialization",
              @"setObserverId",
-             @"setIsUpdatingWritable"];
+             @"setIsUpdatingWritable",
+             @"setShouldCheckingRepeatSetWritable"];
 }
 
 + (NSArray<NSString *>*)additionalDetectFunctions {
@@ -101,10 +102,6 @@ static NSMutableArray* assertableMethodNames;
 
 + (NSString *)newMethodNameForMethodName:(NSString *)name {
     return [NSString stringWithFormat:@"__white__%@", name];
-}
-
-+ (NSInteger)parameterCountFromSelectorName:(NSString *)name {
-    return name.length - [name stringByReplacingOccurrencesOfString:@":" withString:@""].length;
 }
 
 + (void)startObserveRoom:(WhiteRoom *)room {
