@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.8] - 2022-03-22
+- 更新`@netless/window-manager`至 0.4.14
+- 修复 removeScenes 为 "/" 时， 同步端笔迹依旧存在的问题
 ## [2.16.7] - 2022-03-16
 - 更新`@netless/window-manager`至 0.4.13
 - 修复 多窗口模式下，只读状态时 `viewMode` 无法从 `freedom` 切换回 `broadcaster` 问题
