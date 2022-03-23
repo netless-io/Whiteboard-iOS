@@ -11,6 +11,7 @@
 #import "WhitePlayerViewController.h"
 #import "WhitePureReplayViewController.h"
 #import "NETURLSchemeHandler.h"
+#import "WhiteCustomAppViewController.h"
 #if IS_SPM
 #import "ZipArchive.h"
 #import "Whiteboard.h"
@@ -69,6 +70,10 @@
     [createBtn addTarget:self action:@selector(pureReplayRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
+    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [createBtn setTitle:NSLocalizedString(@"自定义插件房间", nil) forState:UIControlStateNormal];
+    [createBtn addTarget:self action:@selector(customAppRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:createBtn];
     
     for (UIView *view in stackView.arrangedSubviews) {
         [view setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
@@ -160,6 +165,20 @@
 - (void)pureReplayRoom:(UIButton *)sender
 {
     WhitePureReplayViewController *vc = [[WhitePureReplayViewController alloc] init];
+    vc.roomUuid = self.inputV.text;
+
+    #if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
+        if ([self.inputV.text length] == 0) {
+            vc.roomUuid = WhiteRoomUUID;
+        }
+    #endif
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)customAppRoom:(UIButton *)sender
+{
+    WhiteCustomAppViewController *vc = [[WhiteCustomAppViewController alloc] init];
     vc.roomUuid = self.inputV.text;
 
     #if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
