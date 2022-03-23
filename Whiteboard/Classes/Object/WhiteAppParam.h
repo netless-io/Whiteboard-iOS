@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)createDocsViewerApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title;
 + (instancetype)createMediaPlayerApp:(NSString *)src title:(NSString *)title;
 
+- (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs;
+
 @end
 
 NS_ASSUME_NONNULL_END
