@@ -64,4 +64,14 @@
     
     return param;
 }
+
+- (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs
+{
+    if (self = [super init]) {
+        self.kind = kind;
+        self.options = options;
+        self.attrs = attrs;
+    }
+    return self;
+}
 @end

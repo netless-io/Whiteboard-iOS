@@ -11,6 +11,7 @@
 #import "WhiteSdkConfiguration.h"
 #import "WhiteAudioMixerBridge.h"
 #import "WhiteFontFace.h"
+#import "WhiteRegisterAppParams.h"
 NS_ASSUME_NONNULL_BEGIN
 
 /** 白板 SDK 相关方法。 */
@@ -126,6 +127,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)setCommonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callbackDelegate;
 
+/**
+ 注册自定义App
+ 
+ @param params 注册参数，详见 [WhiteRegisterAppParams](WhiteRegisterAppParams)
+ */
+- (void)registerAppWithParams:(WhiteRegisterAppParams *)params;
 
 @end
 NS_ASSUME_NONNULL_END

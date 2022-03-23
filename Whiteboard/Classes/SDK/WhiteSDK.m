@@ -83,6 +83,13 @@
     [self.bridge callHandler:@"sdk.updateNativeTextareaFont" arguments:@[fonts]];
 }
 
+#pragma mark - 自定义App
+
+- (void)registerAppWithParams:(WhiteRegisterAppParams *)params
+{
+    [self.bridge callHandler:@"sdk.registerApp" arguments:@[params]];
+}
+
 #pragma mark - Private
 - (void)setupWebSdk
 {
