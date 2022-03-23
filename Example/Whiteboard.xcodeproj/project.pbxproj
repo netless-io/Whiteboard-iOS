@@ -36,6 +36,9 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */; };
+		8A0A85D727EAF82F005CFC84 /* monaco.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A0A85D627EAF82E005CFC84 /* monaco.iife.js */; };
+		8A17AE7C27E9B4E300EB8897 /* WhiteCustomAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */; };
+		8A17AE7E27E9B83800EB8897 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
@@ -104,6 +107,10 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8A05A21C27D5FE1B00B3F329 /* WhiteTestSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteTestSocket.h; sourceTree = "<group>"; };
 		8A05A21D27D5FE1B00B3F329 /* WhiteTestSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteTestSocket.m; sourceTree = "<group>"; };
+		8A0A85D627EAF82E005CFC84 /* monaco.iife.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = monaco.iife.js; sourceTree = "<group>"; };
+		8A17AE7A27E9B4E300EB8897 /* WhiteCustomAppViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteCustomAppViewController.h; sourceTree = "<group>"; };
+		8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteCustomAppViewController.m; sourceTree = "<group>"; };
+		8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = embedPage.iife.js; sourceTree = "<group>"; };
 		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FpaTest.m; sourceTree = "<group>"; };
@@ -189,6 +196,8 @@
 				39E4204B23A37DCF002B9B38 /* PlayerCommandListController.m */,
 				39E4204C23A37DCF002B9B38 /* RoomCommandListController.h */,
 				39E4204F23A37DCF002B9B38 /* RoomCommandListController.m */,
+				8A17AE7A27E9B4E300EB8897 /* WhiteCustomAppViewController.h */,
+				8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */,
 				39E4204723A37DCE002B9B38 /* WhiteUtils.h */,
 				39E4204E23A37DCF002B9B38 /* WhiteUtils.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -203,6 +212,8 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8A0A85D627EAF82E005CFC84 /* monaco.iife.js */,
+				8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */,
 				6003F595195388D20070C39A /* Whiteboard-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				39DFDFBA26B23B3500A4DFE8 /* Localizable.strings */,
@@ -274,7 +285,6 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				14A9084D4375BECEF3DF2A52 /* [CP] Copy Pods Resources */,
-				1EC5B71996415158B3087EEB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -314,6 +324,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = leavesster;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = L922897LKX;
+					};
 					6003F5AD195388D20070C39A = {
 						LastSwiftMigration = 1320;
 						TestTargetID = 6003F589195388D20070C39A;
@@ -346,6 +359,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
+				8A0A85D727EAF82F005CFC84 /* monaco.iife.js in Resources */,
+				8A17AE7E27E9B83800EB8897 /* embedPage.iife.js in Resources */,
 				39DFDFB826B23B3500A4DFE8 /* Localizable.strings in Resources */,
 				398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
@@ -405,26 +420,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1EC5B71996415158B3087EEB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh",
-				"${PODS_ROOT}/AgoraFPA_iOS/AgoraFPA.framework",
-				"${PODS_ROOT}/AgoraFPA_iOS/AgoraFpaProxyService.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFPA.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFpaProxyService.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6961D961CB4C3851A2CEE5A4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -454,6 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A17AE7C27E9B4E300EB8897 /* WhiteCustomAppViewController.m in Sources */,
 				39E4205323A37DCF002B9B38 /* PlayerCommandListController.m in Sources */,
 				39E4205423A37DCF002B9B38 /* WhiteRoomViewController.m in Sources */,
 				39E4205523A37DCF002B9B38 /* WhiteUtils.m in Sources */,
@@ -606,6 +602,8 @@
 			baseConfigurationReference = 4AFA52A18BA89BE2555F51D1 /* Pods-Whiteboard_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = L922897LKX;
+				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Whiteboard/Whiteboard-Prefix.pch";
 				INFOPLIST_FILE = "Whiteboard/Whiteboard-Info.plist";
@@ -623,6 +621,7 @@
 			baseConfigurationReference = 8470081D613A7C8DF8376FBA /* Pods-Whiteboard_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = L922897LKX;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Whiteboard/Whiteboard-Prefix.pch";
 				INFOPLIST_FILE = "Whiteboard/Whiteboard-Info.plist";
