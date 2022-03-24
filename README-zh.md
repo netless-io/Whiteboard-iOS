@@ -242,6 +242,62 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
     end
 ```
 
+## 自定义App插件
+
+自定义App插件可以扩展白板功能，用户通过编写js代码来实现自己的白板插件。
+
+[如何开发自定义白板App](https://github.com/netless-io/window-manager/blob/master/docs/develop-app.md)
+
+### 注册自定义App插件
+
+Native端在使用自定义App时需要注册对应的App到SDK中。
+
+注册方法时`WhiteSDk`的`registerAppWithParams:`
+
+其中`WhiteRegisterAppParams`有两种生成方式：
+ 1. 复制js代码到本地工程，直接注入js字符串。使用这种方法要注意，需要在variable中提供自定义App的变量名，也就是variable。
+   
+ ```Objective-C
+ @interface WhiteRegisterAppParams : WhiteObject
+ 
+/** 创建一个由js代码生成的自定义app
+ @param javascriptString js代码字符串
+ @param kind 插件类型名称，需要在多端保持一致
+ @param appOptions 插件注册额外参数，按需填
+ @param variable 在上述注入的javascript中，要插入的app变量名
+ */
++ (instancetype)paramsWithJavascriptString: (NSString *)javascriptString kind:(NSString *)kind appOptions:(NSDictionary *)appOptions variable:(NSString *)variable;
+ ```
+ 2. 提供一个js代码的下载地址，由sdk完成下载和注入。使用这种方法要注意，App变量的查找将由kind参数决定。请保持js中App变量名与kind一致。
+   ```Objective-C
+@interface WhiteRegisterAppParams : WhiteObject
+
+/** 创建一个由远端js生成的自定义app
+ @param url js地址
+ @param kind 插件类型名称，需要在多端保持一致。（白板会利用这个名字去寻找app入口)
+ @param appOptions 插件注册额外参数，按需填
+ */
++ (instancetype)paramsWithUrl: (NSString *)url kind:(NSString *)kind appOptions:(NSDictionary *)appOptions;
+   ```
+
+### 添加自定义App插件到白板中
+
+添加自定义App方法是`WhiteRoom`的`addApp:comletionHandler:`
+
+其中`WhiteAppParam`用来描述你的自定义App
+
+请调用该方法完成`WhiteAppParam`初始化
+
+```Objective-C
+@interface WhiteAppParam : WhiteObject
+
+/** 特定的App，一般用来创建自定义的App插入参数
+ @param kind 注册App时使用的kind
+ @param options 详见[WhiteAppOptions](WhiteAppOptions)
+ @param attrs 初始化App的参数，按需填
+ */
+- (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs;
+```
 
 ## 部分问题
 
