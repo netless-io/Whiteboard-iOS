@@ -99,7 +99,7 @@ Unit tests need to test some special behaviors, so the following operations are 
 ## Device required
 
 
-Running device: iOS 9 + (iOS 10 or above is recommended for a better experience)
+Running device: iOS 10 + 
 Development environment: Xcode 10+
 
 
