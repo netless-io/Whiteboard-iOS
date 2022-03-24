@@ -32,6 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)createDocsViewerApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title;
 + (instancetype)createMediaPlayerApp:(NSString *)src title:(NSString *)title;
 
+/** 特定的App，一般用来创建自定义的App插入参数
+ @param kind 注册App时使用的kind
+ @param options 详见[WhiteAppOptions](WhiteAppOptions)
+ @param attrs 初始化App的参数，按需填
+ */
 - (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs;
 
 @end
