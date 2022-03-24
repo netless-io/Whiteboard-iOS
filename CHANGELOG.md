@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.9] - 2022-03-24
+- `WhiteSDK`新增`registerAppWithParams`方法，可以通过该方法注册自定义App。详见README
 ## [2.16.8] - 2022-03-22
 - 更新`@netless/window-manager`至 0.4.14
 - 修复 removeScenes 为 "/" 时， 同步端笔迹依旧存在的问题
