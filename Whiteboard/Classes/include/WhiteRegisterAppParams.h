@@ -1,0 +1,1 @@
+../SDK/WhiteRegisterAppParams.h
