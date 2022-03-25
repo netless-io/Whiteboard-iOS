@@ -477,6 +477,14 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     }];
 }
 
+- (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler {
+    [self.bridge callHandler:@"room.closeApp" arguments:@[appId] completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
+}
+
 - (void)getSyncedState:(void (^)(NSDictionary *state))result {
     [self.bridge callHandler:@"room.getSyncedState" completionHandler:^(id  _Nullable value) {
         NSString *string = value;
