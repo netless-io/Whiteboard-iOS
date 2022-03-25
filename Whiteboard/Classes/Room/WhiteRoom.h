@@ -571,6 +571,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
 
+/**
+ * 关闭窗口
+ * 该方法仅在多窗口下有效, 无论appId是否有效都会触发回调
+ *
+ * @param appId 添加app时返回的id
+ */
+- (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler;
+
 
 /** 获取 syncedState 所有状态值 */
 - (void)getSyncedState:(void (^)(NSDictionary *state))result;
