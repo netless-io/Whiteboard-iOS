@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.10] - 2022-03-25
+- 更新`@netless/window-manager`至 0.4.15
+- 修复 remove 根 scenes 时,  切换主白板和 app focus 失效的问题
+- `WhiteRoom`新增`closeApp`方法
 ## [2.16.9] - 2022-03-24
 - `WhiteSDK`新增`registerAppWithParams`方法，可以通过该方法注册自定义App。详见README
 ## [2.16.8] - 2022-03-22
