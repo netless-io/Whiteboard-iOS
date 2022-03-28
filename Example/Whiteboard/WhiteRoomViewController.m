@@ -177,32 +177,42 @@
 
         self.roomConfig = roomConfig;
     }
-
+    
+    __weak typeof(self) weakSelf = self;
     [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
         if (success) {
-            self.title = NSLocalizedString(@"我的白板", nil);
-
-            self.roomToken = roomToken;
-            self.room = room;
-            [self.room addMagixEventListener:WhiteCommandCustomEvent];
-            [self setupShareBarItem];
-            
-            if (self.roomBlock) {
-                self.roomBlock(self.room, nil);
-            }
-        } else if (self.roomBlock) {
-            self.roomBlock(nil, error);
+            [weakSelf actionAfterSuccessJoinRoom:room roomToken:roomToken];
+        } else if (weakSelf.roomBlock) {
+            weakSelf.roomBlock(nil, error);
         } else {
-            self.title = NSLocalizedString(@"加入失败", nil);
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
-            }];
-            [alertVC addAction:action];
-            [self presentViewController:alertVC animated:YES completion:nil];
+            [weakSelf defaultActionAfterJoinRoomError:error];
         }
     }];
     if (self.beginJoinRoomBlock) { self.beginJoinRoomBlock(); };
+}
+
+- (void)actionAfterSuccessJoinRoom:(WhiteRoom *)room roomToken:(NSString *)roomToken
+{
+    self.title = NSLocalizedString(@"我的白板", nil);
+    self.roomToken = roomToken;
+    self.room = room;
+    [self.room addMagixEventListener:WhiteCommandCustomEvent];
+    [self setupShareBarItem];
+
+    if (self.roomBlock) {
+        self.roomBlock(room, nil);
+    }
+}
+
+- (void)defaultActionAfterJoinRoomError:(NSError *)error
+{
+    self.title = NSLocalizedString(@"加入失败", nil);
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    [alertVC addAction:action];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 #pragma mark - Keyboard
