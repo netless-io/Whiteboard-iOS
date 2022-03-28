@@ -8,6 +8,9 @@
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.16.12] - 2022-03-28
+- 更新`@netless/window-manager`至 0.4.18
+- 修复单窗口模式下，iframe 不显示的问题
+## [2.16.12] - 2022-03-28
 - 更新`@netless/window-manager`至 0.4.17
 - 修复 safari 浏览器下 removeScenes 为 "/" 没有清理完成完成时可以 addApp
 - 升级`@netless/app-slide`至0.1.0
