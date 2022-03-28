@@ -5,13 +5,13 @@ cd $BASEDIR
 
 # 更新本地White-bridge build
 cd ../Whiteboard-bridge
-yarn
-if [ $1 = 'debug' ]; then
-yarn buildDev
-else
-yarn build
-fi
-cd $BASEDIR
+# yarn
+# if [ $1 = 'debug' ]; then
+# yarn buildDev
+# else
+# yarn build
+# fi
+# cd $BASEDIR
 
 # 设置 white-sdk web 资源的目标
 export TargetPath="./Whiteboard/Resource"
