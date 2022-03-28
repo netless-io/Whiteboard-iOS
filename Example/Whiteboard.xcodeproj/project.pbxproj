@@ -40,6 +40,7 @@
 		8A17AE7C27E9B4E300EB8897 /* WhiteCustomAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */; };
 		8A17AE7E27E9B83800EB8897 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A18D2A427EDA89500EC29B1 /* MultiViewsRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */; };
+		8A18D2A627F154DB00EC29B1 /* CustomAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */; };
 		8A18D2A727F1554800EC29B1 /* monaco.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A0A85D627EAF82E005CFC84 /* monaco.iife.js */; };
 		8A18D2A827F1554A00EC29B1 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
@@ -115,6 +116,7 @@
 		8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteCustomAppViewController.m; sourceTree = "<group>"; };
 		8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = embedPage.iife.js; sourceTree = "<group>"; };
 		8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MultiViewsRoomTest.m; sourceTree = "<group>"; };
+		8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomAppTest.m; sourceTree = "<group>"; };
 		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FpaTest.m; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */,
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
@@ -476,6 +479,7 @@
 			files = (
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
 				8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */,
+				8A18D2A627F154DB00EC29B1 /* CustomAppTest.m in Sources */,
 				8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */,
 				8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */,
 				8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */,
