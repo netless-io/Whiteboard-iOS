@@ -40,6 +40,8 @@
 		8A17AE7C27E9B4E300EB8897 /* WhiteCustomAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */; };
 		8A17AE7E27E9B83800EB8897 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A18D2A427EDA89500EC29B1 /* MultiViewsRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */; };
+		8A18D2A727F1554800EC29B1 /* monaco.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A0A85D627EAF82E005CFC84 /* monaco.iife.js */; };
+		8A18D2A827F1554A00EC29B1 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
@@ -377,6 +379,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
+				8A18D2A827F1554A00EC29B1 /* embedPage.iife.js in Resources */,
+				8A18D2A727F1554800EC29B1 /* monaco.iife.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
