@@ -41,7 +41,9 @@
 //                                                  kind:kind
 //                                            appOptions:@{}];
     
-    [self.sdk registerAppWithParams:params];
+    [self.sdk registerAppWithParams:params completionHandler:^(NSError * _Nullable error) {
+        return;
+    }];
 }
 
 - (void)registerEmbedPage
@@ -52,7 +54,9 @@
     NSString* jsString = [NSString stringWithContentsOfURL:[NSURL fileURLWithPath:jsPath] encoding:NSUTF8StringEncoding error:nil];
     WhiteRegisterAppParams* params = [WhiteRegisterAppParams paramsWithJavascriptString:jsString kind:kind appOptions:@{} variable:variable];
     
-    [self.sdk registerAppWithParams:params];
+    [self.sdk registerAppWithParams:params completionHandler:^(NSError * _Nullable error) {
+        return;
+    }];
 }
 
 - (void)addEmbedPage
