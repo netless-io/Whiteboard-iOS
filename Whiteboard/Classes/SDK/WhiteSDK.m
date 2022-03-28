@@ -85,9 +85,27 @@
 
 #pragma mark - 自定义App
 
-- (void)registerAppWithParams:(WhiteRegisterAppParams *)params
+- (void)registerAppWithParams:(WhiteRegisterAppParams *)params completionHandler:(void (^)(NSError * _Nullable))completionHandler
 {
-    [self.bridge callHandler:@"sdk.registerApp" arguments:@[params]];
+    [self.bridge callHandler:@"sdk.registerApp" arguments:@[params] completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            if (!value) {
+                completionHandler(nil);
+                return;
+            }
+            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            NSDictionary *error = dict[@"__error"];
+            if (error) {
+                NSString *desc = error[@"message"] ? : @"";
+                NSString *description = error[@"jsStack"] ? : @"";
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+                completionHandler([NSError errorWithDomain:WhiteConstErrorDomain code:-101 userInfo:userInfo]);
+            } else {
+                completionHandler(nil);
+            }
+        }
+    }];
 }
 
 #pragma mark - Private
