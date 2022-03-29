@@ -139,6 +139,12 @@ static NSTimeInterval kTimeout = 30;
         [exp fulfill];
     }];
     
+    [self.room getGlobalStateWithResult:^(WhiteGlobalState * _Nonnull state) {
+        XCTAssertTrue([state isKindOfClass:[CustomGlobalTestModel class]]);
+        CustomGlobalTestModel *globalModel = (CustomGlobalTestModel *)state;
+        XCTAssertTrue([globalModel.name isEqualToString:@"testName"]);
+    }];
+    
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
