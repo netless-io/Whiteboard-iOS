@@ -131,6 +131,12 @@ static NSTimeInterval kTimeout = 30;
     WhiteDisplayerState *result = [WhiteDisplayerState modelWithJSON:dict];
     [self.room setGlobalState:result.globalState];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertTrue([self.room.globalState isKindOfClass:[CustomGlobalTestModel class]]);
+        CustomGlobalTestModel *globalModel = (CustomGlobalTestModel *)self.room.globalState;
+        XCTAssertTrue([globalModel.name isEqualToString:@"testName"]);
+    });
+    
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
         XCTAssertTrue([state.globalState isKindOfClass:[CustomGlobalTestModel class]]);
