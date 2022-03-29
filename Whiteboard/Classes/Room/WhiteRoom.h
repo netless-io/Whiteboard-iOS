@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSNumber *observerId;
 /** 房间 uuid */
 @property (nonatomic, copy, readonly) NSString *uuid;
-/** 全局状态，由于遗留问题，目前该 API，不支持 customGlobalState，如需获取 customGlobalState，请使用 room.state.globalState */
+/** 房间的全局状态。详见 [WhiteGlobalState](WhiteGlobalState)。 */
 @property (nonatomic, strong, readonly) WhiteGlobalState *globalState;
 /** 教具信息 */
 @property (nonatomic, strong, readonly) WhiteReadonlyMemberState *memberState;

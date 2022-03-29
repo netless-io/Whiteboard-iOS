@@ -29,7 +29,6 @@
 {
     self = [super initWithUuid:uuid bridge:bridge];
     _state = [[WhiteRoomState alloc] init];
-    _globalState = [[WhiteGlobalState alloc] init];
     _uuid = uuid;
     _isUpdatingWritable = NO;
     return self;
@@ -37,11 +36,13 @@
 
 #pragma mark - Property
 
+- (WhiteGlobalState *)globalState {
+    return self.bridge.room.state.globalState;
+}
+
 - (void)setGlobalState:(WhiteGlobalState *)modifyState
 {
     [self.bridge callHandler:@"room.setGlobalState" arguments:@[modifyState]];
-    NSDictionary *update = [modifyState jsonDict];
-    [_globalState yy_modelSetWithJSON:update];
 }
 
 - (void)setMemberState:(WhiteMemberState *)modifyState
