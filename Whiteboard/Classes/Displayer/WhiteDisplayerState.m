@@ -25,6 +25,7 @@ WhiteWindowBoxState const WhiteWindowBoxStateMax = @"maximized";
 @implementation WhiteDisplayerState
 
 static Class CustomGlobalClass;
+
 + (BOOL)setCustomGlobalStateClass:(Class)clazz
 {
     if ([clazz isSubclassOfClass:[WhiteGlobalState class]]) {
@@ -42,10 +43,19 @@ static Class CustomGlobalClass;
 
 - (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic;
 {
-    if (CustomGlobalClass) {
-        _globalState = [CustomGlobalClass modelWithJSON:dic[@"globalState"]];
+    WhiteGlobalState* customState = [WhiteDisplayerState getGlobalStateInstanceFromJSON:dic[@"globalState"]];
+    if (customState) {
+        _globalState = customState;
     }
     return YES;
+}
+
++ (WhiteGlobalState *)getGlobalStateInstanceFromJSON:(id)json
+{
+    if (CustomGlobalClass) {
+        return [CustomGlobalClass modelWithJSON:json];
+    }
+    return nil;
 }
 
 @end
