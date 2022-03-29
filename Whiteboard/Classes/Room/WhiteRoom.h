@@ -505,8 +505,7 @@ NS_ASSUME_NONNULL_BEGIN
  **Note:**
 
  - 该方法为异步调用。
- - 通过 [setCustomGlobalStateClass](setCustomGlobalStateClass) 设置自定义状态后，如需异步获取，可以通过 [getRoomStateWithResult](getRoomStateWithResult) 获取自定义 [GlobalState](GlobalState)。
- - 调用 [setGlobalState](setGlobalState) 方法后，可以立刻调用该方法。 
+ - 调用 [setGlobalState](setGlobalState) 方法后，可以立刻调用该方法。
  @param result 回调。返回房间的全局状态，详见 [GlobalState](GlobalState)。 
  */
 - (void)getGlobalStateWithResult:(void (^) (WhiteGlobalState *state))result;

@@ -11,6 +11,7 @@
 #import "WhiteConsts.h"
 #import "WhiteDisplayer+Private.h"
 #import "WhiteObject.h"
+#import "WhiteDisplayerState+Private.h"
 
 @interface WhiteRoom()
 @property (nonatomic, assign, readwrite) NSTimeInterval delay;
@@ -331,8 +332,7 @@
 {
     [self.bridge callHandler:@"room.getGlobalState" completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteGlobalState *jsState = [WhiteGlobalState modelWithJSON:value];
-            result(jsState);
+            result([WhiteDisplayerState getGlobalStateInstanceFromJSON:value]);
         }
     }];
 }
