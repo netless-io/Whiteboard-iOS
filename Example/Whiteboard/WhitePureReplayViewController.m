@@ -30,7 +30,14 @@
     NSLog(@"");
 }
 
-- (void)viewDidLoad {
+- (void)viewDidAppear:(BOOL)animated
+{
+    // 断点在这里可以打开safari调试
+    [super viewDidAppear:animated];
+}
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"设置", nil) style:UIBarButtonItemStylePlain target:self action:@selector(settingAPI:)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"初始化", nil) style:UIBarButtonItemStylePlain target:self action:@selector(initPlayer)];

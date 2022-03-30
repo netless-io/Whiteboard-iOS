@@ -28,7 +28,7 @@ typedef void(^InterrupterBlock)(NSString *url);
 @end
 
 /**
- 测试 Player 时，需要在 example 里面填写  WhiteRoomUUID 以及 WhiteRoomToken
+ 测试 Player 时，需要在 Tests-Prefix.pch 里面填写  WhiteReplayRoomUUID 以及 WhiteReplayRoomToken
  */
 @implementation PlayerTests
 #pragma mark - Const
@@ -45,7 +45,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     vc.sdkConfig.enableInterrupterAPI = YES;
     vc.eventDelegate = self;
     vc.commonDelegate = self;
-    WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:WhiteRoomUUID roomToken:WhiteRoomToken];
+    WhitePlayerConfig *playerConfig = [[WhitePlayerConfig alloc] initWithRoom:WhiteReplayRoomUUID roomToken:WhiteReplayRoomToken];
     vc.playerConfig = playerConfig;
 
     self.vc = vc;
