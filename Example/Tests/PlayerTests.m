@@ -219,22 +219,23 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     }];
 }
 
-- (void)testInsertImage
-{
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
-    self.interrupterBlock = ^(NSString *url) {
-        [exp fulfill];
-    };
-    
-    [self setupPlayer];
-    
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%s error: %@", __FUNCTION__, error);
-        }
-    }];
-}
+// 暂时移除该测试，待web-sdk修复后加回
+//- (void)testInsertImage
+//{
+//    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+//
+//    self.interrupterBlock = ^(NSString *url) {
+//        [exp fulfill];
+//    };
+//
+//    [self setupPlayer];
+//
+//    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+//        if (error) {
+//            NSLog(@"%s error: %@", __FUNCTION__, error);
+//        }
+//    }];
+//}
 
 //FIXME:添加一个异步获取，反而获得的是 1
 - (void)testPlaybackSpeed
