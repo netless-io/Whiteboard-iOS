@@ -37,7 +37,8 @@ static NSMutableArray* assertableMethodNames;
              @"disableSerialization",
              @"setObserverId",
              @"setIsUpdatingWritable",
-             @"setShouldCheckingRepeatSetWritable"];
+             @"setShouldCheckingRepeatSetWritable",
+             @"setDisconnectedBySelf"];
 }
 
 + (NSArray<NSString *>*)additionalDetectFunctions {

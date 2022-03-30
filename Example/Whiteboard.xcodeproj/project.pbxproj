@@ -44,9 +44,9 @@
 		8A18D2A627F154DB00EC29B1 /* CustomAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */; };
 		8A18D2A727F1554800EC29B1 /* monaco.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A0A85D627EAF82E005CFC84 /* monaco.iife.js */; };
 		8A18D2A827F1554A00EC29B1 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
+		8A2212A727F4509900AA372D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
-		8AF2E05627D1BBBC00E0CB1D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
 		8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
 /* End PBXBuildFile section */
@@ -502,6 +502,7 @@
 				8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */,
 				39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */,
 				8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */,
+				8A2212A727F4509900AA372D /* FpaTest.m in Sources */,
 				39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */,
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
 				8A10E27E27F42F6E0098C49F /* TestUtility.m in Sources */,

@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSTimeInterval kTimeout = 30;
+
 /// 房间测试的基类，提供一些测试的便捷方法
 @interface BaseRoomTest : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
 
@@ -22,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig;
 - (void)roomConfigDidSetup:(WhiteRoomConfig *)config;
+- (void)roomVCDidSetup:(WhiteRoomViewController *)roomVC;
 - (void)pushRoomVC;
 - (void)popToRoot;
 
