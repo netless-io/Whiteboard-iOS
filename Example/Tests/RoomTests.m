@@ -225,11 +225,14 @@ static NSTimeInterval kTimeout = 30;
     [self.room zoomChange:0.5];
     [self.room zoomChange:zoomScale];
 #pragma GCC diagnostic pop
-
-    [self.room getZoomScaleWithResult:^(CGFloat scale) {
-        XCTAssertTrue(scale == zoomScale);
-        [exp fulfill];
-    }];
+    
+    // 动画需要时间
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.room getZoomScaleWithResult:^(CGFloat scale) {
+            XCTAssertTrue(scale == zoomScale);
+            [exp fulfill];
+        }];
+    });
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
