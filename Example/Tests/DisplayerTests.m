@@ -7,16 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <Whiteboard/Whiteboard.h>
-#import "WhiteRoomViewController.h"
-
+#import "BaseRoomTest.h"
 
 typedef void(^WhiteEventBlock)(WhiteEvent *event);
 
 // 测试 WhiteRoom 与 WhitePlayer 的共有方法
-@interface WhiteDisplayerTests : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
-@property (nonatomic, strong) WhiteRoomViewController *vc;
-@property (nonatomic, strong) WhiteRoom *room;
+@interface WhiteDisplayerTests : BaseRoomTest
 @property (nonatomic, copy) WhiteEventBlock eventBlock;
 @property (nonatomic, strong) XCTestExpectation *exp;
 @end
@@ -24,56 +20,7 @@ typedef void(^WhiteEventBlock)(WhiteEvent *event);
 @implementation WhiteDisplayerTests
 
 static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
-static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
-
-- (void)setUp {
-    
-    [super setUp];
-    self.continueAfterFailure = NO;
-
-    self.vc = [[WhiteRoomViewController alloc] init];
-    self.vc.sdkConfig.enableInterrupterAPI = YES;
-    self.vc.roomCallbackDelegate = self;
-    self.vc.commonDelegate = self;
-    __unused UIView *view = [self.vc view];
-    
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
-    __weak typeof(self)weakSelf = self;
-    self.vc.roomBlock = ^(WhiteRoom *room, NSError *error) {
-        if (room) {
-            weakSelf.room = room;
-            [exp fulfill];
-        } else {
-            typeof(weakSelf) self = weakSelf;
-            XCTFail(@"房间创建失败");
-        }
-    };
-    
-    // Webview 执行 js 需要在视图栈中显示
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav pushViewController:self.vc animated:YES];
-    }
-    
-    // 创建房间超时可能性
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
-
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav popToRootViewControllerAnimated:YES];
-    }
-    [super tearDown];
-}
 
 - (void)testRefreshViewSize {
     [self.room refreshViewSize];
@@ -83,7 +30,7 @@ static NSTimeInterval kTimeout = 30;
     WhitePanEvent *panEvent = [[WhitePanEvent alloc] init];
     panEvent.x = 11;
     panEvent.y = 22;
-    
+
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
 
     [self.room convertToPointInWorld:panEvent result:^(WhitePanEvent * _Nonnull convertPoint) {
@@ -91,7 +38,7 @@ static NSTimeInterval kTimeout = 30;
         XCTAssertNotNil(convertPoint);
         [exp fulfill];
     }];
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -102,9 +49,9 @@ static NSTimeInterval kTimeout = 30;
 - (void)testEventListener {
     [self.room addMagixEventListener:kTestingCustomEventName];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
-    
+
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
+
     __weak typeof(self)weakSelf = self;
     self.eventBlock = ^(WhiteEvent *event) {
         id self = weakSelf;
@@ -112,7 +59,7 @@ static NSTimeInterval kTimeout = 30;
         XCTAssertTrue([event.payload isEqualToDictionary:CustomEventPayload]);
         [exp fulfill];
     };
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -124,19 +71,19 @@ static NSTimeInterval kTimeout = 30;
     [self.room addMagixEventListener:kTestingCustomEventName];
     [self.room removeMagixEventListener:kTestingCustomEventName];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
-    
+
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
+
     __weak typeof(self)weakSelf = self;
     self.eventBlock = ^(WhiteEvent *event) {
         typeof(weakSelf) self = weakSelf;
         XCTFail(@"移除失败");
     };
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kTimeout / 2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kTimeout / 5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [exp fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -146,7 +93,7 @@ static NSTimeInterval kTimeout = 30;
 
 - (void)testFrequencyEventListener {
     [self.room addHighFrequencyEventListener:kTestingCustomEventName fireInterval:500];
-    
+
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
@@ -155,7 +102,7 @@ static NSTimeInterval kTimeout = 30;
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
 
     self.exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -172,7 +119,7 @@ static NSTimeInterval kTimeout = 30;
             [exp fulfill];
         }
     }];
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -189,7 +136,7 @@ static NSTimeInterval kTimeout = 30;
             [exp fulfill];
         }
     }];
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -210,7 +157,7 @@ static NSTimeInterval kTimeout = 30;
         }];
         [exp fulfill];
     }];
-    
+
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
