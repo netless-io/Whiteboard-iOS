@@ -21,6 +21,7 @@
     [self roomConfigDidSetup:self.roomConfig];
     self.roomVC = [self createNewRoomVC];
     [self sdkConfigDidSetup:self.roomVC.sdkConfig];
+    [self roomVCDidSetup:self.roomVC];
     
     [self pushRoomVC];
     
@@ -39,11 +40,16 @@
     }];
 }
 
-- (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig {
-    
+- (void)roomVCDidSetup:(WhiteRoomViewController *)roomVC;
+{
 }
 
-- (void)roomConfigDidSetup:(WhiteRoomConfig *)config {
+- (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig
+{
+}
+
+- (void)roomConfigDidSetup:(WhiteRoomConfig *)config
+{
 }
 
 - (void)tearDown
