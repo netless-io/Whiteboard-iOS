@@ -1,11 +1,11 @@
 #use_frameworks!
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 project 'Whiteboard.xcodeproj'
 
 target 'Whiteboard_Example' do
   pod 'Whiteboard', :path => '../'
-#  pod 'Whiteboard/fpa', :path => '../'
+  pod 'Whiteboard/fpa', :path => '../'
   pod 'Masonry'
   pod 'NETURLSchemeHandler'
   pod 'SSZipArchive'
