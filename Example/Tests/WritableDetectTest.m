@@ -7,94 +7,46 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <Whiteboard/Whiteboard.h>
-#import "WhiteRoomViewController.h"
+#import "BaseRoomTest.h"
 
-static NSTimeInterval kTimeout = 30;
-
-@interface WritableDetectTest : XCTestCase
-@property (nonatomic, strong) WhiteRoomViewController *roomVC;
-@property (nonatomic, strong) WhiteRoomConfig *roomConfig;
+@interface WritableDetectTest : BaseRoomTest
 @end
 
 @implementation WritableDetectTest
 
-- (void)setUp {
-    [super setUp];
+- (void)roomConfigDidSetup:(WhiteRoomConfig *)config {
+    if ([self.name containsString:@"testActionsNotWritable"]) {
+        config.enableWritableAssert = YES;
+        config.isWritable = NO;
+    }
+    if ([self.name containsString:@"testEnableWritableAssert"]) {
+        config.enableWritableAssert = NO;
+        config.isWritable = NO;
+    }
 }
 
 - (void)testRepeatUpdateWritable
 {
-    self.roomConfig.isWritable = YES;
-    [self refreshRoomVC];
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    __weak typeof(self) weakSelf = self;
-    self.roomVC.roomBlock = ^(WhiteRoom * _Nullable room, NSError * _Nullable eroror) {
-        [weakSelf.roomVC.room setWritable:YES completionHandler:nil];
-        XCTAssertThrows([weakSelf.roomVC.room setWritable:NO completionHandler:nil]);
-        [exp fulfill];
-    };
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
+    [self.roomVC.room setWritable:YES completionHandler:nil];
+    XCTAssertThrows([self.roomVC.room setWritable:NO completionHandler:nil]);
 }
 
 - (void)testActionsWhenWritable
 {
-    self.roomConfig.isWritable = YES;
-    [self refreshRoomVC];
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    __weak typeof(self) weakSelf = self;
-    self.roomVC.roomBlock = ^(WhiteRoom * _Nullable room, NSError * _Nullable eroror) {
-        [weakSelf performAssertableActions];
-        [weakSelf performNotAssertableActions];
-        [exp fulfill];
-    };
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
+    [self performAssertableActions];
+    [self performNotAssertableActions];
 }
 
 - (void)testActionsNotWritable
 {
-    self.roomConfig.enableWritableAssert = YES;
-    self.roomConfig.isWritable = NO;
-    [self refreshRoomVC];
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    __weak typeof(self) weakSelf = self;
-    self.roomVC.roomBlock = ^(WhiteRoom * _Nullable room, NSError * _Nullable eroror) {
-        XCTAssertThrows([weakSelf performAssertableActions]);
-        [weakSelf performNotAssertableActions];
-        [exp fulfill];
-    };
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
+    XCTAssertThrows([self performAssertableActions]);
+    [self performNotAssertableActions];
 }
 
 - (void)testEnableWritableAssert
 {
-    self.roomConfig.enableWritableAssert = NO;
-    self.roomConfig.isWritable = NO;
-    [self refreshRoomVC];
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    __weak typeof(self) weakSelf = self;
-    self.roomVC.roomBlock = ^(WhiteRoom * _Nullable room, NSError * _Nullable eroror) {
-        [weakSelf performAssertableActions];
-        [weakSelf performNotAssertableActions];
-        [exp fulfill];
-    };
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
+    [self performAssertableActions];
+    [self performNotAssertableActions];
 }
 
 - (void)performAssertableActions
@@ -109,26 +61,5 @@ static NSTimeInterval kTimeout = 30;
     [self.roomVC.room setWritable:!self.roomVC.room.isWritable completionHandler:^(BOOL isWritable, NSError * _Nullable error) {
         [weakSelf.roomVC.room setWritable:!isWritable completionHandler:nil];
     }];
-}
-
-- (void)refreshRoomVC
-{
-    _roomVC = [[WhiteRoomViewController alloc] init];
-    _roomVC.roomConfig = self.roomConfig;
-    //Webview 在视图栈中才能正确执行 js
-    __unused UIView *view = [self.roomVC view];
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    [nav popToRootViewControllerAnimated:NO];
-    if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav pushViewController:self.roomVC animated:YES];
-    }
-}
-
-- (WhiteRoomConfig *)roomConfig
-{
-    if (!_roomConfig) {
-        _roomConfig = [[WhiteRoomConfig alloc] initWithUUID:WhiteRoomUUID roomToken:WhiteRoomToken uid:@"1"];
-    }
-    return _roomConfig;
 }
 @end
