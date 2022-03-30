@@ -61,6 +61,7 @@ static NSTimeInterval kTimeout = 30;
 
 - (void)testActionsNotWritable
 {
+    self.roomConfig.enableWritableAssert = YES;
     self.roomConfig.isWritable = NO;
     [self refreshRoomVC];
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
