@@ -303,10 +303,14 @@ static NSTimeInterval kTimeout = 30;
     
     [self.room moveCamera:config];
     
-    [self.room getZoomScaleWithResult:^(CGFloat scale) {
-        XCTAssertTrue(scale == zoomScale, @"set scale is:%f realy scale is:%f", scale, zoomScale);
-        [exp fulfill];
-    }];
+    // 动画时间
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.room getZoomScaleWithResult:^(CGFloat scale) {
+            XCTAssertTrue(scale == zoomScale, @"set scale is:%f realy scale is:%f", scale, zoomScale);
+            [exp fulfill];
+        }];
+    });
+    
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
