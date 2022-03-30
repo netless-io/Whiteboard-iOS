@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <Whiteboard/Whiteboard.h>
 #import "WhiteRoomViewController.h"
+#import "TestUtility.h"
 
 @interface CustomGlobalTestModel : WhiteGlobalState
 @property (nonatomic, copy) NSString *name;
@@ -638,13 +639,29 @@ static NSTimeInterval kTimeout = 30;
 - (void)testGetRoomMember
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.room getRoomMembersWithResult:^(NSArray<WhiteRoomMember *> *roomMembers) {
-        for (WhiteRoomMember *member in roomMembers) {
-            XCTAssertTrue([member isKindOfClass:[WhiteRoomMember class]]);
-            NSLog(@"%s %@", __FUNCTION__, [member jsonString]);
-        }
-        XCTAssertTrue([roomMembers count] == 1, @"room should be 1 people, but has %lu", (unsigned long)[roomMembers count]);
-        [exp fulfill];
+    
+    [TestUtility updateRoomWithUuid:WhiteRoomUUID ban:YES completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+        [TestUtility updateRoomWithUuid:WhiteRoomUUID ban:NO completionHandler:^(NSError * _Nullable error) {
+            XCTAssertNil(error);
+            
+            [self popToRoot];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self pushRoomVC];
+                
+                [self.roomVC performSelector:NSSelectorFromString(@"joinExistRoom")];
+                self.roomVC.roomBlock = ^(WhiteRoom * _Nullable room, NSError * _Nullable eroror) {
+                    [room getRoomMembersWithResult:^(NSArray<WhiteRoomMember *> *roomMembers) {
+                        for (WhiteRoomMember *member in roomMembers) {
+                            XCTAssertTrue([member isKindOfClass:[WhiteRoomMember class]]);
+                            NSLog(@"%s %@", __FUNCTION__, [member jsonString]);
+                        }
+                        XCTAssertTrue([roomMembers count] == 1, @"room should be 1 people, but has %lu", (unsigned long)[roomMembers count]);
+                        [exp fulfill];
+                    }];
+                };
+            });
+        }];
     }];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
@@ -707,7 +724,7 @@ static NSTimeInterval kTimeout = 30;
 
 - (void)fireKickedWithReason:(NSString *)reason
 {
-    XCTFail(@"fireKickedWithReason：%@", reason);
+//    XCTFail(@"fireKickedWithReason：%@", reason);
 //    NSLog(@"%s, %@", __func__, reason);
 }
 
