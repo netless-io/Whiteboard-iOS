@@ -6,10 +6,7 @@
 //  Copyright (c) 2018 leavesster. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import <Whiteboard/Whiteboard.h>
-#import "WhiteRoomViewController.h"
-#import "TestUtility.h"
+#import "BaseRoomTest.h"
 
 @interface CustomGlobalTestModel : WhiteGlobalState
 @property (nonatomic, copy) NSString *name;
@@ -21,108 +18,23 @@
 
 typedef void(^InterrupterBlock)(NSString *url);
 
-@interface RoomTests : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
-@property (nonatomic, strong) WhiteRoomViewController *roomVC;
-@property (nonatomic, strong) WhiteRoom *room;
-@property (nonatomic, strong) WhiteRoomConfig *roomConfig;
+@interface RoomTests : BaseRoomTest
 @property (nonatomic, copy) InterrupterBlock interrupterBlock;
 @end
 
 
 @implementation RoomTests
-#pragma mark - Test
-- (void)setUp
-{
-    [super setUp];
-    self.continueAfterFailure = NO;
-
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
-    __weak typeof(self)weakSelf = self;
-    self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
-        typeof(weakSelf)self = weakSelf;
-        weakSelf.room = room;
-        XCTAssertEqual(weakSelf.roomVC.roomConfig.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.roomConfig.isWritable, room.isWritable);
-        XCTAssertNotNil(room);
-        [exp fulfill];
-    };
-
-    [self pushRoomVC];
-    
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
-}
-
-
-- (void)tearDown
-{
-    if (self.room.phase == WhiteRoomPhaseDisconnected) {
-        [self popToRoot];
-        [super tearDown];
-        return;
-    }
-    
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
-    [self.room disconnect:^{
-        [self popToRoot];
-        [exp fulfill];
-        [super tearDown];
-    }];
-
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
-}
-
-#pragma mark - Prepare
-
-- (void)pushRoomVC {
-    //Webview 在视图栈中才能正确执行 js
-    __unused UIView *view = [self.roomVC view];
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav pushViewController:self.roomVC animated:YES];
-    }
-}
-
-- (void)popToRoot {
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-   if ([nav isKindOfClass:[UINavigationController class]]) {
-       [nav popToRootViewControllerAnimated:YES];
-   }
-}
-
-- (WhiteRoomConfig *)roomConfig
-{
-    if (!_roomConfig) {
-        NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
-        _roomConfig = [[WhiteRoomConfig alloc] initWithUUID:WhiteRoomUUID roomToken:WhiteRoomToken uid:@"1"];
-    }
-    return _roomConfig;
-}
-
-- (WhiteRoomViewController *)roomVC {
-    if (!_roomVC) {
-        _roomVC = [[WhiteRoomViewController alloc] init];
-        _roomVC.sdkConfig.enableInterrupterAPI = YES;
-        _roomVC.roomCallbackDelegate = self;
-        _roomVC.commonDelegate = self;
-        _roomVC.roomConfig = self.roomConfig;
-    }
-    return _roomVC;
-}
 
 #pragma mark - Consts
-
 static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
-static NSTimeInterval kTimeout = 30;
 #define CustomEventPayload @{@"test": @"1234"}
+
+- (void)roomConfigDidSetup:(WhiteRoomConfig *)config
+{
+    if ([self.name containsString:@"testWritableFalseInit"]) {
+        config.isWritable = NO;
+    }
+}
 
 #pragma mark - setting
 - (void)testSetGlobalState
@@ -243,30 +155,7 @@ static NSTimeInterval kTimeout = 30;
 }
 
 - (void)testWritableFalseInit {
-    
-    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
-    self.roomVC = nil;
-    [self popToRoot];
-    
-    self.roomConfig.isWritable = NO;
-    __weak typeof(self)weakSelf = self;
-    self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
-        typeof(weakSelf)self = weakSelf;
-        weakSelf.room = room;
-        XCTAssertNotNil(room);
-        XCTAssertEqual(weakSelf.roomConfig.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomConfig.isWritable, room.isWritable);
-        [exp fulfill];
-    };
-
-    [self pushRoomVC];
-    
-    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"%s error: %@", __FUNCTION__, error);
-        }
-    }];
-
+    XCTAssertEqual(self.roomConfig.isWritable, self.room.isWritable, @"roomVC writable is :%d room writbale is :%d", self.roomConfig.isWritable, self.room.isWritable);
 }
 
 - (void)testSetWritable {

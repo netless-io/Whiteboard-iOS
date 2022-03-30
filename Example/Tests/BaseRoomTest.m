@@ -17,16 +17,20 @@
 
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
 
+    self.roomConfig = [self createNewNewConfig];
+    [self roomConfigDidSetup:self.roomConfig];
+    self.roomVC = [self createNewRoomVC];
+    [self sdkConfigDidSetup:self.roomVC.sdkConfig];
+    
+    [self pushRoomVC];
+    
     __weak typeof(self)weakSelf = self;
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
-        typeof(weakSelf)self = weakSelf;
         weakSelf.room = room;
         XCTAssertEqual(weakSelf.roomVC.roomConfig.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.roomConfig.isWritable, room.isWritable);
         XCTAssertNotNil(room);
         [exp fulfill];
     };
-
-    [self pushRoomVC];
 
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
@@ -35,9 +39,34 @@
     }];
 }
 
+- (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig {
+    
+}
+
+- (void)roomConfigDidSetup:(WhiteRoomConfig *)config {
+}
+
 - (void)tearDown
 {
-    [self popToRoot];
+    if (self.room.phase == WhiteRoomPhaseDisconnected) {
+        [self popToRoot];
+        [super tearDown];
+        return;
+    }
+    
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+
+    [self.room disconnect:^{
+        [self popToRoot];
+        [exp fulfill];
+        [super tearDown];
+    }];
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
 }
 
 #pragma mark - Prepare
@@ -58,24 +87,20 @@
    }
 }
 
-- (WhiteRoomConfig *)roomConfig
+- (WhiteRoomConfig *)createNewNewConfig
 {
-    if (!_roomConfig) {
-        NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
-        _roomConfig = [[WhiteRoomConfig alloc] initWithUUID:WhiteRoomUUID roomToken:WhiteRoomToken uid:@"1"];
-    }
-    return _roomConfig;
+    NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
+    WhiteRoomConfig *config = [[WhiteRoomConfig alloc] initWithUUID:WhiteRoomUUID roomToken:WhiteRoomToken uid:@"1"];
+    return config;
 }
 
-- (WhiteRoomViewController *)roomVC {
-    if (!_roomVC) {
-        _roomVC = [[WhiteRoomViewController alloc] init];
-        _roomVC.sdkConfig.enableInterrupterAPI = YES;
-        _roomVC.roomCallbackDelegate = self;
-        _roomVC.commonDelegate = self;
-        _roomVC.roomConfig = self.roomConfig;
-    }
-    return _roomVC;
+- (WhiteRoomViewController *)createNewRoomVC
+{
+    WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
+    vc.roomCallbackDelegate = self;
+    vc.commonDelegate = self;
+    vc.roomConfig = self.roomConfig;
+    return vc;
 }
 
 @end

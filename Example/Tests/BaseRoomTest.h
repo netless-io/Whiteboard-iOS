@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) WhiteRoom *room;
 @property (nonatomic, strong) WhiteRoomConfig *roomConfig;
 
+- (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig;
+- (void)roomConfigDidSetup:(WhiteRoomConfig *)config;
 - (void)pushRoomVC;
 - (void)popToRoot;
 
