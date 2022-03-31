@@ -3,19 +3,26 @@ BASEDIR=$(cd $(dirname "$0"); pwd -P)
 set -exo pipefail
 cd $BASEDIR
 
-# 更新本地White-bridge build
-cd ../Whiteboard-bridge
+# 更新本地White-bridge build, 第二个参数可以控制bridge的地址
+if (! [ -z $2 ]); then
+BRIDGEDIR=$2
+else
+BRIDGEDIR=../Whiteboard-bridge
+fi
+cd $BRIDGEDIR
 yarn
-if [ $1 = 'debug' ]; then
+
+if (! [ -z $1 ])&&[ $1 = 'debug' ]; then
 yarn buildDev
 else
 yarn build
 fi
+
 cd $BASEDIR
 
 # 设置 white-sdk web 资源的目标
 export TargetPath="./Whiteboard/Resource"
-export SourcePath="../whiteboard-bridge/build"
+export SourcePath="$BRIDGEDIR/build"
 
 # 删除并创建文件目录
 rm -rf $TargetPath
