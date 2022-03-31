@@ -1,0 +1,42 @@
+name: iOS13+Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Test using any available iPad simulator OS >= 13
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/setup-node@v3.0.0
+      - run: npm install rabbit-tools -g
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: rabbit clone
+      - name: UpdateDebugResource
+        run: |
+          ./update_web_resource debug
+      - run: brew install xcbeautify
+      - name: FillSecret
+        env:
+          ROOMUUID: ${{ secrets.ROOMUUID }}
+          ROOMTOKEN: ${{ secrets.ROOMTOKEN }}
+          APPIDENTIFIER: ${{ secrets.APPIDENTIFIER }}
+          SDKTOKEN: ${{ secrets.SDKTOKEN }}
+          REPLAYUUID: ${{ secrets.REPLAYUUID }}
+          REPLAYTOKEN: ${{ secrets.REPLAYTOKEN }}
+        run: |
+          sh replaceSecret.sh $ROOMUUID $ROOMTOKEN $APPIDENTIFIER $SDKTOKEN $REPLAYUUID $REPLAYTOKEN
+      - name: Test
+        run: |
+          sh test.sh test_out
+      - name: Upload artifacts On Fail
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test_out
+          path: test_out

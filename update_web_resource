@@ -30,7 +30,7 @@ mkdir -p $TargetPath
 # 从 bridge 复制构建好的 web 资源
 cp -r $SourcePath/* $TargetPath/
 
-# 清理 build 文件，否则在 .boundle 里的静态资源文件无法更新
+# 清理 build 文件，否则在 .bundle 里的静态资源文件无法更新
 rm -rf ~/Library/Developer/Xcode/DerivedData/WhiteSDKPrivate-*/Build/Products/
 
 cd $BASEDIR/Example
