@@ -7,6 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.14] - 2022-04-1
+- 更新`@netless/window-manager`至 0.4.20
+- 更新`@netless/app-slide`至 0.1.1
+- 更新`iframe-bridge`至 2.1.8
+- 加了锁定ppt 的功能，小窗口 ppt 里面的白板，禁止拖动。
 ## [2.16.13] - 2022-03-28
 - 更新`@netless/window-manager`至 0.4.18
 - 修复单窗口模式下，iframe 不显示的问题
