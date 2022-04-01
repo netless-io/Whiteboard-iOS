@@ -13,12 +13,12 @@ xcodebuild \
   -skip-testing:$SCHEME/RoomTests/testZoomChange \
   -skip-testing:$SCHEME/RoomTests/testGetRoomMember \
   test | xcbeautify > $OUTPATH
-  PASSSTR='Tests Passed'
+  PASSSTR='Test Succeeded'
   TEST_TAIL=$(tail -n 1 $OUTPATH)
   ISPASS=$(echo $TEST_TAIL | grep "${PASSSTR}")
   if [[ "$ISPASS" != "" ]]
   then
-    echo "TEST PASS"
+    echo "TEST Succeeded"
   else
     echo "TEST FAIL SEE $OUTPATH"
     exit 1
