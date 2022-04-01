@@ -92,23 +92,28 @@ static NSString * const pdfFileURL = @"https://flat-storage.oss-accelerate.aliyu
                      resource:pdfFileURL
                          type:WhiteConvertTypeStatic
             completionHandler:^(NSString *taskUUID, NSString *taskToken, NSError *error) {
+        if (error) {
+            XCTAssertNil(error);
+            [exp fulfill];
+            return;
+        }
         [self.foo.converter insertPollingTaskWithTaskUUID:taskUUID
                                                     token:taskToken
                                                    region:WhiteRegionCN
                                                  taskType:WhiteConvertTypeStatic
                                                  progress:^(CGFloat progress, WhiteConversionInfoV5 * _Nullable info) {
-            XCTAssert(@"Should not progress");
+            XCTAssertNil(@"Should not progress");
         } result:^(BOOL success, WhiteConversionInfoV5 * _Nullable info, NSError * _Nullable error) {
-            XCTAssert(@"Should not success");
+            XCTAssertNil(@"Should not success");
         }];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.foo.converter cancelPollingTaskWithTaskUUID:taskUUID];
         });
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [exp fulfill];
         });
     }];
-    [self waitForExpectationsWithTimeout:7 handler:^(NSError * _Nullable error) {
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%@", error);
         }
@@ -177,6 +182,7 @@ static NSString * const pdfFileURL = @"https://flat-storage.oss-accelerate.aliyu
     NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"resource": resource, @"type": type} options:0 error:nil];
     request.HTTPBody = data;
     request.HTTPMethod = @"POST";
+    request.timeoutInterval = 5;
 
     NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error) {
