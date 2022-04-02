@@ -51,7 +51,7 @@ Pod::Spec.new do |s|
     base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h'
     base.private_header_files = 'Whiteboard/Classes/Displayer/*+Private.h', 'Whiteboard/Classes/SDK/*+Private.h'
     base.frameworks = 'WebKit'
-    base.dependency 'dsBridge', '~> 3.0.2'
+    base.dependency 'NTLBridge', '~> 3.1.1'
     base.dependency 'Whiteboard/Object'
   end
 

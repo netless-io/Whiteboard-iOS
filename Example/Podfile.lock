@@ -1,31 +1,31 @@
 PODS:
   - AgoraFPA_iOS (1.0.0)
-  - dsBridge (3.0.6)
   - Masonry (1.1.0)
   - NETURLSchemeHandler (0.1.5)
+  - NTLBridge (3.1.1)
   - SSZipArchive (2.4.3)
-  - Whiteboard (2.16.13):
-    - Whiteboard/Converter (= 2.16.13)
-    - Whiteboard/NativeReplayer (= 2.16.13)
-    - Whiteboard/Replayer (= 2.16.13)
-    - Whiteboard/Room (= 2.16.13)
-  - Whiteboard/Base (2.16.13):
-    - dsBridge (~> 3.0.2)
+  - Whiteboard (2.16.14):
+    - Whiteboard/Converter (= 2.16.14)
+    - Whiteboard/NativeReplayer (= 2.16.14)
+    - Whiteboard/Replayer (= 2.16.14)
+    - Whiteboard/Room (= 2.16.14)
+  - Whiteboard/Base (2.16.14):
+    - NTLBridge (~> 3.1.1)
     - Whiteboard/Object
-  - Whiteboard/Converter (2.16.13):
+  - Whiteboard/Converter (2.16.14):
     - Whiteboard/Object
-  - Whiteboard/fpa (2.16.13):
+  - Whiteboard/fpa (2.16.14):
     - AgoraFPA_iOS (~> 1.0.0)
     - Whiteboard/Room
-  - Whiteboard/Model (2.16.13):
+  - Whiteboard/Model (2.16.14):
     - YYModel (~> 1.0.4)
-  - Whiteboard/NativeReplayer (2.16.13):
+  - Whiteboard/NativeReplayer (2.16.14):
     - Whiteboard/Replayer
-  - Whiteboard/Object (2.16.13):
+  - Whiteboard/Object (2.16.14):
     - Whiteboard/Model
-  - Whiteboard/Replayer (2.16.13):
+  - Whiteboard/Replayer (2.16.14):
     - Whiteboard/Base
-  - Whiteboard/Room (2.16.13):
+  - Whiteboard/Room (2.16.14):
     - Whiteboard/Base
   - YYModel (1.0.4)
 
@@ -39,9 +39,9 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AgoraFPA_iOS
-    - dsBridge
     - Masonry
     - NETURLSchemeHandler
+    - NTLBridge
     - SSZipArchive
     - YYModel
 
@@ -51,11 +51,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AgoraFPA_iOS: 2202f574e6832567e368d5e69ad6da121a18ee4a
-  dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   NETURLSchemeHandler: 7e3b68bea1d06062f22adf8fbcb971149cbc1379
+  NTLBridge: e7a7c6fe4096ae2e081d2fad868770199706d4cc
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  Whiteboard: a94f5c0c1a80cc10b9115dd6d423ea24e823a0c8
+  Whiteboard: 0e3d394c3677fd735f1985df3d63af4923c7006b
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: bce2d1daf5dd25d6ce48fdbd5e53b3c69c7c9a9f
