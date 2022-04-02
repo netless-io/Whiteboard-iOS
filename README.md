@@ -4,6 +4,8 @@
 <p><a href="./README-zh.md">中文</a></p>
 </div>
 
+[![iOS13+Test](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml/badge.svg)](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml)
+
 ## TOC
 
 

@@ -2,6 +2,8 @@
 
 本项目为 White-SDK-iOS 的开源版本，为了更好的显示源码结构，`Whiteboard` 将项目分为了多个`subpod`，更有利于开发者查看项目源码层级。为此需要修改引用关系。
 
+[![iOS13+Test](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml/badge.svg)](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml)
+
 ## TOC
 
 - [官方文档](#文档)
