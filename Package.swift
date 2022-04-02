@@ -12,7 +12,7 @@ let package = Package(
             targets: ["Whiteboard"]),
     ],
     dependencies: [
-        .package(name: "DSBridge-IOS", url: "https://github.com/vince-hz/DSBridge-IOS.git", from: .init(3, 1, 0)),
+        .package(name: "DSBridge-IOS", url: "https://github.com/netless-io/DSBridge-IOS.git", from: .init(3, 1, 1)),
         .package(name: "YYModel", url: "https://github.com/vince-hz/YYModel.git", from: .init(1, 1, 0))
     ],
     targets: [

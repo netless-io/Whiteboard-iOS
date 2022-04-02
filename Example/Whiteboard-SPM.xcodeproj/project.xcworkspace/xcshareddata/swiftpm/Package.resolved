@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "DSBridge-IOS",
-        "repositoryURL": "https://github.com/vince-hz/DSBridge-IOS.git",
+        "repositoryURL": "https://github.com/netless-io/DSBridge-IOS.git",
         "state": {
           "branch": null,
-          "revision": "160b9d21de8a5a5b5241ae45d91b04ab592784a5",
-          "version": "3.1.0"
+          "revision": "44cff2254caf6cbd925c2b57e6f45faa86ac30cd",
+          "version": "3.1.1"
         }
       },
       {
