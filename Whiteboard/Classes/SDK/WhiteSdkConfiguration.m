@@ -73,6 +73,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     _nativeTags = @{@"nativeVersion": [WhiteSDK version], @"platform": [NSString stringWithFormat:@"%@ %@ %@", _platform, deviceModel, currentDevice.systemVersion]};
     _appIdentifier = appIdentifier;
     _pptParams = [[WhitePptParams alloc] init];
+    _disableNewPencilStroke = NO;
     return self;
 }
 
