@@ -44,6 +44,14 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - 页面（场景）管理 API
 
 /**
+ 根据scenePath查询指定场景
+ 
+ @param scenePath 场景路径
+ @param result 返回指定场景的查询结果，详见 [WhiteScene](WhiteScene)
+ */
+- (void)getSceneFromScenePath:(NSString *)scenePath result:(void (^) (WhiteScene* _Nullable scene))result;
+
+/**
  查询场景路径类型。
 
  你可以在该方法中指定想要查询的场景路径，SDK 会返回该路径对应的场景类型。
