@@ -7,7 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## [2.16.14] - 2022-04-1
+## [2.16.15] - 2022-04-08
+- 更新`white-web-sdk`至2.16.15
+- `WhiteDisplayer`中新增`getSceneFromScenePath:`方法
+- `WhiteSdkConfiguration`中新增`disableNewPencilStroke`参数，默认为NO，设置为YES后可以禁止新铅笔工具展示笔锋
+## [2.16.14] - 2022-04-01
 - 更新`@netless/window-manager`至 0.4.20
 - 更新`@netless/app-slide`至 0.1.1
 - 更新`iframe-bridge`至 2.1.8
