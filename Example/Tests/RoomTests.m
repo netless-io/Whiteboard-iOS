@@ -526,6 +526,34 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 
 #pragma mark - Get
 
+- (void)testGetScene
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.room getSceneFromScenePath:@"/init" result:^(WhiteScene * _Nullable scene) {
+        XCTAssertNotNil(scene);
+        [exp fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testGetSceneFail
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.room getSceneFromScenePath:@"/initA" result:^(WhiteScene * _Nullable scene) {
+        XCTAssertNil(scene);
+        [exp fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 - (void)testGetRoomMember
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];

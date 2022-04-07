@@ -261,6 +261,42 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 }
 
 #pragma mark - Get
+- (void)testGetScene
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self setupPlayer];
+    __weak typeof(self) weakSelf = self;
+    self.loadFirstFrameBlock = ^{
+        [weakSelf.player getSceneFromScenePath:@"/init" result:^(WhiteScene * _Nullable scene) {
+            XCTAssertNotNil(scene);
+            [exp fulfill];
+        }];
+    };
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testGetSceneFail
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self setupPlayer];
+    __weak typeof(self) weakSelf = self;
+    self.loadFirstFrameBlock = ^{
+        [weakSelf.player getSceneFromScenePath:@"/initA" result:^(WhiteScene * _Nullable scene) {
+            XCTAssertNil(scene);
+            [exp fulfill];
+        }];
+    };
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 - (void)testGetPhase
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
