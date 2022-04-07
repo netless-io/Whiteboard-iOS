@@ -254,6 +254,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoom (Scene)
 
+/**
+ 为当前的 WindowManger 直接设置attributes
+ 
+ @param attributes 需要设置的attributes
+ */
+- (void)setWindowManagerWithAttributes:(NSDictionary *)attributes;
 
 /**
  获取房间当前场景组下的场景状态。 

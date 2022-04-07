@@ -209,4 +209,17 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
     }];
 }
 
+- (void)getWindowManagerAttributesWithResult:(void (^)(NSDictionary * _Nonnull))result
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"getWindowManagerAttributes"] completionHandler:^(id  _Nullable value) {
+        if (result) {
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                result(value);
+            } else {
+                result(nil);
+            }
+        }
+    }];
+}
+
 @end

@@ -150,6 +150,11 @@
 
 #pragma mark - Scene API
 
+- (void)setWindowManagerWithAttributes:(NSDictionary *)attributes
+{
+    [self.bridge callHandler:@"room.setWindowManagerAttributes" arguments:@[attributes]];
+}
+
 - (void)putScenes:(NSString *)dir scenes:(NSArray<WhiteScene *> *)scenes index:(NSUInteger)index
 {
     [self.bridge callHandler:@"room.putScenes" arguments:@[dir, scenes, @(index)]];

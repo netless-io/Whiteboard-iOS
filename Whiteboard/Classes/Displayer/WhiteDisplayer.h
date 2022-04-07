@@ -206,6 +206,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)getSceneSnapshotImage:(NSString *)scenePath completion:(void (^)(UIImage * _Nullable image))completionHandler;
 
+/**
+ 获取当前的 WindowManager
+ 
+ @param result 获取的attributes回调
+ */
+- (void)getWindowManagerAttributesWithResult:(void(^)(NSDictionary * attributes))result;
+
 @end
 
 NS_ASSUME_NONNULL_END
