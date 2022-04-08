@@ -63,7 +63,12 @@ NS_ASSUME_NONNULL_BEGIN
 /** 目前主要用来切换教具 */
 - (void)setMemberState:(WhiteMemberState *)modifyState;
 
-/** 切换用户视角模式 */
+/**
+ 切换用户视角模式
+ 
+ 现有视角模式设置的解释是针对单窗口版本而言(useMultiViews = NO)。
+ 如果使用了多窗口版本，房间内有写权限的用户所做操作会同步到房间内其他用户，推荐通过修改读写权限(setWritable)来控制用户对房间的操作。
+ */
 - (void)setViewMode:(WhiteViewMode)viewMode;
 
 
