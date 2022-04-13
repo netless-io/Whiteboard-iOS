@@ -1,0 +1,4 @@
+framework module AgoraFpaProxyService {
+    umbrella header "FpaProxyService.h"
+    export *
+}
