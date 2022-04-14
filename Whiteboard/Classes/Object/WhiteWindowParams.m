@@ -22,6 +22,12 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     return self;
 }
 
+- (void)setContainerSizeRatio:(NSNumber *)containerSizeRatio {
+    if (isinf([containerSizeRatio doubleValue])) { return; }
+    if (isnan([containerSizeRatio doubleValue])) { return; }
+    _containerSizeRatio = containerSizeRatio;
+}
+
 - (void)setPrefersColorScheme:(WhitePrefersColorScheme)prefersColorScheme {
     if (@available(iOS 13, *)) {
         _prefersColorScheme = prefersColorScheme;
