@@ -97,6 +97,8 @@
 {
     NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg", @"userId": @1024};
     WhiteRoomConfig *config = [[WhiteRoomConfig alloc] initWithUUID:WhiteRoomUUID roomToken:WhiteRoomToken uid:@"1"];
+    config.userPayload = payload;
+    config.windowParams = [[WhiteWindowParams alloc] init];
     return config;
 }
 

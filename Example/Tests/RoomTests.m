@@ -36,6 +36,16 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     }
 }
 
+#pragma mark - roomConfig
+- (void)testNan
+{
+    NSNumber *r = self.roomConfig.windowParams.containerSizeRatio;
+    self.roomConfig.windowParams.containerSizeRatio = @(1.0 / 0);
+    XCTAssertTrue([r isEqualToNumber:self.roomConfig.windowParams.containerSizeRatio]);
+    self.roomConfig.windowParams.containerSizeRatio = [NSDecimalNumber notANumber];
+    XCTAssertTrue([r isEqualToNumber:self.roomConfig.windowParams.containerSizeRatio]);
+}
+
 #pragma mark - setting
 - (void)testSetGlobalState
 {
