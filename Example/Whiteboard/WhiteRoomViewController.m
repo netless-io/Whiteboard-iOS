@@ -7,6 +7,8 @@
 //
 
 #import "WhiteRoomViewController.h"
+#import "Whiteboard_Example-swift.h"
+#import "CommandHandler.h"
 
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate>
 
@@ -17,7 +19,6 @@
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @end
 
-#import "RoomCommandListController.h"
 #import "WhiteUtils.h"
 
 @implementation WhiteRoomViewController
@@ -63,15 +64,27 @@
     return _roomCallbackDelegate;
 }
 
+#pragma mark - Example Control
+- (void)setupExampleControl {
+    NSMutableArray *items = [NSMutableArray array];
+    __weak typeof(self) weakSelf = self;
+    [[CommandHandler generateCommandsForRoom:self.room roomToken:self.roomToken] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, void (^ _Nonnull obj)(WhiteRoom * _Nonnull), BOOL * _Nonnull stop) {
+        ExampleItem* item = [[ExampleItem alloc] initWithTitle:key status:nil enable:YES clickBlock:^(ExampleItem * _Nonnull i) {
+            obj(weakSelf.room);
+        }];
+        [items addObject:item];
+    }];
+    self.controlView.items = items;
+}
+
 #pragma mark - BarItem
 - (void)setupShareBarItem
 {
-    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"设置 API", nil) style:UIBarButtonItemStylePlain target:self action:@selector(settingAPI:)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"分享", nil) style:UIBarButtonItemStylePlain target:self action:@selector(shareRoom:)];
     UIBarButtonItem *item3 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"pre", nil) style:UIBarButtonItemStylePlain target:self action:@selector(pptPreviousStep)];
     UIBarButtonItem *item4 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"next", nil) style:UIBarButtonItemStylePlain target:self action:@selector(pptNextStep)];
     
-    self.navigationItem.rightBarButtonItems = @[item1, item2, item3, item4];
+    self.navigationItem.rightBarButtonItems = @[item2, item3, item4];
 }
 
 - (void)pptPreviousStep
@@ -82,13 +95,6 @@
 - (void)pptNextStep
 {
     [self.room pptNextStep];
-}
-
-- (void)settingAPI:(id)sender
-{
-    RoomCommandListController *controller = [[RoomCommandListController alloc] initWithRoom:self.room];
-    controller.roomToken = self.roomToken;
-    [self showPopoverViewController:controller sourceView:sender];
 }
 
 - (void)shareRoom:(id)sender
@@ -187,6 +193,7 @@
         } else {
             [weakSelf defaultActionAfterJoinRoomError:error];
         }
+        [weakSelf setupExampleControl];
     }];
     if (self.beginJoinRoomBlock) { self.beginJoinRoomBlock(); };
 }

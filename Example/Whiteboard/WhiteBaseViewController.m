@@ -86,9 +86,20 @@ static NSString *kPPTScheme = @"netless";
     // 3. 使用 Masonry 进行 Autolayout 处理
     [self.boardView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom);
-        make.left.bottom.right.equalTo(self.view);
+        make.left.right.equalTo(self.view).inset(88);
+        make.height.equalTo(self.boardView.mas_width).multipliedBy(9.0 / 16.0);
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeFrame) name:@"changeframe" object:nil];
+    
+    // 4. ControlView
+    ExampleControlView* controlView = [[ExampleControlView alloc] initWithItems:@[]];
+    [self.view addSubview:controlView];
+    [controlView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.boardView.mas_bottom).offset(10);
+        make.left.right.equalTo(self.view).inset(10);
+        make.bottom.equalTo(self.view);
+    }];
+    self.controlView = controlView;
 }
 
 - (void)changeFrame

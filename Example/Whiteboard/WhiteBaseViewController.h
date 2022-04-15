@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Whiteboard_Example-swift.h"
 #if IS_SPM
 #import "Whiteboard.h"
 #else
@@ -24,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) WhiteBoardView *boardView;
 @property (nonatomic, strong) WhiteSDK *sdk;
 @property (nonatomic, assign) BOOL useMultiViews;
+@property (nonatomic, strong) ExampleControlView *controlView;
 
 @property (nonatomic, strong, nonnull) WhiteSdkConfiguration *sdkConfig;
 

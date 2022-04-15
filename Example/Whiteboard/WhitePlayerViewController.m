@@ -7,10 +7,10 @@
 //
 
 #import "WhitePlayerViewController.h"
+#import "CommandHandler.h"
 #import "WhiteSDK.h"
 #import "WhiteUtils.h"
 #import "PlayerCommandListController.h"
-#import "RoomCommandListController.h"
 #if IS_SPM
 #import "Whiteboard.h"
 #else

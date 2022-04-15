@@ -16,7 +16,6 @@
 		39E4205323A37DCF002B9B38 /* PlayerCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204B23A37DCF002B9B38 /* PlayerCommandListController.m */; };
 		39E4205423A37DCF002B9B38 /* WhiteRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204D23A37DCF002B9B38 /* WhiteRoomViewController.m */; };
 		39E4205523A37DCF002B9B38 /* WhiteUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204E23A37DCF002B9B38 /* WhiteUtils.m */; };
-		39E4205623A37DCF002B9B38 /* RoomCommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4204F23A37DCF002B9B38 /* RoomCommandListController.m */; };
 		39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4205923A3B74F002B9B38 /* DisplayerTests.m */; };
 		39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4205B23A3B790002B9B38 /* PlayerTests.m */; };
 		39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4205D23A3B81C002B9B38 /* RoomTests.m */; };
@@ -46,6 +45,10 @@
 		8A18D2A827F1554A00EC29B1 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A2212A727F4509900AA372D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
+		8A86A4E82806A0070095F499 /* ControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A86A4E52806A0070095F499 /* ControlCell.xib */; };
+		8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E62806A0070095F499 /* ExampleControlView.swift */; };
+		8A86A4EA2806A0070095F499 /* ControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E72806A0070095F499 /* ControlCell.swift */; };
+		8A86A4ED2806A5FE0095F499 /* CommandHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4EC2806A5FE0095F499 /* CommandHandler.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
@@ -80,10 +83,8 @@
 		39E4204923A37DCF002B9B38 /* WhitePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayerViewController.h; sourceTree = "<group>"; };
 		39E4204A23A37DCF002B9B38 /* WhitePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhitePlayerViewController.m; sourceTree = "<group>"; };
 		39E4204B23A37DCF002B9B38 /* PlayerCommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerCommandListController.m; sourceTree = "<group>"; };
-		39E4204C23A37DCF002B9B38 /* RoomCommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCommandListController.h; sourceTree = "<group>"; };
 		39E4204D23A37DCF002B9B38 /* WhiteRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteRoomViewController.m; sourceTree = "<group>"; };
 		39E4204E23A37DCF002B9B38 /* WhiteUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteUtils.m; sourceTree = "<group>"; };
-		39E4204F23A37DCF002B9B38 /* RoomCommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCommandListController.m; sourceTree = "<group>"; };
 		39E4205923A3B74F002B9B38 /* DisplayerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplayerTests.m; sourceTree = "<group>"; };
 		39E4205B23A3B790002B9B38 /* PlayerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerTests.m; sourceTree = "<group>"; };
 		39E4205D23A3B81C002B9B38 /* RoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomTests.m; sourceTree = "<group>"; };
@@ -122,6 +123,11 @@
 		8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MultiViewsRoomTest.m; sourceTree = "<group>"; };
 		8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomAppTest.m; sourceTree = "<group>"; };
 		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
+		8A86A4E52806A0070095F499 /* ControlCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ControlCell.xib; sourceTree = "<group>"; };
+		8A86A4E62806A0070095F499 /* ExampleControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleControlView.swift; sourceTree = "<group>"; };
+		8A86A4E72806A0070095F499 /* ControlCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlCell.swift; sourceTree = "<group>"; };
+		8A86A4EB2806A5FE0095F499 /* CommandHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandHandler.h; sourceTree = "<group>"; };
+		8A86A4EC2806A5FE0095F499 /* CommandHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommandHandler.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AC2F0E127F43F0900A980D9 /* BaseRoomTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseRoomTest.h; sourceTree = "<group>"; };
 		8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseRoomTest.m; sourceTree = "<group>"; };
@@ -192,6 +198,7 @@
 		6003F593195388D20070C39A /* Example for Whiteboard */ = {
 			isa = PBXGroup;
 			children = (
+				8A86A4E428069FF00095F499 /* Control */,
 				6003F59C195388D20070C39A /* NETAppDelegate.h */,
 				6003F59D195388D20070C39A /* NETAppDelegate.m */,
 				39E4204823A37DCF002B9B38 /* StartViewController.h */,
@@ -206,8 +213,6 @@
 				39E4204D23A37DCF002B9B38 /* WhiteRoomViewController.m */,
 				39E4204323A37DCE002B9B38 /* PlayerCommandListController.h */,
 				39E4204B23A37DCF002B9B38 /* PlayerCommandListController.m */,
-				39E4204C23A37DCF002B9B38 /* RoomCommandListController.h */,
-				39E4204F23A37DCF002B9B38 /* RoomCommandListController.m */,
 				8A17AE7A27E9B4E300EB8897 /* WhiteCustomAppViewController.h */,
 				8A17AE7B27E9B4E300EB8897 /* WhiteCustomAppViewController.m */,
 				39E4204723A37DCE002B9B38 /* WhiteUtils.h */,
@@ -275,6 +280,18 @@
 				71FA1F4860720C219B686ED8 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		8A86A4E428069FF00095F499 /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				8A86A4EB2806A5FE0095F499 /* CommandHandler.h */,
+				8A86A4EC2806A5FE0095F499 /* CommandHandler.m */,
+				8A86A4E72806A0070095F499 /* ControlCell.swift */,
+				8A86A4E52806A0070095F499 /* ControlCell.xib */,
+				8A86A4E62806A0070095F499 /* ExampleControlView.swift */,
+			);
+			name = Control;
 			sourceTree = "<group>";
 		};
 		8AC2F0E427F43FEA00A980D9 /* Base */ = {
@@ -353,6 +370,7 @@
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
 						DevelopmentTeam = L922897LKX;
+						LastSwiftMigration = 1330;
 					};
 					6003F5AD195388D20070C39A = {
 						LastSwiftMigration = 1320;
@@ -391,6 +409,7 @@
 				39DFDFB826B23B3500A4DFE8 /* Localizable.strings in Resources */,
 				398B6E9C23A7AA8A00950A57 /* CHANGELOG.md in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
+				8A86A4E82806A0070095F499 /* ControlCell.xib in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
@@ -503,8 +522,10 @@
 				39E4205423A37DCF002B9B38 /* WhiteRoomViewController.m in Sources */,
 				39E4205523A37DCF002B9B38 /* WhiteUtils.m in Sources */,
 				6003F59E195388D20070C39A /* NETAppDelegate.m in Sources */,
+				8A86A4EA2806A0070095F499 /* ControlCell.swift in Sources */,
 				39E4205223A37DCF002B9B38 /* WhitePlayerViewController.m in Sources */,
-				39E4205623A37DCF002B9B38 /* RoomCommandListController.m in Sources */,
+				8A86A4ED2806A5FE0095F499 /* CommandHandler.m in Sources */,
+				8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */,
 				39E4205123A37DCF002B9B38 /* StartViewController.m in Sources */,
 				39A82CE8242700BB00FC1FD6 /* WhitePureReplayViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
@@ -655,15 +676,19 @@
 			baseConfigurationReference = 4AFA52A18BA89BE2555F51D1 /* Pods-Whiteboard_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = L922897LKX;
 				EXCLUDED_ARCHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Whiteboard/Whiteboard-Prefix.pch";
 				INFOPLIST_FILE = "Whiteboard/Whiteboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -674,6 +699,8 @@
 			baseConfigurationReference = 8470081D613A7C8DF8376FBA /* Pods-Whiteboard_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = L922897LKX;
 				EXCLUDED_ARCHS = "$(inherited)";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
@@ -681,6 +708,7 @@
 				GCC_PREFIX_HEADER = "Whiteboard/Whiteboard-Prefix.pch";
 				INFOPLIST_FILE = "Whiteboard/Whiteboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -693,6 +721,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 789AF49F9FB06918748A94DC /* Pods-Whiteboard_Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -722,6 +751,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4CB02330C08AD98B832844A9 /* Pods-Whiteboard_Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (

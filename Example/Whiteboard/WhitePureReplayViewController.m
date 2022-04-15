@@ -9,8 +9,8 @@
 #import "WhitePureReplayViewController.h"
 #import "WhiteSDK.h"
 #import "WhiteUtils.h"
+#import "CommandHandler.h"
 #import "PlayerCommandListController.h"
-#import "RoomCommandListController.h"
 #if IS_SPM
 #import "Whiteboard.h"
 #else
