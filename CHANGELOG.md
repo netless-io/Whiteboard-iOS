@@ -15,6 +15,7 @@
 - 更新`white-web-sdk`至2.16.15
 - `WhiteDisplayer`中新增`getSceneFromScenePath:`方法
 - `WhiteSdkConfiguration`中新增`disableNewPencilStroke`参数，默认为NO，设置为YES后可以禁止新铅笔工具展示笔锋
+- 修改依赖`dsbridge`为`NTLbridge`。2.16.14及以下版本的用户升级到2.16.15以上时，如果遇到关于dsbridge的报错，请先尝试重新运行一遍`pod install`，删除所有缓存之后再重新编译。
 ## [2.16.14] - 2022-04-01
 - 更新`@netless/window-manager`至 0.4.20
 - 更新`@netless/app-slide`至 0.1.1
