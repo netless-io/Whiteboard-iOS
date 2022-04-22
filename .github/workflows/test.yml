@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Test using any available iPad simulator OS >= 13
-    runs-on: macos-latest
+    runs-on: self-hosted
 
     steps:
       - uses: actions/setup-node@v3.0.0
