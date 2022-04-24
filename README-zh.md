@@ -4,15 +4,24 @@
 
 [![bridge-check](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/bridge.yml/badge.svg)](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/bridge.yml) [![iOS13+Test](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml/badge.svg)](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml)
 
-## TOC
-
-- [官方文档](#文档)
-- [Example](#Example)
-    - [快速调试](#快速调试)
-- [项目结构](#项目结构)
-- [音视频支持](#Native音视频)
-- [动态PPT本地资源包](#动态ppt本地资源包)
-- [部分问题](#部分问题)
+- [Whiteboard](#whiteboard)
+  - [文档](#文档)
+  - [引用](#引用)
+    - [White-SDK-iOS 迁移](#white-sdk-ios-迁移)
+  - [Example](#example)
+    - [调试特定房间](#调试特定房间)
+    - [单元测试](#单元测试)
+  - [要求设备](#要求设备)
+  - [项目结构](#项目结构)
+  - [Native音视频](#native音视频)
+  - [动态ppt本地资源包](#动态ppt本地资源包)
+  - [fpa加速（iOS 13 及其以上）](#fpa加速ios-13-及其以上)
+  - [自定义App插件](#自定义app插件)
+    - [注册自定义App插件](#注册自定义app插件)
+    - [添加自定义App插件到白板中](#添加自定义app插件到白板中)
+  - [使用YYKit](#使用yykit)
+  - [部分问题](#部分问题)
+  - [Whiteboard - Framework 拖拽方式集成](#whiteboard---framework-拖拽方式集成)
 
 ## 文档
 
@@ -299,6 +308,22 @@ Native端在使用自定义App时需要注册对应的App到SDK中。
  @param attrs 初始化App的参数，按需填
  */
 - (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs;
+```
+
+## 使用YYKit
+
+本SDK默认依赖为YYModel，部分使用者若使用YYKit，依赖关系将会发生错误。
+
+解决方法为修改Podfile:
+
+``` ruby
+pod 'Whiteboard/Whiteboard-YYKit'
+```
+
+如果你引用了fpa你可以这样声明:
+
+``` ruby
+pod 'Whiteboard/fpa-YYKit'
 ```
 
 ## 部分问题
