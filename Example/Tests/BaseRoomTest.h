@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSTimeInterval kTimeout = 30;
 
+@interface WhiteSDK ()
+@property (nonatomic, weak) WhiteBoardView *bridge;
+@end
+
 /// 房间测试的基类，提供一些测试的便捷方法
 @interface BaseRoomTest : XCTestCase<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate>
 

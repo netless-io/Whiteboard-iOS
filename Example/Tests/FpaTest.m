@@ -24,13 +24,6 @@ typedef enum : NSUInteger {
 @implementation WhiteRoom
 @end
 
-@interface WhiteSDK ()
-@property (nonatomic, weak) WhiteBoardView *bridge;
-@end
-
-@implementation WhiteSDK
-@end
-
 @interface FpaTest : BaseRoomTest
 @property (nonatomic, weak) WhiteTestSocket *testSocket;
 @end
