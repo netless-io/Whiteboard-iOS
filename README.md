@@ -6,10 +6,6 @@
 
 [![bridge-check](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/bridge.yml/badge.svg)](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/bridge.yml) [![iOS13+Test](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml/badge.svg)](https://github.com/netless-io/Whiteboard-iOS/actions/workflows/test.yml)
 
-## TOC
-
-
-- [TOC](#toc)
 - [Documentation](#documentation)
 - [Reference](#reference)
 - [Example](#example)
@@ -23,6 +19,7 @@
 - [Custom App Plugin](#custom-app-plugin)
   - [Register the Custom App plugin](#register-the-custom-app-plugin)
   - [Adding custom App plugins to the whiteboard](#adding-custom-app-plugins-to-the-whiteboard)
+- [Using YYKit](#using-yykit)
 - [Part of the problem](#part-of-the-problem)
 
 ## Documentation
@@ -305,6 +302,22 @@ Please call this method to complete the initialization of `WhiteAppParam`
  @param attrs Parameters to initialize the App, fill in as needed
  */
 - (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs;
+```
+
+## Using YYKit
+
+The default dependency of this SDK is YYModel, some users will have an error in the dependency if they use YYKit.
+
+The solution is to modify the Podfile:
+
+``` ruby
+pod 'Whiteboard/Whiteboard-YYKit'
+```
+
+If you refer to fpa you can declare it like this:
+
+``` ruby
+pod 'Whiteboard/fpa-YYKit'
 ```
 
 ## Part of the problem
