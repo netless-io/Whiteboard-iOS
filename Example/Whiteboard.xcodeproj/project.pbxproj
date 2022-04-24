@@ -51,6 +51,7 @@
 		8A86A4ED2806A5FE0095F499 /* CommandHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4EC2806A5FE0095F499 /* CommandHandler.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */; };
+		8AF1F04428153AFB00AA7535 /* SDKTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF1F04328153AFB00AA7535 /* SDKTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +132,7 @@
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AC2F0E127F43F0900A980D9 /* BaseRoomTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseRoomTest.h; sourceTree = "<group>"; };
 		8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseRoomTest.m; sourceTree = "<group>"; };
+		8AF1F04328153AFB00AA7535 /* SDKTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDKTest.m; sourceTree = "<group>"; };
 		8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FpaTest.m; sourceTree = "<group>"; };
 		AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -245,6 +247,7 @@
 			children = (
 				8AC2F0E427F43FEA00A980D9 /* Base */,
 				8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */,
+				8AF1F04328153AFB00AA7535 /* SDKTest.m */,
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
@@ -327,8 +330,8 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				14A9084D4375BECEF3DF2A52 /* [CP] Copy Pods Resources */,
-				7E7B1715EB6F0F6950397E54 /* [CP] Embed Pods Frameworks */,
+				028AE4694DCA4E845AF51C55 /* [CP] Copy Pods Resources */,
+				808AF72B7CC2538283A46D02 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -428,7 +431,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		14A9084D4375BECEF3DF2A52 /* [CP] Copy Pods Resources */ = {
+		028AE4694DCA4E845AF51C55 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -490,7 +493,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7E7B1715EB6F0F6950397E54 /* [CP] Embed Pods Frameworks */ = {
+		808AF72B7CC2538283A46D02 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -537,6 +540,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AF1F04428153AFB00AA7535 /* SDKTest.m in Sources */,
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
 				8A18D2A627F154DB00EC29B1 /* CustomAppTest.m in Sources */,
 				8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */,

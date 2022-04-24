@@ -79,7 +79,9 @@ static NSString *const kJSDeviceType = @"deviceType";
 
 + (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper
 {
-    return @{@"nativeTags": @"__nativeTags", @"platform": @"__platform"};
+    return @{@"nativeTags": @"__nativeTags",
+             @"platform": @"__platform",
+             @"netlessUA": @"__netlessUA"};
 }
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {
