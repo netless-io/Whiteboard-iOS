@@ -10,6 +10,67 @@
 
 @implementation CommandHandler
 
++ (NSDictionary<NSString *,void (^)(WhiteCombinePlayer * _Nonnull)> *)generateCommandsForCombineReplay:(WhiteCombinePlayer *)player {
+    return @{
+        NSLocalizedString(@"播放", nil): ^(WhiteCombinePlayer* player) {
+            [player play];
+        },
+        NSLocalizedString(@"暂停", nil): ^(WhiteCombinePlayer* player) {
+            [player pause];
+        },
+        NSLocalizedString(@"加速", nil): ^(WhiteCombinePlayer* player) {
+            player.playbackSpeed = 1.25;
+        },
+        NSLocalizedString(@"快进", nil): ^(WhiteCombinePlayer* player) {
+            [player seekToTime:CMTimeMake(3000, 600) completionHandler:^(BOOL finished) {
+                [player play];
+            }];
+        },
+        NSLocalizedString(@"观察模式", nil): ^(WhiteCombinePlayer* player) {
+            [player.whitePlayer setObserverMode:WhiteObserverModeFreedom];
+        },
+        NSLocalizedString(@"获取信息", nil): ^(WhiteCombinePlayer* player) {
+            [player.whitePlayer getPlayerStateWithResult:^(WhitePlayerState * _Nullable state) {
+                NSLog(@"%@", state);
+            }];
+            [player.whitePlayer getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
+                NSLog(@"%@", info);
+            }];
+            [player.whitePlayer getPlaybackSpeed:^(CGFloat speed) {
+                NSLog(@"%f", speed);
+            }];
+        }
+    };
+}
+
++ (NSDictionary<NSString *,void (^)(WhitePlayer * _Nonnull)> *)generateCommandsForReplay:(WhitePlayer *)player {
+    return @{
+        NSLocalizedString(@"播放", nil): ^(WhitePlayer* player) {
+            [player play];
+        },
+        NSLocalizedString(@"暂停", nil): ^(WhitePlayer* player) {
+            [player pause];
+        },
+        NSLocalizedString(@"加速", nil): ^(WhitePlayer* player) {
+            player.playbackSpeed = 1.25;
+        },
+        NSLocalizedString(@"快进", nil): ^(WhitePlayer* player) {
+            [player seekToScheduleTime:5];
+        },
+        NSLocalizedString(@"观察模式", nil): ^(WhitePlayer* player) {
+            [player setObserverMode:WhiteObserverModeFreedom];
+        },
+        NSLocalizedString(@"获取信息", nil): ^(WhitePlayer* player) {
+            [player getPlayerStateWithResult:^(WhitePlayerState * _Nullable state) {
+                NSLog(@"%@", state);
+            }];
+            [player getPlayerTimeInfoWithResult:^(WhitePlayerTimeInfo * _Nonnull info) {
+                NSLog(@"%@", info);
+            }];
+        }
+    };
+}
+
 + (NSDictionary<NSString*, void(^)(WhiteRoom* room)> *)generateCommandsForRoom:(WhiteRoom *)room roomToken:(NSString *)roomToken {
     return @{
         NSLocalizedString(@"改变布局", nil): ^(WhiteRoom* room) {

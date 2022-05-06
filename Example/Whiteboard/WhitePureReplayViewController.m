@@ -91,7 +91,20 @@
             [weakSelf.player addHighFrequencyEventListener:@"a" fireInterval:1000];
              [player seekToScheduleTime:0];
         }
+        [weakSelf setupExampleControl];
     }];
+}
+
+- (void)setupExampleControl {
+    NSMutableArray *items = [NSMutableArray array];
+    __weak typeof(self) weakSelf = self;
+    [[CommandHandler generateCommandsForReplay:self.player] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, void (^ _Nonnull obj)(WhitePlayer * _Nonnull), BOOL * _Nonnull stop) {
+        ExampleItem* item = [[ExampleItem alloc] initWithTitle:key status:nil enable:YES clickBlock:^(ExampleItem * _Nonnull i) {
+            obj(weakSelf.player);
+        }];
+        [items addObject:item];
+    }];
+    self.controlView.items = items;
 }
 
 #pragma mark -
