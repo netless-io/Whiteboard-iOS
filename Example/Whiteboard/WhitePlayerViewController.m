@@ -46,14 +46,17 @@
     [self.view addSubview:self.videoView];
 
     [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
+        make.left.equalTo(self.view);
         make.top.equalTo(self.mas_topLayoutGuideBottom);
-        make.height.equalTo(self.view.mas_width).multipliedBy(0.6);
+        make.height.equalTo(@144);
+        make.width.equalTo(self.videoView.mas_height).multipliedBy(16.0/9.0);
     }];
     
     [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.videoView.mas_bottom);
-        make.bottom.left.right.equalTo(self.view);
+        make.top.equalTo(self.mas_topLayoutGuideBottom);
+        make.left.equalTo(self.videoView.mas_right);
+        make.right.equalTo(self.view);
+        make.height.equalTo(self.boardView.mas_width).multipliedBy(9.0 / 16.0);
     }];
 }
 
@@ -115,7 +118,20 @@
             //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
             [player seekToScheduleTime:0];
         }
+        [weakSelf setupExampleControl];
     }];
+}
+
+- (void)setupExampleControl {
+    NSMutableArray *items = [NSMutableArray array];
+    __weak typeof(self) weakSelf = self;
+    [[CommandHandler generateCommandsForCombineReplay:self.combinePlayer] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, void (^ _Nonnull obj)(WhiteCombinePlayer * _Nonnull), BOOL * _Nonnull stop) {
+        ExampleItem* item = [[ExampleItem alloc] initWithTitle:key status:nil enable:YES clickBlock:^(ExampleItem * _Nonnull i) {
+            obj(weakSelf.combinePlayer);
+        }];
+        [items addObject:item];
+    }];
+    self.controlView.items = items;
 }
 
 #pragma mark -

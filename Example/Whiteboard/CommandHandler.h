@@ -19,6 +19,10 @@ static NSString *WhiteCommandCustomEvent = @"WhiteCommandCustomEvent";
 
 @interface CommandHandler : NSObject
 
++ (NSDictionary<NSString*, void(^)(WhiteCombinePlayer* player)> *)generateCommandsForCombineReplay:(WhiteCombinePlayer *)player;
+
++ (NSDictionary<NSString*, void(^)(WhitePlayer* player)> *)generateCommandsForReplay:(WhitePlayer *)player;
+
 + (NSDictionary<NSString*, void(^)(WhiteRoom* room)> *)generateCommandsForRoom:(WhiteRoom *)room roomToken:(NSString *)roomToken;
 
 @end
