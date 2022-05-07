@@ -44,6 +44,8 @@
 		8A18D2A727F1554800EC29B1 /* monaco.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A0A85D627EAF82E005CFC84 /* monaco.iife.js */; };
 		8A18D2A827F1554A00EC29B1 /* embedPage.iife.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */; };
 		8A2212A727F4509900AA372D /* FpaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2E05527D1BBBC00E0CB1D /* FpaTest.m */; };
+		8A3CC7312824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */; };
+		8A3CC734282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
 		8A86A4E82806A0070095F499 /* ControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A86A4E52806A0070095F499 /* ControlCell.xib */; };
 		8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E62806A0070095F499 /* ExampleControlView.swift */; };
@@ -123,6 +125,8 @@
 		8A17AE7D27E9B83800EB8897 /* embedPage.iife.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = embedPage.iife.js; sourceTree = "<group>"; };
 		8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MultiViewsRoomTest.m; sourceTree = "<group>"; };
 		8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomAppTest.m; sourceTree = "<group>"; };
+		8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombinePlayerOnlyVideoTest.m; sourceTree = "<group>"; };
+		8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombinePlayerOnlyWhiteTest.m; sourceTree = "<group>"; };
 		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
 		8A86A4E52806A0070095F499 /* ControlCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ControlCell.xib; sourceTree = "<group>"; };
 		8A86A4E62806A0070095F499 /* ExampleControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleControlView.swift; sourceTree = "<group>"; };
@@ -245,6 +249,7 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8A3CC732282621B3002DCE39 /* CombinePlayer */,
 				8AC2F0E427F43FEA00A980D9 /* Base */,
 				8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */,
 				8AF1F04328153AFB00AA7535 /* SDKTest.m */,
@@ -283,6 +288,15 @@
 				71FA1F4860720C219B686ED8 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		8A3CC732282621B3002DCE39 /* CombinePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */,
+				8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */,
+			);
+			name = CombinePlayer;
 			sourceTree = "<group>";
 		};
 		8A86A4E428069FF00095F499 /* Control */ = {
@@ -549,7 +563,9 @@
 				39E4205C23A3B790002B9B38 /* PlayerTests.m in Sources */,
 				8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */,
 				8A2212A727F4509900AA372D /* FpaTest.m in Sources */,
+				8A3CC734282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m in Sources */,
 				39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */,
+				8A3CC7312824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m in Sources */,
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
 				8A10E27E27F42F6E0098C49F /* TestUtility.m in Sources */,
 				8A18D2A427EDA89500EC29B1 /* MultiViewsRoomTest.m in Sources */,

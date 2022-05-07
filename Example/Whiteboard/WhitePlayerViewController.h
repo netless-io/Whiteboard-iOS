@@ -15,7 +15,7 @@
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^PlayBlock)(WhitePlayer * _Nullable player, NSError * _Nullable eroror);
+typedef void(^CombinePlayBlock)(WhiteCombinePlayer * _Nullable player, NSError * _Nullable eroror);
 
 @interface WhitePlayerViewController : WhiteBaseViewController
 
@@ -24,8 +24,11 @@ typedef void(^PlayBlock)(WhitePlayer * _Nullable player, NSError * _Nullable ero
 
 #pragma mark - UnitTest
 
-@property (nonatomic, copy, nullable) PlayBlock playBlock;
+@property (nonatomic, copy, nullable) CombinePlayBlock playBlock;
 @property (nonatomic, strong) WhitePlayerConfig *playerConfig;
+@property (nonatomic, assign) BOOL ignoreWhitePlayer;
+
+- (instancetype)initWithNativeURL:(nullable NSURL *)nativeURL;
 
 @end
 
