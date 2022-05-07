@@ -95,7 +95,7 @@ Pod::Spec.new do |s|
   s.subspec 'Room' do |room|
     room.source_files = 'Whiteboard/Classes/Room/**'
     room.public_header_files = 'Whiteboard/Classes/Room/**.h'
-    room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h'
+    room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h', 'Whiteboard/Classes/Room/Private/**.h'
     room.dependency 'Whiteboard/Base'
   end
   
@@ -103,7 +103,7 @@ Pod::Spec.new do |s|
   s.subspec 'Room-YYKit' do |room|
     room.source_files = 'Whiteboard/Classes/Room/**'
     room.public_header_files = 'Whiteboard/Classes/Room/**.h'
-    room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h'
+    room.private_header_files = 'Whiteboard/Classes/Room/*+Private.h', 'Whiteboard/Classes/Room/Private/**.h'
     room.dependency 'Whiteboard/Base-YYKit'
   end
   

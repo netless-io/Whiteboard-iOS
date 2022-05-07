@@ -52,6 +52,15 @@ NS_ASSUME_NONNULL_BEGIN
 /** 连接状态 */
 @property (nonatomic, assign, readonly) WhiteRoomPhase phase;
 
+#pragma mark - Apple Pencil
+
+/**
+ 设置是否只允许ApplePencil涂鸦
+ 
+ 详见 [drawOnlyApplePencil](drawOnlyApplePencil)
+ */
+- (void)setDrawOnlyApplePencil:(BOOL)drawOnlyPencil;
+
 #pragma mark - Set API
 
 /**

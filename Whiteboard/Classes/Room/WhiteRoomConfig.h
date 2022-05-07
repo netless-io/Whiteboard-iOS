@@ -183,6 +183,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL enableWritableAssert;
 
+/**
+ 是否只允许用ApplePencil涂鸦
+ 
+ 开启后，禁止手指涂鸦，只有ApplePencil的笔迹会被识别。
+ 在涂鸦时如果有手指误触，将触发 [fireRoomStateChanged](fireRoomStateChanged:) 回调，返回发生 ApplianceClickerClicker 和 ApplianceClickerPencil 教具切换。
+ 
+ 该参数仅在 iPad 设备上生效
+ 建议跟随`UIPencilInteraction.prefersPencilOnlyDrawing`设置
+ 
+ 该参数默认为`NO`
+ */
+@property (nonatomic, assign) BOOL drawOnlyApplePencil;
+
 @end
 
 NS_ASSUME_NONNULL_END

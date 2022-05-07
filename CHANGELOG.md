@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.21] - 待发布
+- 新增仅 ApplePencil 涂鸦选项，详见 `WhiteRoomConfig.drawOnlyApplePencil`和`WhiteRoom.setDrawOnlyApplePencil`
 ## [2.16.20] - 2022-05-06
 - 更新`white-web-sdk`至 2.16.20
 ## [2.16.19] - 2022-04-24

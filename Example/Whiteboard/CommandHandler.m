@@ -8,6 +8,8 @@
 
 #import "CommandHandler.h"
 
+static BOOL onlyApplePencil = NO;
+
 @implementation CommandHandler
 
 + (NSDictionary<NSString *,void (^)(WhiteCombinePlayer * _Nonnull)> *)generateCommandsForCombineReplay:(WhiteCombinePlayer *)player {
@@ -339,6 +341,11 @@
                 camerConfig.scale = scale == 1 ? @5 : @1;
                 [room moveCamera:camerConfig];
             }];
+        }
+        ,
+        @"Apple Pencil": ^(WhiteRoom* room) {
+            onlyApplePencil = !onlyApplePencil;
+            [room setDrawOnlyApplePencil:onlyApplePencil];
         }
     };
 }

@@ -6,11 +6,13 @@
 //
 
 #import "WhiteRoom.h"
+#import "ApplePencilDrawHandler.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoom ()
 
+@property (nonatomic, strong, readwrite) ApplePencilDrawHandler *applePencilDrawHandler;
 @property (nonatomic, strong, readwrite) NSNumber *observerId;
 @property (nonatomic, assign, readwrite, getter=isWritable) BOOL writable;
 @property (nonatomic, assign) BOOL shouldCheckingRepeatSetWritable;
@@ -19,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge;
 - (void)updatePhase:(WhiteRoomPhase)phase;
 - (void)updateRoomState:(WhiteRoomState *)state;
+- (void)prepareForApplePencilDrawOnly;
 
 @end
 
