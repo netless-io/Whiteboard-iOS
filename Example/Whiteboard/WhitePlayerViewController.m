@@ -20,14 +20,30 @@
 @interface WhitePlayerViewController ()<WhiteCommonCallbackDelegate, WhitePlayerEventDelegate, WhiteCombineDelegate, UIPopoverPresentationControllerDelegate>
 @property (nonatomic, nullable, strong) WhitePlayer *player;
 @property (nonatomic, nullable, strong) WhiteCombinePlayer *combinePlayer;
-@property (nonatomic, nullable, strong) NSString *roomToken;
+@property (nonatomic, nullable, copy) NSString *roomToken;
 @property (nonatomic, nullable, strong) WhiteVideoView *videoView;
+@property (nonatomic, nullable, copy) NSURL *nativePlayerURL;
 @end
 
 #import "Masonry.h"
 //#import <Masonry/Masonry.h>
 
 @implementation WhitePlayerViewController
+
+- (instancetype)init {
+    if (self = [super init]) {
+        //        [NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]
+        _nativePlayerURL = [NSURL URLWithString:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/oceans.mp4"];
+    }
+    return self;
+}
+
+- (instancetype)initWithNativeURL:(NSURL *)nativeURL {
+    if (self = [super init]) {
+        self.nativePlayerURL = nativeURL;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,7 +60,7 @@
     // 展示用的 m3u8 有 3 秒黑屏，显示黑色时，就是加载成功
     self.videoView.backgroundColor = [UIColor grayColor];
     [self.view addSubview:self.videoView];
-
+    
     [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.top.equalTo(self.mas_topLayoutGuideBottom);
@@ -94,31 +110,52 @@
 
 - (void)initPlayer
 {
-
-    //音视频，白板混合播放处理类
-//    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://netless-media.oss-cn-hangzhou.aliyuncs.com/c447a98ece45696f09c7fc88f649c082_3002a61acef14e4aa1b0154f734a991d.m3u8"]];
-    self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl:[NSURL URLWithString:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/oceans.mp4"]];
-    //显示 AVPlayer 画面
-    [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
+    if (self.nativePlayerURL) {
+        //音视频，白板混合播放处理类
+        self.combinePlayer = [[WhiteCombinePlayer alloc] initWithMediaUrl: self.nativePlayerURL];
+        //显示 AVPlayer 画面
+        [self.videoView setAVPlayer:self.combinePlayer.nativePlayer];
+        if (!self.ignoreWhitePlayer) {
+            [self initWhiteCombinePlayer];
+        } else {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.playBlock) {
+                    self.playBlock(self.combinePlayer, nil);
+                }
+            });
+        }
+    } else {
+        [self initWhiteCombinePlayer];
+    }
     //配置代理
     self.combinePlayer.delegate = self;
-    
+}
+
+- (void)initWhiteCombinePlayer
+{
     __weak typeof(self)weakSelf = self;
     [self.sdk createReplayerWithConfig:self.playerConfig callbacks:self.eventDelegate completionHandler:^(BOOL success, WhitePlayer * _Nonnull player, NSError * _Nonnull error) {
-        if (weakSelf.playBlock) {
-            weakSelf.playBlock(player, error);
-        } else if (error) {
+        if (error) {
             [weakSelf alert:NSLocalizedString(@"回放失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]]];
         } else {
             weakSelf.player = player;
             [weakSelf.player addMagixEventListener:WhiteCommandCustomEvent];
             [weakSelf.player addHighFrequencyEventListener:@"a" fireInterval:1000];
-            //配置 WhitePlayer
-            weakSelf.combinePlayer.whitePlayer = player;
+            
+            if (weakSelf.combinePlayer) {
+                //配置 WhitePlayer
+                weakSelf.combinePlayer.whitePlayer = player;
+            } else {
+                weakSelf.combinePlayer = [[WhiteCombinePlayer alloc] initWithWhitePlayer:player];
+            }
             //WhitePlayer 需要先手动 seek 到 0 才会触发缓冲行为
             [player seekToScheduleTime:0];
+            
+            if (weakSelf.playBlock) {
+                weakSelf.playBlock(weakSelf.combinePlayer, error);
+            }
+            [weakSelf setupExampleControl];
         }
-        [weakSelf setupExampleControl];
     }];
 }
 

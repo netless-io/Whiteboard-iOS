@@ -13,8 +13,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSTimeInterval kTimeout = 30;
-
 @interface WhiteSDK ()
 @property (nonatomic, weak) WhiteBoardView *bridge;
 @end
