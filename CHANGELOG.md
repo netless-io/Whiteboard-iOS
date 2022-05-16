@@ -7,8 +7,12 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## [2.16.21] - 待发布
+## [2.16.21] - 2022-05-16
+- 更新`@netless/window-manager`至 0.4.25
 - 新增仅 ApplePencil 涂鸦选项，详见 `WhiteRoomConfig.drawOnlyApplePencil`和`WhiteRoom.setDrawOnlyApplePencil`
+- `WhiteRoom`新增`setPrefersColorScheme`方法，用于更改多窗口暗色模式。
+- `WhiteRoom`新增`setContainerSizeRatio`方法，用于更新多窗口显示比例。
+- `WhiteCombinePlayer`支持单白板或者单Native播放。
 ## [2.16.20] - 2022-05-06
 - 更新`white-web-sdk`至 2.16.20
 ## [2.16.19] - 2022-04-24
