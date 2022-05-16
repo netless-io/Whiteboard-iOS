@@ -343,6 +343,24 @@ static BOOL onlyApplePencil = NO;
             }];
         }
         ,
+        NSLocalizedString(@"修改比例", nil): ^(WhiteRoom* room) {
+            static int rCount = 0;
+            if (rCount % 2 == 0) {
+                [room setContainerSizeRatio:@1];
+            } else {
+                [room setContainerSizeRatio:@(9.0/16)];
+            }
+            rCount += 1;
+        },
+        NSLocalizedString(@"多窗口颜色", nil): ^(WhiteRoom* room) {
+            static int cCount = 0;
+            if (cCount % 2 == 0) {
+                [room setPrefersColorScheme:WhitePrefersColorSchemeDark];
+            } else {
+                [room setPrefersColorScheme:WhitePrefersColorSchemeLight];
+            }
+            cCount += 1;
+        },
         @"Apple Pencil": ^(WhiteRoom* room) {
             onlyApplePencil = !onlyApplePencil;
             [room setDrawOnlyApplePencil:onlyApplePencil];
