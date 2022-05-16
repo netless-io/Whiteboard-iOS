@@ -170,6 +170,16 @@
 
 #pragma mark - Scene API
 
+- (void)setPrefersColorScheme:(WhitePrefersColorScheme)colorScheme
+{
+    [self.bridge callHandler:@"room.setPrefersColorScheme" arguments:@[colorScheme]];
+}
+
+- (void)setContainerSizeRatio:(NSNumber *)ratio
+{
+    [self.bridge callHandler:@"room.setContainerSizeRatio" arguments:@[ratio]];
+}
+
 - (void)setWindowManagerWithAttributes:(NSDictionary *)attributes
 {
     [self.bridge callHandler:@"room.setWindowManagerAttributes" arguments:@[attributes]];
