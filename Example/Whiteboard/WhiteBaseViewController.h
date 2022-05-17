@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+
+#if __has_include("Whiteboard_Example-swift.h")
 #import "Whiteboard_Example-swift.h"
+#elif __has_include("Whiteboard_SPM-Swift.h")
+#import "Whiteboard_SPM-Swift.h"
+#endif
+
 #if IS_SPM
 #import "Whiteboard.h"
 #else

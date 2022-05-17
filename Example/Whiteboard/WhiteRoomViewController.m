@@ -7,7 +7,6 @@
 //
 
 #import "WhiteRoomViewController.h"
-#import "Whiteboard_Example-swift.h"
 #import "CommandHandler.h"
 
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate>
