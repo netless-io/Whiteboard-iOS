@@ -7,6 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.22] - 2022-05-30
+- 更新 `white-web-sdk` 至 2.16.24
+- 更新 `@netless/app-slide` 至 0.2.1
+- 修复 单窗口模式下 `Room.sceneState` 不回调问题
+- 修复 PPT 文字排版显示问题
 ## [2.16.21] - 2022-05-16
 - 更新`@netless/window-manager`至 0.4.25
 - 新增仅 ApplePencil 涂鸦选项，详见 `WhiteRoomConfig.drawOnlyApplePencil`和`WhiteRoom.setDrawOnlyApplePencil`
