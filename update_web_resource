@@ -18,6 +18,9 @@ else
 yarn build
 fi
 
+# 清理bridge不需要的资源
+git clean -fd
+
 cd $BASEDIR
 
 # 设置 white-sdk web 资源的目标
