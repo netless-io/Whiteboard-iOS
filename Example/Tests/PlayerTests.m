@@ -156,6 +156,25 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     }];
 }
 
+- (void)testSeekToScheduleTimeWithCompletionHandler
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    CGFloat expTime = 5;
+    [self.player play];
+    [self.player seekToScheduleTime:expTime completionHandler:^(WhitePlayerSeekingResult  _Nonnull result) {
+        if ([result isEqualToString:WhitePlayerSeekingResultSuccess]) {
+            [exp fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
 #pragma mark - Event
 - (void)testEvent {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
