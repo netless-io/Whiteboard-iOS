@@ -8,12 +8,17 @@
 
 #import "BaseRoomTest.h"
 
+typedef void(^WhiteSceneStateBlock)(WhiteSceneState *state);
+
 static WhiteAppParam* _Nonnull testMp4AppParam;
 
 @interface MultiViewsRoomTest : BaseRoomTest
 @end
 
 @implementation MultiViewsRoomTest
+{
+    WhiteSceneStateBlock _stateChangeBlock;
+}
 
 + (void)load
 {
@@ -97,6 +102,32 @@ static WhiteAppParam* _Nonnull testMp4AppParam;
             NSLog(@"%@", error);
         }
     }];
+}
+
+- (void)testSceneStateUpdate {
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSString *sceneName = [[NSUUID UUID] UUIDString];
+    NSString *sceneDir = [NSString stringWithFormat:@"/%@", sceneName];
+    WhiteScene *scene = [[WhiteScene alloc] initWithName:sceneName ppt:nil];
+    [self.room addPageWithScene:scene afterCurrentScene:YES];
+    [self.room setScenePath:sceneDir];
+    _stateChangeBlock = ^(WhiteSceneState* state) {
+        [exp fulfill];
+    };
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
+- (void)fireRoomStateChanged:(WhiteRoomState *)modifyState {
+    if (modifyState.sceneState) {
+        if (_stateChangeBlock) {
+            _stateChangeBlock(modifyState.sceneState);
+        }
+    }
 }
 
 @end

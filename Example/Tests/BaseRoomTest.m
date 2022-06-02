@@ -62,6 +62,16 @@
     
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
 
+    // 清除多余的scene
+    NSArray *scenes = self.room.sceneState.scenes;
+    for (WhiteScene *scene in scenes) {
+        if ([scene.name isEqualToString:@"init"]) {
+            continue;
+        } else {
+            [self.room removeScenes:[NSString stringWithFormat:@"/%@", scene.name]];
+        }
+    }
+    
     [self.room disconnect:^{
         [self popToRoot];
         [exp fulfill];
