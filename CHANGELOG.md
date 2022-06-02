@@ -10,6 +10,7 @@
 ## [2.16.23] - 2022-06-02
 - 更新`@netless/window-manager`至 0.4.26
 - 更新`iframe-bridge`至 2.1.9
+- 修复多窗口模式下主白板`sceneState`发生变化时没有触发`WhiteRoomCallbackDelegate`的`fireRoomStateChanged`的错误
 ## [2.16.22] - 2022-05-30
 - 更新 `white-web-sdk` 至 2.16.24
 - 更新 `@netless/app-slide` 至 0.2.1
