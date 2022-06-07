@@ -88,10 +88,13 @@
 "房间 UUID: %@" = "room UUID: %@";
 
 /* No comment provided by engineer. */
-"插入已转换 PPT" = "insert converted PPT";
+"插入已转换 PPT (已废弃)" = "insert converted PPT (deprecated)";
 
 /* No comment provided by engineer. */
-"发起动态转码" = "start dynamic conversion";
+"发起动态转码 (已废弃)" = "start dynamic conversion (deprecated)";
+
+/* No comment provided by engineer. */
+"插入动态ppt" = "insert dynamic PPT";
 
 /* No comment provided by engineer. */
 "插入动态 PPT(有zip)" = "insert dynamic PPT(with zip)";
@@ -109,7 +112,7 @@
 "删除当前页面" = "remove current page";
 
 /* No comment provided by engineer. */
-"发起静态转码" = "start static conversion";
+"发起静态转码 (已废弃)" = "start static conversion (deprecated)";
 
 /* No comment provided by engineer. */
 "播放" = "play";

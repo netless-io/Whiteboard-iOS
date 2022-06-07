@@ -138,7 +138,7 @@ static BOOL onlyApplePencil = NO;
             [room removePage:nil];
         }
         ,
-        NSLocalizedString(@"插入已转换 PPT", nil): ^(WhiteRoom* room) {
+        NSLocalizedString(@"插入已转换 PPT (已废弃)", nil): ^(WhiteRoom* room) {
             //v2.0 新 API
             WhitePptPage *pptPage = [[WhitePptPage alloc] init];
             pptPage.src = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg";
@@ -151,7 +151,7 @@ static BOOL onlyApplePencil = NO;
             [room setScenePath:@"/ppt2"];
         }
         ,
-        NSLocalizedString(@"发起静态转码", nil): ^(WhiteRoom* room) {
+        NSLocalizedString(@"发起静态转码 (已废弃)", nil): ^(WhiteRoom* room) {
             WhiteConverter *converter = [[WhiteConverter alloc] initWithRoomToken:roomToken];
             [converter startConvertTask:@"https://white-cn-edge-doc-convert.oss-cn-hangzhou.aliyuncs.com/LightWaves.pdf" type:ConvertTypeStatic progress:^(CGFloat progress, WhiteConversionInfo * _Nullable info) {
                 NSLog(@"progress:%f", progress);
@@ -165,7 +165,7 @@ static BOOL onlyApplePencil = NO;
             }];
         }
         ,
-        NSLocalizedString(@"发起动态转码", nil): ^(WhiteRoom* room) {
+        NSLocalizedString(@"发起动态转码 (已废弃)", nil): ^(WhiteRoom* room) {
             WhitePptPage *page = [[WhitePptPage alloc] initWithSrc:@"pptx://convertcdn.netless.link/dynamicConvert/17510b2000c411ecbfbbb9230f6dd80f/1.slide" size:CGSizeMake(960, 720)];
             WhiteScene *scene = [[WhiteScene alloc] initWithName:@"1" ppt:page];
             WhiteAppParam *app = [WhiteAppParam createDocsViewerApp:@"/www" scenes:@[scene] title:@"tt"];
@@ -182,6 +182,13 @@ static BOOL onlyApplePencil = NO;
             [room safeUpdateAttributes:@[@"b", @"ba"] attributes:@"cccc"];
             [room getSyncedState:^(NSDictionary * _Nonnull state) {
                 NSLog(@"state2: %@", state);
+            }];
+        }
+        ,
+        NSLocalizedString(@"插入动态ppt", nil): ^(WhiteRoom* room) {
+            WhiteAppParam *app = [WhiteAppParam createSlideApp:@"/ppt" taskId:@"7f5d2864e82b4f0e9c868f348e922453" url:@"https://convertcdn.netless.link/dynamicConvert" title:@"example_ppt"];
+            [room addApp:app completionHandler:^(NSString * _Nonnull appId) {
+                NSLog(@"app id: %@", appId);
             }];
         }
         ,

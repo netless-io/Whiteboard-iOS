@@ -26,6 +26,13 @@
 
 @implementation StartViewController
 
+- (UIButton *)createButtonWithTitle:(NSString *)title {
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [btn.titleLabel setFont:[UIFont systemFontOfSize:24]];
+    [btn setTitle:title forState:UIControlStateNormal];
+    return btn;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -35,7 +42,7 @@
     stackView.alignment = UIStackViewAlignmentCenter;
     [self.view addSubview:stackView];
     
-    stackView.frame = CGRectMake(0, 0, 300, 120);
+    stackView.frame = CGRectMake(0, 0, 320, 240);
     stackView.center = self.view.center;
     stackView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
@@ -45,33 +52,27 @@
     [stackView addArrangedSubview:field];
     self.inputV = field;
     
-    UIButton *joinBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [joinBtn setTitle:NSLocalizedString(@"加入房间", nil) forState:UIControlStateNormal];
+    UIButton *joinBtn = [self createButtonWithTitle: NSLocalizedString(@"加入房间", nil)];
     [joinBtn addTarget:self action:@selector(joinRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:joinBtn];
     
-    UIButton *joinWindowBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [joinWindowBtn setTitle:NSLocalizedString(@"加入多窗口房间", nil) forState:UIControlStateNormal];
+    UIButton *joinWindowBtn = [self createButtonWithTitle: NSLocalizedString(@"加入多窗口房间", nil)];
     [joinWindowBtn addTarget:self action:@selector(joinWindowRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:joinWindowBtn];
     
-    UIButton *createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [createBtn setTitle:NSLocalizedString(@"创建新房间", nil) forState:UIControlStateNormal];
+    UIButton *createBtn = [self createButtonWithTitle: NSLocalizedString(@"创建新房间", nil)];
     [createBtn addTarget:self action:@selector(createRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
-    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [createBtn setTitle:NSLocalizedString(@"回放房间", nil) forState:UIControlStateNormal];
+    createBtn = [self createButtonWithTitle: NSLocalizedString(@"回放房间", nil)];
     [createBtn addTarget:self action:@selector(replayRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
-    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [createBtn setTitle:NSLocalizedString(@"纯白板回放房间", nil) forState:UIControlStateNormal];
+    createBtn = [self createButtonWithTitle: NSLocalizedString(@"纯白板回放房间", nil)];
     [createBtn addTarget:self action:@selector(pureReplayRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
-    createBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [createBtn setTitle:NSLocalizedString(@"自定义插件房间", nil) forState:UIControlStateNormal];
+    createBtn = [self createButtonWithTitle: NSLocalizedString(@"自定义插件房间", nil)];
     [createBtn addTarget:self action:@selector(customAppRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
