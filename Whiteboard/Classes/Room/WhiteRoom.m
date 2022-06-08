@@ -276,7 +276,14 @@
 
 - (void)addPage
 {
-    [self addPageWithScene:nil afterCurrentScene:YES];
+    [self addPage:nil];
+}
+
+- (void)addPage:(void (^)(BOOL))completionHandler
+{
+    [self addPageWithScene:nil afterCurrentScene:YES completionHandler:completionHandler];
+}
+
 - (void)removePage:(void (^)(BOOL))completionHandler
 {
     [self removePage:-1 completionHandler:completionHandler];
@@ -307,11 +314,31 @@
 
 - (void)addPageWithScene:(WhiteScene *)scene afterCurrentScene:(BOOL)afterCurrentScene
 {
+    [self addPageWithScene:scene afterCurrentScene:afterCurrentScene completionHandler:nil];
+}
+
+- (void)addPageWithScene:(WhiteScene *)scene afterCurrentScene:(BOOL)afterCurrentScene completionHandler:(void (^)(BOOL))completionHandler
+{
+    NSArray *args;
     if (scene) {
-        [self.bridge callHandler:@"room.addPage" arguments:@[@{@"after": @(afterCurrentScene), @"scene": scene}]];
+        args = @[@{@"after": @(afterCurrentScene), @"scene": scene}];
     } else {
-        [self.bridge callHandler:@"room.addPage" arguments:@[@{@"after": @(afterCurrentScene)}]];
+        args = @[@{@"after": @(afterCurrentScene)}];
     }
+    [self.bridge callHandler:@"room.addPage" arguments:args completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            if (value) {
+                NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                NSDictionary *error = dict[@"__error"];
+                if (error) {
+                    completionHandler(NO);
+                    return;
+                }
+            }
+            completionHandler(YES);
+        }
+    }];
 }
 
 - (void)nextPage:(void(^ _Nullable)(BOOL success))completionHandler

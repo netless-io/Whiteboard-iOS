@@ -417,6 +417,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)addPage;
 
+/**
+ 插入一个新页面
+ 该新页面会位于当前的页面的下一页
+ @param completionHandler 回调
+ */
+- (void)addPage:(void(^ _Nullable)(BOOL success))completionHandler;
 
 /**
  删除当前页面
@@ -440,6 +446,17 @@ NS_ASSUME_NONNULL_BEGIN
  @param afterCurrentScene 是否在当前页面之后。YES: 插入到当前页面之后。 NO: 在插入到最后一页的后面
  */
 - (void)addPageWithScene:(WhiteScene * _Nullable )scene afterCurrentScene:(BOOL)afterCurrentScene;
+
+/**
+ 插入一个新页面
+ 
+ **Note:**
+ 
+ @param scene 新插入的场景对象
+ @param afterCurrentScene 是否在当前页面之后。YES: 插入到当前页面之后。 NO: 在插入到最后一页的后面
+ @param completionHandler 回调
+ */
+- (void)addPageWithScene:(WhiteScene * _Nullable )scene afterCurrentScene:(BOOL)afterCurrentScene completionHandler:(void(^ _Nullable)(BOOL success))completionHandler;
 
 /**
  切换到下一页场景
