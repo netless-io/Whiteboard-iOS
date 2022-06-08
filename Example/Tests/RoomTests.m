@@ -487,6 +487,92 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     }];
 }
 
+- (void)testAddPage
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    NSInteger oldLength = self.room.state.pageState.length;
+    __weak typeof(self) weakSelf = self;
+    [self.room addPage:^(BOOL success) {
+        [weakSelf.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+            XCTAssertTrue(state.pageState.length == oldLength + 1);
+            [exp fulfill];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testRemovePage
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSInteger oldLength = self.room.state.pageState.length;
+    NSInteger oldIndex = self.room.state.pageState.index;
+    __weak typeof(self) weakSelf = self;
+    [self.room addPage:^(BOOL success) {
+        [weakSelf.room removePage:oldIndex completionHandler:^(BOOL success) {
+            [weakSelf.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+                XCTAssertTrue(state.pageState.length == oldLength);
+                [exp fulfill];
+            }];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:999 handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testRemoveCurrentPage
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSInteger oldLength = self.room.state.pageState.length;
+
+    __weak typeof(self) weakSelf = self;
+    [self.room addPage:^(BOOL success) {
+        [weakSelf.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+            [weakSelf.room removePage:^(BOOL success) {
+                [weakSelf.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+                    XCTAssertTrue(state.pageState.length == oldLength);
+                    [exp fulfill];
+                }];
+            }];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testRemoveLastPage
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSInteger oldLength = self.room.state.pageState.length;
+    XCTAssertTrue(oldLength > 0);
+    
+    [self loopToOnlyOnePage:^{
+        [self.room removePage:0 completionHandler:^(BOOL success) {
+            XCTAssertTrue(!success);
+            [exp fulfill];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 #pragma mark - Image
 
 - (void)testScenesImages
@@ -686,6 +772,18 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
         self.interrupterBlock(url);
     }
     return url;
+}
+
+#pragma - private
+- (void)loopToOnlyOnePage:(void (^)(void))completionHandler
+{
+    [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+        if (state.pageState.length > 1) {
+            [self loopToOnlyOnePage:completionHandler];
+        } else {
+            completionHandler();
+        }
+    }];
 }
 
 @end

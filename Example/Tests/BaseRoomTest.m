@@ -65,11 +65,14 @@
     // 清除多余的scene
     if (self.room.isWritable) {
         NSArray *scenes = self.room.sceneState.scenes;
-        for (WhiteScene *scene in scenes) {
-            if ([scene.name isEqualToString:@"init"]) {
-                continue;
-            } else {
-                [self.room removeScenes:[NSString stringWithFormat:@"/%@", scene.name]];
+        if (scenes.count > 1) {
+            scenes = [scenes subarrayWithRange:NSMakeRange(1, scenes.count - 1)];
+            for (WhiteScene *scene in scenes) {
+                if ([scene.name isEqualToString:@"init"]) {
+                    continue;
+                } else {
+                    [self.room removeScenes:[NSString stringWithFormat:@"/%@", scene.name]];
+                }
             }
         }
     }
