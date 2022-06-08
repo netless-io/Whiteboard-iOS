@@ -59,15 +59,15 @@ Pod::Spec.new do |s|
 
   # PPT转码 http 请求封装 - YYModel
   s.subspec 'Converter' do |converter|
-    converter.source_files = 'Whiteboard/Classes/Converter/**'
-    converter.public_header_files = 'Whiteboard/Classes/Converter/**.h'
+    converter.source_files = 'Whiteboard/Classes/Converter/**/*'
+    converter.public_header_files = 'Whiteboard/Classes/Converter/**/*.h'
     converter.dependency 'Whiteboard/Object'
   end
   
   # PPT转码 http 请求封装 - YYKit
   s.subspec 'Converter-YYKit' do |converter|
-    converter.source_files = 'Whiteboard/Classes/Converter/**'
-    converter.public_header_files = 'Whiteboard/Classes/Converter/**.h'
+    converter.source_files = 'Whiteboard/Classes/Converter/**/*'
+    converter.public_header_files = 'Whiteboard/Classes/Converter/**/*.h'
     converter.dependency 'Whiteboard/Object-YYKit'
   end
 

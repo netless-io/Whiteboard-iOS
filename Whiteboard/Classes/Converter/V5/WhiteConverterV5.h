@@ -77,6 +77,7 @@ typedef NS_ENUM(NSInteger, ConverterErrorCodeV5) {
                                          region:(WhiteRegionKey)region
                                        taskType:(WhiteConvertTypeV5)type
                                          result:(void (^)(WhiteConversionInfoV5 * _Nullable info, NSError * _Nullable error))result;
+
 @end
 
 NS_ASSUME_NONNULL_END
