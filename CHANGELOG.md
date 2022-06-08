@@ -7,6 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.24] - 2022-06-09
+- 更新`@netless/window-manager`至 0.4.30
+- `WhiteRoom`新增`removePage`方法，用于删除主白板画布
+- 修复重连之后， app 创建失败的错误
+- 增加`WhiteReplayer`的 seeking 回调
 ## [2.16.23] - 2022-06-02
 - 更新`@netless/window-manager`至 0.4.26
 - 更新`iframe-bridge`至 2.1.9
