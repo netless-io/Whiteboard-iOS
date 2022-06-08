@@ -277,6 +277,32 @@
 - (void)addPage
 {
     [self addPageWithScene:nil afterCurrentScene:YES];
+- (void)removePage:(void (^)(BOOL))completionHandler
+{
+    [self removePage:-1 completionHandler:completionHandler];
+}
+
+- (void)removePage:(NSUInteger)index completionHandler:(void (^ _Nullable)(BOOL))completionHandler
+{
+    NSDictionary *params = (index == -1) ? @{} : @{@"index": @(index)};
+    [self.bridge callHandler:@"room.removePage" arguments:@[params] completionHandler:^(id  _Nullable value) {
+        if (completionHandler) {
+            
+            if ([value isKindOfClass:[NSNumber class]]) {
+                return completionHandler([(NSNumber *)value boolValue]);
+            }
+            if (value) {
+                NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                NSDictionary *error = dict[@"__error"];
+                if (error) {
+                    completionHandler(NO);
+                    return;
+                }
+            }
+            completionHandler(YES);
+        }
+    }];
 }
 
 - (void)addPageWithScene:(WhiteScene *)scene afterCurrentScene:(BOOL)afterCurrentScene

@@ -417,6 +417,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)addPage;
 
+
+/**
+ 删除当前页面
+ @param completionHandler 回调
+ */
+- (void)removePage:(void(^ _Nullable)(BOOL success))completionHandler;
+
+/**
+ 删除指定页面
+ @param index 页面下标
+ @param completionHandler 回调
+ */
+- (void)removePage:(NSUInteger)index completionHandler:(void(^ _Nullable)(BOOL success))completionHandler;
+
 /**
  插入一个新页面
  
