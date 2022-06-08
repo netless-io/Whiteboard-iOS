@@ -130,16 +130,12 @@ static BOOL onlyApplePencil = NO;
         }
         ,
         NSLocalizedString(@"插入新页面", nil): ^(WhiteRoom* room) {
-            //v2.0 新 API
-            WhitePptPage *pptPage = [[WhitePptPage alloc] init];
-            pptPage.src = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/alin-rusu-1239275-unsplash_opt.jpg";
-            pptPage.width = 400;
-            pptPage.height = 600;
-            WhiteScene *scene = [[WhiteScene alloc] initWithName:@"ppt2" ppt:pptPage];
-            
-            //插入新页面的 API，现在支持传入 ppt 参数（可选），所以插入PPT和插入新页面的 API，合并成了一个。
-            [room putScenes:@"/" scenes:@[scene] index:0];
-            [room setScenePath:@"/ppt2"];
+            [room addPage];
+            [room nextPage:nil];
+        }
+        ,
+        NSLocalizedString(@"删除当前页面", nil): ^(WhiteRoom* room) {
+            [room removePage:nil];
         }
         ,
         NSLocalizedString(@"插入已转换 PPT", nil): ^(WhiteRoom* room) {
