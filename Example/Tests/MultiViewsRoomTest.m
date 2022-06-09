@@ -222,7 +222,9 @@ static WhiteAppParam* _Nonnull testMp4AppParam;
 {
     [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
         if (state.pageState.length > 1) {
-            [self loopToOnlyOnePage:completionHandler];
+            [self.room removePage:^(BOOL success) {
+                [self loopToOnlyOnePage:completionHandler];
+            }];
         } else {
             completionHandler();
         }

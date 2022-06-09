@@ -337,10 +337,12 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 - (void)testSceneTypePage
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
-    [self.room getScenePathType:@"/init" result:^(WhiteScenePathType pathType) {
-        XCTAssertEqual(pathType, WhiteScenePathTypePage);
-        [exp fulfill];
+    
+    [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+        [self.room getScenePathType:state.sceneState.scenePath result:^(WhiteScenePathType pathType) {
+            XCTAssertEqual(pathType, WhiteScenePathTypePage);
+            [exp fulfill];
+        }];
     }];
     
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
@@ -586,12 +588,9 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [self.room setScenePath:@"/ppt/opt"];
     
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.room getSceneStateWithResult:^(WhiteSceneState * _Nonnull state) {
-        NSLog(@"SceneState: %@", [state jsonString]);
-    }];
     
     [self.room getScenesWithResult:^(NSArray<WhiteScene *> * _Nonnull scenes) {
-        XCTAssertTrue([[scenes lastObject].ppt.src isEqualToString:pptPage.src]);
+        XCTAssertTrue([[scenes firstObject].ppt.src isEqualToString:pptPage.src]);
         [exp fulfill];
     }];
     
@@ -781,7 +780,9 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 {
     [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
         if (state.pageState.length > 1) {
-            [self loopToOnlyOnePage:completionHandler];
+            [self.room removePage:^(BOOL success) {
+                [self loopToOnlyOnePage:completionHandler];
+            }];
         } else {
             completionHandler();
         }
