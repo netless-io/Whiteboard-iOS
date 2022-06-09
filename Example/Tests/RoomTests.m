@@ -625,9 +625,11 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 - (void)testGetScene
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.room getSceneFromScenePath:@"/init" result:^(WhiteScene * _Nullable scene) {
-        XCTAssertNotNil(scene);
-        [exp fulfill];
+    [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
+        [self.room getSceneFromScenePath:state.sceneState.scenePath result:^(WhiteScene * _Nullable scene) {
+            XCTAssertNotNil(scene);
+            [exp fulfill];
+        }];
     }];
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
