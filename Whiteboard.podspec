@@ -132,6 +132,24 @@ Pod::Spec.new do |s|
     naitve.frameworks = 'AVFoundation'
   end
   
+  # 对SyncPlayer的支持
+  s.subspec 'SyncPlayer' do |sync|
+    sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
+    sync.public_header_files = 'Whiteboard/Classes/SyncPlayer/**.h'
+    sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
+    sync.dependency 'Whiteboard/Replayer'
+    sync.dependency 'SyncPlayer'
+  end
+  
+  # 对SyncPlayer的支持 - YYKit
+  s.subspec 'SyncPlayer-YYKit' do |sync|
+    sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
+    sync.public_header_files = 'Whiteboard/Classes/SyncPlayer/**.h'
+    sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
+    sync.dependency 'Whiteboard/Replayer-YYKit'
+    sync.dependency 'SyncPlayer'
+  end
+  
   # 音视频 native 与回放房间结合 - YYKit
   s.subspec 'NativeReplayer-YYKit' do |naitve|
     naitve.source_files = 'Whiteboard/Classes/NativeReplayer/**'
