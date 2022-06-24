@@ -12,6 +12,7 @@
 - `WhiteRoom`新增`removePage`方法，用于删除主白板画布
 - 修复重连之后， app 创建失败的错误
 - 增加`WhiteReplayer`的 seeking 回调
+- 修复 2.16.22 部分 log 丢失问题 
 ## [2.16.23] - 2022-06-02
 - 更新`@netless/window-manager`至 0.4.26
 - 更新`iframe-bridge`至 2.1.9
@@ -21,6 +22,7 @@
 - 更新 `@netless/app-slide` 至 0.2.1
 - 修复 单窗口模式下 `Room.sceneState` 不回调问题
 - 修复 PPT 文字排版显示问题
+- 该版本存在 log 缺陷 
 ## [2.16.21] - 2022-05-16
 - 更新`@netless/window-manager`至 0.4.25
 - 新增仅 ApplePencil 涂鸦选项，详见 `WhiteRoomConfig.drawOnlyApplePencil`和`WhiteRoom.setDrawOnlyApplePencil`
