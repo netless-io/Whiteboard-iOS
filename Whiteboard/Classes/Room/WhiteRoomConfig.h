@@ -123,6 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
  - 必须使用 [WhiteRoomConfig](WhiteRoomConfig) 子类，以保证字段结构正确。
  - 自定义的用户信息会被完整透传。
  如果要在白板房间中显示用户头像，请在 `userPayload` 中传入 `avatar` 字段并添加用户头像的地址，例如 `"avatar", "https://example.com/user.png")`。
+ 如果要在白板房间中显示用户明层，请在 `userPayload` 中传入 `cursorName` 字段并添加用户名称，例如 `"cursorName", "exampleName"`。
  - 从 [WhiteMemberInformation](WhiteMemberInformation) 迁移，只需要在 `userPayload` 中，传入相同字段即可。
  */
 @property (nonatomic, copy, nullable) id userPayload;
