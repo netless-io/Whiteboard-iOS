@@ -198,6 +198,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     NSLog(@"fireMagixEvent: %@", [event jsonString]);
     if (self.eventBlock) {
         self.eventBlock(event);
+        self.eventBlock = nil;
     }
 }
 
@@ -206,6 +207,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     XCTAssertNotNil(events);
     NSLog(@"fireHighFrequencyEvent: %lu", (unsigned long)[events count]);
     [self.exp fulfill];
+    self.exp = nil;
 }
 
 #pragma mark - WhiteCommonCallbackDelegate

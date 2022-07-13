@@ -126,6 +126,7 @@ static WhiteAppParam* _Nonnull testMp4AppParam;
     if (modifyState.sceneState) {
         if (_stateChangeBlock) {
             _stateChangeBlock(modifyState.sceneState);
+            _stateChangeBlock = nil;
         }
     }
 }

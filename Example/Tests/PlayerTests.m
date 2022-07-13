@@ -421,6 +421,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 //    NSLog(@"fireMagixEvent: %@", event);
     if (self.eventBlock) {
         self.eventBlock(event);
+        self.eventBlock = nil;
     }
 }
 
@@ -430,6 +431,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     NSLog(@"fireHighFrequencyEvent: %lu", (unsigned long)[events count]);
     if (self.eventsBlock) {
         self.eventsBlock(events);
+        self.eventsBlock = nil;
     }
 }
 
