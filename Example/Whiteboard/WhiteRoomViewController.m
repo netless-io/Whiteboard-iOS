@@ -298,9 +298,4 @@
     NSLog(@"%s", __func__);
 }
 
-- (void)fireAttributesUpdate:(NSDictionary *)state
-{
-    NSLog(@"%s %@", __func__, state);
-}
-
 @end
