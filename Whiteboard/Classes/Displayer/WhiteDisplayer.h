@@ -11,6 +11,7 @@
 #import "WhiteCameraBound.h"
 #import "WhitePanEvent.h"
 #import "WhiteFontFace.h"
+#import "SyncedStore.h"
 
 typedef NS_ENUM(NSInteger, WhiteScenePathType) {
     /** 路径对应的内容为空。 */
@@ -71,6 +72,13 @@ NS_ASSUME_NONNULL_BEGIN
  @param result 回调。返回当前房间内所有场景的信息。
  */
 - (void)getEntireScenes:(void (^) (NSDictionary<NSString *, NSArray<WhiteScene *>*> *dict))result;
+
+#pragma mark - SyncedStore
+/**
+ * 获取 SyncedStore 对象
+ * 注意 SyncedStore 只有在 `WhiteSdkConfiguration` 的 `enableSyncedStore` 为 true 的情况下才能正常使用
+ */
+- (SyncedStore *)obtainSyncedStore;
 
 #pragma mark - 自定义事件
 /** 注册自定义事件监听。

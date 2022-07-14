@@ -9,11 +9,15 @@
 #import "WhiteDisplayer+Private.h"
 #import "WhiteScene.h"
 #import "WhiteConsts.h"
+#import "SyncedStore+Private.h"
 
 @interface WhiteDisplayer ()
 @end
 
 @implementation WhiteDisplayer
+{
+    SyncedStore* _syncedStore;
+}
 
 #pragma mark - Class Methods
 
@@ -164,6 +168,15 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
             result(convertP);
         }
     }];
+}
+
+#pragma mark - SyncedStore
+- (SyncedStore *)obtainSyncedStore {
+    if (!_syncedStore) {
+        _syncedStore = [SyncedStore new];
+        _syncedStore.bridge = self.bridge;
+    }
+    return _syncedStore;
 }
 
 #pragma mark - 自定义事件
