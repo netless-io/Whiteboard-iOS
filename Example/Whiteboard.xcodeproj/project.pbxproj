@@ -52,6 +52,7 @@
 		8A86A4EA2806A0070095F499 /* ControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E72806A0070095F499 /* ControlCell.swift */; };
 		8A86A4ED2806A5FE0095F499 /* CommandHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4EC2806A5FE0095F499 /* CommandHandler.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
+		8AB1A7812880127E000AE9A1 /* SyncedStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */; };
 		8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */; };
 		8AF1F04428153AFB00AA7535 /* SDKTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF1F04328153AFB00AA7535 /* SDKTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
@@ -134,6 +135,7 @@
 		8A86A4EB2806A5FE0095F499 /* CommandHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandHandler.h; sourceTree = "<group>"; };
 		8A86A4EC2806A5FE0095F499 /* CommandHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommandHandler.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
+		8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SyncedStoreTest.m; sourceTree = "<group>"; };
 		8AC2F0E127F43F0900A980D9 /* BaseRoomTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseRoomTest.h; sourceTree = "<group>"; };
 		8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseRoomTest.m; sourceTree = "<group>"; };
 		8AF1F04328153AFB00AA7535 /* SDKTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDKTest.m; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
+				8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */,
 				8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */,
 				8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */,
 				8A05A21C27D5FE1B00B3F329 /* WhiteTestSocket.h */,
@@ -569,6 +572,7 @@
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
 				8A10E27E27F42F6E0098C49F /* TestUtility.m in Sources */,
 				8A18D2A427EDA89500EC29B1 /* MultiViewsRoomTest.m in Sources */,
+				8AB1A7812880127E000AE9A1 /* SyncedStoreTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
