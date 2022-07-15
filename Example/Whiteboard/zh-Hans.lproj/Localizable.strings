@@ -1,0 +1,152 @@
+/* No comment provided by engineer. */
+"next" = "next";
+/* No comment provided by engineer. */
+"铺满屏幕" = "铺满屏幕";
+/* No comment provided by engineer. */
+"pre" = "pre";
+/* No comment provided by engineer. */
+"WhiteRoomPhase:%ld" = "WhiteRoomPhase:%ld";
+/* No comment provided by engineer. */
+"下一页" = "下一页";
+/* No comment provided by engineer. */
+"主动断连" = "主动断连";
+/* No comment provided by engineer. */
+"主播" = "主播";
+/* No comment provided by engineer. */
+"分享" = "分享";
+/* No comment provided by engineer. */
+"创建失败" = "创建失败";
+/* No comment provided by engineer. */
+"加入多窗口房间" = "加入多窗口房间";
+/* No comment provided by engineer. */
+"创建房间中..." = "创建房间中...";
+/* No comment provided by engineer. */
+"创建房间失败，error:" = "创建房间失败，error:";
+/* No comment provided by engineer. */
+"创建新房间" = "创建新房间";
+/* No comment provided by engineer. */
+"初始化" = "初始化";
+/* No comment provided by engineer. */
+"删除" = "删除";
+/* No comment provided by engineer. */
+"加入失败" = "加入失败";
+/* No comment provided by engineer. */
+"加入房间" = "加入房间";
+/* No comment provided by engineer. */
+"加入房间中..." = "加入房间中...";
+/* No comment provided by engineer. */
+"加入房间失败" = "加入房间失败";
+/* No comment provided by engineer. */
+"加速" = "加速";
+/* No comment provided by engineer. */
+"自定义事件" = "自定义事件";
+/* No comment provided by engineer. */
+"回放失败" = "回放失败";
+/* No comment provided by engineer. */
+"回放房间" = "回放房间";
+/* No comment provided by engineer. */
+"坐标转换" = "坐标转换";
+/* No comment provided by engineer. */
+"当前视角状态" = "当前视角状态";
+/* No comment provided by engineer. */
+"当前连接状态" = "当前连接状态";
+/* No comment provided by engineer. */
+"快进" = "快进";
+/* No comment provided by engineer. */
+"恢复操作" = "恢复操作";
+/* No comment provided by engineer. */
+"我的白板" = "我的白板";
+/* No comment provided by engineer. */
+"房间 UUID: %@" = "房间 UUID: %@";
+/* No comment provided by engineer. */
+"插入已转换 PPT (已废弃)" = "插入已转换 PPT (已废弃)";
+/* No comment provided by engineer. */
+"发起动态转码 (已废弃)" = "发起动态转码 (已废弃)";
+/* No comment provided by engineer. */
+"插入动态ppt" = "插入动态ppt";
+/* No comment provided by engineer. */
+"插入动态 PPT(有zip)" = "插入动态 PPT(有zip)";
+/* No comment provided by engineer. */
+"插入图片" = "插入图片";
+/* No comment provided by engineer. */
+"插入文字" = "插入文字";
+/* No comment provided by engineer. */
+"插入新页面" = "插入新页面";
+/* No comment provided by engineer. */
+"删除当前页面" = "删除当前页面";
+/* No comment provided by engineer. */
+"发起静态转码 (已废弃)" = "发起静态转码 (已废弃)";
+/* No comment provided by engineer. */
+"播放" = "播放";
+/* No comment provided by engineer. */
+"撤销重做" = "撤销重做";
+/* No comment provided by engineer. */
+"改变布局" = "改变布局";
+/* No comment provided by engineer. */
+"数据未初始化" = "数据未初始化";
+/* No comment provided by engineer. */
+"文本教具" = "文本教具";
+/* No comment provided by engineer. */
+"暂停" = "暂停";
+/* No comment provided by engineer. */
+"橡皮擦教具" = "橡皮擦教具";
+/* No comment provided by engineer. */
+"正在连接房间" = "正在连接房间";
+/* No comment provided by engineer. */
+"清屏" = "清屏";
+/* No comment provided by engineer. */
+"画笔教具" = "画笔教具";
+/* No comment provided by engineer. */
+"矩形教具" = "矩形教具";
+/* No comment provided by engineer. */
+"确定" = "确定";
+/* No comment provided by engineer. */
+"确认" = "确认";
+/* No comment provided by engineer. */
+"禁止操作" = "禁止操作";
+/* No comment provided by engineer. */
+"移动整体视角" = "移动整体视角";
+/* No comment provided by engineer. */
+"箭头教具" = "箭头教具";
+/* No comment provided by engineer. */
+"纯白板回放房间" = "纯白板回放房间";
+/* No comment provided by engineer. */
+"缩放" = "缩放";
+/* No comment provided by engineer. */
+"获取 RoomToken 失败" = "获取 RoomToken 失败";
+/* No comment provided by engineer. */
+"获取PPT" = "获取PPT";
+/* No comment provided by engineer. */
+"修改比例" = "修改比例";
+/* No comment provided by engineer. */
+"多窗口颜色" = "多窗口颜色";
+/* No comment provided by engineer. */
+"获取信息" = "获取信息";
+/* No comment provided by engineer. */
+"获取场景完整封面" = "获取场景完整封面";
+/* No comment provided by engineer. */
+"获取连接状态" = "获取连接状态";
+/* No comment provided by engineer. */
+"获取页面数据" = "获取页面数据";
+/* No comment provided by engineer. */
+"获取预览截图" = "获取预览截图";
+/* No comment provided by engineer. */
+"观众" = "观众";
+/* No comment provided by engineer. */
+"观察模式" = "观察模式";
+/* No comment provided by engineer. */
+"锁定视野" = "锁定视野";
+/* No comment provided by engineer. */
+"设置" = "设置";
+/* No comment provided by engineer. */
+"设置 API" = "设置 API";
+/* No comment provided by engineer. */
+"输入房间ID，加入房间" = "输入房间ID，加入房间";
+/* No comment provided by engineer. */
+"连接房间失败，room uuid:%@ roomToken:%@" = "连接房间失败，room uuid:%@ roomToken:%@";
+/* No comment provided by engineer. */
+"选择教具" = "选择教具";
+/* No comment provided by engineer. */
+"随机颜色" = "随机颜色";
+/* No comment provided by engineer. */
+"自定义插件房间" = "自定义插件房间";

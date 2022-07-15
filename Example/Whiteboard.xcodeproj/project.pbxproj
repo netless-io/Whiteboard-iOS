@@ -135,6 +135,8 @@
 		8A86A4EB2806A5FE0095F499 /* CommandHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandHandler.h; sourceTree = "<group>"; };
 		8A86A4EC2806A5FE0095F499 /* CommandHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommandHandler.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
+		8AB1A776287FEA6F000AE9A1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		8AB1A777287FEA74000AE9A1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SyncedStoreTest.m; sourceTree = "<group>"; };
 		8AC2F0E127F43F0900A980D9 /* BaseRoomTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseRoomTest.h; sourceTree = "<group>"; };
 		8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseRoomTest.m; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				English,
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 6003F581195388D10070C39A;
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
@@ -591,6 +594,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				39DFDFB926B23B3500A4DFE8 /* en */,
+				8AB1A777287FEA74000AE9A1 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -615,6 +619,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				71719F9E1E33DC2100824A3D /* Base */,
+				8AB1A776287FEA6F000AE9A1 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
