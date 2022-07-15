@@ -10,6 +10,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol SyncedStoreUpdateCallBackDelegate <NSObject>
+/**
+ * SyncedStore 数据发生变更的时候该回调会被触发
+ 
+ @param name 房间内的唯一标识
+ @param partialValue 发生变更的数据
+ 结构为 {"key": {"oldValue": "xxx", "newValue": "xxx"}}
+ 举例 {"name": {"oldValue": "jack", "newValue": "rose"}}
+ 
+ 注意： 如果只有 oldValue 没有 newValue 。说明该 key 被删除。反之则是新增了一个 key。
+ */
 - (void)syncedStoreDidUpdateStoreName:(NSString *)name partialValue:(NSDictionary *)partialValue;
 @end
 
