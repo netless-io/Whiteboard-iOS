@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithRoom:(WhiteRoom *)room drawOnlyPencil:(BOOL)drawOnlyPencil;
 
-- (void)roomApplianceDidUpdate;
+- (void)roomApplianceDidManualUpdate;
 - (void)recoverApplianceFromTempRemove;
 
 @end

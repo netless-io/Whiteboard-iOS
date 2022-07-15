@@ -48,6 +48,9 @@
 - (void)setMemberState:(WhiteMemberState *)modifyState
 {
     [self.bridge callHandler:@"room.setMemberState" arguments:@[modifyState]];
+    if (modifyState.currentApplianceName) {
+        [self.applePencilDrawHandler roomApplianceDidManualUpdate];
+    }
 }
 
 - (WhiteReadonlyMemberState *)memberState {
@@ -82,10 +85,6 @@
 
 - (void)updateRoomState:(WhiteRoomState *)state {
     [_state yy_modelSetWithJSON:[state yy_modelToJSONObject]];
-    
-    if (state.memberState.currentApplianceName) {
-        [self.applePencilDrawHandler roomApplianceDidUpdate];
-    }
 }
 
 #pragma mark - Apple Pencil

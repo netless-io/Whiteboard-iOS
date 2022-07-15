@@ -16,7 +16,6 @@
 @property (nonatomic, assign) BOOL isPencilTouch;
 @property (nonatomic, assign) BOOL hasRemovedAppliance;
 @property (nonatomic, assign) WhiteApplianceNameKey removedAppliance;
-@property (nonatomic, assign) BOOL shouldDropFirstUpdate;
 @end
 
 @implementation ApplePencilDrawHandler
@@ -66,12 +65,8 @@
     }
 }
 
-- (void)roomApplianceDidUpdate {
+- (void)roomApplianceDidManualUpdate {
     if (!self.hasRemovedAppliance) {
-        return;
-    }
-    if (self.shouldDropFirstUpdate) {
-        self.shouldDropFirstUpdate = NO;
         return;
     }
     if (![self.room.memberState.currentApplianceName isEqualToString:self.removedAppliance]) {
@@ -84,13 +79,11 @@
         return;
     }
     if ([self isApplianceDrawable:self.room.state.memberState.currentApplianceName]) {
-        self.shouldDropFirstUpdate = YES;
         self.removedAppliance = self.room.state.memberState.currentApplianceName;
-        self.hasRemovedAppliance = YES;
-        
         WhiteMemberState *state = [[WhiteMemberState alloc] init];
         state.currentApplianceName = ApplianceClicker;
         [self.room setMemberState:state];
+        self.hasRemovedAppliance = YES;
     }
 }
 
