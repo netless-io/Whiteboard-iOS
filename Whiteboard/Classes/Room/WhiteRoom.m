@@ -573,27 +573,6 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     }];
 }
 
-- (void)getSyncedState:(void (^)(NSDictionary *state))result {
-    [self.bridge callHandler:@"room.getSyncedState" completionHandler:^(id  _Nullable value) {
-        NSString *string = value;
-        if ([string isKindOfClass:[NSString class]]) {
-            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
-            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            result(json);
-        } else {
-            // TODO: message for error serialization
-        }
-    }];
-}
-
-- (void)safeSetAttributes:(NSDictionary *)result {
-    [self.bridge callHandler:@"room.safeSetAttributes" arguments:@[result]];
-}
-
-- (void)safeUpdateAttributes:(NSArray<NSString *>*)keyPaths attributes:(id)attributes {
-    [self.bridge callHandler:@"room.safeUpdateAttributes" arguments:@[keyPaths, attributes]];
-}
-
 @end
 
 

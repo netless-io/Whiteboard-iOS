@@ -640,19 +640,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler;
 
-
-/** 获取 syncedState 所有状态值 */
-- (void)getSyncedState:(void (^)(NSDictionary *state))result;
-
-/** 更新 syncedState 中的值，逻辑与 GlobalState 相似，只会更新有值的 key value。room writable false 时，不会任何效果。 */
-- (void)safeSetAttributes:(NSDictionary *)result;
-
-/** 更新 syncedState 特定 key 的值，逻辑与 GlobalState 相似。
- * 只会更新有值的 key value。room writable false 时，不会任何效果。
- * keyPaths 参考 KVC 的效果
- */
-- (void)safeUpdateAttributes:(NSArray<NSString *>*)keyPaths attributes:(id)attributes;
-
 @end
 
 #pragma mark - 弃用方法

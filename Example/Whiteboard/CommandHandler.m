@@ -172,17 +172,6 @@ static BOOL onlyApplePencil = NO;
             [room addApp:app completionHandler:^(NSString * _Nonnull appId) {
                 NSLog(@"app id: %@", appId);
             }];
-            
-            [room safeSetAttributes:@{@"a": @"aaaa", @"b": @{@"ba": @"bababa"}}];
-            
-            [room getSyncedState:^(NSDictionary * _Nonnull state) {
-                NSLog(@"state1: %@", state);
-            }];
-            
-            [room safeUpdateAttributes:@[@"b", @"ba"] attributes:@"cccc"];
-            [room getSyncedState:^(NSDictionary * _Nonnull state) {
-                NSLog(@"state2: %@", state);
-            }];
         }
         ,
         NSLocalizedString(@"插入动态ppt", nil): ^(WhiteRoom* room) {
