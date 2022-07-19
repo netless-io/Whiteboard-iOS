@@ -7,6 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.29] - 2022-07-19
+- 更新 `white-web-sdk` 至 2.16.27
+- 画笔支持虚线功能，设置 `room.memberState.dottedLine` 为 `true` 开启该功能。该功能需要开启新铅笔后才能使用
+- 文字工具支持直接选择并编辑文字，设置 `room.memberState.textCanSelectText` 为 `true` 开启该功能
+- 修改箭头、直线工具的交互方式
 ## [2.16.28] - 2022-07-15
 - 更新 `white-web-sdk` 至2.16.26
 - 升级 NTLBridge 依赖，提升白板性能
