@@ -7,6 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.17.0-alpha.0] - 2022-07-20
+- 更新 `@netless/window-manager`至 1.0.0-canary.45
+- `WhiteWindowParams` 中的 `chessboard` 设置为 DEPRECATED
+- `WhiteWindowParams` 新增 `fullscreen` 属性，用于设置全屏模式的样式
+- `WhiteWindowParams` 新增 `containerStyle` `stageStyle` `defaultBoxBodyStyle` `defaultBoxStageStyle` `theme` 属性，用于设置窗口样式
 ## [2.16.29] - 2022-07-19
 - 更新 `white-web-sdk` 至 2.16.27
 - 画笔支持虚线功能，设置 `room.memberState.dottedLine` 为 `true` 开启该功能。该功能需要开启新铅笔后才能使用
