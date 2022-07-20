@@ -7,6 +7,9 @@
 
 #import "WhiteWindowParams.h"
 
+WhiteTeleBoxFullscreen const WhiteTeleBoxFullscreenNoTitleBar = @"no-titlebar";
+WhiteTeleBoxFullscreen const WhiteTeleBoxFullscreenAlwaysTitleBar = @"always-titlebar";
+
 WhitePrefersColorScheme const WhitePrefersColorSchemeAuto = @"auto";
 WhitePrefersColorScheme const WhitePrefersColorSchemeLight = @"light";
 WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
