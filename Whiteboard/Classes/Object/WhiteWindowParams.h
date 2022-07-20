@@ -21,7 +21,7 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 /** 各个端本地显示多窗口内容时，高与宽比例，默认为 9:16。该值应该各个端保持统一，否则会有不可预见的情况。 */
 @property (nonatomic, strong) NSNumber *containerSizeRatio;
 /** 多窗口区域（主窗口）以外的空间显示 PS 棋盘背景，默认 YES */
-@property (nonatomic, assign) BOOL chessboard;
+@property (nonatomic, assign) BOOL chessboard DEPRECATED_MSG_ATTRIBUTE("no more chessboard");
 /** 驼峰形式的 CSS，透传给多窗口时，最小化 div 的 css */
 @property (nonatomic, copy, nullable) NSDictionary *collectorStyles;
 /** 是否在网页控制台打印日志，默认 YES */

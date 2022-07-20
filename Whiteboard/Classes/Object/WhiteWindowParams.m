@@ -15,7 +15,6 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
 
 - (instancetype)init {
     self = [super init];
-    _chessboard = YES;
     _containerSizeRatio = @(9/16.0);
     _debug = YES;
     _prefersColorScheme = WhitePrefersColorSchemeLight;
