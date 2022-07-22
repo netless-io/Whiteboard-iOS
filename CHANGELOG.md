@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.30] -
+- 优化 Web 内存不足导致的白板白屏问题， 之前如果设置过 `navigationDelegate` 需要去掉设置才能开启该优化。
+- `WhiteCommonCallbackDelegate` 新增 `startRecoveringFromMemoryIssues` 和 `endRecoveringFromMemoryIssues` 回调，Web Crash 并且恢复的时候有事件通知。 多次恢复之后如果仍然 crash， `WhiteCommonCallbackDelegate` 会通过 `throwError:` 抛出一个 code 为 -500 的错误
 ## [2.16.29] - 2022-07-19
 - 更新 `white-web-sdk` 至 2.16.27
 - 画笔支持虚线功能，设置 `room.memberState.dottedLine` 为 `true` 开启该功能。该功能需要开启新铅笔后才能使用
