@@ -12,6 +12,7 @@ xcodebuild \
   -destination "platform=iOS Simulator,name=$device" \
   -skip-testing:$SCHEME/RoomTests/testZoomChange \
   -skip-testing:$SCHEME/RoomTests/testGetRoomMember \
+  -skip-testing:$SCHEME/WebCrashTest \
   test | xcbeautify > $OUTPATH
   PASSSTR='Test Succeeded'
   TEST_TAIL=$(tail -n 1 $OUTPATH)
