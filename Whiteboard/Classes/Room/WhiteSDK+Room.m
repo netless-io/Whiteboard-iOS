@@ -85,7 +85,7 @@
                 weakBridge.roomCallbacks.room = room;
                 
                 if (config.drawOnlyApplePencil && UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-                    [room prepareForApplePencilDrawOnly];
+                    [room prepareForApplePencilDrawOnly:TRUE];
                 }
                 
                 completionHandler(YES, room, nil);
