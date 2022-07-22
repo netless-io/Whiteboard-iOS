@@ -60,9 +60,7 @@
 
 - (void)setDrawOnlyApplePencil:(BOOL)drawOnlyPencil {
     _drawOnlyApplePencil = drawOnlyPencil;
-    if (!drawOnlyPencil) {
-        [self recoverApplianceFromTempRemove];
-    }
+    [self recoverApplianceFromTempRemove];
 }
 
 - (void)roomApplianceDidManualUpdate {

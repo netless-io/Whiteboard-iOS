@@ -93,13 +93,13 @@
     if (self.applePencilDrawHandler) {
         self.applePencilDrawHandler.drawOnlyApplePencil = drawOnlyPencil;
     } else if (drawOnlyPencil && UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self prepareForApplePencilDrawOnly];
+        [self prepareForApplePencilDrawOnly:drawOnlyPencil];
     }
 }
 
-- (void)prepareForApplePencilDrawOnly
+- (void)prepareForApplePencilDrawOnly:(BOOL)drawOnly
 {
-    self.applePencilDrawHandler = [[ApplePencilDrawHandler alloc] initWithRoom:self drawOnlyPencil:YES];
+    self.applePencilDrawHandler = [[ApplePencilDrawHandler alloc] initWithRoom:self drawOnlyPencil:drawOnly];
 }
 
 #pragma mark - Set Action
