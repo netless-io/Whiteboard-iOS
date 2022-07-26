@@ -66,11 +66,15 @@
     // 缺失一个错误判断。
     if (command.await) {
         [view callHandler:command.method arguments:command.args completionHandler:^(id  _Nullable value) {
-            completionHandler();
+            if (completionHandler) {
+                completionHandler();
+            }
         }];
     } else {
         [view callHandler:command.method arguments:command.args];
-        completionHandler();
+        if (completionHandler) {
+            completionHandler();
+        }
     }
 }
 
