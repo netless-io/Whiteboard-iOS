@@ -9,53 +9,55 @@
 
 @interface BridgeCallRecorder ()
 
-@property (nonatomic, strong) NSMutableArray<WhiteCallBridgeCommand *>* recordedCommands;
-@property (nonatomic, copy) NSDictionary<NSString *, NSNumber *>*recordingKeys;
+@property (nonatomic, strong) NSMutableArray<WhiteCallBridgeCommand *>* recordCommands;
+@property (nonatomic, copy) NSDictionary<NSString *, NSNumber *>*recordKeys;
+@property (nonatomic, copy) NSArray* lockedArray;
+@property (nonatomic, assign) NSInteger leftLockedArrayResumeCount;
+
 @end
 
-@implementation BridgeCallRecorder {
-    NSArray *_lockedArray;
-    NSInteger _leftLockedArrayResumeCount;
-}
+@implementation BridgeCallRecorder
 
-- (instancetype)initWithRecordingKeys:(NSDictionary<NSString *, NSNumber *>*)recordingKeys {
+- (instancetype)initWithRecordKeys:(NSDictionary<NSString *, NSNumber *>*)recordingKeys {
     if (self = [super init]) {
-        self.recordingKeys = recordingKeys;
-        self.recordedCommands = [NSMutableArray array];
+        self.recordKeys = recordingKeys;
+        self.recordCommands = [NSMutableArray array];
     }
     return self;
 }
 
 - (void)receiveCommand:(WhiteCallBridgeCommand *)command {
-    NSNumber *awaitObject = self.recordingKeys[command.method];
-    if (awaitObject) {
-        command.await = [awaitObject boolValue];
-        [self.recordedCommands addObject:command];
+    NSNumber *existObject = self.recordKeys[command.method];
+    if (existObject) {
+        command.await = [existObject boolValue];
+        [self.recordCommands addObject:command];
         return;
     }
 }
 
 - (void)resumeCommandsFromBridgeView:(WhiteBoardView *)view completionHandler:(void (^__nullable)(void))completionHandler {
-    _lockedArray = [self.recordedCommands copy];
-    _leftLockedArrayResumeCount = [_lockedArray count];
+    self.lockedArray = [self.recordCommands copy];
+    self.leftLockedArrayResumeCount = [self.lockedArray count];
     
-    self.recordedCommands = [NSMutableArray array];
+    self.recordCommands = [NSMutableArray array];
     [self loopLockedCommandsFromBridgeView:view completionHandler:completionHandler];
 }
 
 - (void)loopLockedCommandsFromBridgeView:(WhiteBoardView *)view completionHandler:(void (^__nullable)(void))completionHandler {
-    if (_leftLockedArrayResumeCount > 0) {
-        NSInteger index = _lockedArray.count - _leftLockedArrayResumeCount;
-        WhiteCallBridgeCommand *command = _lockedArray[index];
+    if (self.leftLockedArrayResumeCount > 0) {
+        NSInteger index = self.lockedArray.count - self.leftLockedArrayResumeCount;
+        WhiteCallBridgeCommand *command = self.lockedArray[index];
         __weak typeof(self) weakSelf = self;
         __weak typeof(view) weakWebView = view;
         [self resumeCommandFromBridgeView:view command:command completionHandler:^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf->_leftLockedArrayResumeCount -= 1;
+            strongSelf.leftLockedArrayResumeCount -= 1;
             [strongSelf loopLockedCommandsFromBridgeView:weakWebView completionHandler:completionHandler];
         }];
     } else {
-        completionHandler();
+        if (completionHandler) {
+            completionHandler();
+        }
     }
 }
 
