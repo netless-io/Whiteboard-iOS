@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BridgeCallRecorder : NSObject
 
 /// Values是重放时是否 await
-- (instancetype)initWithRecordingKeys:(NSDictionary<NSString *, NSNumber *>*)recordingKeys;
+- (instancetype)initWithRecordKeys:(NSDictionary<NSString *, NSNumber *>*)recordingKeys;
 
 - (void)receiveCommand:(WhiteCallBridgeCommand *)command;
 
