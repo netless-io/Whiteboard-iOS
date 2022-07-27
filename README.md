@@ -323,3 +323,4 @@ pod 'Whiteboard/fpa-YYKit'
 ## Part of the problem
 
 1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
+2. In case of complex content, the WhiteBoard may be killed by the system due to lack of memory, resulting in a white screen, we have restored this situation in version 2.16.30. Before 2.16.30, you can set `navigationDelegate` of `WhiteBoardView` to listen to `webViewWebContentProcessDidTerminate:` method. This method will be called when the whiteboard is killed and you can prompt the user to reconnect to resume the whiteboard in this method.
