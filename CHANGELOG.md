@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.31] - 2022-08-01
+- 更新 `@netless/window-manager`至 0.4.37。
+- 修复 Slide 最小化状态下重新进入房间恢复正常无法恢复到正确的大小问题。
+- 修复只读用户 Slide 最小化状态下重新进入房间恢复正常无法恢复到正确的大小问题。
 ## [2.16.30] - 2022-07-27
 - 优化 Web 内存不足导致的白板白屏问题， 之前如果设置过 `navigationDelegate` 需要去掉设置才能开启该优化。
 - `WhiteCommonCallbackDelegate` 新增 `startRecoveringFromMemoryIssues` 和 `endRecoveringFromMemoryIssues` 回调，Web Crash 并且恢复的时候有事件通知。 多次恢复之后如果仍然 crash， `WhiteCommonCallbackDelegate` 会通过 `throwError:` 抛出一个 code 为 -500 的错误
