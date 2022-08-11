@@ -72,7 +72,7 @@ class VideoChatViewController: UIViewController, WKNavigationDelegate {
         let config = WhiteSdkConfiguration(app: "792/uaYcRG0I7ctP9A")
         self.whiteSdk = WhiteSDK(whiteBoardView: board, config: config, commonCallbackDelegate: self, audioMixerBridgeDelegate: self)
 
-        let roomConfig = WhiteRoomConfig(uuid: <#Room UUID#>, roomToken: <#ROOM Token#>)
+        let roomConfig = WhiteRoomConfig(uuid: <#Room UUID#>, roomToken: <#ROOM Token#>, uid: <#T##String#>)
 
         self.whiteSdk!.joinRoom(with: roomConfig, callbacks: self) { (success, room, error) in
             if ((room) != nil) {
@@ -190,6 +190,22 @@ extension VideoChatViewController: WhiteCommonCallbackDelegate {
 }
 
 extension VideoChatViewController: WhiteAudioMixerBridgeDelegate {
+    func pauseAudioMixing() {
+        let result:Int32 = agoraKit.pauseAudioMixing()
+        print("\(#function) result:\(result)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(0, errorCode: Int(result))
+        }
+    }
+    
+    func resumeAudioMixing() {
+        let result:Int32 = agoraKit.resumeAudioMixing()
+        print("\(#function) result:\(result)")
+        if result != 0 {
+            self.whiteSdk!.audioMixer?.setMediaState(0, errorCode: Int(result))
+        }
+    }
+    
     func startAudioMixing(_ filePath: String, loopback: Bool, replace: Bool, cycle: Int) {
         let result:Int32 = agoraKit.startAudioMixing(filePath, loopback: true, replace: false, cycle: 1)
         print("\(#function) \(filePath) \(loopback) \(replace) \(cycle) result:\(result)")

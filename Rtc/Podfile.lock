@@ -1,26 +1,29 @@
 PODS:
   - AgoraRtcEngine_iOS (3.0.1.1)
-  - dsBridge (3.0.6)
-  - Whiteboard (2.9.14):
-    - Whiteboard/Base (= 2.9.14)
-    - Whiteboard/Converter (= 2.9.14)
-    - Whiteboard/NativeReplayer (= 2.9.14)
-    - Whiteboard/Object (= 2.9.14)
-    - Whiteboard/Replayer (= 2.9.14)
-    - Whiteboard/Room (= 2.9.14)
-  - Whiteboard/Base (2.9.14):
-    - dsBridge (~> 3.0.2)
+  - NTLBridge (3.1.4)
+  - Whiteboard (2.16.34):
+    - Whiteboard/Whiteboard-YYModel (= 2.16.34)
+  - Whiteboard/Base (2.16.34):
+    - NTLBridge (~> 3.1.4)
     - Whiteboard/Object
-  - Whiteboard/Converter (2.9.14):
+  - Whiteboard/Converter (2.16.34):
     - Whiteboard/Object
-  - Whiteboard/NativeReplayer (2.9.14):
+  - Whiteboard/Model (2.16.34):
+    - YYModel
+  - Whiteboard/NativeReplayer (2.16.34):
     - Whiteboard/Replayer
-  - Whiteboard/Object (2.9.14):
-    - YYModel (~> 1.0.4)
-  - Whiteboard/Replayer (2.9.14):
+  - Whiteboard/Object (2.16.34):
+    - Whiteboard/Model
+  - Whiteboard/Replayer (2.16.34):
     - Whiteboard/Base
-  - Whiteboard/Room (2.9.14):
+  - Whiteboard/Resource (2.16.34)
+  - Whiteboard/Room (2.16.34):
     - Whiteboard/Base
+  - Whiteboard/Whiteboard-YYModel (2.16.34):
+    - Whiteboard/Converter
+    - Whiteboard/NativeReplayer
+    - Whiteboard/Resource
+    - Whiteboard/Room
   - YYModel (1.0.4)
 
 DEPENDENCIES:
@@ -30,7 +33,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AgoraRtcEngine_iOS
-    - dsBridge
+    - NTLBridge
     - YYModel
 
 EXTERNAL SOURCES:
@@ -39,10 +42,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AgoraRtcEngine_iOS: 8ccceaaecff2e80ab28fcd33f3dfd2b417eb5365
-  dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
-  Whiteboard: edbe3ed753dc9a457a38718834d7bf16fdfd3980
+  NTLBridge: 49780dc966976d3221a0eb03c7368617c1987cb6
+  Whiteboard: 2eba76f6853ff0fe7db2218fa650e54224cb2688
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: c0c77fa63f7c74e86993af49e2c0d3c3b42515ef
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.11.3
