@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.34] - 2022-08-11
+- 更新 `@netless/app-slide` 至 0.2.7
+- 更新 `@netless/slide-rtc-plugin` 至 0.6.1
+- `WhiteAudioMixerBridgeDelegate` 新增 `pauseAudioMixing` 和 `resumeAudioMixing` 回调， 使用方法为在回调中调起 RTC 对应的混音方法
 ## [2.16.33] - 2022-08-03
 - 更新 `white-web-sdk` 至 2.16.31。修复 room.setMemberState() 某些字段无法保存到本地问题。
 ## [2.16.32] - 2022-08-02
