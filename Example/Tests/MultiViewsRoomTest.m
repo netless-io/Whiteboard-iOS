@@ -11,6 +11,7 @@
 typedef void(^WhiteSceneStateBlock)(WhiteSceneState *state);
 
 static WhiteAppParam* _Nonnull testMp4AppParam;
+static WhiteAppParam* _Nonnull testPptAppParam;
 
 @interface MultiViewsRoomTest : BaseRoomTest
 @end
@@ -22,14 +23,42 @@ static WhiteAppParam* _Nonnull testMp4AppParam;
 
 + (void)load
 {
-    testMp4AppParam = [WhiteAppParam createMediaPlayerApp:@"https://flat-web-dev.whiteboard.agora.io/preview/https://flat-storage.oss-accelerate.aliyuncs.com/cloud-storage/2022-01/25/d9bbde94-5a80-43bd-9727-660197f20d28/d9bbde94-5a80-43bd-9727-660197f20d28.mp4/" title:@"testApp"];
+    testMp4AppParam = [WhiteAppParam
+                       createMediaPlayerApp:@"https://flat-web-dev.whiteboard.agora.io/preview/https://flat-storage.oss-accelerate.aliyuncs.com/cloud-storage/2022-01/25/d9bbde94-5a80-43bd-9727-660197f20d28/d9bbde94-5a80-43bd-9727-660197f20d28.mp4/"
+                       title:@"testApp"];
+    
+    testPptAppParam = [WhiteAppParam createSlideApp:@"/ppt" taskId:@"7f5d2864e82b4f0e9c868f348e922453" url:@"https://convertcdn.netless.link/dynamicConvert" title:@"example_ppt"];
 }
 
 - (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig {
     sdkConfig.useMultiViews = YES;
 }
 
-- (void)testAddApp
+- (void)testAddPpt
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self.room) weakRoom = self.room;
+    [self.room addApp:testPptAppParam completionHandler:^(NSString * _Nonnull appId) {
+        if ([appId length] > 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakRoom closeApp:appId completionHandler:^{
+                }];
+            });
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [exp fulfill];
+            });
+            return;
+        }
+        XCTAssert(NO, @"add app fail");
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
+- (void)testAddMedia
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     __weak typeof(self.room) weakRoom = self.room;
