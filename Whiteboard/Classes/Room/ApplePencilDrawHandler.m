@@ -102,7 +102,9 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (!self.drawOnlyApplePencil) {
         if (self.originalDelegate) {
-            return [self.originalDelegate gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+            if ([self.originalGesture respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]) {
+                return [self.originalDelegate gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+            }
         }
     }
     self.isPencilTouch = (touch.type == UITouchTypePencil);
@@ -112,14 +114,18 @@
         [self recoverApplianceFromTempRemove];
     }
     if (self.originalDelegate) {
-        return [self.originalDelegate gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+        if ([self.originalGesture respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]) {
+            return [self.originalDelegate gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+        }
     }
     return YES;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (self.originalDelegate) {
-        return [self.originalDelegate gestureRecognizerShouldBegin:gestureRecognizer];
+        if ([self.originalGesture respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+            return [self.originalDelegate gestureRecognizerShouldBegin:gestureRecognizer];
+        }
     }
     return YES;
 }
