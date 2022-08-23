@@ -9,6 +9,7 @@
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.16.38] - 2022-08-23
 - 更新 `white-web-sdk` 至 2.16.34
+- 更新 `@netless/app-slide` 至 0.2.8
 ## [2.16.37] - 2022-08-19
 - 更新 `@netless/window-manager`至 0.4.42
 - 修复非 ApplePencil 的手写笔在 iPad 上使用 `drawOnlyPencil` 功能可能导致的 crash
