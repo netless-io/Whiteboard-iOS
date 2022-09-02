@@ -7,6 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.39] - 2022-09-13
+- 更新 `white-web-sdk` 至 2.16.35
+- `WhiteRoomConfig` 新增 `floatBar` 参数， 开启后可以在选中同一类物体的时候启用浮动条。
+- `WhiteApplianceNameKey` 新增 `AppliancePencilEraser` 类型， 可以用来局部擦除 NewPencil 画出的笔记。
+- 修复加入房间时， `WhiteBroadcastState` 初始化错误。
 ## [2.16.38] - 2022-08-23
 - 更新 `white-web-sdk` 至 2.16.34
 - 更新 `@netless/app-slide` 至 0.2.8
