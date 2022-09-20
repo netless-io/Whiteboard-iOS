@@ -14,6 +14,39 @@
 - `WhiteWindowParams` 中的 `chessboard` 设置为 DEPRECATED
 - `WhiteWindowParams` 新增 `fullscreen` 属性，用于设置全屏模式的样式
 - `WhiteWindowParams` 新增 `containerStyle` `stageStyle` `defaultBoxBodyStyle` `defaultBoxStageStyle` `theme` 属性，用于设置窗口样式
+## [2.16.39] - 2022-09-13
+- 更新 `white-web-sdk` 至 2.16.35
+- `WhiteRoomConfig` 新增 `floatBar` 参数， 开启后可以在选中同一类物体的时候启用浮动条。
+- `WhiteApplianceNameKey` 新增 `AppliancePencilEraser` 类型， 可以用来局部擦除 NewPencil 画出的笔记。
+- 修复加入房间时， `WhiteBroadcastState` 初始化错误。
+## [2.16.38] - 2022-08-23
+- 更新 `white-web-sdk` 至 2.16.34
+- 更新 `@netless/app-slide` 至 0.2.8
+## [2.16.37] - 2022-08-19
+- 更新 `@netless/window-manager`至 0.4.42
+- 修复非 ApplePencil 的手写笔在 iPad 上使用 `drawOnlyPencil` 功能可能导致的 crash
+## [2.16.36] - 2022-08-17
+- 更新 `@netless/window-manager`至 0.4.40
+- 更新 `WritableDetectRoom`, 完善房间非可写时操作判断
+## [2.16.35] - 2022-08-16
+- 更新 `white-web-sdk` 至 2.16.33
+- 更新 `@netless/window-manager`至 0.4.38
+## [2.16.34] - 2022-08-11
+- 更新 `@netless/app-slide` 至 0.2.7
+- 更新 `@netless/slide-rtc-plugin` 至 0.6.1
+- `WhiteAudioMixerBridgeDelegate` 新增 `pauseAudioMixing` 和 `resumeAudioMixing` 回调， 使用方法为在回调中调起 RTC 对应的混音方法
+## [2.16.33] - 2022-08-03
+- 更新 `white-web-sdk` 至 2.16.31。修复 room.setMemberState() 某些字段无法保存到本地问题。
+## [2.16.32] - 2022-08-02
+- 更新 `@netless/app-slide` 至0.2.3
+## [2.16.31] - 2022-08-01
+- 更新 `@netless/window-manager`至 0.4.37。
+- 修复 Slide 最小化状态下重新进入房间恢复正常无法恢复到正确的大小问题。
+- 修复只读用户 Slide 最小化状态下重新进入房间恢复正常无法恢复到正确的大小问题。
+## [2.16.30] - 2022-07-27
+- 优化 Web 内存不足导致的白板白屏问题， 之前如果设置过 `navigationDelegate` 需要去掉设置才能开启该优化。
+- `WhiteCommonCallbackDelegate` 新增 `startRecoveringFromMemoryIssues` 和 `endRecoveringFromMemoryIssues` 回调，Web Crash 并且恢复的时候有事件通知。 多次恢复之后如果仍然 crash， `WhiteCommonCallbackDelegate` 会通过 `throwError:` 抛出一个 code 为 -500 的错误
+- 升级 `synced-store` 至 2.0.3
 ## [2.16.29] - 2022-07-19
 - 更新 `white-web-sdk` 至 2.16.27
 - 画笔支持虚线功能，设置 `room.memberState.dottedLine` 为 `true` 开启该功能。该功能需要开启新铅笔后才能使用

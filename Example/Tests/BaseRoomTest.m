@@ -97,14 +97,14 @@
     __unused UIView *view = [self.roomVC view];
     UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     if ([nav isKindOfClass:[UINavigationController class]]) {
-        [nav pushViewController:self.roomVC animated:YES];
+        [nav pushViewController:self.roomVC animated:NO];
     }
 }
 
 - (void)popToRoot {
     UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
    if ([nav isKindOfClass:[UINavigationController class]]) {
-       [nav popToRootViewControllerAnimated:YES];
+       [nav popToRootViewControllerAnimated:NO];
    }
 }
 

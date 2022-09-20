@@ -47,6 +47,7 @@
 		8A3CC7312824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */; };
 		8A3CC734282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
+		8A71723E288A7EFE00E0E3C7 /* WebCrashTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A71723D288A7EFE00E0E3C7 /* WebCrashTest.m */; };
 		8A86A4E82806A0070095F499 /* ControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A86A4E52806A0070095F499 /* ControlCell.xib */; };
 		8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E62806A0070095F499 /* ExampleControlView.swift */; };
 		8A86A4EA2806A0070095F499 /* ControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E72806A0070095F499 /* ControlCell.swift */; };
@@ -129,6 +130,7 @@
 		8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombinePlayerOnlyVideoTest.m; sourceTree = "<group>"; };
 		8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombinePlayerOnlyWhiteTest.m; sourceTree = "<group>"; };
 		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
+		8A71723D288A7EFE00E0E3C7 /* WebCrashTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebCrashTest.m; sourceTree = "<group>"; };
 		8A86A4E52806A0070095F499 /* ControlCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ControlCell.xib; sourceTree = "<group>"; };
 		8A86A4E62806A0070095F499 /* ExampleControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleControlView.swift; sourceTree = "<group>"; };
 		8A86A4E72806A0070095F499 /* ControlCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlCell.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				8A3CC732282621B3002DCE39 /* CombinePlayer */,
 				8AC2F0E427F43FEA00A980D9 /* Base */,
 				8A18D2A527F154DB00EC29B1 /* CustomAppTest.m */,
+				8A71723D288A7EFE00E0E3C7 /* WebCrashTest.m */,
 				8AF1F04328153AFB00AA7535 /* SDKTest.m */,
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
@@ -562,6 +565,7 @@
 			files = (
 				8AF1F04428153AFB00AA7535 /* SDKTest.m in Sources */,
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
+				8A71723E288A7EFE00E0E3C7 /* WebCrashTest.m in Sources */,
 				8A18D2A627F154DB00EC29B1 /* CustomAppTest.m in Sources */,
 				8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */,
 				8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */,

@@ -329,6 +329,7 @@ pod 'Whiteboard/fpa-YYKit'
 ## 部分问题
 
 1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
+2. 在白板内容比较复杂的情况下，白板有可能会因为内存不足的原因被系统kill掉,导致白屏，我们在 2.16.30 的版本中对该情况进行了主动恢复。在 2.16.30 的版本前，可以通过设置  `WhiteBoardView` 的 `navigationDelegate` 来监听 `webViewWebContentProcessDidTerminate:` 方法。当白板被kill掉时，会调用该方法，你可以在该方法中提示用户重新连接以恢复白板。
 
 ## Whiteboard - Framework 拖拽方式集成
 

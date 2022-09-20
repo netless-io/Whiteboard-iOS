@@ -70,7 +70,7 @@ static NSString * const kAsyncSyncedStoreNameSpace = @"store.%@";
             NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
             completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
         } else {
-            completionHandler(value, nil);
+            completionHandler(dict, nil);
         }
     }];
 }
