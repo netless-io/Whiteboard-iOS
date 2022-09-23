@@ -139,6 +139,7 @@ Pod::Spec.new do |s|
     sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
     sync.dependency 'Whiteboard/Replayer'
     sync.dependency 'SyncPlayer'
+    sync.frameworks = 'AVFoundation'
   end
   
   # 对SyncPlayer的支持 - YYKit
@@ -148,6 +149,7 @@ Pod::Spec.new do |s|
     sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
     sync.dependency 'Whiteboard/Replayer-YYKit'
     sync.dependency 'SyncPlayer'
+    sync.frameworks = 'AVFoundation'
   end
   
   # 音视频 native 与回放房间结合 - YYKit
