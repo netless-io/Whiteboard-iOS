@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.40] - 2022-09-23
+- 更新 `@netless/window-manager`至 0.4.44
+- 更新 `@netless/app-slide` 至 0.2.14
 ## [2.16.39] - 2022-09-13
 - 更新 `white-web-sdk` 至 2.16.35
 - `WhiteRoomConfig` 新增 `floatBar` 参数， 开启后可以在选中同一类物体的时候启用浮动条。
