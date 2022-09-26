@@ -7,7 +7,6 @@
 //
 
 import SyncPlayer
-import AVFoundation
 
 private var proxyKey: String?
 private var atomStatusKey: String?
