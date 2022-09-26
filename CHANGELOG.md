@@ -9,7 +9,7 @@
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 ## [2.16.41] - 2022-09-26
 - 更新 `@netless/app-slide` 至 0.2.13
-- `WhiteDisplayer` 新增 `requestSlideLogToFilePath:` 方法，可以通过调用该方法来将 Slide 产生的日志写入到指定文件。
+- `WhiteSDK` 新增 `requestSlideLogToFilePath:` 方法，可以通过调用该方法来将 Slide 产生的日志写入到指定文件。
 ## [2.16.40] - 2022-09-23
 - 更新 `@netless/window-manager`至 0.4.44
 - 更新 `@netless/app-slide` 至 0.2.12

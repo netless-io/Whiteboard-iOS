@@ -12,10 +12,6 @@
 #import "SyncedStore+Private.h"
 
 @interface WhiteDisplayer ()
-@property (nonatomic, copy) NSString *requestingSlideLogSessionId;
-@property (nonatomic, copy) NSString *slideLogPath;
-@property (nonatomic, copy) NSFileHandle *slideLogFileHandler;
-@property (nonatomic, copy) void(^requestLogHandler)(BOOL success, NSError *error);
 
 @end
 
@@ -46,7 +42,6 @@
     if (self) {
         _bridge = bridge;
         _backgroundColor = [UIColor whiteColor];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideLogNotification:) name:@"Slide-Log" object:nil];
     }
     return self;
 }
@@ -239,55 +234,6 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
             }
         }
     }];
-}
-
-#pragma mark - Slide 日志
-- (void)requestSlideLogToFilePath:(NSString *)path result:(void(^)(BOOL success, NSError *error))result
-{
-    NSFileManager *manager = [NSFileManager defaultManager];
-    BOOL fileExist = [manager fileExistsAtPath:path];
-    if (!fileExist) {
-        [manager createFileAtPath:path contents:nil attributes:nil];
-    }
-    NSString *sessionId = [NSString stringWithFormat:@"%d", [self.requestingSlideLogSessionId intValue] + 1];
-    self.requestingSlideLogSessionId = sessionId;
-    self.requestLogHandler = result;
-    self.slideLogPath = path;
-    self.slideLogFileHandler = [NSFileHandle fileHandleForWritingAtPath:path];
-    NSString *logJs = [NSString stringWithFormat:@"window.postMessage({type: '@slide/_request_log_', sessionId: '%@'}, '*')", sessionId];
-    [self.bridge evaluateJavaScript:logJs completionHandler:^(id _Nullable value, NSError * _Nullable error) {
-        if (error) {
-            result(NO, error);
-            [self cleanSlideLogResource];
-        }
-    }];
-}
-
-- (void)cleanSlideLogResource
-{
-    [self.slideLogFileHandler closeFile];
-    self.slideLogPath = @"";
-    self.requestingSlideLogSessionId = @"";
-    self.requestLogHandler = nil;
-    self.slideLogFileHandler = nil;
-}
-
-- (void)onSlideLogNotification:(NSNotification *)notification
-{
-    NSDictionary *userInfo = notification.userInfo;
-    if (!userInfo) { return; }
-    if (![userInfo[@"sessionId"] isEqualToString:self.requestingSlideLogSessionId]) { return; }
-    NSString *log = userInfo[@"log"];
-    [self.slideLogFileHandler seekToEndOfFile];
-    NSData *data = [log dataUsingEncoding:NSUTF8StringEncoding];
-    [self.slideLogFileHandler writeData:data];
-    
-    int index = [userInfo[@"index"] intValue];
-    int total = [userInfo[@"total"] intValue];
-    if (total == index) {
-        self.requestLogHandler(YES, nil);
-        [self cleanSlideLogResource];
-    }
 }
 
 @end
