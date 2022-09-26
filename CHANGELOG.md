@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.42] - 2022-09-26
+- 更新 `Whiteboard.podspec`
 ## [2.16.41] - 2022-09-26
 - 更新 `@netless/app-slide` 至 0.2.13
 - `WhiteSDK` 新增 `requestSlideLogToFilePath:` 方法，可以通过调用该方法来将 Slide 产生的日志写入到指定文件。
