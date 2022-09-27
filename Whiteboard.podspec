@@ -73,8 +73,8 @@ Pod::Spec.new do |s|
 
   # 基础类，包括sdk，Displayer（Room与Player父类）- YYModel
   s.subspec 'Base' do |base|
-    base.source_files = 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**'
-    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h'
+    base.source_files = 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**', 'Whiteboard/Classes/Whiteboard.h'
+    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h', 'Whiteboard/Classes/Whiteboard.h'
     base.private_header_files = 'Whiteboard/Classes/Displayer/*+Private.h', 'Whiteboard/Classes/SDK/*+Private.h'
     base.frameworks = 'WebKit'
     base.dependency 'NTLBridge', '~> 3.1.4'
@@ -83,8 +83,8 @@ Pod::Spec.new do |s|
   
   # 基础类，包括sdk，Displayer（Room与Player父类）- YYKit
   s.subspec 'Base-YYKit' do |base|
-    base.source_files = 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**'
-    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h'
+    base.source_files = 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**', 'Whiteboard/Classes/Whiteboard.h'
+    base.public_header_files = 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h', 'Whiteboard/Classes/Whiteboard.h'
     base.private_header_files = 'Whiteboard/Classes/Displayer/*+Private.h', 'Whiteboard/Classes/SDK/*+Private.h'
     base.frameworks = 'WebKit'
     base.dependency 'NTLBridge', '~> 3.1.4'
@@ -134,18 +134,18 @@ Pod::Spec.new do |s|
   
   # 对SyncPlayer的支持
   s.subspec 'SyncPlayer' do |sync|
-    sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
     sync.public_header_files = 'Whiteboard/Classes/SyncPlayer/**.h'
     sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
+    sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
     sync.dependency 'Whiteboard/Replayer'
     sync.dependency 'SyncPlayer'
   end
   
   # 对SyncPlayer的支持 - YYKit
   s.subspec 'SyncPlayer-YYKit' do |sync|
-    sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
     sync.public_header_files = 'Whiteboard/Classes/SyncPlayer/**.h'
     sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
+    sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
     sync.dependency 'Whiteboard/Replayer-YYKit'
     sync.dependency 'SyncPlayer'
   end
@@ -168,9 +168,6 @@ Pod::Spec.new do |s|
     socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
     # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
     socket.ios.deployment_target = '11.0'
-    # 这个config是因为fpa的framework没有simulator-arm64的版本，需要手动剔除
-    socket.pod_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
-    socket.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
   end
   
   # socket 代理 - YYKit
@@ -182,9 +179,6 @@ Pod::Spec.new do |s|
     socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
     # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
     socket.ios.deployment_target = '11.0'
-    # 这个config是因为fpa的framework没有simulator-arm64的版本，需要手动剔除
-    socket.pod_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
-    socket.user_target_xcconfig = { "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64" }
   end
   
   s.subspec 'Whiteboard-YYModel' do |sp|

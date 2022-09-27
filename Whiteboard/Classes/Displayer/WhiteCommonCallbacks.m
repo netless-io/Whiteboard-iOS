@@ -99,6 +99,9 @@
         */
         [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:dict];
     }
+    if (dict && [dict[@"type"] isEqualToString:@"@slide/_report_log_"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Slide-Log" object:nil userInfo:dict];
+    }
     if (dict && [self.delegate respondsToSelector:@selector(customMessage:)]) {
         [self.delegate customMessage:dict];
     }

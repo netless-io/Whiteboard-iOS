@@ -136,5 +136,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)registerAppWithParams:(WhiteRegisterAppParams *)params completionHandler:(void (^)(NSError * _Nullable error))completionHandler;
 
+#pragma mark - Slide 日志
+/**
+ 将 Slide 日志写入到指定的文件路径。
+ 
+ @param path 将要写入文件的 path ，如果文件不存在，会直接创建。如果已存在，会在文件末尾下继续写入日志。
+ @param result 日志写入结果
+ */
+- (void)requestSlideLogToFilePath:(NSString *)path result:(void(^)(BOOL success, NSError *error))result;
+
 @end
 NS_ASSUME_NONNULL_END

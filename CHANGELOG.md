@@ -16,6 +16,14 @@
 - `WhiteWindowParams` 中的 `chessboard` 设置为 DEPRECATED
 - `WhiteWindowParams` 新增 `fullscreen` 属性，用于设置全屏模式的样式
 - `WhiteWindowParams` 新增 `containerStyle` `stageStyle` `defaultBoxBodyStyle` `defaultBoxStageStyle` `theme` 属性，用于设置窗口样式
+## [2.16.42] - 2022-09-26
+- 更新 `Whiteboard.podspec`
+## [2.16.41] - 2022-09-26
+- 更新 `@netless/app-slide` 至 0.2.13
+- `WhiteSDK` 新增 `requestSlideLogToFilePath:` 方法，可以通过调用该方法来将 Slide 产生的日志写入到指定文件。
+## [2.16.40] - 2022-09-23
+- 更新 `@netless/window-manager`至 0.4.44
+- 更新 `@netless/app-slide` 至 0.2.12
 ## [2.16.39] - 2022-09-13
 - 更新 `white-web-sdk` 至 2.16.35
 - `WhiteRoomConfig` 新增 `floatBar` 参数， 开启后可以在选中同一类物体的时候启用浮动条。

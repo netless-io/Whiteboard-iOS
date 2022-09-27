@@ -12,6 +12,7 @@
 #import "SyncedStore+Private.h"
 
 @interface WhiteDisplayer ()
+
 @end
 
 @implementation WhiteDisplayer
