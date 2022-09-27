@@ -30,6 +30,13 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 @property (nonatomic, assign) BOOL chessboard DEPRECATED_MSG_ATTRIBUTE("no more chessboard");
 /** 驼峰形式的 CSS，透传给多窗口时，最小化 div 的 css */
 @property (nonatomic, copy, nullable) NSDictionary *collectorStyles;
+/**
+ 是否只允许垂直滚动。（默认为 FALSE)
+ TRUE:  只允许垂直滚动，不允许放大。
+ FALSE: 允许放大和任意方向滚动。
+ 注意该值必须在各端保持一致，否则会导致画布无法同步。该参数为 TURE 时，与 room.viewMode 冲突。
+ */
+@property (nonatomic, assign) BOOL scrollVerticalOnly;
 /** 是否在网页控制台打印日志，默认 YES */
 @property (nonatomic, assign) BOOL debug;
 /** 暗黑模式, 本地效果， 不会同步到远端， 默认Light, 设置auto只有在iOS13以上才会生效*/

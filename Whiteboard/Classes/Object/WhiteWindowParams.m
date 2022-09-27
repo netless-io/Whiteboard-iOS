@@ -21,6 +21,7 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     _containerSizeRatio = @(9/16.0);
     _debug = YES;
     _prefersColorScheme = WhitePrefersColorSchemeLight;
+    _scrollVerticalOnly = FALSE;
     return self;
 }
 
@@ -40,6 +41,16 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
         _prefersColorScheme = prefersColorScheme;
     }
 }
+
+- (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
+{
+    if (self.scrollVerticalOnly) {
+        dic[@"viewMode"] = @"scroll";
+    }
+    [dic removeObjectForKey:@"scrollVerticalOnly"];
+    return YES;
+}
+
 
 @end
 
