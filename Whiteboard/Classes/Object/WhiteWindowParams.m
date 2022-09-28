@@ -42,15 +42,5 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     }
 }
 
-- (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
-{
-    if (self.scrollVerticalOnly) {
-        dic[@"viewMode"] = @"scroll";
-    }
-    [dic removeObjectForKey:@"scrollVerticalOnly"];
-    return YES;
-}
-
-
 @end
 
