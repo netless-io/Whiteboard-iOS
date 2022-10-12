@@ -34,6 +34,39 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     sdkConfig.useMultiViews = YES;
 }
 
+- (void)testPptLocalSnapShot
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self.room) weakRoom = self.room;
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:testPptAppParam completionHandler:^(NSString * _Nonnull appId) {
+        if ([appId length] > 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakRoom closeApp:appId completionHandler:^{
+                }];
+            });
+            [weakRoom getLocalSnapShotWithCompletion:^(UIImage * _Nullable image, NSError * _Nullable error) {
+                [weakSelf.roomVC.boardView evaluateJavaScript:@"window.dispatchEvent(new CustomEvent('__slide_ref__'))" completionHandler:^(id _Nullable, NSError * _Nullable error) {
+                    [weakSelf.roomVC.boardView evaluateJavaScript:@"__slide.hasOwnProperty('player')" completionHandler:^(id _Nullable hasPlayer, NSError * _Nullable error) {
+                        XCTAssertNotNil(image);
+                        XCTAssertTrue(hasPlayer);
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [exp fulfill];
+                        });
+                    }];
+                }];
+            }];
+        } else {
+            XCTAssert(NO, @"add app fail");
+        }
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
 - (void)testAddPpt
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
