@@ -7,7 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## [2.16.43] - 2022-10-10 
+## [2.16.44] - 2022-10-12
+- 更新 `@netless/window-manager`至 0.4.46
+- 更新 `@netless/app-slide` 至 0.2.17
+- `WhiteDisplayer` 新增 `getLocalSnapShotWithCompletion` 方法获取当前屏幕截图
+## [2.16.43] - 2022-10-10
 - 修复 `drawOnlyPencil` 在用户没有写权限的时候，可能产生的一些错误日志。
 - 更新 `@netless/app-slide` 至 0.2.16
 - 更新 `@netless/slide-rtc-plugin` 至 0.7.5
