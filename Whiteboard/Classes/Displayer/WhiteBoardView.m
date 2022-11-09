@@ -169,35 +169,6 @@
     return ;
 }
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-    
-    if (self.room || self.player) {
-        CGFloat r;
-        CGFloat g;
-        CGFloat b;
-        CGFloat a;
-        
-        [backgroundColor getRed:&r green:&g blue:&b alpha:&a];
-        
-        //fix issue: iOS 10/11 rgb css don's support float
-        NSUInteger R = floorf(r * 255.0);
-        NSUInteger G = floorf(g * 255.0);
-        NSUInteger B = floorf(b * 255.0);
-        NSString *js = [NSString stringWithFormat:@"setBackgroundColor(%@, %@, %@)", @(R), @(G), @(B)];
-        __weak typeof(self) weakSelf = self;
-        [self evaluateJavaScript:js completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-            if (!error) {
-                weakSelf.opaque = YES;
-            }
-        }];
-    } else {
-        self.opaque = NO;
-    }
-}
-
-
 //#pragma mark - Private Methods
 - (NSBundle *)whiteSDKBundle
 {
