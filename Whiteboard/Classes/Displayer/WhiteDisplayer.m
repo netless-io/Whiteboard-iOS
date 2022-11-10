@@ -74,6 +74,16 @@
 
 #pragma mark - 页面（场景）API
 
+- (void)setPrefersColorScheme:(WhitePrefersColorScheme)colorScheme
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setPrefersColorScheme"] arguments: @[colorScheme]];
+}
+
+- (void)setTeleBoxTheme:(WhiteTeleBoxManagerThemeConfig *)themeConfig
+{
+    [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"setTeleBoxTheme"] arguments: @[themeConfig]];
+}
+
 - (void)getSceneFromScenePath:(NSString *)scenePath result:(void (^)(WhiteScene * _Nullable))result
 {
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"getScene"] arguments:@[scenePath] completionHandler:^(id  _Nullable value) {

@@ -12,6 +12,8 @@
 #import "WhitePanEvent.h"
 #import "WhiteFontFace.h"
 #import "SyncedStore.h"
+#import "WhiteWindowParams.h"
+#import "WhiteTeleBoxManagerThemeConfig.h"
 
 typedef NS_ENUM(NSInteger, WhiteScenePathType) {
     /** 路径对应的内容为空。 */
@@ -43,6 +45,20 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)postIframeMessage:(id)payload;
 
 #pragma mark - 页面（场景）管理 API
+
+/**
+ 多窗口下更新窗口颜色配置
+ 
+ @param colorScheme (WhitePrefersColorScheme)[WhitePrefersColorScheme]
+ */
+- (void)setPrefersColorScheme:(WhitePrefersColorScheme)colorScheme;
+
+/**
+ 多窗口下更新窗口颜色主题配置
+ 
+ @param themeConfig (WhiteTeleBoxManagerThemeConfig)[WhiteTeleBoxManagerThemeConfig]
+ */
+- (void)setTeleBoxTheme:(WhiteTeleBoxManagerThemeConfig *)themeConfig;
 
 /**
  根据scenePath查询指定场景

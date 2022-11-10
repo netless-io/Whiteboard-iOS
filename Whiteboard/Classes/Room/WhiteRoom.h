@@ -263,13 +263,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoom (Scene)
 
-/**
- 多窗口下更新窗口颜色配置
- 
- @param colorScheme (WhitePrefersColorScheme)[WhitePrefersColorScheme]
- */
-- (void)setPrefersColorScheme:(WhitePrefersColorScheme)colorScheme;
-
 /** 暗黑模式, 本地效果， 不会同步到远端， 默认Light, 设置auto只有在iOS13以上才会生效*/
 
 /**
