@@ -9,6 +9,8 @@
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
   开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 
+## [2.17.0-alpha.10] - 2022-11-14
+- 修复 `WhitePlayer` 的 `scrollVerticalOnly` 不生效错误
 ## [2.17.0-alpha.9] - 2022-11-10
 - 移除 `WhiteboardView.backgroundColor` 设置，现在设置颜色变为直接设置 `WKWebView` 的背景色
 - `WhiteDisplayer` 新增设置主题的 `setPrefersColorScheme` 和 `setTeleBoxTheme`
