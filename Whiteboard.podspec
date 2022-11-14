@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Whiteboard'
-  s.version          = '2.17.0-alpha.9'
+  s.version          = '2.17.0-alpha.10'
   s.summary          = 'netless.io Whiteboard API on iOS'
 
   s.description      = <<-DESC
