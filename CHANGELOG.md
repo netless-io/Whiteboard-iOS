@@ -9,6 +9,9 @@
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
   开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 
+## [2.17.0-alpha.11] - 2022-11-15
+- 更新 `@netless/window-manager`至 1.0.0-canary.69
+- 修复播放器精度丢失的错误
 ## [2.17.0-alpha.10] - 2022-11-14
 - 修复 `WhitePlayer` 的 `scrollVerticalOnly` 不生效错误
 ## [2.17.0-alpha.9] - 2022-11-10
