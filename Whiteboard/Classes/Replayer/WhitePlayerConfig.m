@@ -34,7 +34,8 @@
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
 {
     if (self.beginTimestamp) {
-        dic[NSStringFromSelector(@selector(beginTimestamp))] = @([self.beginTimestamp integerValue] * WhiteConstTimeUnitRatio);
+        NSInteger intValue = [self.beginTimestamp doubleValue] * WhiteConstTimeUnitRatio;
+        dic[NSStringFromSelector(@selector(beginTimestamp))] = @(intValue);
     }
     if (self.duration) {
         dic[NSStringFromSelector(@selector(duration))] = @([self.duration integerValue] * WhiteConstTimeUnitRatio);

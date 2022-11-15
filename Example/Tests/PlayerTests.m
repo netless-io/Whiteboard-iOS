@@ -89,6 +89,23 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [self.player play];
 }
 
+#pragma mark - Player TimeStamp Convert
+
+- (void)testBeginTimestampConvert
+{
+    NSNumber *t1 = @(1668412662.560);
+    WhitePlayerConfig *config1 = [[WhitePlayerConfig alloc] initWithRoom:@"" roomToken:@""];
+    config1.beginTimestamp = t1;
+    NSString *json1 = [config1 jsonString];
+    XCTAssert([json1 containsString:[@(t1.doubleValue * WhiteConstTimeUnitRatio) description]]);
+    
+    NSNumber *t2 = @(1668412662);
+    WhitePlayerConfig *config2 = [[WhitePlayerConfig alloc] initWithRoom:@"" roomToken:@""];
+    config2.beginTimestamp = t2;
+    NSString *json2 = [config2 jsonString];
+    XCTAssert([json2 containsString:[@(t2.integerValue * WhiteConstTimeUnitRatio) description]]);
+}
+
 #pragma mark - Player Control
 
 - (void)testPlay
