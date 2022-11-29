@@ -199,7 +199,7 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /** 独立的 SyncedStore 状态，与 globalState 类似，但是没有任何 SDK 内部的状态 */
 @property (nonatomic, assign) BOOL enableSyncedStore;
 
-/** 是否开启多窗口，默认为 false，开启后，各种 API 会进行更改。*/
+/** 是否开启多窗口，默认为 NO，开启后，各种 API 会进行更改。*/
 @property (nonatomic, assign) BOOL useMultiViews;
 
 @end

@@ -169,7 +169,7 @@
     if (!self.roomConfig) {
         NSDictionary *payload = @{@"avatar": @"https://white-pan.oss-cn-shanghai.aliyuncs.com/40/image/mask.jpg"};
         WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUUID:self.roomUuid roomToken:roomToken uid:@"1" userPayload:payload];
-        // 配置，橡皮擦是否能删除图片。默认为 false，能够删除图片。
+        // 配置，橡皮擦是否能删除图片。默认为 NO，能够删除图片。
 //         roomConfig.disableEraseImage = YES;
         // 设置最大最小缩放比例，不设置成 0，会导致画面极小时，出现一些问题。默认不是 0
         WhiteCameraBound *bound = [WhiteCameraBound defaultMinContentModeScale:0 maxContentModeScale:10];

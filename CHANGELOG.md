@@ -67,8 +67,8 @@
 - 升级 `synced-store` 至 2.0.3
 ## [2.16.29] - 2022-07-19
 - 更新 `white-web-sdk` 至 2.16.27
-- 画笔支持虚线功能，设置 `room.memberState.dottedLine` 为 `true` 开启该功能。该功能需要开启新铅笔后才能使用
-- 文字工具支持直接选择并编辑文字，设置 `room.memberState.textCanSelectText` 为 `true` 开启该功能
+- 画笔支持虚线功能，设置 `room.memberState.dottedLine` 为 `YES` 开启该功能。该功能需要开启新铅笔后才能使用
+- 文字工具支持直接选择并编辑文字，设置 `room.memberState.textCanSelectText` 为 `YES` 开启该功能
 - 修改箭头、直线工具的交互方式
 ## [2.16.28] - 2022-07-15
 - 更新 `white-web-sdk` 至2.16.26
@@ -252,7 +252,7 @@
 - 更新`white-web-sdk`至 2.15.4
 - 更新`@netless/window-manager`至 0.2.19
 - 更新`@netless/app-slide`至 0.0.22
-- 优化 `useMultiViews` 为 true 时，cameraState 状态回调
+- 优化 `useMultiViews` 为 YES 时，cameraState 状态回调
 ## [2.15.1] - 2021-11-09
 - 更新`white-web-sdk`至 2.15.3
 - 更新`@netless/window-manager`至 0.2.17
@@ -266,14 +266,14 @@
 - 更新`white-web-sdk`至 2.14.7
 - 多窗口支持显示单页模式 ppt
 ## [2.14.5] - 2021-10-22
-- 更新`@netless/window-manager`至 0.2.9,修复`WhiteSdkConfiguration`中`useMultiViews`为 true，writable 为 false，userCursor 为 true 进入一个没有多窗口内容的房间后，再切换回 writable 为 true 时，无法绘制的问题。
+- 更新`@netless/window-manager`至 0.2.9,修复`WhiteSdkConfiguration`中`useMultiViews`为 YES，writable 为 NO，userCursor 为 YES 进入一个没有多窗口内容的房间后，再切换回 writable 为 YES 时，无法绘制的问题。
 ## [2.14.4] - 2021-10-22
-- 更新`@netless/window-manager`至 0.2.8,修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，以 writable 为 false 进入一个没有多窗口内容的房间时，出现报错，或者无回调的问题。
+- 更新`@netless/window-manager`至 0.2.8,修复`WhiteSdkConfiguration`中`useMultiViews`为 YES 时，以 writable 为 NO 进入一个没有多窗口内容的房间时，出现报错，或者无回调的问题。
 ## [2.14.3] - 2021-10-21
 - 更新`white-web-sdk`至 2.14.5
 ## [2.14.2] - 2021-10-15
 - 更新`white-web-sdk`至 2.14.4
-- 更新`@netless/window-manager`至 0.2.5，修复`WhiteSdkConfiguration`中`useMultiViews`为 true 时，`WhiteRoomConfig`的 `disableCameraTransform` true 无法生效的问题。
+- 更新`@netless/window-manager`至 0.2.5，修复`WhiteSdkConfiguration`中`useMultiViews`为 YES 时，`WhiteRoomConfig`的 `disableCameraTransform` YES 无法生效的问题。
 ## [2.14.1] - 2021-10-11
 - 更新`white-web-sdk`至 2.14.4
 ## [2.14.0] - 2021-10-09
@@ -546,7 +546,7 @@
 ## [2.8.0] - 2020-05-14
 - <span style="color:red;">不兼容改动</span>：SDK 初始化时，新增必须要的 APP identitier 参数（详情见 开发者文档中，查看 APP identitier 一栏）
 - 开放画笔渲染引擎选项，新增 canvas 渲染模式（需要主动选择）
-- 修复`isWritable=false`用户无法跟随新主播的问题
+- 修复`isWritable=NO`用户无法跟随新主播的问题
 ## [2.7.14] - 2020-05-14
 - 动态 ppt 增加本地 scheme 支持（详情见`WhitePptParams`类，以及`WhiteSdkConfiguration` `pptParams`属性说明，注意：拦截自定义协议需要使用 iOS 11 API）
 ## [2.7.13] - 2020-05-07
