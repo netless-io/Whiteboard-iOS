@@ -92,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - SyncedStore
 /**
  * 获取 SyncedStore 对象
- * 注意 SyncedStore 只有在 `WhiteSdkConfiguration` 的 `enableSyncedStore` 为 true 的情况下才能正常使用
+ * 注意 SyncedStore 只有在 `WhiteSdkConfiguration` 的 `enableSyncedStore` 为  YES  的情况下才能正常使用
  */
 - (SyncedStore *)obtainSyncedStore;
 
