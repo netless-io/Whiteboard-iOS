@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "WhiteCallBridgeCommand.h"
-#import "WhiteboardView.h"
+#import "WhiteBoardView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
