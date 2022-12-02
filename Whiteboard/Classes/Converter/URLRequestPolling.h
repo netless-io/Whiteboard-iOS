@@ -7,15 +7,14 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 @protocol URLRequestPollingDelegate <NSObject>
 
 - (void)URLRequestPollingDidCompleteRequest:(NSString *)identifier response:(NSURLResponse *)response data:(NSData *)data error:(NSError *)error;
 
 @end
 
-typedef NSURLRequest* (^URLRequestMaker)(void);
-
-NS_ASSUME_NONNULL_BEGIN
+typedef NSURLRequest* _Nullable (^URLRequestMaker)(void);
 
 static NSURLSession* querySession() {
     static NSURLSession* session;
