@@ -61,6 +61,12 @@
 
 `WhiteWindowParams` 新增 `containerStyle` `stageStyle` `defaultBoxBodyStyle` `defaultBoxStageStyle` `theme` 属性，用于设置窗口样式
 
+## [2.16.51] - 2022-12-09
+- 更新 `@netless/app-slide` 至 0.2.27
+- 更新 `@netless/slide-rtc-plugin` 至 0.9.3
+## [2.16.50] - 2022-12-06
+- 更新 `@netless/app-slide` 至 0.2.25
+- 更新 `@netless/slide-rtc-plugin` 至 0.8.7
 ## [2.16.49] - 2022-11-30
 
 - 更新 `@netless/app-slide` 至 0.2.24
