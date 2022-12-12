@@ -4,28 +4,28 @@ PODS:
   - NETURLSchemeHandler (0.1.5)
   - NTLBridge (3.1.4)
   - SSZipArchive (2.4.3)
-  - Whiteboard (2.17.0-alpha.12):
-    - Whiteboard/Whiteboard-YYModel (= 2.17.0-alpha.12)
-  - Whiteboard/Base (2.17.0-alpha.12):
+  - Whiteboard (2.17.0-alpha.13):
+    - Whiteboard/Whiteboard-YYModel (= 2.17.0-alpha.13)
+  - Whiteboard/Base (2.17.0-alpha.13):
     - NTLBridge (~> 3.1.4)
     - Whiteboard/Object
-  - Whiteboard/Converter (2.17.0-alpha.12):
+  - Whiteboard/Converter (2.17.0-alpha.13):
     - Whiteboard/Object
-  - Whiteboard/fpa (2.17.0-alpha.12):
+  - Whiteboard/fpa (2.17.0-alpha.13):
     - AgoraFPA_iOS (~> 1.0.0)
     - Whiteboard/Room
-  - Whiteboard/Model (2.17.0-alpha.12):
+  - Whiteboard/Model (2.17.0-alpha.13):
     - YYModel
-  - Whiteboard/NativeReplayer (2.17.0-alpha.12):
+  - Whiteboard/NativeReplayer (2.17.0-alpha.13):
     - Whiteboard/Replayer
-  - Whiteboard/Object (2.17.0-alpha.12):
+  - Whiteboard/Object (2.17.0-alpha.13):
     - Whiteboard/Model
-  - Whiteboard/Replayer (2.17.0-alpha.12):
+  - Whiteboard/Replayer (2.17.0-alpha.13):
     - Whiteboard/Base
-  - Whiteboard/Resource (2.17.0-alpha.12)
-  - Whiteboard/Room (2.17.0-alpha.12):
+  - Whiteboard/Resource (2.17.0-alpha.13)
+  - Whiteboard/Room (2.17.0-alpha.13):
     - Whiteboard/Base
-  - Whiteboard/Whiteboard-YYModel (2.17.0-alpha.12):
+  - Whiteboard/Whiteboard-YYModel (2.17.0-alpha.13):
     - Whiteboard/Converter
     - Whiteboard/NativeReplayer
     - Whiteboard/Resource
@@ -58,7 +58,7 @@ SPEC CHECKSUMS:
   NETURLSchemeHandler: 7e3b68bea1d06062f22adf8fbcb971149cbc1379
   NTLBridge: 49780dc966976d3221a0eb03c7368617c1987cb6
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  Whiteboard: 32bc7643dbd273e02c0537c1dc688136c58ec134
+  Whiteboard: 6094f6155bec93bae45a4a4ad3896d09afac77ff
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: d8420d18c515bc9df7e4cfb19930b344dd46d60d
