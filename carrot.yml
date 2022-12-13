@@ -1,4 +1,4 @@
 - name: whiteboard-bridge
   repoPath: ../whiteboard-bridge
   repoURL: 'https://github.com/netless-io/whiteboard-bridge.git'
-  commit: 9857fb2
+  commit: 91d9848
