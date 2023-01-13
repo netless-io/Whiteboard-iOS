@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.53] - 2023-01-13
+- 更新 `@netless/app-slide` 至 0.2.30
 ## [2.16.52] - 2023-01-06
 - 更新 `@netless/app-slide` 至 0.2.29
 - 更新 `@netless/slide-rtc-plugin` 至 0.10.1
