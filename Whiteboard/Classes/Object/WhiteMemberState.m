@@ -35,6 +35,7 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
 @property (nonatomic, copy) NSArray<NSNumber *> *strokeColor;
 @property (nonatomic, strong) NSNumber *strokeWidth;
 @property (nonatomic, strong) NSNumber *textSize;
+@property (nonatomic, strong) NSNumber *pencilEraserSize;
 @property (nonatomic, strong) WhiteApplianceShapeTypeKey shapeType;
 @end
 
@@ -62,6 +63,7 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
 @dynamic strokeWidth;
 @dynamic textSize;
 @dynamic shapeType;
+@dynamic pencilEraserSize;
 
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"strokeColor" : [NSNumber class]};

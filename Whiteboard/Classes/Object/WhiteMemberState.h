@@ -105,6 +105,10 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
  @since 2.12.24
  */
 @property (nonatomic, strong, readwrite, nullable) WhiteApplianceShapeTypeKey shapeType;
+/**
+ * 铅笔橡皮的尺寸，取值 1~3
+ */
+@property (nonatomic, assign, readwrite, nullable) NSNumber *pencilEraserSize;
 
 @end
 
