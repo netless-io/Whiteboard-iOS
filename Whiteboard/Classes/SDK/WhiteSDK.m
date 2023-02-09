@@ -21,6 +21,7 @@
 @property (nonatomic, copy) NSString *slideLogPath;
 @property (nonatomic, copy) NSFileHandle *slideLogFileHandler;
 @property (nonatomic, copy) void(^requestLogHandler)(BOOL success, NSError *error);
+@property (nonatomic, copy) void(^requestSlideVolumeHandler)(CGFloat volume, NSError *error);
 
 @end
 
@@ -118,6 +119,26 @@
 {
     [self.bridge setupWebSDKWithConfig:self.config completion:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideLogNotification:) name:@"Slide-Log" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideVolumeNotification:) name:@"Slide-Volume" object:nil];
+}
+
+#pragma mark - PPT Volume
+- (void)getSlideVolumeWithCompletionHandler:(void (^)(CGFloat, NSError * _Nonnull))completionHandler
+{
+    self.requestSlideVolumeHandler = completionHandler;
+    __weak typeof(self) weakSelf = self;
+    [self.bridge evaluateJavaScript:@"window.postMessage({type: \"@slide/_get_volume_\"}, '*');" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (error) {
+            completionHandler(0, error);
+            weakSelf.requestSlideVolumeHandler = nil;
+            return;
+        }
+    }];
+}
+
+- (void)updateSlideVolume:(CGFloat)volume
+{
+    [self.bridge evaluateJavaScript:[NSString stringWithFormat:@"window.postMessage ({'type': \"@slide/_update_volume_\", 'volume': %f}, '*')", volume] completionHandler:nil];
 }
 
 #pragma mark - CommonCallback
@@ -155,6 +176,21 @@
     self.requestingSlideLogSessionId = @"";
     self.requestLogHandler = nil;
     self.slideLogFileHandler = nil;
+}
+
+- (void)onSlideVolumeNotification:(NSNotification *)notification
+{
+    if (!self.requestSlideVolumeHandler) {
+        return;
+    }
+    NSDictionary *userInfo = notification.userInfo;
+    if (userInfo[@"volume"]) {
+        CGFloat volume = [userInfo[@"volume"] floatValue];
+        self.requestSlideVolumeHandler(volume, nil);
+        return;
+    }
+    NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-70000 userInfo:userInfo];
+    self.requestSlideVolumeHandler(0, error);
 }
 
 - (void)onSlideLogNotification:(NSNotification *)notification

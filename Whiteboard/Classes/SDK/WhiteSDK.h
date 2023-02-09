@@ -116,6 +116,22 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)updateTextFont:(NSArray <NSString *>*)fonts;
 
+#pragma mark - PPT Volume
+
+/**
+ 获取当前 slide 音量
+ @param completionHandler 调用结果
+ - 如果调用成功： volume 返回值为 0-1 之间的值，error 为 nil
+ - 如果调用失败： volume 返回值为0，error 会返回详细信息
+ */
+- (void)getSlideVolumeWithCompletionHandler:(void(^)(CGFloat volume, NSError *error))completionHandler;
+
+/**
+ 更新当前 slide 音量
+ @param volume 音量值，0-1
+ */
+- (void)updateSlideVolume:(CGFloat)volume;
+
 #pragma mark - CommonCallback
 
 /**

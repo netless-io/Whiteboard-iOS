@@ -7,6 +7,7 @@
 # Whiteboard 版本记录
 
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
+
   开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 
 ## [2.17.0-alpha.26] - 2023-07-18
@@ -85,6 +86,16 @@
 
 `WhiteWindowParams` 新增 `containerStyle` `stageStyle` `defaultBoxBodyStyle` `defaultBoxStageStyle` `theme` 属性，用于设置窗口样式
 
+## [2.16.55] - 2023-02-09
+- 更新 `@netless/app-slide` 至 0.2.32
+- `WhiteSDK` 新增 `getSlideVolumeWithCompletionHandler` 和 `updateSlideVolume` 方法用于获取和更新 ppt 内音频音量
+## [2.16.54] - 2023-02-02
+- 更新 `@netless/app-slide` 至 0.2.31
+## [2.16.53] - 2023-01-13
+- 更新 `@netless/app-slide` 至 0.2.30
+## [2.16.52] - 2023-01-06
+- 更新 `@netless/app-slide` 至 0.2.29
+- 更新 `@netless/slide-rtc-plugin` 至 0.10.1
 ## [2.16.51] - 2022-12-09
 - 更新 `@netless/app-slide` 至 0.2.27
 - 更新 `@netless/slide-rtc-plugin` 至 0.9.3
