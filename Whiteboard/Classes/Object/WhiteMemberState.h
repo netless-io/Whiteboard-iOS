@@ -74,6 +74,10 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 /** 当教具为 `Shape` 时，所选定的 shape 图形。
  @since 2.12.24 */
 @property (nonatomic, strong, readonly, nullable) WhiteApplianceShapeTypeKey shapeType;
+/**
+ * 铅笔橡皮的尺寸，取值 1~3
+ */
+@property (nonatomic, strong, readonly, nullable) NSNumber *pencilEraserSize;
 @end
 
 #pragma mark - MemberState
