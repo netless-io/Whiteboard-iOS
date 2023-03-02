@@ -12,6 +12,7 @@
 #import "WhiteAudioMixerBridge.h"
 #import "WhiteFontFace.h"
 #import "WhiteRegisterAppParams.h"
+#import "WhiteSlideDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
 
 /** 白板 SDK 相关方法。 */
@@ -142,6 +143,17 @@ NS_ASSUME_NONNULL_BEGIN
  @param callbackDelegate 通用回调事件，详见 [WhiteCommonCallbackDelegate](WhiteCommonCallbackDelegate)。
  */
 - (void)setCommonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callbackDelegate;
+
+#pragma mark - SlideCallback
+
+/**
+ 设置 多窗口 Slide 回调事件。
+
+ SDK 通过 [WhiteSlideDelegate](WhiteSlideDelegate) 类处理 Slide 的回调。
+ 
+ @param slideDelegate Slide 回调事件，详见 [WhiteSlideDelegate](WhiteSlideDelegate)。
+ */
+- (void)setSlideDelegate:(nullable id<WhiteSlideDelegate>)slideDelegate;
 
 #pragma mark - CustomApp
 
