@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.57] - 2023-03-02
+- 更新 `@netless/app-slide` 至 0.2.34
+- `WhiteSdkConfiguration` 新增 `enableSlideInterrupterAPI` 参数。`WhiteSDK` 新增 `setSlideDelegate:` 方法。现在可以通过设置 `WhiteSdkConfiguration.enableSlideInterrupterAPI` 为 `YES` 和调用 `WhiteSDK.setSlideDelegate:` 设置回调对象完成 Slide Url 的拦截替换功能。
+- 新增 Slide Url 拦截替换功能。
 ## [2.16.56] - 2023-02-16
 - 更新 `@netless/app-slide` 至 0.2.33
 ## [2.16.55] - 2023-02-09
