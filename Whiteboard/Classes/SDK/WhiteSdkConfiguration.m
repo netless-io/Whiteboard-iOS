@@ -75,6 +75,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     _pptParams = [[WhitePptParams alloc] init];
     _disableNewPencilStroke = NO;
     _whiteSlideAppParams = [[WhiteSlideAppParams alloc] init];
+    _enableSlideInterrupterAPI = NO;
     return self;
 }
 

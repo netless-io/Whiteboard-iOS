@@ -192,6 +192,15 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /** SlideApp 参数。详见 [WhiteSlideAppParams](WhiteSlideAppParams)  */
 @property (nonatomic, strong) WhiteSlideAppParams *whiteSlideAppParams;
 
+/**
+ 是否开启 Slide 资源 url 拦截替换功能。
+ 开启之后，需要同时设置 `WhiteSDK.setSlideDelegate` 在 `slideUrlInterrupter` 回调中对 url 进行处理。
+ 
+ - `YES`：开启。
+ - `NO`：（默认）关闭。
+ */
+@property (nonatomic, assign) BOOL enableSlideInterrupterAPI;
+
 @property (nonatomic, assign) BOOL disableDeviceInputs;
 
 /**
