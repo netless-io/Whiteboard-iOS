@@ -147,6 +147,12 @@
     self.bridge.commonCallbacks.delegate = callbackDelegate;
 }
 
+#pragma mark - SlideCallback
+- (void)setSlideDelegate:(nullable id<WhiteSlideDelegate>)slideDelegate
+{
+    self.bridge.commonCallbacks.slideDelegate = slideDelegate;
+}
+
 #pragma mark - Slide 日志
 - (void)requestSlideLogToFilePath:(NSString *)path result:(void(^)(BOOL success, NSError *error))result
 {

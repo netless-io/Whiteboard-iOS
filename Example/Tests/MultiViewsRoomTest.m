@@ -13,7 +13,8 @@ typedef void(^WhiteSceneStateBlock)(WhiteSceneState *state);
 static WhiteAppParam* _Nonnull testMp4AppParam;
 static WhiteAppParam* _Nonnull testPptAppParam;
 
-@interface MultiViewsRoomTest : BaseRoomTest
+@interface MultiViewsRoomTest : BaseRoomTest <WhiteSlideDelegate>
+@property (nonatomic, assign) BOOL didCallSlideInterrupter;
 @end
 
 @implementation MultiViewsRoomTest
@@ -32,6 +33,10 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 
 - (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig {
     sdkConfig.useMultiViews = YES;
+    
+    if ([self.name containsString:@"testSlideUrlInterrupt"]) {
+        sdkConfig.enableSlideInterrupterAPI = YES;
+    }
 }
     
 - (void)testSlideOptionsDefault
@@ -44,7 +49,30 @@ static WhiteAppParam* _Nonnull testPptAppParam;
             [exp fulfill];
         }];
     }];
-    [self waitForExpectationsWithTimeout:999 handler:^(NSError * _Nullable error) {
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testSlideUrlInterrupt
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.roomVC.sdk setSlideDelegate:self];
+    WhiteAppParam* slide = [WhiteAppParam createSlideApp:@"/test_interrupter" taskId:@"0c17d99a3cfa41dc85a9b9a379d18912" url:@"https://white-us-doc-convert.s3.us-west-1.amazonaws.com/dynamicConvert" title:@"test_interrupter"];
+    self.didCallSlideInterrupter = NO;
+    __weak typeof(self.room) weakRoom = self.room;
+    __weak typeof(self) weakSelf = self;
+    [self.roomVC.room addApp:slide completionHandler:^(NSString * _Nonnull appId) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            XCTAssertTrue(weakSelf.didCallSlideInterrupter);
+            [weakRoom closeApp:appId completionHandler:^{
+                [exp fulfill];
+            }];
+        });
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
         }
@@ -309,6 +337,26 @@ static WhiteAppParam* _Nonnull testPptAppParam;
             completionHandler();
         }
     }];
+}
+
+#pragma - Delegate
+- (void)slideUrlInterrupter:(NSString *)url completionHandler:(SlideUrlInterrupterCallback)completionHandler {
+    self.didCallSlideInterrupter = YES;
+    NSString *questUrl = [NSString stringWithFormat:@"https://abacus-api-us.netless.group/aws/s3/presigned"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:questUrl]];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request addValue:@"us-sv" forHTTPHeaderField:@"region"];
+    request.HTTPMethod = @"POST";
+    NSData *bodyData = [NSJSONSerialization dataWithJSONObject:@{@"src": url} options:NSJSONWritingFragmentsAllowed error:nil];
+    request.HTTPBody = bodyData;
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSString *signedUrl = dict[@"signedUrl"];
+        if (signedUrl.length > 0) {
+            completionHandler(signedUrl);
+        }
+    }] resume] ;
 }
 
 @end

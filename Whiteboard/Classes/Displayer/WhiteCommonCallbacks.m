@@ -8,6 +8,7 @@
 #import "WhiteCommonCallbacks.h"
 #import "WhiteConsts.h"
 #import "WhiteObject.h"
+#import "DWKWebView.h"
 
 @implementation WhiteCommonCallbacks
 
@@ -37,6 +38,15 @@
         [self.delegate throwError:error];
     }
     return @"";
+}
+
+- (void)slideUrlInterrupter:(NSString *)url completionHandler:(JSCallback)completionHandler
+{
+    if ([self.slideDelegate respondsToSelector:@selector(slideUrlInterrupter:completionHandler:)]) {
+        [self.slideDelegate slideUrlInterrupter:url completionHandler:^(NSString * _Nullable result) {
+            completionHandler(result, YES);
+        }];
+    }
 }
 
 - (NSString *)urlInterrupter:(NSString *)url
