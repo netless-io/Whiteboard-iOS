@@ -8,6 +8,7 @@
 #import "WhiteObject.h"
 #import <UIKit/UIKit.h>
 #import "WhiteConsts.h"
+#import "WhiteSlideAppParams.h"
 
 
 typedef NS_ENUM(NSInteger, WhiteDeviceType) {
@@ -185,9 +186,11 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 @property (nonatomic, assign) BOOL routeBackup __deprecated_msg("this api has no effect");
 
-/** 动态 ppt 参数。详见 [WhitePptParams](WhitePptParams)。 */
-@property (nonatomic, strong) WhitePptParams *pptParams;
+/** @deprecated 该属性已废弃。请使用 WhiteSlideAppParams */
+@property (nonatomic, strong) WhitePptParams *pptParams __deprecated_msg("use WhiteSlideAppParams instead");
 
+/** SlideApp 参数。详见 [WhiteSlideAppParams](WhiteSlideAppParams)  */
+@property (nonatomic, strong) WhiteSlideAppParams *whiteSlideAppParams;
 
 @property (nonatomic, assign) BOOL disableDeviceInputs;
 

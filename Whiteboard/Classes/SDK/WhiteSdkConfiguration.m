@@ -74,6 +74,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     _appIdentifier = appIdentifier;
     _pptParams = [[WhitePptParams alloc] init];
     _disableNewPencilStroke = NO;
+    _whiteSlideAppParams = [[WhiteSlideAppParams alloc] init];
     return self;
 }
 
@@ -81,7 +82,9 @@ static NSString *const kJSDeviceType = @"deviceType";
 {
     return @{@"nativeTags": @"__nativeTags",
              @"platform": @"__platform",
-             @"netlessUA": @"__netlessUA"};
+             @"netlessUA": @"__netlessUA",
+             @"whiteSlideAppParams": @"slideAppOptions"
+    };
 }
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {

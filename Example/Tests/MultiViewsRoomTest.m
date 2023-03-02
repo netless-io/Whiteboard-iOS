@@ -33,6 +33,23 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 - (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig {
     sdkConfig.useMultiViews = YES;
 }
+    
+- (void)testSlideOptionsDefault
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    [self.roomVC.sdk.bridge evaluateJavaScript:@"manager.__proto__.constructor.registered.get('Slide').appOptions.showRenderError" completionHandler:^(NSNumber *renderError, NSError * _Nullable error) {
+        [self.roomVC.sdk.bridge evaluateJavaScript:@"manager.__proto__.constructor.registered.get('Slide').appOptions.debug" completionHandler:^(NSNumber *debug, NSError * _Nullable error1) {
+            XCTAssertTrue((![renderError boolValue] && ![debug boolValue]));
+            [exp fulfill];
+        }];
+    }];
+    [self waitForExpectationsWithTimeout:999 handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
 
 - (void)testPptLocalSnapShot
 {
