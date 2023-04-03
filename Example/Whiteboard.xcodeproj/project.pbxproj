@@ -523,13 +523,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Whiteboard_Example/Pods-Whiteboard_Example-frameworks.sh",
-				"${PODS_ROOT}/AgoraFPA_iOS/AgoraFPA.framework",
-				"${PODS_ROOT}/AgoraFPA_iOS/AgoraFpaProxyService.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/NTL_AgoraFPA/AgoraFpaProxyService.framework/AgoraFpaProxyService",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/NTL_AgoraFPA/AgoraFPA.framework/AgoraFPA",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFPA.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFpaProxyService.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraFPA.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

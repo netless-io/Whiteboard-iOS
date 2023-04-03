@@ -165,7 +165,7 @@ Pod::Spec.new do |s|
     socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
     socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
     socket.dependency 'Whiteboard/Room'
-    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
+    socket.dependency 'NTL_AgoraFPA', '~> 1.0.0'
     # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
     socket.ios.deployment_target = '11.0'
   end
@@ -176,7 +176,7 @@ Pod::Spec.new do |s|
     socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
     socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
     socket.dependency 'Whiteboard/Room-YYKit'
-    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
+    socket.dependency 'NTL_AgoraFPA', '~> 1.0.0'
     # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
     socket.ios.deployment_target = '11.0'
   end
