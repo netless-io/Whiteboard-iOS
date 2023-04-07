@@ -25,13 +25,26 @@
 @interface WhiteBoardView ()
 
 @property (nonatomic, strong) BridgeCallRecorder* recorder;
+@property (nonatomic, copy) NSString* customResourceUrl;
+
 
 @end
 
 @implementation WhiteBoardView
 
 - (instancetype)init {
-    return [self initWithFrame:CGRectZero];
+    if (self = [self initWithFrame:CGRectZero]) {
+        [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
+    }
+    return self;
+}
+
+- (instancetype)initCustomUrl:(NSString *)customUrl {
+    if (self = [self initWithFrame:CGRectZero]) {
+        self.customResourceUrl = customUrl;
+        [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -71,13 +84,14 @@
         @"sdk.joinRoom": @(TRUE)
     }];
     
-    [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHandler:) name:UIKeyboardWillChangeFrameNotification object:nil];
     return self;
 }
 
 - (NSURL *)resourceURL {
+    if (self.customResourceUrl) {
+        return [NSURL URLWithString:self.customResourceUrl];
+    }
     return [NSURL fileURLWithPath:[[self whiteSDKBundle] pathForResource:@"index" ofType:@"html"]];
 }
 
