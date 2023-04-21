@@ -36,9 +36,32 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     
     if ([self.name containsString:@"testSlideUrlInterrupt"]) {
         sdkConfig.enableSlideInterrupterAPI = YES;
+        return;
+    }
+    if ([self.name isEqualToString:@"testApiHostError"]) {
+        self.assertJoinRoomError = YES;
+        sdkConfig.apiHosts = @[@"t.t.com"];
+    }
+    if ([self.name isEqualToString:@"testApiHostEmpty"]) {
+        self.assertJoinRoomError = YES;
+        sdkConfig.apiHosts = @[];
+    }
+    if ([self.name isEqualToString:@"testApiHostSuccess"]) {
+        sdkConfig.apiHosts = @[@"api.baiban.shengwang.cn"];
     }
 }
-    
+
+- (void)roomConfigDidSetup:(WhiteRoomConfig *)config {
+    if ([self.name isEqualToString:@"testModulesOrigin"]) {
+        config.modulesOrigin = @"https://sdk.herewhite.com";
+    }
+}
+
+- (void)testApiHostError { return; }
+- (void)testApiHostEmpty { return; }
+- (void)testApiHostSuccess { return; }
+- (void)testModulesOrigin { return; }
+
 - (void)testSlideOptionsDefault
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];

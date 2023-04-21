@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) WhiteRoomViewController *roomVC;
 @property (nonatomic, strong) WhiteRoom *room;
 @property (nonatomic, strong) WhiteRoomConfig *roomConfig;
+/// 需要加入房间失败的时候设置 YES，测试结束后会自己设置 NO
+@property (nonatomic, assign) BOOL assertJoinRoomError;
 
 - (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig;
 - (void)roomConfigDidSetup:(WhiteRoomConfig *)config;
