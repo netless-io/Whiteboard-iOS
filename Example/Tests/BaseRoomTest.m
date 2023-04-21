@@ -28,6 +28,13 @@
     __weak typeof(self)weakSelf = self;
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         weakSelf.room = room;
+        if (weakSelf.assertJoinRoomError) {
+            if (!error) {
+                XCTAssertTrue(NO, @"Need join room error, but join success");
+            }
+            [exp fulfill];
+            return;
+        }
         XCTAssertEqual(weakSelf.roomVC.roomConfig.isWritable, room.isWritable, @"roomVC writable is :%d room writbale is :%d", weakSelf.roomVC.roomConfig.isWritable, room.isWritable);
         XCTAssertNotNil(room);
         [exp fulfill];
@@ -54,6 +61,10 @@
 
 - (void)tearDown
 {
+    if (self.assertJoinRoomError) {
+        self.assertJoinRoomError = NO;
+        return;
+    }
     if (self.room.phase == WhiteRoomPhaseDisconnected) {
         [self popToRoot];
         [super tearDown];
