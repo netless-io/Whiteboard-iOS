@@ -40,6 +40,12 @@ NS_ASSUME_NONNULL_BEGIN
  @since 2.11.0 */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 
+/**
+ * 白板请求 modules 数据的地址，配置后不会请求白板默认地址
+ * @example https://modules.example.com
+ */
+@property (nonatomic, copy, nullable) NSString *modulesOrigin;
+
 /** 房间 UUID，即房间唯一标识符。 */
 @property (nonatomic, copy) NSString *room;
 
