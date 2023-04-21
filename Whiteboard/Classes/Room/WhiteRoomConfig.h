@@ -62,6 +62,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 
 /**
+ * 白板请求 modules 数据的地址，配置后不会请求白板默认地址
+ * @example https://modules.example.com
+ */
+@property (nonatomic, copy, nullable) NSString *modulesOrigin;
+
+/**
  禁止/允许工具响应用户输入。
 
  - `YES`：禁止工具响应用户输入。

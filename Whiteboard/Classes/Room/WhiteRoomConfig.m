@@ -23,7 +23,7 @@
 - (instancetype)init
 {
     NSAssert(false, @"please never use this method.");
-    return [self initWithUUID:nil roomToken:nil uid:@"" userPayload:nil];
+    return [self initWithUUID:@"" roomToken:@"" uid:@"" userPayload:nil];
 }
 
 - (instancetype)initWithUUID:(NSString *)uuid roomToken:(NSString *)roomToken uid:(NSString *)uid
