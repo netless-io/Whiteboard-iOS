@@ -7,7 +7,7 @@ target 'Whiteboard_Example' do
   pod 'Whiteboard', :path => '../'
   # FPA Not support arm64 simulator yet.
   # When there is some error like `building for iOS Simulator, but linking in dylib built for iOS`. Try using x64 simulator or real iOS device.
-  #  pod 'Whiteboard/fpa', :path => '../'
+  pod 'Whiteboard/fpa', :path => '../'
   pod 'Masonry'
   pod 'NETURLSchemeHandler'
   pod 'SSZipArchive'
