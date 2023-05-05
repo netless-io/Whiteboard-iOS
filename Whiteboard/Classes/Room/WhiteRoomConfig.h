@@ -178,7 +178,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- 加入房间的超时时间。单位为毫秒。
+ 加入房间的超时时间。单位为秒。
 
  SDK 超时后会主动断连，并触发 [firePhaseChanged](firePhaseChanged:) 回调。同时触发 [fireDisconnectWithError](fireDisconnectWithError:) 回调并返回”重连时长超出 xx 毫秒”的提示。
  */
