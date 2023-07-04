@@ -1,31 +1,27 @@
 PODS:
-  - AgoraFPA_iOS (1.0.0)
   - Masonry (1.1.0)
   - NETURLSchemeHandler (0.1.5)
   - NTLBridge (3.1.5)
   - SSZipArchive (2.4.3)
-  - Whiteboard (2.16.59):
-    - Whiteboard/Whiteboard-YYModel (= 2.16.59)
-  - Whiteboard/Base (2.16.59):
+  - Whiteboard (2.16.60):
+    - Whiteboard/Whiteboard-YYModel (= 2.16.60)
+  - Whiteboard/Base (2.16.60):
     - NTLBridge (~> 3.1.4)
     - Whiteboard/Object
-  - Whiteboard/Converter (2.16.59):
+  - Whiteboard/Converter (2.16.60):
     - Whiteboard/Object
-  - Whiteboard/fpa (2.16.59):
-    - AgoraFPA_iOS (~> 1.0.0)
-    - Whiteboard/Room
-  - Whiteboard/Model (2.16.59):
+  - Whiteboard/Model (2.16.60):
     - YYModel
-  - Whiteboard/NativeReplayer (2.16.59):
+  - Whiteboard/NativeReplayer (2.16.60):
     - Whiteboard/Replayer
-  - Whiteboard/Object (2.16.59):
+  - Whiteboard/Object (2.16.60):
     - Whiteboard/Model
-  - Whiteboard/Replayer (2.16.59):
+  - Whiteboard/Replayer (2.16.60):
     - Whiteboard/Base
-  - Whiteboard/Resource (2.16.59)
-  - Whiteboard/Room (2.16.59):
+  - Whiteboard/Resource (2.16.60)
+  - Whiteboard/Room (2.16.60):
     - Whiteboard/Base
-  - Whiteboard/Whiteboard-YYModel (2.16.59):
+  - Whiteboard/Whiteboard-YYModel (2.16.60):
     - Whiteboard/Converter
     - Whiteboard/NativeReplayer
     - Whiteboard/Resource
@@ -37,11 +33,9 @@ DEPENDENCIES:
   - NETURLSchemeHandler
   - SSZipArchive
   - Whiteboard (from `../`)
-  - Whiteboard/fpa (from `../`)
 
 SPEC REPOS:
   trunk:
-    - AgoraFPA_iOS
     - Masonry
     - NETURLSchemeHandler
     - NTLBridge
@@ -53,14 +47,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AgoraFPA_iOS: 2202f574e6832567e368d5e69ad6da121a18ee4a
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   NETURLSchemeHandler: 7e3b68bea1d06062f22adf8fbcb971149cbc1379
   NTLBridge: e94dc18242476b0238c10213a5438d9b9a59fcce
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  Whiteboard: bcff0e2652439fdf6baa410ada7177bcdf651387
+  Whiteboard: dd85077ac00790f9b460ddc7bbaa022be7448fd4
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 09fe7c56dd9928c3a1045d4858445252b9340c56
+PODFILE CHECKSUM: 68fd0ce7a45522c395b1c5daf3ec03787eb607f4
 
 COCOAPODS: 1.12.1
