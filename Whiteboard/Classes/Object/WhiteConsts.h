@@ -33,5 +33,5 @@ extern WhiteRegionKey const WhiteRegionUS;
 extern WhiteRegionKey const WhiteRegionIN;
 /** 新加坡 */
 extern WhiteRegionKey const WhiteRegionSG;
-/** 英国 */
-extern WhiteRegionKey const WhiteRegionGB;
+/** 欧洲 */
+extern WhiteRegionKey const WhiteRegionEU;
