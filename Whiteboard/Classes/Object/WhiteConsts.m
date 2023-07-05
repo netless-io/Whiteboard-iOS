@@ -19,4 +19,5 @@ WhiteRegionKey const WhiteRegionCN = @"cn-hz";
 WhiteRegionKey const WhiteRegionUS = @"us-sv";
 WhiteRegionKey const WhiteRegionIN = @"in-mum";
 WhiteRegionKey const WhiteRegionSG = @"sg";
+WhiteRegionKey const WhiteRegionGB = @"gb-lon";
 WhiteRegionKey const WhiteRegionEU = @"eu";
