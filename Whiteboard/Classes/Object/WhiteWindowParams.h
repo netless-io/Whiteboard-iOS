@@ -22,6 +22,8 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 @property (nonatomic, strong) NSNumber *containerSizeRatio;
 /** 多窗口区域（主窗口）以外的空间显示 PS 棋盘背景，默认 YES */
 @property (nonatomic, assign) BOOL chessboard;
+/** 是否使用窗口最大化，开启后添加的窗口将全屏展示。 默认 NO */
+@property (nonatomic, assign) BOOL fullscreen;
 /** 驼峰形式的 CSS，透传给多窗口时，最小化 div 的 css */
 @property (nonatomic, copy, nullable) NSDictionary *collectorStyles;
 /** 是否在网页控制台打印日志，默认 YES */

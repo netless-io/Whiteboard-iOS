@@ -18,6 +18,7 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     _chessboard = YES;
     _containerSizeRatio = @(9/16.0);
     _debug = YES;
+    _fullscreen = NO;
     _prefersColorScheme = WhitePrefersColorSchemeLight;
     return self;
 }
