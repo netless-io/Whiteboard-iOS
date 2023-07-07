@@ -261,6 +261,59 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     }
 }
 
+#pragma mark - DocsEvent
+- (void)testDocsEvents
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self.room) weakRoom = self.room;
+    [self.room addApp:testPptAppParam completionHandler:^(NSString * _Nonnull appId) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            WhiteWindowDocsEventOptions *ops = [[WhiteWindowDocsEventOptions alloc] init];
+            ops.page = @(1);
+            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventJumpToPage options:ops completionHandler:^(bool success) {
+                XCTAssert(success, @"WhiteWindowDocsEventJumpPage Fail");
+            }];
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventNextPage options:nil completionHandler:^(bool success) {
+                XCTAssert(success, @"WhiteWindowDocsEventNextPage Fail");
+            }];
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventPrevPage options:nil completionHandler:^(bool success) {
+                XCTAssert(success, @"WhiteWindowDocsEventPrevPage Fail");
+            }];
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(12 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventNextStep options:nil completionHandler:^(bool success) {
+                XCTAssert(success, @"WhiteWindowDocsEventNextStep Fail");
+            }];
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventPrevStep options:nil completionHandler:^(bool success) {
+                XCTAssert(success, @"WhiteWindowDocsEventPrevStep Fail");
+            }];
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(18 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([appId length] > 0) {
+                [weakRoom closeApp:appId completionHandler:^{
+                    [exp fulfill];
+                }];
+            }
+        });
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 #pragma mark - Page API
 - (void)testAddPage
 {
