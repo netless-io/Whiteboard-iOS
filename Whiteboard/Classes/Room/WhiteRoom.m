@@ -306,7 +306,6 @@
     NSDictionary *params = (index == -1) ? @{} : @{@"index": @(index)};
     [self.bridge callHandler:@"room.removePage" arguments:@[params] completionHandler:^(id  _Nullable value) {
         if (completionHandler) {
-            
             if ([value isKindOfClass:[NSNumber class]]) {
                 return completionHandler([(NSNumber *)value boolValue]);
             }
@@ -645,6 +644,20 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     [self.bridge callHandler:@"room.closeApp" arguments:@[appId] completionHandler:^(id  _Nullable value) {
         if (completionHandler) {
             completionHandler();
+        }
+    }];
+}
+
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent options:(WhiteWindowDocsEventOptions *)options completionHandler:(void (^)(bool))completionHandler {
+    WhiteWindowDocsEventOptions *ops = options;
+    if (!ops) {
+        ops = [[WhiteWindowDocsEventOptions alloc] init];
+    }
+    [self.bridge callHandler:@"room.dispatchDocsEvent" arguments:@[docsEvent, ops] completionHandler:^(id  _Nullable value) {
+        if ([value isKindOfClass:[NSNumber class]]) {
+            return completionHandler([(NSNumber *)value boolValue]);
+        } else {
+            completionHandler(NO);
         }
     }];
 }

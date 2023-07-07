@@ -21,6 +21,7 @@
 #import "WhiteDisplayer.h"
 #import "WhiteSDK+Room.h"
 #import "WhiteAppParam.h"
+#import "WhiteWindowDocsEventOptions.h"
 
 @class WhiteBoardView;
 
@@ -639,6 +640,18 @@ NS_ASSUME_NONNULL_BEGIN
  * @param appId 添加app时返回的id
  */
 - (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler;
+
+/**
+ * 派发文档事件
+ * 在多窗口模式下，该方法可以用来操作当前聚焦的文档窗口。
+ *
+ * @param docsEvent 事件类型。
+ * @param options 可选事件参数。
+ * @params completionHandler 完成回调。
+ *
+ * @warning 该方法只有在文档视图加载完毕时才能调用。不支持多次连续调用，只有当当前的转场动画完毕之后才能进行下一次调用。
+ */
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent options:( WhiteWindowDocsEventOptions * _Nullable )options completionHandler:(void (^)(bool success))completionHandler;
 
 @end
 
