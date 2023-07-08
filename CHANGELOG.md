@@ -7,9 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.63] - 2023-07-08
+- 移除 FPA 加速功能
 ## [2.16.62] - 2023-07-07
-- `WhiteRoom` 新增 `dispatchDocsEvent`, 用于控制多窗口下文档的切换。
-- `WhiteWindowParams` 新增 `fullscreen`, 用于控制窗口是否全屏。
+- `WhiteRoom` 新增 `dispatchDocsEvent`, 用于控制多窗口下文档的切换
+- `WhiteWindowParams` 新增 `fullscreen`, 用于控制窗口是否全屏
 ## [2.16.61] - 2023-07-05
 - WhiteRegion 新增欧洲区域 `WhiteRegionEU` ，废弃 `WhiteRegionGB`
 ## [2.16.60] - 2023-06-14

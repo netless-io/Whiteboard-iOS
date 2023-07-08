@@ -15,7 +15,6 @@
 - [The project structure](#the-project-structure)
 - [Native audio and video](#native-audio-and-video)
 - [Dynamic PPT local resource pack](#dynamic-ppt-local-resource-pack)
-- [FPA Network Acceleration (iOS 13 and above)](#fpa-network-acceleration-ios-13-and-above)
 - [Custom App Plugin](#custom-app-plugin)
   - [Register the Custom App plugin](#register-the-custom-app-plugin)
   - [Adding custom App plugins to the whiteboard](#adding-custom-app-plugins-to-the-whiteboard)
@@ -233,20 +232,6 @@ For specific implementation, please check the Git record:
 
 [dynamic-conversion-zip](https://developer.netless.link/server-zh/home/server-dynamic-conversion-zip)
 
-## FPA Network Acceleration (iOS 13 and above)
-
-1. Add `pod 'Whiteboard/fpa'` dependency in podfile
-2. configure WhiteRoomConfig with `nativeWebSocket` as YES
-3. If you want to listen to FPA connection status, you can call `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];`
-
-> Note that if you want to debug with iPhoneSimulator from M1 Device, please add the following statement to the Podfile.
-```ruby
-  post_install do |installer|
-    installer.pods_project.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-    end
-```
-
 ## Custom App Plugin
 
 Custom App plugin can extend the whiteboard functionality, users write js code to implement their own whiteboard plugin.
@@ -314,15 +299,10 @@ The solution is to modify the Podfile:
 pod 'Whiteboard/Whiteboard-YYKit'
 ```
 
-If you refer to fpa you can declare it like this:
-
-``` ruby
-pod 'Whiteboard/fpa-YYKit'
-```
-
 ## Part of the problem
 
 1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
 2. In case of complex content, the WhiteBoard may be killed by the system due to lack of memory, resulting in a white screen, we have restored this situation in version 2.16.30. Before 2.16.30, you can set `navigationDelegate` of `WhiteBoardView` to listen to `webViewWebContentProcessDidTerminate:` method. This method will be called when the whiteboard is killed and you can prompt the user to reconnect to resume the whiteboard in this method.
-3. About cocoapods release: Some subspecs in the project depend on static libraries that do not support arm64-simulator architecture, such as `YYKit` and `AgoraFPA_iOS`, which cause the pod lint to fail. The current workaround is to modify the local `validator.rb` file. See [here](https://github.com/caixindong/Cocoapods_fix_i386/blob/master/validator.rb) for details.
+3. About cocoapods release: Some subspecs in the project depend on static libraries that do not support arm64-simulator architecture, such as `YYKit`, which cause the pod lint to fail. The current workaround is to modify the local `validator.rb` file. See [here](https://github.com/caixindong/Cocoapods_fix_i386/blob/master/validator.rb) for details.
 4. Due to the possibility of using scenarios, please use conditional references to third-party code, for example `#import "YYModel.h"` needs to be replaced with `#if __has_include(<YYModel/YYModel.h>) #import <YYModel/YYModel.h> `.
+5. Starting with version 2.16.63, fpa acceleration is no longer available.
