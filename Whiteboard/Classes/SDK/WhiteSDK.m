@@ -28,7 +28,7 @@
 
 + (NSString *)version
 {
-    return @"2.17.0-alpha.24";
+    return @"2.17.0-alpha.25";
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:( id<WhiteAudioMixerBridgeDelegate>)mixer
