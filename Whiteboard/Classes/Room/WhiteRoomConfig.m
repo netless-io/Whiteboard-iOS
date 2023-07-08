@@ -67,14 +67,4 @@
     _disableCameraTransform = disableOperations;
 }
 
-#if __has_include("WhiteRoomConfig+FPA.h")
-- (void)setNativeWebSocket:(BOOL)nativeWebSocket {
-    if (@available(iOS 13.0, *)) {
-        _nativeWebSocket = nativeWebSocket;
-    } else {
-        _nativeWebSocket = NO;
-    }
-}
-#endif
-
 @end

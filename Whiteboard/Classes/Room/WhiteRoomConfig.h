@@ -207,7 +207,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#if __has_include("WhiteRoomConfig+FPA.h")
-#import "WhiteRoomConfig+FPA.h"
-#endif
