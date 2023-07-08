@@ -15,7 +15,6 @@
   - [项目结构](#项目结构)
   - [Native音视频](#native音视频)
   - [动态ppt本地资源包](#动态ppt本地资源包)
-  - [fpa加速（iOS 13 及其以上）](#fpa加速ios-13-及其以上)
   - [自定义App插件](#自定义app插件)
     - [注册自定义App插件](#注册自定义app插件)
     - [添加自定义App插件到白板中](#添加自定义app插件到白板中)
@@ -238,21 +237,6 @@ sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会�
 
 [动态转换资源包](https://developer.netless.link/server-zh/home/server-dynamic-conversion-zip)
 
-
-## fpa加速（iOS 13 及其以上）
-
-1. podfile 添加 `pod 'Whiteboard/fpa'` 依赖
-2. 配置 WhiteRoomConfig 的 `nativeWebSocket` 为 YES
-3. 如需监听FPA连接状态，可以调用 `[[FpaProxyService sharedFpaProxyService] setupDelegate:(id<FpaProxyServiceDelegate>)self];`
-
-注意：如果是M1的电脑想要在模拟器调试，请在Podfile里加入如下声明：
-```ruby
-  post_install do |installer|
-    installer.pods_project.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-    end
-```
-
 ## 自定义App插件
 
 自定义App插件可以扩展白板功能，用户通过编写js代码来实现自己的白板插件。
@@ -320,17 +304,11 @@ Native端在使用自定义App时需要注册对应的App到SDK中。
 pod 'Whiteboard/Whiteboard-YYKit'
 ```
 
-如果你引用了fpa你可以这样声明:
-
-``` ruby
-pod 'Whiteboard/fpa-YYKit'
-```
-
 ## 部分问题
 
 1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
 2. 在白板内容比较复杂的情况下，白板有可能会因为内存不足的原因被系统kill掉,导致白屏，我们在 2.16.30 的版本中对该情况进行了主动恢复。在 2.16.30 的版本前，可以通过设置  `WhiteBoardView` 的 `navigationDelegate` 来监听 `webViewWebContentProcessDidTerminate:` 方法。当白板被kill掉时，会调用该方法，你可以在该方法中提示用户重新连接以恢复白板。
-3. 关于 cocoapods 发版：由于项目中的一些子仓库依赖了一些不支持arm64-simulator的静态库，比如 `YYKit` 和 `AgoraFPA_iOS` ，导致 pod lint 无法通过。 目前的解决办法是修改本地的 `validator.rb` 文件。具体参考 [这里](https://github.com/caixindong/Cocoapods_fix_i386/blob/master/validator.rb)。
+3. 关于 cocoapods 发版：由于项目中的一些子仓库依赖了一些不支持arm64-simulator的静态库，比如 `YYKit` ，导致 pod lint 无法通过。 目前的解决办法是修改本地的 `validator.rb` 文件。具体参考 [这里](https://github.com/caixindong/Cocoapods_fix_i386/blob/master/validator.rb)。
 
 ## Whiteboard - Framework 拖拽方式集成
 
