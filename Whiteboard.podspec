@@ -159,28 +159,6 @@ Pod::Spec.new do |s|
     naitve.frameworks = 'AVFoundation'
   end
   
-  # socket 代理 - YYModel
-  s.subspec 'fpa' do |socket|
-    socket.source_files = 'Whiteboard/Classes/fpa/**'
-    socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
-    socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
-    socket.dependency 'Whiteboard/Room'
-    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
-    # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
-    socket.ios.deployment_target = '11.0'
-  end
-  
-  # socket 代理 - YYKit
-  s.subspec 'fpa-YYKit' do |socket|
-    socket.source_files = 'Whiteboard/Classes/fpa/**'
-    socket.public_header_files = 'Whiteboard/Classes/fpa/**.h'
-    socket.private_header_files = 'Whiteboard/Classes/fpa/*+Private.h'
-    socket.dependency 'Whiteboard/Room-YYKit'
-    socket.dependency 'AgoraFPA_iOS', '~> 1.0.0'
-    # 这个限制是因为fpa的framework没有i386的版本，导致需要ios11以上才能用
-    socket.ios.deployment_target = '11.0'
-  end
-  
   s.subspec 'Whiteboard-YYModel' do |sp|
       sp.public_header_files = 'Whiteboard/Classes/Whiteboard.h'
       sp.source_files = 'Whiteboard/Classes/Whiteboard.h'
