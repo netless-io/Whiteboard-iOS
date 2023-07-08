@@ -9,6 +9,11 @@
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
   开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
 
+## [2.17.0-alpha.25] - 2023-07-08
+- 移除 fpa
+- 更新 `@netless/window-manager`至 1.0.0-canary.78
+- 更新 `@netless/app-slide` 至 0.3.0-canary.19
+
 ## [2.17.0-alpha.23] - 2023-04-07
 - 支持自定义 url
 
