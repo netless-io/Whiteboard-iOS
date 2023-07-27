@@ -61,15 +61,7 @@ static NSString *kPPTScheme = @"netless";
     // 1. 初始化 WhiteBoardView，
     // FIXME: 请提前加入视图栈，否则 iOS12 上，SDK 无法正常初始化。
     
-    if (@available(iOS 11, *)) {
-        // 在初始化 sdk 时，配置 PPTParams 的 scheme，保证与此处传入的 scheme 一致。
-        self.schemeHandler = [[NETURLSchemeHandler alloc] initWithScheme:kPPTScheme directory:NSTemporaryDirectory()];
-        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-        [config setURLSchemeHandler:self.schemeHandler forURLScheme:kPPTScheme];
-        self.boardView = [[WhiteBoardView alloc] initWithFrame:CGRectZero configuration:config];
-    } else {
-        self.boardView = [[WhiteBoardView alloc] init];
-    }
+    self.boardView = [[WhiteBoardView alloc] init];
     [self.view addSubview:self.boardView];
     
     // 2. 为 WhiteBoardView 做 iOS10 及其以下兼容
