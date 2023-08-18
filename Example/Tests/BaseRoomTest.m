@@ -7,6 +7,7 @@
 //
 
 #import "BaseRoomTest.h"
+#import "DWKWebview.h"
 
 @implementation BaseRoomTest
 
@@ -28,6 +29,7 @@
     __weak typeof(self)weakSelf = self;
     self.roomVC.roomBlock = ^(WhiteRoom *room, NSError *error) {
         weakSelf.room = room;
+        [weakSelf catchAnyError]; // After joinroom.
         if (weakSelf.assertJoinRoomError) {
             if (!error) {
                 XCTAssertTrue(NO, @"Need join room error, but join success");
@@ -117,6 +119,25 @@
    if ([nav isKindOfClass:[UINavigationController class]]) {
        [nav popToRootViewControllerAnimated:NO];
    }
+}
+
+- (NSString *)onJSAnyError:(NSString *)reason {
+    NSLog(@"js error %@", reason);
+    XCTAssert(NO, @"js error, %@", reason);
+    return @"";
+}
+
+- (void)catchAnyError {
+    DWKWebView *webView = [self.room valueForKey:@"bridge"];
+    [webView addJavascriptObject:self namespace:@"_whiteboardiOSTest"];
+    [webView evaluateJavaScript:@"window.addEventListener('unhandledrejection', (event) => { \
+     window.a = event; \
+       window.bridge.call('_whiteboardiOSTest.onJSAnyError', event.reason.toString());\
+       console.log('native log ', event.reason); \
+     });"
+              completionHandler:^(id _Nullable, NSError * _Nullable error) {
+        return;
+    }];
 }
 
 - (WhiteRoomConfig *)createNewNewConfig
