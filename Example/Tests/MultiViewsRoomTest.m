@@ -141,11 +141,11 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     __weak typeof(self.room) weakRoom = self.room;
     [self.room addApp:testPptAppParam completionHandler:^(NSString * _Nonnull appId) {
         if ([appId length] > 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [weakRoom closeApp:appId completionHandler:^{
                 }];
             });
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [exp fulfill];
             });
             return;
