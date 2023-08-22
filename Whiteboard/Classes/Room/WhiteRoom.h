@@ -22,6 +22,7 @@
 #import "WhiteSDK+Room.h"
 #import "WhiteAppParam.h"
 #import "WhiteWindowDocsEventOptions.h"
+#import "WhiteAppSyncAttributes.h"
 
 @class WhiteBoardView;
 
@@ -630,6 +631,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 添加窗口
  * @param appParams app 类型以及配置内容
+ *
+ * @warning 多次插入同一个 ppt 时，插入会失败，返回的 appId 为 nil 。
  */
 - (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
 
@@ -640,6 +643,27 @@ NS_ASSUME_NONNULL_BEGIN
  * @param appId 添加app时返回的id
  */
 - (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler;
+
+/**
+ * 切换聚焦窗口
+ * 该方法仅在多窗口下有效
+ *
+ * @param appId 添加app时返回的id
+ */
+- (void)focusApp:(NSString *)appId;
+
+/** 查询所有 App 信息
+ *  该方法仅在多窗口下有效
+ * @param completionHandler 查询结果回调
+ */
+- (void)queryAllAppsWithCompletionHandler:(void (^)(NSDictionary<NSString *, WhiteAppSyncAttributes *> *apps, NSError * _Nullable error))completionHandler;
+
+/** 查询 App 信息
+ *  该方法仅在多窗口下有效
+ * @param appId 添加app时返回的id
+ * @param completionHandler 查询结果回调
+ */
+- (void)queryApp:(NSString *)appId completionHandler:(void (^)(WhiteAppSyncAttributes *appParam, NSError * _Nullable error))completionHandler;
 
 /**
  * 派发文档事件

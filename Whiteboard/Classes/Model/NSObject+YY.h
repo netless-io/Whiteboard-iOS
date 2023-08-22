@@ -35,4 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface NSDictionary (YY)
+#if YYMODEL
+#else
++ (NSDictionary *)yy_modelDictionaryWithClass:(Class)cls json:(id)json;
+#endif
+@end
+
 NS_ASSUME_NONNULL_END

@@ -648,6 +648,49 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     }];
 }
 
+- (void)focusApp:(NSString *)appId {
+    [self.bridge callHandler:@"room.focusApp" arguments:@[appId]];
+}
+
+- (void)queryAllAppsWithCompletionHandler:(void (^)(NSDictionary<NSString *, WhiteAppSyncAttributes *> *apps, NSError * _Nullable error))completionHandler {
+    [self.bridge callHandler:@"room.queryAllApps" arguments:@[] completionHandler:^(id  _Nullable value) {
+        NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        NSDictionary *error = dict[@"__error"];
+        if (error) {
+            NSString *desc = error[@"message"] ? : @"";
+            NSString *description = error[@"jsStack"] ? : @"";
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
+            return;
+        }
+        NSMutableDictionary *results = [NSMutableDictionary dictionary];
+        
+        for (NSString *key in dict.allKeys) {
+            WhiteAppSyncAttributes *para = [WhiteAppSyncAttributes modelWithJSON:dict[key]];
+            results[key] = para;
+        }
+        completionHandler(results, nil);
+    }];
+}
+
+- (void)queryApp:(NSString *)appId completionHandler:(void (^)(WhiteAppSyncAttributes * _Nullable, NSError * _Nullable))completionHandler {
+    [self.bridge callHandler:@"room.queryApp" arguments:@[appId] completionHandler:^(id  _Nullable value) {
+        NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        NSDictionary *error = dict[@"__error"];
+        if (error) {
+            NSString *desc = error[@"message"] ? : @"";
+            NSString *description = error[@"jsStack"] ? : @"";
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
+            return;
+        }
+        WhiteAppSyncAttributes* result = [WhiteAppSyncAttributes modelWithJSON:value];
+        completionHandler(result, nil);
+    }];
+}
+
 - (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent options:(WhiteWindowDocsEventOptions *)options completionHandler:(void (^)(bool))completionHandler {
     WhiteWindowDocsEventOptions *ops = options;
     if (!ops) {
