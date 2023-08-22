@@ -37,3 +37,15 @@
 #endif
 
 @end
+
+@implementation NSDictionary (YY)
+
+#if YYMODEL
+#else
++ (nonnull NSDictionary *)yy_modelDictionaryWithClass:(nonnull Class)cls json:(nonnull id)json
+{
+    return [NSDictionary modelDictionaryWithClass:cls json:json];
+}
+#endif
+
+@end
