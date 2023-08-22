@@ -25,7 +25,7 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 + (void)load
 {
     testMp4AppParam = [WhiteAppParam
-                       createMediaPlayerApp:@"https://flat-web-dev.whiteboard.agora.io/preview/https://flat-storage.oss-accelerate.aliyuncs.com/cloud-storage/2022-01/25/d9bbde94-5a80-43bd-9727-660197f20d28/d9bbde94-5a80-43bd-9727-660197f20d28.mp4/"
+                       createMediaPlayerApp:@"https://convertcdn.netless.link/1.mp4"
                        title:@"testApp"];
     
     testPptAppParam = [WhiteAppParam createSlideApp:@"/ppt" taskId:@"7f5d2864e82b4f0e9c868f348e922453" url:@"https://convertcdn.netless.link/dynamicConvert" title:@"example_ppt"];
@@ -309,6 +309,89 @@ static WhiteAppParam* _Nonnull testPptAppParam;
         });
     }];
     [self waitForExpectationsWithTimeout:40 handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+#pragma mark - App API
+- (void)testQueryApp
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:testMp4AppParam completionHandler:^(NSString * _Nonnull appId) {
+        [weakSelf.room queryApp:appId completionHandler:^(WhiteAppSyncAttributes * _Nonnull appParam, NSError * _Nullable error) {
+            XCTAssert(error == nil);
+            [weakSelf.room closeApp:appId completionHandler:^{}];
+            [weakSelf.room queryApp:appId completionHandler:^(WhiteAppSyncAttributes * _Nonnull appParam, NSError * _Nullable afterCloseError) {
+                XCTAssert(afterCloseError);
+                [exp fulfill];
+            }];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testQueryAll
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:testMp4AppParam completionHandler:^(NSString * _Nonnull id1) {
+        [weakSelf.room addApp:testMp4AppParam completionHandler:^(NSString * _Nonnull id2) {
+            [weakSelf.room addApp:testMp4AppParam completionHandler:^(NSString * _Nonnull id3) {
+                [weakSelf.room queryAllAppsWithCompletionHandler:^(NSDictionary<NSString *,WhiteAppSyncAttributes *> * _Nonnull apps, NSError * _Nullable error) {
+                    XCTAssert(apps.allKeys.count > 0);
+                    [apps enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, WhiteAppSyncAttributes * _Nonnull obj, BOOL * _Nonnull stop) {
+                        [weakSelf.room closeApp:key completionHandler:^{}];
+                    }];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakSelf.room queryAllAppsWithCompletionHandler:^(NSDictionary<NSString *,WhiteAppParam *> * _Nonnull afterCloseApps, NSError * _Nullable error) {
+                            XCTAssert(afterCloseApps.allKeys.count == 0);
+                            [exp fulfill];
+                        }];
+                    });
+                }];
+            }];
+        }];
+    }];
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+
+- (void)testFocusApp
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:testMp4AppParam completionHandler:^(NSString * _Nonnull mp4Id1) {
+        [weakSelf.room addApp:testMp4AppParam completionHandler:^(NSString * _Nonnull mp4Id2) {
+            [weakSelf.room focusApp:mp4Id1];
+            [weakSelf.roomVC.boardView evaluateJavaScript:@"manager.focused" completionHandler:^(NSString* _Nullable focused, NSError * _Nullable error) {
+                NSLog(@"focused: %@", focused);
+                XCTAssert([focused isEqualToString:mp4Id1]);
+                [weakSelf.room focusApp:mp4Id2];
+                [weakSelf.roomVC.boardView evaluateJavaScript:@"manager.focused" completionHandler:^(NSString* _Nullable focused1, NSError * _Nullable error) {
+                    NSLog(@"focused: %@", focused1);
+                    XCTAssert([focused1 isEqualToString:mp4Id2]);
+                    [weakSelf.room closeApp:mp4Id1 completionHandler:^{}];
+                    [weakSelf.room closeApp:mp4Id2 completionHandler:^{}];
+                    [exp fulfill];
+                }];
+            }];
+        }];
+    }];
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
         }
