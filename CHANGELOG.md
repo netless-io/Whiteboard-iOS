@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.67] - 2023-08-22
+- `WhiteRoom` 新增 `focusApp:`, `queryAllAppsWithCompletionHandler:` 和 `queryApp:` 方法用于在多窗口模式下查询 app 和切换 app 焦点。
 ## [2.16.66] - 2023-08-18
 - 修复 window-manager 打包错误
 ## [2.16.65] - 2023-08-11
