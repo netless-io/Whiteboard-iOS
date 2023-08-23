@@ -48,16 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *uid;
 /** 
  待回放的互动白板房间所在的数据中心。
-
- 数据中心包括：
-
- - `"cn-hz"`：中国大陆
- - `"us-sv"`：美国
- - `"in-mum"`：印度
- - `"sg"`：新加坡
- - `"gb-lon"`：英国
- 
- @since 2.11.0 
  */
 @property (nonatomic, strong, nullable) WhiteRegionKey region;
 
