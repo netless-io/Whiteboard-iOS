@@ -62,6 +62,11 @@
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+                if ([desc containsString:@"Failed to OpenBackingStore"]) {
+                    // 修复 indexDB 打开错误的问题。
+                    // 这个问题可以通过往 indexDB 里不停塞入 100 kb的 item，在塞满后再刷新页面复现。
+                    [self.bridge evaluateJavaScript:@"indexedDB.databases().then(ds => Promise.all(ds.map(d => indexedDB.deleteDatabase(d.name))))" completionHandler:nil];
+                }
                 completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-100 userInfo:userInfo]);
             } else {
                 room.observerId = dict[@"observerId"];
