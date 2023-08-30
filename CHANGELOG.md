@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.68] - 2023-08-30
+- 修复 WKWebView 在某些异常情况下可能导致无法打开 indexDB 的错误
+- 修复 `WhiteWindowParams.fullscreen` 参数在第二次打开 app 没有最大化的错误
 ## [2.16.67] - 2023-08-22
 - `WhiteRoom` 新增 `focusApp:`, `queryAllAppsWithCompletionHandler:` 和 `queryApp:` 方法用于在多窗口模式下查询 app 和切换 app 焦点。
 ## [2.16.66] - 2023-08-18
