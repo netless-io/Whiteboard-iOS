@@ -24,6 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 */
 @property (nonatomic, assign) BOOL debug;
 
+/**
+ 是否可以通过点击 ppt 画面执行下一步功能, (默认 YES)。
+*/
+@property (nonatomic, assign) BOOL enableGlobalClick;
+
 @end
 
 NS_ASSUME_NONNULL_END

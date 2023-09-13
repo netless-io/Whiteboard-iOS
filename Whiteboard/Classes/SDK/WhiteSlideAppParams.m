@@ -15,6 +15,7 @@
     if (self) {
         _showRenderError = NO;
         _debug = NO;
+        _enableGlobalClick = YES;
     }
     return self;
 }
