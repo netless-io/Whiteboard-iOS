@@ -69,6 +69,8 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 @property (nonatomic, copy, readonly) NSArray<NSNumber *> *strokeColor;
 /** 线条粗细。 */
 @property (nonatomic, strong, readonly, nullable) NSNumber *strokeWidth;
+/** 文本颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
+@property (nonatomic, copy, readonly) NSArray<NSNumber *> *textColor;
 /** 字体大小。 */
 @property (nonatomic, strong, readonly, nullable) NSNumber *textSize;
 /** 当教具为 `Shape` 时，所选定的 shape 图形。
@@ -86,6 +88,8 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 @property (nonatomic, copy, readwrite, nullable) NSArray<NSNumber *> *strokeColor;
 /** 线条粗细。 */
 @property (nonatomic, strong, readwrite, nullable) NSNumber *strokeWidth;
+/** 文本颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
+@property (nonatomic, copy, readwrite, nullable) NSArray<NSNumber *> *textColor;
 /** 字体大小。 */
 @property (nonatomic, strong, readwrite, nullable) NSNumber *textSize;
 /**

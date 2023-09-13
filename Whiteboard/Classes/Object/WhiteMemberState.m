@@ -34,6 +34,7 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
 @property (nonatomic, copy) WhiteApplianceNameKey currentApplianceName;
 @property (nonatomic, copy) NSArray<NSNumber *> *strokeColor;
 @property (nonatomic, strong) NSNumber *strokeWidth;
+@property (nonatomic, copy) NSArray<NSNumber *> *textColor;
 @property (nonatomic, strong) NSNumber *textSize;
 @property (nonatomic, strong) WhiteApplianceShapeTypeKey shapeType;
 @end
@@ -41,7 +42,7 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
 @implementation WhiteReadonlyMemberState
 
 + (NSDictionary *)modelContainerPropertyGenericClass {
-    return @{@"strokeColor" : [NSNumber class]};
+    return @{@"strokeColor" : [NSNumber class], @"textColor" : [NSNumber class]};
 }
 
 - (void)setStrokeColor:(NSArray<NSNumber *> *)newColor
@@ -54,17 +55,27 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
     _strokeColor = [IntArray copy];
 }
 
+- (void)setTextColor:(NSArray<NSNumber *> *)textColor {
+  NSMutableArray *IntArray = [NSMutableArray arrayWithCapacity:textColor.count];
+  for (NSNumber *n in textColor) {
+      //fix issue: iOS 10 rgb css don's support float
+      [IntArray addObject:[NSNumber numberWithInteger:[n integerValue]]];
+  }
+  _textColor = [IntArray copy];
+}
+
 @end
 
 @implementation WhiteMemberState
 @dynamic currentApplianceName;
 @dynamic strokeColor;
+@dynamic textColor;
 @dynamic strokeWidth;
 @dynamic textSize;
 @dynamic shapeType;
 
 + (NSDictionary *)modelContainerPropertyGenericClass {
-    return @{@"strokeColor" : [NSNumber class]};
+    return @{@"strokeColor" : [NSNumber class], @"textColor" : [NSNumber class]};
 }
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
