@@ -188,6 +188,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^) (NSString * textId))completionHandler;
 
+/**
+ * 更新置顶 id 文本内容
+ * @param textId 文字标识符
+ * @param textContent 文字内容
+ */
+- (void)updateText:(NSString *)textId textContent:(NSString *)textContent;
+
 #pragma mark - Image API
 
 /**

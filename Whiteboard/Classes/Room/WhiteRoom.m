@@ -372,6 +372,10 @@
     [self.bridge callHandler:@"room.insertText" arguments:@[@(x), @(y), textContent] completionHandler:completionHandler];
 }
 
+- (void)updateText:(NSString *)textId textContent:(NSString *)textContent {
+  [self.bridge callHandler:@"room.updateText" arguments:@[textId, textContent]];
+}
+
 #pragma mark - Image API
 
 - (void)insertImage:(WhiteImageInformation *)imageInfo;
