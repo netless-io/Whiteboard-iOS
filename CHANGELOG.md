@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.71] - 2023-09-15
+- 新增 `WhiteSlideAppParams.minFPS`, `WhiteSlideAppParams.maxFPS`, 用于控制 PPT 动画帧率
+- 新增 `WhiteSlideAppParams.resolution`, `WhiteSlideAppParams.maxResolutionLevel`, 用于控制 PPT 渲染分辨率
+- 新增 `WhiteSlideAppOptions.bgColor`, `WhiteSlideAppOptions.forceCanvas`, 用于控制 PPT 渲染
 ## [2.16.70] - 2023-09-13
 - 新增 `WhiteMemberState.textColor`, 独立 Text 教具颜色
 - 新增 `SlideAppOptions.enableGlobalClick`, 用于控制是否可以通过点击 ppt 画面执行下一步功能, 默认开启
