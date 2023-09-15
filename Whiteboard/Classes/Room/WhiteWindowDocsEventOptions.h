@@ -24,7 +24,7 @@ FOUNDATION_EXPORT WhiteWindowDocsEventKey const WhiteWindowDocsEventNextStep;
 FOUNDATION_EXPORT WhiteWindowDocsEventKey const WhiteWindowDocsEventJumpToPage;
 
 @interface WhiteWindowDocsEventOptions : WhiteObject
-@property (nonatomic, copy) NSNumber *page;
+@property (nonatomic, strong) NSNumber *page;
 @end
 
 NS_ASSUME_NONNULL_END
