@@ -73,6 +73,8 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 @property (nonatomic, copy, readonly) NSArray<NSNumber *> *textColor;
 /** 字体大小。 */
 @property (nonatomic, strong, readonly, nullable) NSNumber *textSize;
+/** 局部橡皮擦大小。 取值范围 1-3  */
+@property (nonatomic, strong, readonly, nullable) NSNumber *pencilEraserSize;
 /** 当教具为 `Shape` 时，所选定的 shape 图形。
  @since 2.12.24 */
 @property (nonatomic, strong, readonly, nullable) WhiteApplianceShapeTypeKey shapeType;
@@ -92,6 +94,8 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 @property (nonatomic, copy, readwrite, nullable) NSArray<NSNumber *> *textColor;
 /** 字体大小。 */
 @property (nonatomic, strong, readwrite, nullable) NSNumber *textSize;
+/** 局部橡皮擦大小。 取值范围 1-3  */
+@property (nonatomic, strong, readwrite, nullable) NSNumber *pencilEraserSize;
 /**
  开启后可以在文字教具下直接选择编辑文字。NSNumber取值为 bool 类型。
  默认为 NO 。
