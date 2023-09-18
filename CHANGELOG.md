@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.72] - 2023-09-18
+- 更新 `@netless/app-slide` 至 0.2.43
+- 更新 `WhiteSlideAppParams.maxResolutionLevel`, 取值范围变更为 0-4
+- 新增 `WhiteMemberState.pencilEraserSize`, 用于更改局部橡皮擦尺寸，取之范围 1-3
 ## [2.16.71] - 2023-09-15
 - 新增 `WhiteSlideAppParams.minFPS`, `WhiteSlideAppParams.maxFPS`, 用于控制 PPT 动画帧率
 - 新增 `WhiteSlideAppParams.resolution`, `WhiteSlideAppParams.maxResolutionLevel`, 用于控制 PPT 渲染分辨率
