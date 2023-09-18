@@ -19,7 +19,7 @@
         _minFPS = @25;
         _maxFPS = @30;
         _resolution = @1;
-        _maxResolution = @2;
+        _maxResolutionLevel = @2;
         _forceCanvas = FALSE;
         _bgColor = nil;
     }

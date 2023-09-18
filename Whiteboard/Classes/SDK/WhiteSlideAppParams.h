@@ -48,13 +48,20 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Used to set the maximum display resolution. This value not only affects the canvas rendering resolution, but also affects the texture quality.
  On low-end devices, reducing this value can greatly improve memory usage and image black screen phenomenon.
- [1] Minimum 960 * 540, less than 1 is calculated as 1;
+ 
+ [0] 640 * 360
+ 
+ [1] 960 * 540;
+ 
  [2] Normal 1280 * 720; --- default setting for mobile devices.
+ 
  [3] HD 1920 * 1080;
+ 
  [4] 3K 3200 × 1800, greater than 4 is calculated as 4; --- default setting for PC devices.
- By default, PC devices are set to 3K, and mobile devices are set to 720P. （默认 2）。
+ 
+ By default, PC devices are set to 3K, and mobile devices are set to 720P（默认 2）。
  */
-@property (nonatomic, strong) NSNumber *maxResolution;
+@property (nonatomic, strong) NSNumber *maxResolutionLevel;
 
 /**
  Whether to force the use of 2D rendering, forcing the use of 2D rendering will lose some 3D, filters, and effects. (默认 NO)。
