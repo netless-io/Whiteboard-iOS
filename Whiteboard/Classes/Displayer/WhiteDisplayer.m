@@ -226,7 +226,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
 - (void)getLocalSnapShotWithCompletion:(void (^)(UIImage * _Nullable, NSError * _Nullable))completionHandler
 {
     __weak typeof(self) weakSelf = self;
-    [self.bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_frozen_'}, '*')" completionHandler:^(id _Nullable, NSError * _Nullable error) {
+    [self.bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_frozen_'}, '*')" completionHandler:^(id _Nullable value, NSError * _Nullable error) {
         if (error) {
             completionHandler(nil, error);
             return;
@@ -239,7 +239,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
             UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             completionHandler(snapshot, nil);
-            [bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_release_'}, '*')" completionHandler:^(id _Nullable, NSError * _Nullable error) {
+            [bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_release_'}, '*')" completionHandler:^(id _Nullable  value, NSError * _Nullable error) {
                 return;
             }];
         });
@@ -253,7 +253,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
             if ([value isKindOfClass:[NSDictionary class]]) {
                 result(value);
             } else {
-                result(nil);
+                result(@{});
             }
         }
     }];

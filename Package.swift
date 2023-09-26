@@ -22,7 +22,7 @@ let package = Package(
                 exclude: [
                     "Classes/Model-YYKit",
                     "Classes/include/cpScript.sh",
-                    "Classes/fpa"
+                    "Classes/SyncPlayer/WhiteReplayer+AtomPlayer.swift",
                 ],
                 sources: ["Classes"],
                 resources: [

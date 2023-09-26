@@ -12,7 +12,7 @@
 #import "WhiteDisplayer+Private.h"
 #import "WhiteObject.h"
 #import "WhiteDisplayerState+Private.h"
-#import "WhiteboardView+Private.h"
+#import "WhiteBoardView+Private.h"
 
 @interface WhiteRoom()<WKNavigationDelegate>
 @property (nonatomic, assign, readwrite) NSTimeInterval delay;

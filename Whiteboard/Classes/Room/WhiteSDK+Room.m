@@ -12,8 +12,6 @@
 #import "WhiteRoom+Private.h"
 #import "WhiteRoomCallbacks+Private.h"
 #import "WhiteRoom.h"
-#import "WhiteSocket.h"
-#import "WhiteSocket+Private.h"
 
 #if DEBUG
 #import "WritableDetectRoom.h"
