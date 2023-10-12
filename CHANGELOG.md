@@ -7,8 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.75] - 2023-10-12
+- 更新 `window-manager` 至 0.4.62。AppDocsViewer 支持抓手工具
 ## [2.16.74] - 2023-09-27
-- 更新 `@netless/app-slide` 至 0.2.44。修复渐变色引起的调用栈溢出。
+- 更新 `@netless/app-slide` 至 0.2.44。修复渐变色引起的调用栈溢出
 ## [2.16.73] - 2023-09-26
 - 对 Swift Package Manager 适配，由于不支持在 SPM 中单 target 混编，SPM 中移除 syncPlayer 代码 
 ## [2.16.72] - 2023-09-18
