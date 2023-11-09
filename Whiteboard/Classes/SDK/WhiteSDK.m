@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
 @property (nonatomic, strong, readwrite) WhiteAudioMixerBridge *audioMixer;
+@property (nonatomic, strong, readwrite) WhiteAudioEffectMixerBridge *effectMixer;
 
 @property (nonatomic, copy) NSString *requestingSlideLogSessionId;
 @property (nonatomic, copy) NSString *slideLogPath;
@@ -32,8 +33,7 @@
     return @"2.16.76";
 }
 
-- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:( id<WhiteAudioMixerBridgeDelegate>)mixer
-{
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer {
     self = [super init];
     if (self) {
         _bridge = boardView;
@@ -44,9 +44,23 @@
             _audioMixer = [[WhiteAudioMixerBridge alloc] initWithBridge:boardView delegate:mixer];
             [self.bridge addJavascriptObject:_audioMixer namespace:@"rtc"];
         }
+        if ([effectMixer conformsToProtocol:@protocol(WhiteAudioEffectMixerBridgeDelegate)]) {
+            config.enableRtcIntercept = YES;
+            _effectMixer = [[WhiteAudioEffectMixerBridge alloc] initWithBridge:boardView delegate:effectMixer];
+            [self.bridge addJavascriptObject:_effectMixer namespace:@"rtc"];
+        }
         [self setupWebSdk];
     }
     return self;
+}
+
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer {
+    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil effectMixerBridgeDelegate:effectMixer];
+}
+
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer
+{
+    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:mixer effectMixerBridgeDelegate:nil];
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback

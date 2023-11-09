@@ -13,6 +13,7 @@
 #import "WhiteFontFace.h"
 #import "WhiteRegisterAppParams.h"
 #import "WhiteSlideDelegate.h"
+#import "WhiteAudioEffectMixerBridge.h"
 NS_ASSUME_NONNULL_BEGIN
 
 /** 白板 SDK 相关方法。 */
@@ -28,10 +29,22 @@ NS_ASSUME_NONNULL_BEGIN
  @param boardView     白板界面，详见 [WhiteBoardView](WhiteBoardView)。
  @param config        白板 SDK 对象配置，详见 [WhiteSdkConfiguration](WhiteSdkConfiguration)。
  @param callback      通用回调事件，详见 [WhiteCommonCallbackDelegate](WhiteCommonCallbackDelegate)。
+ @param effectMixer         RTC 混音设置，详见 [WhiteAudioEffectMixerBridge](WhiteAudioEffectMixerBridge)。当你同时使用 Agora RTC SDK 和互动白板 SDK, 且互动白板中展示的动态 PPT 中包含音频文件时，你可以调用 `WhiteAudioEffectMixerBridge` 接口，将动态 PPT 中的所有音频交给 Agora RTC SDK 进行混音播放。
+ @return 初始化的 `WhiteSDK` 对象。
+ */
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer;
+
+/**
+ @deprecated 已废弃，请使用 initWithWhiteBoardView:config: commonCallbackDelegate:effectMixerBridgeDelegate: 。
+ 设置 RTC 混音并初始化 `WhiteSDK` 对象。
+ 请确保在调用其他 API 前先调用该方法创建并初始化白板 SDK 对象。
+ @param boardView     白板界面，详见 [WhiteBoardView](WhiteBoardView)。
+ @param config        白板 SDK 对象配置，详见 [WhiteSdkConfiguration](WhiteSdkConfiguration)。
+ @param callback      通用回调事件，详见 [WhiteCommonCallbackDelegate](WhiteCommonCallbackDelegate)。
  @param mixer         RTC 混音设置，详见 [WhiteAudioMixerBridge](WhiteAudioMixerBridge)。当你同时使用 Agora RTC SDK 和互动白板 SDK, 且互动白板中展示的动态 PPT 中包含音频文件时，你可以调用 `WhiteAudioMixerBridge` 接口，将动态 PPT 中的所有音频交给 Agora RTC SDK 进行混音播放。
  @return 初始化的 `WhiteSDK` 对象。
  */
-- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer;
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer __deprecated_msg("use initWithWhiteBoardView:config: commonCallbackDelegate:effectMixerBridgeDelegate: instead");
 
 /**
  初始化 `WhiteSDK` 对象。
@@ -56,6 +69,11 @@ NS_ASSUME_NONNULL_BEGIN
  混音设置。
   */
 @property (nonatomic, strong, readonly, nullable) WhiteAudioMixerBridge *audioMixer;
+
+/**
+ Effect 混音设置。
+  */
+@property (nonatomic, strong, readonly, nullable) WhiteAudioEffectMixerBridge *effectMixer;
 
 #pragma mark - 字体
 
