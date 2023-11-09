@@ -190,7 +190,7 @@ typedef void (^JSNumberCallback)(NSNumber * _Nullable result,BOOL complete);
     NSNumber *pos = params[@"pos"];
     if ([self.delegate respondsToSelector:@selector(setEffectPosition:pos:)]) {
         int res = [self.delegate setEffectPosition:[soundId intValue] pos:[pos integerValue]];
-        NSLog(@"set position %ld, result: %d", (long)[pos integerValue], res);
+//        NSLog(@"set position %ld, result: %d", (long)[pos integerValue], res);
         completionHandler(@(res), YES);
     } else {
         completionHandler(@(-999), YES);
@@ -201,7 +201,7 @@ typedef void (^JSNumberCallback)(NSNumber * _Nullable result,BOOL complete);
 //    NSLog(@"%s", __FUNCTION__);
     if ([self.delegate respondsToSelector:@selector(getEffectCurrentPosition:)]) {
         int res = [self.delegate getEffectCurrentPosition:[soundId intValue]];
-        NSLog(@"get: %d", res);
+//        NSLog(@"get: %d", res);
         completionHandler(@(res), YES);
     } else {
         completionHandler(@(-999), YES);
