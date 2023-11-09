@@ -73,13 +73,13 @@
     
     [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
     
-#if DEBUG
-    if (@available(iOS 16.4, *)) {
-        self.inspectable = YES;
-    } else {
-        // Fallback on earlier versions
-    }
-#endif
+//#if DEBUG
+//    if (@available(iOS 16.4, *)) {
+//        self.inspectable = YES;
+//    } else {
+//        // Fallback on earlier versions
+//    }
+//#endif
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHandler:) name:UIKeyboardWillChangeFrameNotification object:nil];
     return self;
