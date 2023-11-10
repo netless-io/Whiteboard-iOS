@@ -3,29 +3,13 @@ PODS:
   - NETURLSchemeHandler (0.1.5)
   - NTLBridge (3.1.5)
   - SSZipArchive (2.4.3)
-  - Whiteboard (2.16.77.beta):
-    - Whiteboard/Whiteboard-YYModel (= 2.16.77.beta)
-  - Whiteboard/Base (2.16.77.beta):
+  - Whiteboard (2.16.77.beta.3):
+    - Whiteboard/Whiteboard-Basic (= 2.16.77.beta.3)
+  - Whiteboard/Resource (2.16.77.beta.3)
+  - Whiteboard/Whiteboard-Basic (2.16.77.beta.3):
     - NTLBridge (~> 3.1.4)
-    - Whiteboard/Object
-  - Whiteboard/Converter (2.16.77.beta):
-    - Whiteboard/Object
-  - Whiteboard/Model (2.16.77.beta):
-    - YYModel
-  - Whiteboard/NativeReplayer (2.16.77.beta):
-    - Whiteboard/Replayer
-  - Whiteboard/Object (2.16.77.beta):
-    - Whiteboard/Model
-  - Whiteboard/Replayer (2.16.77.beta):
-    - Whiteboard/Base
-  - Whiteboard/Resource (2.16.77.beta)
-  - Whiteboard/Room (2.16.77.beta):
-    - Whiteboard/Base
-  - Whiteboard/Whiteboard-YYModel (2.16.77.beta):
-    - Whiteboard/Converter
-    - Whiteboard/NativeReplayer
     - Whiteboard/Resource
-    - Whiteboard/Room
+    - YYModel
   - YYModel (1.0.4)
 
 DEPENDENCIES:
@@ -51,7 +35,7 @@ SPEC CHECKSUMS:
   NETURLSchemeHandler: 7e3b68bea1d06062f22adf8fbcb971149cbc1379
   NTLBridge: e94dc18242476b0238c10213a5438d9b9a59fcce
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  Whiteboard: 4ebc6c58ae779ba0b4bf9a02c29a1565d44597b2
+  Whiteboard: 3cdcb42325a1a39e84201f5f1dadbb6382ffc0cf
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: 95aae5767e3ee1197fa3ca543ca2900d16bd9399
