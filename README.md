@@ -291,18 +291,13 @@ Please call this method to complete the initialization of `WhiteAppParam`
 
 ## Using YYKit
 
-The default dependency of this SDK is YYModel, some users will have an error in the dependency if they use YYKit.
+If you use YYKit in your project, it will conflict with our library dependencies. Since YYKit is extremely difficult to use after Xcode 15.0, we recommend using an alternative library.
 
-The solution is to modify the Podfile:
-
-``` ruby
-pod 'Whiteboard/Whiteboard-YYKit'
 ```
 
 ## Part of the problem
 
 1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
 2. In case of complex content, the WhiteBoard may be killed by the system due to lack of memory, resulting in a white screen, we have restored this situation in version 2.16.30. Before 2.16.30, you can set `navigationDelegate` of `WhiteBoardView` to listen to `webViewWebContentProcessDidTerminate:` method. This method will be called when the whiteboard is killed and you can prompt the user to reconnect to resume the whiteboard in this method.
-3. About cocoapods release: Some subspecs in the project depend on static libraries that do not support arm64-simulator architecture, such as `YYKit`, which cause the pod lint to fail. The current workaround is to modify the local `validator.rb` file. See [here](https://github.com/caixindong/Cocoapods_fix_i386/blob/master/validator.rb) for details.
-4. Due to the possibility of using scenarios, please use conditional references to third-party code, for example `#import "YYModel.h"` needs to be replaced with `#if __has_include(<YYModel/YYModel.h>) #import <YYModel/YYModel.h> `.
-5. Starting with version 2.16.63, fpa acceleration is no longer available.
+3. Due to the possibility of using scenarios, please use conditional references to third-party code, for example `#import "YYModel.h"` needs to be replaced with `#if __has_include(<YYModel/YYModel.h>) #import <YYModel/YYModel.h> `.
+4. Starting with version 2.16.63, fpa acceleration is no longer available.
