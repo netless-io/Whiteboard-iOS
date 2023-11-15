@@ -18,7 +18,6 @@
   - [自定义App插件](#自定义app插件)
     - [注册自定义App插件](#注册自定义app插件)
     - [添加自定义App插件到白板中](#添加自定义app插件到白板中)
-  - [使用YYKit](#使用yykit)
   - [部分问题](#部分问题)
   - [Whiteboard - Framework 拖拽方式集成](#whiteboard---framework-拖拽方式集成)
 
@@ -294,16 +293,13 @@ Native端在使用自定义App时需要注册对应的App到SDK中。
 - (instancetype)initWithKind:(NSString *)kind options:(WhiteAppOptions *)options attrs:(NSDictionary *)attrs;
 ```
 
-## 使用YYKit
-
-如果你的项目中使用了 YYKit ，那么会跟我们的库依赖关系发生冲突。由于 YYKit 在 Xcode 15.0 后使用极度不便，建议选用其他替代库。
-
 ## 部分问题
 
 1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
 2. 在白板内容比较复杂的情况下，白板有可能会因为内存不足的原因被系统kill掉,导致白屏，我们在 2.16.30 的版本中对该情况进行了主动恢复。在 2.16.30 的版本前，可以通过设置  `WhiteBoardView` 的 `navigationDelegate` 来监听 `webViewWebContentProcessDidTerminate:` 方法。当白板被kill掉时，会调用该方法，你可以在该方法中提示用户重新连接以恢复白板。
 3. 由于使用的场景存在较多可能性，第三方代码的引用方式请使用条件判断的方式来引入，比如 `#import "YYModel.h"` 需要替换成 `#if __has_include(<YYModel/YYModel.h>) #import <YYModel/YYModel.h>`.
 4. 从 2.16.63 版本开始，fpa加速停止提供服务。
+5. 如果你之前使用了 YYKit，从 2.16.77 版本开始，可以将 `Whiteboard/Whiteboard-YYKit` 替换为 `Whiteboard`。由于 YYModel 不再支持 Xcode 15 集成，已将 YYModel 代码 Fork 到 White_YYModel。
 
 ## Whiteboard - Framework 拖拽方式集成
 
