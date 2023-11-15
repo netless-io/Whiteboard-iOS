@@ -113,7 +113,7 @@ static NSString * const kErrorDomain = @"errorDomain";
             result(nil, error);
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            WhiteProjectorQueryResult *info = [WhiteProjectorQueryResult modelWithJSON:responseObject];
+            WhiteProjectorQueryResult *info = [WhiteProjectorQueryResult _white_yy_modelWithJSON:responseObject];
             if ([info.status isEqualToString:ProjectorQueryResultStatusFail]) {
                 result(info, error);
             } else if ([info.status isEqualToString:ProjectorQueryResultStatusFinished]) {
@@ -146,7 +146,7 @@ static NSString * const kErrorDomain = @"errorDomain";
         [self cancelPollingTaskWithTaskUUID:identifier];
     } else if (httpResponse.statusCode == 200) {
         NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        WhiteProjectorQueryResult *info = [WhiteProjectorQueryResult modelWithJSON:responseObject];
+        WhiteProjectorQueryResult *info = [WhiteProjectorQueryResult _white_yy_modelWithJSON:responseObject];
         if ([info.status isEqualToString:ProjectorQueryResultStatusFail]) {
             task.completionHandler(NO, info, error);
             [self cancelPollingTaskWithTaskUUID:identifier];

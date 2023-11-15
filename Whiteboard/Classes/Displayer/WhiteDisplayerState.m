@@ -53,7 +53,7 @@ static Class CustomGlobalClass;
 + (WhiteGlobalState *)getGlobalStateInstanceFromJSON:(id)json
 {
     if (CustomGlobalClass) {
-        return [CustomGlobalClass modelWithJSON:json];
+        return [CustomGlobalClass _white_yy_modelWithJSON:json];
     }
     return nil;
 }

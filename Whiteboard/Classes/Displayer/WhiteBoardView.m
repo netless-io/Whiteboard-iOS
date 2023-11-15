@@ -157,7 +157,7 @@
         } else if ([item isKindOfClass:[WhiteObject class]]) {
             [arr addObject:[(WhiteObject *)item jsonDict]];
         } else {
-            [arr addObject:([item yy_modelToJSONObject] ? : @"")];
+            [arr addObject:([item _white_yy_modelToJSONObject] ? : @"")];
         }
     }
     dispatch_main_async_safe(^ {

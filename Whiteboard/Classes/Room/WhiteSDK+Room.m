@@ -69,7 +69,7 @@
             } else {
                 room.observerId = dict[@"observerId"];
                 room.writable = [dict[@"isWritable"] boolValue];
-                [room updateRoomState:[WhiteRoomState modelWithJSON:dict[@"state"]]];
+                [room updateRoomState:[WhiteRoomState _white_yy_modelWithJSON:dict[@"state"]]];
                 weakBridge.room = room;
                 weakBridge.roomCallbacks.room = room;
                 

@@ -315,7 +315,7 @@ static NSString * const kErrorDomain = @"errorDomain";
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             NSDictionary *task = responseObject[@"msg"][@"task"];
-            WhiteConversionInfo *info = [WhiteConversionInfo modelWithJSON:task];
+            WhiteConversionInfo *info = [WhiteConversionInfo _white_yy_modelWithJSON:task];
             !result ? : result(info, nil);
         } else {
             NSMutableDictionary *responseObject = [([NSJSONSerialization JSONObjectWithData:data options:0 error:nil] ? : @{}) mutableCopy];

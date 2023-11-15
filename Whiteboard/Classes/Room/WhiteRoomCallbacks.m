@@ -40,7 +40,7 @@
 
 - (NSString *)fireRoomStateChanged:(id)magixPhase;
 {
-    WhiteRoomState *state = [WhiteRoomState modelWithJSON:magixPhase];
+    WhiteRoomState *state = [WhiteRoomState _white_yy_modelWithJSON:magixPhase];
     [self.room updateRoomState:state];
     if ([self.delegate respondsToSelector:@selector(fireRoomStateChanged:)]) {
         [self.delegate fireRoomStateChanged:state];
@@ -75,7 +75,7 @@
 - (NSString *)fireMagixEvent:(NSString *)info
 {
     if ([self.delegate respondsToSelector:@selector(fireMagixEvent:)]) {
-        WhiteEvent *event = [WhiteEvent modelWithJSON:info];
+        WhiteEvent *event = [WhiteEvent _white_yy_modelWithJSON:info];
         [self.delegate fireMagixEvent:event];
     }
     return @"";
@@ -87,7 +87,7 @@
         NSArray *array = [NSJSONSerialization JSONObjectWithData:[info dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
         NSMutableArray<WhiteEvent *> *events = [NSMutableArray arrayWithCapacity:[array count]];
         for (NSString *evtString in array) {
-            WhiteEvent *event = [WhiteEvent modelWithJSON:evtString];
+            WhiteEvent *event = [WhiteEvent _white_yy_modelWithJSON:evtString];
             [events addObject:event];
         }
         [self.delegate fireHighFrequencyEvent:events];

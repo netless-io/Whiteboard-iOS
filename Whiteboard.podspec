@@ -22,12 +22,12 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'Whiteboard-Basic' do |spec|
-      spec.dependency 'YYModel'
       spec.source_files = 'Whiteboard/Classes/Model/**', 'Whiteboard/Classes/Object/**', 'Whiteboard/Classes/Converter/**/*', 'Whiteboard/Classes/SDK/**', 'Whiteboard/Classes/Displayer/**', 'Whiteboard/Classes/Whiteboard.h', 'Whiteboard/Classes/Room/**', 'Whiteboard/Classes/Replayer/**', 'Whiteboard/Classes/NativeReplayer/**'
       spec.public_header_files = 'Whiteboard/Classes/Model/**.h', 'Whiteboard/Classes/Object/**.h', 'Whiteboard/Classes/Converter/**/*.h', 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h', 'Whiteboard/Classes/Whiteboard.h', 'Whiteboard/Classes/Room/**.h', 'Whiteboard/Classes/Replayer/**.h', 'Whiteboard/Classes/NativeReplayer/**.h'
       spec.private_header_files = 'Whiteboard/Classes/Object/*+Private.h', 'Whiteboard/Classes/Displayer/*+Private.h', 'Whiteboard/Classes/SDK/*+Private.h', 'Whiteboard/Classes/Room/*+Private.h', 'Whiteboard/Classes/Room/Private/**.h', 'Whiteboard/Classes/Replayer/*+Private.h', 'Whiteboard/Classes/NativeReplayer/*+Private.h'
       spec.frameworks = 'UIKit', 'WebKit', 'AVFoundation'
       spec.dependency 'NTLBridge', '~> 3.1.4'
+      spec.dependency 'White_YYModel'
       spec.dependency 'Whiteboard/Resource'
   end
   

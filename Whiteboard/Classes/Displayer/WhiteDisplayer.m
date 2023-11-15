@@ -78,7 +78,7 @@
 {
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"getScene"] arguments:@[scenePath] completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteScene* scene = [WhiteScene modelWithJSON:value];
+            WhiteScene* scene = [WhiteScene _white_yy_modelWithJSON:value];
             result(scene);
         }
     }];
@@ -106,7 +106,7 @@
                 if ([key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSArray class]]) {
                     NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:obj.count];
                     [obj enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        WhiteScene *scene = [WhiteScene modelWithJSON:obj];
+                        WhiteScene *scene = [WhiteScene _white_yy_modelWithJSON:obj];
                         if (scene) {
                             [mutableArray addObject:scene];
                         }
@@ -165,7 +165,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
 {
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"convertToPointInWorld"] arguments:@[@(point.x), @(point.y)] completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhitePanEvent *convertP = [WhitePanEvent modelWithJSON:value];
+            WhitePanEvent *convertP = [WhitePanEvent _white_yy_modelWithJSON:value];
             result(convertP);
         }
     }];

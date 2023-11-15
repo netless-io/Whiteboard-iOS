@@ -115,7 +115,7 @@ static NSString * const kErrorDomain = @"errorDomain";
             result(nil, error);
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            WhiteConversionInfoV5 *info = [WhiteConversionInfoV5 modelWithJSON:responseObject];
+            WhiteConversionInfoV5 *info = [WhiteConversionInfoV5 _white_yy_modelWithJSON:responseObject];
             if ([info.status isEqualToString:WhiteConvertStatusV5Fail]) {
                 result(info, error);
             } else if ([info.status isEqualToString:WhiteConvertStatusV5Finished]) {
@@ -148,7 +148,7 @@ static NSString * const kErrorDomain = @"errorDomain";
         [self cancelPollingTaskWithTaskUUID:identifier];
     } else if (httpResponse.statusCode == 200) {
         NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        WhiteConversionInfoV5 *info = [WhiteConversionInfoV5 modelWithJSON:responseObject];
+        WhiteConversionInfoV5 *info = [WhiteConversionInfoV5 _white_yy_modelWithJSON:responseObject];
         if ([info.status isEqualToString:WhiteConvertStatusV5Fail]) {
             task.completionHandler(NO, info, error);
             [self cancelPollingTaskWithTaskUUID:identifier];

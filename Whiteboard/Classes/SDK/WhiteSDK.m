@@ -73,7 +73,7 @@
         if (completionHandler) {
             NSDictionary *info = value;
             BOOL success = [info[@"success"] boolValue];
-            WhiteFontFace *fontFace = [WhiteFontFace modelWithJSON:info[@"fontFace"]];
+            WhiteFontFace *fontFace = [WhiteFontFace _white_yy_modelWithJSON:info[@"fontFace"]];
             if (success) {
                 completionHandler(YES, fontFace, nil);
             } else {

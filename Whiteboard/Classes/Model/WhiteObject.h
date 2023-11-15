@@ -6,7 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "NSObject+YY.h"
+
+#if __has_include(<White_YYModel/White_YYModel.h>)
+#import <White_YYModel/White_YYModel.h>
+#elif __has_include("White_YYModel.h")
+#import "White_YYModel.h"
+#elif __has_include("NSObject+White_YYModel.h")
+#import "NSObject+White_YYModel.h"
+#endif
+
 
 NS_ASSUME_NONNULL_BEGIN
 
