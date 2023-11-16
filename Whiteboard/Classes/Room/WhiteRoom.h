@@ -518,8 +518,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)duplicate;
 
-
-- (void)deleteOpertion DEPRECATED_MSG_ATTRIBUTE("use deleteOperation");
 /**
  * 删除选中内容。
  */
@@ -688,6 +686,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 弃用方法
 @interface WhiteRoom (Deprecated)
+
+- (void)deleteOpertion DEPRECATED_MSG_ATTRIBUTE("use deleteOperation");
 
 /**
  @deprecated 该方法已废弃，请使用 [disableDeviceInputs](disableDeviceInputs:) 和 [disableCameraTransform](disableCameraTransform:)。

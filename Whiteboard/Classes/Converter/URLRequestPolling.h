@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NSURLRequest* _Nullable (^URLRequestMaker)(void);
 
-static NSURLSession* querySession() {
+static NSURLSession* querySession(void) {
     static NSURLSession* session;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

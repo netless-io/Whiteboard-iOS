@@ -42,17 +42,11 @@
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration
 {
     configuration.allowsInlineMediaPlayback = YES;
-    
-    NSOperatingSystemVersion iOS_10_0_0 = (NSOperatingSystemVersion){10, 0, 0};
-    NSOperatingSystemVersion iOS_11_0_0 = (NSOperatingSystemVersion){11, 0, 0};
-
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_10_0_0]) {
-        configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
-    }
+    configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
     
     self = [super initWithFrame:frame configuration:configuration];
     
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_11_0_0]) {
+    if (@available(iOS 11.0, *)) {
         self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     

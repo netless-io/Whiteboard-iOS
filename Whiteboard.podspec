@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/netless-io/Whiteboard-iOS.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '10.0'
+  s.swift_versions = '5.0'
 
   # Resource whiteboard-bridge打包
   s.subspec 'Resource' do |src|
@@ -34,7 +35,6 @@ Pod::Spec.new do |s|
   # 对SyncPlayer的支持
   s.subspec 'SyncPlayer' do |sync|
     sync.public_header_files = 'Whiteboard/Classes/SyncPlayer/**.h'
-    sync.private_header_files = 'Whiteboard/Classes/SyncPlayer/*+Private.h'
     sync.source_files = 'Whiteboard/Classes/SyncPlayer/**'
     sync.dependency 'Whiteboard/Whiteboard-Basic'
     sync.dependency 'SyncPlayer'

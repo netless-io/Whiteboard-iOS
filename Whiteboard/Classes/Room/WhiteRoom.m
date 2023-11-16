@@ -541,11 +541,6 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"duplicate"] arguments:nil];
 }
 
-- (void)deleteOpertion
-{
-    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
-}
-
 - (void)deleteOperation
 {
     [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
@@ -713,6 +708,11 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
 
 @implementation WhiteRoom (Deprecated)
+
+- (void)deleteOpertion
+{
+    [self.bridge callHandler:[NSString stringWithFormat:RoomSyncNamespace, @"delete"] arguments:nil];
+}
 
 - (void)disableOperations:(BOOL)readonly
 {

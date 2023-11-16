@@ -17,7 +17,8 @@
 
 + (void)load {
     Method originMethod = class_getInstanceMethod([WhitePlayerEvent class], @selector(setDelegate:));
-    Method targetMethod = class_getInstanceMethod([WhitePlayerEvent class], @selector(hook_setDelegate:));
+    
+    Method targetMethod = class_getInstanceMethod([WhitePlayerEvent class], NSSelectorFromString(@"hook_setDelegate:"));
     method_exchangeImplementations(originMethod, targetMethod);
 }
 

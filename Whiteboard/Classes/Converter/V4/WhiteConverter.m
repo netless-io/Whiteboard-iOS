@@ -9,7 +9,7 @@
 #import "WhiteConsts.h"
 #import "WhiteConversionInfo.h"
 
-static dispatch_queue_t converter_processing_queue() {
+static dispatch_queue_t converter_processing_queue(void) {
     static dispatch_queue_t netless_converter_processing_queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

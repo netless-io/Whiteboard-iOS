@@ -9,10 +9,10 @@
 import SyncPlayer
 import AVFoundation
 
-private var proxyKey: String?
-private var atomStatusKey: String?
-private var atomErrorKey: String?
-private var atomListenersKey: String?
+private var proxyKey: Void?
+private var atomStatusKey: Void?
+private var atomErrorKey: Void?
+private var atomListenersKey: Void?
 private let statusKey = "status"
 private let bufferKeepUpKey = "playbackLikelyToKeepUp"
 private let bufferFullKey = "playbackBufferFull"
@@ -179,6 +179,8 @@ extension WhitePlayer: WhitePlayerEventDelegate {
             return
         case .ended:
             atomStatus = .ended
+        @unknown default:
+            return
         }
     }
     
