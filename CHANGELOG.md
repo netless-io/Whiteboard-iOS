@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.77] - 2023-11-16
+- 移除 YYModel 依赖，如果你之前使用了 YYKit，从 2.16.77 版本开始，可以将 `Whiteboard/Whiteboard-YYKit` 替换为 `Whiteboard`。由于 YYModel 不再支持 Xcode 15 集成，已将 YYModel 代码 Fork 到 White_YYModel
+- 修复 `fullscreen` 参数在某些情况下会有短暂的闪烁问题
 ## [2.16.76] - 2023-11-07
 - 更新 `@netless/app-slide` 至 0.2.46 
 ## [2.16.75] - 2023-10-12
