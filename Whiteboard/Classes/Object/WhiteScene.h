@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 场景名称。 */
 @property (nonatomic, copy, readonly) NSString *name;
-@property (nonatomic, assign, readonly) NSInteger componentsCount __deprecated_msg("this property is always 0");
+@property (nonatomic, assign, readonly) NSInteger componentsCount DEPRECATED_MSG_ATTRIBUTE("this property is always 0");
 /**
  场景图片配置。详见 [WhitePptPage](WhitePptPage)。
  */

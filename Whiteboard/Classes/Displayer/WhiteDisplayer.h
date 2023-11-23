@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  @deprecated 该方法已弃用，修改白板背景色，现在可以直接设置 WhiteboardView backgroundColor 属性即可。
  */
-@property (nonatomic, strong) UIColor *backgroundColor __deprecated_msg("use WhiteboardView's backgroundColor property");
+@property (nonatomic, strong) UIColor *backgroundColor DEPRECATED_MSG_ATTRIBUTE("use WhiteboardView's backgroundColor property");
 
 #pragma mark - iframe
 
