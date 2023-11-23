@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param delegate 用 RTC SDK 的混音方法播放动态 PPT 中的音频文件。详见 [WhiteAudioMixerBridgeDelegate](WhiteAudioMixerBridgeDelegate)。
  @return 初始化的 `WhiteAudioMixerBridge` 对象。
 */
-- (instancetype)initWithBridge:(WhiteBoardView *)bridge deletegate:(id<WhiteAudioMixerBridgeDelegate>)delegate __deprecated_msg("use initWithBridge:delegate:");
+- (instancetype)initWithBridge:(WhiteBoardView *)bridge deletegate:(id<WhiteAudioMixerBridgeDelegate>)delegate;
 
 /**
  初始化 `WhiteAudioMixerBridge` 对象。
