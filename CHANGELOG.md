@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.78] - 2023-11-16
+- 新增 Rtc PlayEffect 支持。使用方式为在 `WhiteSDK` 初始化的时候传入 `WhiteAudioEffectMixerBridgeDelegate` 对象。并且在收到 PlayEffect 回调的时候将内容回传给 `WhiteSDK.effectMixer`。目前监听的两个回调为 `setEffectSoundId:stateChanged:` 和 `setEffectDurationUpdate:duration:`
 ## [2.16.77] - 2023-11-16
 - 移除 YYModel 依赖，如果你之前使用了 YYKit，从 2.16.77 版本开始，可以将 `Whiteboard/Whiteboard-YYKit` 替换为 `Whiteboard`。由于 YYModel 不再支持 Xcode 15 集成，已将 YYModel 代码 Fork 到 White_YYModel
 - 修复 `fullscreen` 参数在某些情况下会有短暂的闪烁问题
