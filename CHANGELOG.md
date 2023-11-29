@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.79] - 2023-11-29
+- 为 `RtcAudioEffectClient` 添加 log
 ## [2.16.78] - 2023-11-16
 - 新增 Rtc PlayEffect 支持。使用方式为在 `WhiteSDK` 初始化的时候传入 `WhiteAudioEffectMixerBridgeDelegate` 对象。并且在收到 PlayEffect 回调的时候将内容回传给 `WhiteSDK.effectMixer`。目前监听的回调为 `setEffectSoundId:stateChanged:` / `setEffectDurationUpdate:duration:` / `setEffectFinished:`
 ## [2.16.77] - 2023-11-16
