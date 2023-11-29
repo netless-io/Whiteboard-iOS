@@ -5,12 +5,11 @@
 # WebCrashTest，模拟器上的memory 过大，无法crash
 OUTPATH=$1
 SCHEME=Whiteboard_Tests
-device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPad.*.*Simulator.*1[3-9].*[)]+' | head -1 | grep -oE 'iPad.+?)' | head -1`
 xcodebuild \
   -workspace Example/Whiteboard.xcworkspace \
   -scheme $SCHEME \
   -sdk iphonesimulator \
-  -destination "platform=iOS Simulator,name=$device" \
+  -destination "platform=iOS Simulator,name=iPadTest" \
   -skip-testing:$SCHEME/RoomTests/testZoomChange \
   -skip-testing:$SCHEME/RoomTests/testGetRoomMember \
   -skip-testing:$SCHEME/WebCrashTest \
