@@ -131,6 +131,9 @@
 #pragma mark - Private
 - (void)setupWebSdk
 {
+    if ([self.config.loggerOptions[@"printLevelMask"] isEqualToString:WhiteSDKLoggerOptionLevelDebug]) {
+        [self.bridge observeWKWebViewConsole];
+    }
     [self.bridge setupWebSDKWithConfig:self.config completion:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideLogNotification:) name:@"Slide-Log" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideVolumeNotification:) name:@"Slide-Volume" object:nil];

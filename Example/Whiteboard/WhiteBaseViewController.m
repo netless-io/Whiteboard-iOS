@@ -150,6 +150,10 @@ static NSString *kPPTScheme = @"netless";
 //        config.enableSyncedStore = YES;
         config.useMultiViews = self.useMultiViews;
         
+        config.loggerOptions = @{
+            @"printLevelMask": WhiteSDKLoggerOptionLevelDebug
+        };
+        
         //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
         //    config.enableInterrupterAPI = YES;
         config.log = YES;
@@ -252,6 +256,9 @@ static NSString *kPPTScheme = @"netless";
 - (void)pptMediaPause
 {
     NSLog(@"%s", __func__);
+}
+- (void)logger:(NSDictionary *)dict {
+    NSLog(@"log %@", [dict description]);
 }
 
 @end
