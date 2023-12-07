@@ -297,9 +297,8 @@ Native端在使用自定义App时需要注册对应的App到SDK中。
 
 1. 目前 SDK 关键字为`White`，未严格使用前置三大写字母做前缀。
 2. 在白板内容比较复杂的情况下，白板有可能会因为内存不足的原因被系统kill掉,导致白屏，我们在 2.16.30 的版本中对该情况进行了主动恢复。在 2.16.30 的版本前，可以通过设置  `WhiteBoardView` 的 `navigationDelegate` 来监听 `webViewWebContentProcessDidTerminate:` 方法。当白板被kill掉时，会调用该方法，你可以在该方法中提示用户重新连接以恢复白板。
-3. 由于使用的场景存在较多可能性，第三方代码的引用方式请使用条件判断的方式来引入，比如 `#import "YYModel.h"` 需要替换成 `#if __has_include(<YYModel/YYModel.h>) #import <YYModel/YYModel.h>`.
-4. 从 2.16.63 版本开始，fpa加速停止提供服务。
-5. 如果你之前使用了 YYKit，从 2.16.77 版本开始，可以将 `Whiteboard/Whiteboard-YYKit` 替换为 `Whiteboard`。由于 YYModel 不再支持 Xcode 15 集成，已将 YYModel 代码 Fork 到 White_YYModel。
+3. 从 2.16.63 版本开始，fpa加速停止提供服务。
+4. 如果你之前使用了 YYKit，从 2.16.77 版本开始，可以将 `Whiteboard/Whiteboard-YYKit` 替换为 `Whiteboard`。由于 YYModel 不再支持 Xcode 15 集成，已将 YYModel 代码 Fork 到 White_YYModel。
 
 ## Whiteboard - Framework 拖拽方式集成
 
@@ -312,7 +311,7 @@ Framework 打包(需安装pod package 插件:`sudo gem install cocoapods-package
   
 
 关于Framework 手动添加  
-Whiteboard.framework  yymodel.framework dsBridge.framework  一并拖入Embed设置为 Do not embed
+Whiteboard.framework  White_YYModel.framework NTLBridge.framework  一并拖入Embed设置为 Do not embed
 
 FAQ：  
 遇到问题：have the same architectures (arm64) and can't be in the same fat output file  
@@ -323,5 +322,3 @@ FAQ：
 
 3.Command CodeSign failed with a nonzero exit code报错
 Whiteboard.framework 改为Do not embed
-
-- [ ] TODO:framework bundle 路径有问题

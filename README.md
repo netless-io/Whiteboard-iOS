@@ -292,6 +292,5 @@ Please call this method to complete the initialization of `WhiteAppParam`
 
 1. The current SDK keyword is 'White', which is not strictly prefixed by three uppercase letters.
 2. In case of complex content, the WhiteBoard may be killed by the system due to lack of memory, resulting in a white screen, we have restored this situation in version 2.16.30. Before 2.16.30, you can set `navigationDelegate` of `WhiteBoardView` to listen to `webViewWebContentProcessDidTerminate:` method. This method will be called when the whiteboard is killed and you can prompt the user to reconnect to resume the whiteboard in this method.
-3. Due to the possibility of using scenarios, please use conditional references to third-party code, for example `#import "YYModel.h"` needs to be replaced with `#if __has_include(<YYModel/YYModel.h>) #import <YYModel/YYModel.h> `.
-4. Starting with version 2.16.63, fpa acceleration is no longer available.
-5. If you previously used YYKit, starting with version 2.16.77, you can replace `Whiteboard/Whiteboard-YYKit` with `Whiteboard`. The YYModel code has been Forked to White_YYModel as YYModel no longer supports Xcode 15 integration.
+3. Starting with version 2.16.63, fpa acceleration is no longer available.
+4. If you previously used YYKit, starting with version 2.16.77, you can replace `Whiteboard/Whiteboard-YYKit` with `Whiteboard`. The YYModel code has been Forked to White_YYModel as YYModel no longer supports Xcode 15 integration.
