@@ -51,8 +51,13 @@ typedef void (^JSNumberCallback)(NSNumber * _Nullable result,BOOL complete);
     if (userInfo) {
         int reason = [userInfo[AVAudioSessionRouteChangeReasonKey] intValue];
         if (reason == AVAudioSessionRouteChangeReasonCategoryChange) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resumeAllAudioInterruptByAudioSessionChanged) object:nil];
-            [self performSelector:@selector(resumeAllAudioInterruptByAudioSessionChanged) withObject:nil afterDelay:0.5];
+            __weak typeof(self) weakSelf = self;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (weakSelf) {
+                    [NSObject cancelPreviousPerformRequestsWithTarget:weakSelf selector:@selector(resumeAllAudioInterruptByAudioSessionChanged) object:nil];
+                    [weakSelf performSelector:@selector(resumeAllAudioInterruptByAudioSessionChanged) withObject:nil afterDelay:0.5];
+                }
+            });
         }
     }
 }

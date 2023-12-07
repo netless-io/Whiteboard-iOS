@@ -141,18 +141,23 @@
 {
     self.requestSlideVolumeHandler = completionHandler;
     __weak typeof(self) weakSelf = self;
-    [self.bridge evaluateJavaScript:@"window.postMessage({type: \"@slide/_get_volume_\"}, '*');" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        if (error) {
-            completionHandler(0, error);
-            weakSelf.requestSlideVolumeHandler = nil;
-            return;
-        }
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.bridge evaluateJavaScript:@"window.postMessage({type: \"@slide/_get_volume_\"}, '*');" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+            if (error) {
+                completionHandler(0, error);
+                weakSelf.requestSlideVolumeHandler = nil;
+                return;
+            }
+        }];
+    });
 }
 
 - (void)updateSlideVolume:(CGFloat)volume
 {
-    [self.bridge evaluateJavaScript:[NSString stringWithFormat:@"window.postMessage ({'type': \"@slide/_update_volume_\", 'volume': %f}, '*')", volume] completionHandler:nil];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.bridge evaluateJavaScript:[NSString stringWithFormat:@"window.postMessage ({'type': \"@slide/_update_volume_\", 'volume': %f}, '*')", volume] completionHandler:nil];
+    });
 }
 
 #pragma mark - CommonCallback
@@ -181,12 +186,15 @@
     self.slideLogPath = path;
     self.slideLogFileHandler = [NSFileHandle fileHandleForWritingAtPath:path];
     NSString *logJs = [NSString stringWithFormat:@"window.postMessage({type: '@slide/_request_log_', sessionId: '%@'}, '*')", sessionId];
-    [self.bridge evaluateJavaScript:logJs completionHandler:^(id _Nullable value, NSError * _Nullable error) {
-        if (error) {
-            result(NO, error);
-            [self cleanSlideLogResource];
-        }
-    }];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.bridge evaluateJavaScript:logJs completionHandler:^(id _Nullable value, NSError * _Nullable error) {
+            if (error) {
+                result(NO, error);
+                [weakSelf cleanSlideLogResource];
+            }
+        }];
+    });
 }
 
 - (void)cleanSlideLogResource
