@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.80] - 2023-12-07
+- 修复 `AVAudioSessionRouteChangeNotification` 通知可能不在主线程回调时引起的 Crash
+- 更新 `@netless/app-slide` 至 0.2.46, 修复路径动画跳页后无法恢复到原位问题, 修复菱形填充会充满图形问题。
+- 更新 `window-manager` 至 0.4.64, 修复重连后 SDK 内置光标消失的问题
 ## [2.16.79] - 2023-11-29
 - 为 `RtcAudioEffectClient` 添加 log
 ## [2.16.78] - 2023-11-16
