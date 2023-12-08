@@ -1,11 +1,11 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "Whiteboard",
-    platforms: [.iOS(.v10)],
+    platforms: [.iOS(.v12)],
     products: [
         .library(
             name: "Whiteboard",
@@ -13,14 +13,13 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "DSBridge-IOS", url: "https://github.com/netless-io/DSBridge-IOS.git", from: .init(3, 1, 1)),
-        .package(name: "YYModel", url: "https://github.com/vince-hz/YYModel.git", from: .init(1, 1, 0))
+        .package(name: "White_YYModel", url: "https://github.com/netless-io/White_YYModel.git", from: .init(1, 0, 6))
     ],
     targets: [
         .target(name: "Whiteboard",
-                dependencies: ["YYModel", "DSBridge-IOS"],
+                dependencies: ["White_YYModel", "DSBridge-IOS"],
                 path: "Whiteboard",
                 exclude: [
-                    "Classes/Model-YYKit",
                     "Classes/include/cpScript.sh",
                     "Classes/SyncPlayer/WhiteReplayer+AtomPlayer.swift",
                 ],
