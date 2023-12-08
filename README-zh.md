@@ -116,38 +116,6 @@ pod install
 运行设备：iOS 10 + 
 开发环境：Xcode 10+
 
-## 项目结构
-
-SDK由多个`subpod`组成，依赖结构如下图所示：
-
-![项目依赖结构](./struct.jpeg)
-
->参数配置类：用于描述和存储API参数，返回值，状态等配置项的类。主要用于与`webview`进行交互。
-
-1. Object：主要作用是通过`YYModel`处理`JSON`转换。包含以下部分：
-    1. `Object`基类，所有`sdk`中使用的参数配置类的基类。
-    2. `Room`，`Player`中API所涉及到的一些参数配置类。
-2. Base：包含`SDK``Displayer`以及部分相关类，主要为以下部分：
-    1. `WhiteSDK`以及其初始化参数类。
-    2. `WhiteSDK`设置的通用回调`WhiteCommonCallbacks`
-    3. `Room`与`Player`共同的父类`Displayer`类的实现。
-    4. `Displayer`中API所使用的一些参数配置类。
-    5. `Displayer`用来描述当前房间状态的类，为`RoomState`,`PlayerState`的基类。
-3. Room：实时房间相关内容：
-    1. `Room`类，及其相关事件回调类。
-    1. `WhiteSDK+Room`，使用`SDK`创建`Room`的API。
-    1. `Room`特有的参数配置类。
-    1. 描述`Room`状态相关的类。
-4. Player：回放房间相关内容：
-    1. `Player`类，及其相关事件回调类。
-    1. `WhiteSDK+Player`，使用`SDK`创建`Player`的API。
-    1. `Player`特有的参数配置类。
-    1. 描述`Player`状态相关的类。
-5. NativePlayer：在`iOS`端播放音视频，并与白板播放状态做同步
-    1. `WhiteCombinePlayer`类，及其相关部分类。
-6. Converter：动静态转换请求封装类。
-    * 动静态转换计费以QPS（日并发）计算，客户端无法控制并发，不推荐在生产环境下使用。详情请参考文档。
-
 ## Native音视频
 
 sdk 现在支持使用 CombinePlayer，在 Native 端播放音视频，sdk 会负责音视频与白板回放的状态同步。

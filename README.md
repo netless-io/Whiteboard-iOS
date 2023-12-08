@@ -100,40 +100,6 @@ Running device: iOS 10 +
 Development environment: Xcode 10+
 
 
-## The project structure
-
-
-SDK is composed of multiple `subpods`, and the dependency structure is shown in the following figure:
-
-![Project dependency structure](./struct.jpeg)
-
-> parameter configuration class: A class used to describe and store API parameters, return values, status, and other configuration items. Mainly used to interact with `webview`.
-
-1. Object: The main function of Object is to handle the `JSON` conversion via `YYModel`. Contains the following parts:
-    1. The `Object` base class, the base class of all the parameters used in the `SDK` configuration class.
-    2. Some of the parameter configuration classes in `Room` and `Player` API.
-2. Base: includes` SDK ` `Displayer` and some related classes, mainly as follows:
-    1. `WhiteSDK` and its initialization parameter class.
-    2. Generic callback `whiteCommonCallbacks` set by`WhiteSDK`
-    3. Implementation of the same parent class `Displayer` as `Room` and `Player`.
-    4. Some of the parameter configuration classes used by the `Displayer` API.
-    5. `Displayer` is a class used to describe the current RoomState. It is the base class of `RoomState` and `PlayerState`.
-3. Real-time Room
-    1. `Room` class, and its related event callback class.
-    2. `WhiteSDK+Room`, using the `SDK` API to create `Room`.
-    3. Parameter configuration class unique to `Room`.
-    4. Describe the class related to `Room`.
-4. You can play back the contents of the room.
-    1. `Player` class, and its related event callback class.
-    2. `WhiteSDK+Player`, using the `SDK` API to create `Player`.
-    3. The `Player` specific parameter configuration class.
-    4. Describe the class related to the status of `Player`.
-5. NativePlayer: Play audio and video on the `iOS` side, and synchronize with the whiteboard playing state
-    1. `WhiteCombinePlayer` class, and some of its related classes.
-6. Converter: Convert the request to the wrapper class.
-* Charging for dynamic and static conversion is based on QPS (daily concurrency). The client cannot control the concurrency, so it is not recommended to use in production environment. Please refer to the documentation for details.
-
-
 
 ## Native audio and video
 
