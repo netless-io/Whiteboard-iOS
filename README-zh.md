@@ -36,7 +36,7 @@ pod 'Whiteboard'
 - ### Swift Package Manager
 ```swift
  dependencies: [
-    .package(url: "https://github.com/netless-io/Whiteboard-iOS.git", .upToNextMajor(from: "2.15.0"))
+    .package(url: "https://github.com/netless-io/Whiteboard-iOS.git", .upToNextMajor(from: "2.16.81"))
 ]
 ```
 
