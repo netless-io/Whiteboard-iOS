@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.82] - 2023-12-08
+- 更新 `window-manager` 至 0.4.65，修复SDK内置光标在修改 isWritable 后消失的问题
 ## [2.16.81] - 2023-12-07
 - 支持将 `WKWebView` 中的所有 console 日志打印到 `WhiteCommonCallbacks.logger:` 回调中。如果需要打印此类信息，请在初始化 SDK 的时候传入 `config.loggerOptions` 中设置 `@"printLevelMask": WhiteSDKLoggerOptionLevelDebug`
 ## [2.16.80] - 2023-12-07
