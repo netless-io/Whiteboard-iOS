@@ -43,7 +43,7 @@
 
 - (NSString *)onPlayerStateChanged:(NSString *)json
 {
-    WhitePlayerState *state = [WhitePlayerState modelWithJSON:json];
+    WhitePlayerState *state = [WhitePlayerState _white_yy_modelWithJSON:json];
     //连 sceneState 都没有时，说明内容没有初始化，此时的回调是返回所有信息。
     if (self.player.state.sceneState == nil) {
         [self.player updatePlayerState:state];
@@ -111,7 +111,7 @@
 - (NSString *)fireMagixEvent:(NSString *)info
 {
     if ([self.delegate respondsToSelector:@selector(fireMagixEvent:)]) {
-        WhiteEvent *event = [WhiteEvent modelWithJSON:info];
+        WhiteEvent *event = [WhiteEvent _white_yy_modelWithJSON:info];
         [self.delegate fireMagixEvent:event];
     }
     return @"";
@@ -123,7 +123,7 @@
         NSArray *array  = [NSJSONSerialization JSONObjectWithData:[info dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray<WhiteEvent *> *events = [NSMutableArray arrayWithCapacity:[array count]];
         for (NSString *evtString in array) {
-            WhiteEvent *event = [WhiteEvent modelWithJSON:evtString];
+            WhiteEvent *event = [WhiteEvent _white_yy_modelWithJSON:evtString];
             [events addObject:event];
         }
         [self.delegate fireHighFrequencyEvent:events];

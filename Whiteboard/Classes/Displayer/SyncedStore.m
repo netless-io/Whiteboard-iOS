@@ -9,7 +9,6 @@
 #import "WhiteConsts.h"
 #import "WhiteBoardView.h"
 #import "SyncedStore+Private.h"
-#import "NSObject+YY.h"
 
 @protocol SyncedStoreCallbackDelegate <NSObject>
 - (void)fireSyncedStoreUpdate:(NSString *)jsonString;

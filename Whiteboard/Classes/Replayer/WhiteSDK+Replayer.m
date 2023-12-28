@@ -47,7 +47,7 @@
             } else {
                 WhitePlayer *player = [[WhitePlayer alloc] initWithUuid:config.room bridge:weakBridge];
                 weakBridge.playerEvent.player = player;
-                [player updateTimeInfo:[WhitePlayerTimeInfo modelWithJSON:dict[@"timeInfo"]]];
+                [player updateTimeInfo:[WhitePlayerTimeInfo _white_yy_modelWithJSON:dict[@"timeInfo"]]];
                 completionHandler(YES, player, nil);
             }
         }

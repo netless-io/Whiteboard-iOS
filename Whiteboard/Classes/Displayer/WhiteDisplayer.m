@@ -88,7 +88,7 @@
 {
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"getScene"] arguments:@[scenePath] completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteScene* scene = [WhiteScene modelWithJSON:value];
+            WhiteScene* scene = [WhiteScene _white_yy_modelWithJSON:value];
             result(scene);
         }
     }];
@@ -116,7 +116,7 @@
                 if ([key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSArray class]]) {
                     NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:obj.count];
                     [obj enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        WhiteScene *scene = [WhiteScene modelWithJSON:obj];
+                        WhiteScene *scene = [WhiteScene _white_yy_modelWithJSON:obj];
                         if (scene) {
                             [mutableArray addObject:scene];
                         }
@@ -175,7 +175,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
 {
     [self.bridge callHandler:[NSString stringWithFormat:kDisplayerNamespace, @"convertToPointInWorld"] arguments:@[@(point.x), @(point.y)] completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhitePanEvent *convertP = [WhitePanEvent modelWithJSON:value];
+            WhitePanEvent *convertP = [WhitePanEvent _white_yy_modelWithJSON:value];
             result(convertP);
         }
     }];
@@ -236,7 +236,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
 - (void)getLocalSnapShotWithCompletion:(void (^)(UIImage * _Nullable, NSError * _Nullable))completionHandler
 {
     __weak typeof(self) weakSelf = self;
-    [self.bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_frozen_'}, '*')" completionHandler:^(id _Nullable, NSError * _Nullable error) {
+    [self.bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_frozen_'}, '*')" completionHandler:^(id _Nullable value, NSError * _Nullable error) {
         if (error) {
             completionHandler(nil, error);
             return;
@@ -249,7 +249,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
             UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             completionHandler(snapshot, nil);
-            [bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_release_'}, '*')" completionHandler:^(id _Nullable, NSError * _Nullable error) {
+            [bridge evaluateJavaScript:@"window.postMessage({type: '@slide/_request_release_'}, '*')" completionHandler:^(id _Nullable  value, NSError * _Nullable error) {
                 return;
             }];
         });
@@ -263,7 +263,7 @@ static NSString * const kAsyncDisplayerNamespace = @"displayerAsync.%@";
             if ([value isKindOfClass:[NSDictionary class]]) {
                 result(value);
             } else {
-                result(nil);
+                result(@{});
             }
         }
     }];

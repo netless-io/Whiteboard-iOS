@@ -58,7 +58,7 @@ WhitePlayerSeekingResult const WhitePlayerSeekingResultStopped = @"stopped";
 
 - (void)updatePlayerState:(WhitePlayerState *)state
 {
-    [_state yy_modelSetWithJSON:[state yy_modelToJSONObject]];
+    [_state _white_yy_modelSetWithJSON:[state _white_yy_modelToJSONObject]];
 }
 
 - (void)updateTimeInfo:(WhitePlayerTimeInfo *)info
@@ -69,7 +69,7 @@ WhitePlayerSeekingResult const WhitePlayerSeekingResultStopped = @"stopped";
 - (void)updateScheduleTime:(NSTimeInterval)time;
 {
     NSString *key = @"scheduleTime";
-    [_timeInfo yy_modelSetWithJSON:@{key : @(time)}];
+    [_timeInfo _white_yy_modelSetWithJSON:@{key : @(time)}];
 }
 
 #pragma mark - action API
@@ -164,7 +164,7 @@ static NSString * const PlayerStateNamespace = @"player.state.%@";
     [self.bridge callHandler:[NSString stringWithFormat:PlayerStateNamespace, @"playerState"] arguments:nil completionHandler:^(id  _Nullable value) {
         WhitePlayerState *state;
         if ([NSJSONSerialization isValidJSONObject:value]) {
-            state = [WhitePlayerState modelWithJSON:value];
+            state = [WhitePlayerState _white_yy_modelWithJSON:value];
         }
         if (result) {
             result(state);
@@ -177,7 +177,7 @@ static NSString * const PlayerStateNamespace = @"player.state.%@";
     [self.bridge callHandler:[NSString stringWithFormat:PlayerStateNamespace, @"timeInfo"] arguments:nil completionHandler:^(id  _Nullable value) {
         WhitePlayerTimeInfo *timeInfo;
         if ([NSJSONSerialization isValidJSONObject:value]) {
-            timeInfo = [WhitePlayerTimeInfo modelWithJSON:value];
+            timeInfo = [WhitePlayerTimeInfo _white_yy_modelWithJSON:value];
         }
         if (result) {
             result(timeInfo);

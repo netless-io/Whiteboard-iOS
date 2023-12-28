@@ -12,8 +12,6 @@
 #import "WhiteRoom+Private.h"
 #import "WhiteRoomCallbacks+Private.h"
 #import "WhiteRoom.h"
-#import "WhiteSocket.h"
-#import "WhiteSocket+Private.h"
 
 #if DEBUG
 #import "WritableDetectRoom.h"
@@ -71,7 +69,7 @@
             } else {
                 room.observerId = dict[@"observerId"];
                 room.writable = [dict[@"isWritable"] boolValue];
-                [room updateRoomState:[WhiteRoomState modelWithJSON:dict[@"state"]]];
+                [room updateRoomState:[WhiteRoomState _white_yy_modelWithJSON:dict[@"state"]]];
                 weakBridge.room = room;
                 weakBridge.roomCallbacks.room = room;
                 

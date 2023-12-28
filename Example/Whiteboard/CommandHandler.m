@@ -156,7 +156,7 @@ static BOOL onlyApplePencil = NO;
             [converter startConvertTask:@"https://white-cn-edge-doc-convert.oss-cn-hangzhou.aliyuncs.com/LightWaves.pdf" type:ConvertTypeStatic progress:^(CGFloat progress, WhiteConversionInfo * _Nullable info) {
                 NSLog(@"progress:%f", progress);
             } completionHandler:^(BOOL success, ConvertedFiles * _Nullable ppt, WhiteConversionInfo * _Nullable info, NSError * _Nullable error) {
-                NSLog(@"success:%d ppt: %@ error:%@", success, [ppt yy_modelDescription], error);
+                NSLog(@"success:%d ppt: %@ error:%@", success, [ppt _white_yy_modelDescription], error);
                 
                 if (ppt) {
                     [room putScenes:@"/static" scenes:ppt.scenes index:0];

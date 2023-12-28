@@ -16,16 +16,16 @@
 
 - (NSString *)jsonString
 {
-    return [self yy_modelToJSONString];
+    return [self _white_yy_modelToJSONString];
 }
 
 - (NSDictionary *)jsonDict
 {
-    NSDictionary *dict = [self yy_modelToJSONObject];
+    NSDictionary *dict = [self _white_yy_modelToJSONObject];
     if (![dict isKindOfClass:[NSDictionary class]]) {
         return @{};
     }
-    return [self yy_modelToJSONObject];
+    return dict;
 }
 
 @end

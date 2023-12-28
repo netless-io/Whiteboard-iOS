@@ -12,7 +12,7 @@
 #import "WhiteDisplayer+Private.h"
 #import "WhiteObject.h"
 #import "WhiteDisplayerState+Private.h"
-#import "WhiteboardView+Private.h"
+#import "WhiteBoardView+Private.h"
 
 @interface WhiteRoom()<WKNavigationDelegate>
 @property (nonatomic, assign, readwrite) NSTimeInterval delay;
@@ -97,7 +97,7 @@
 }
 
 - (void)updateRoomState:(WhiteRoomState *)state {
-    [_state yy_modelSetWithJSON:[state yy_modelToJSONObject]];
+    [_state _white_yy_modelSetWithJSON:[state _white_yy_modelToJSONObject]];
 }
 
 #pragma mark - Apple Pencil
@@ -417,7 +417,7 @@
 {
     [self.bridge callHandler:@"room.getMemberState" completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteMemberState *jsState = [WhiteMemberState modelWithJSON:value];
+            WhiteMemberState *jsState = [WhiteMemberState _white_yy_modelWithJSON:value];
             result(jsState);
         }
     }];
@@ -436,7 +436,7 @@
 {
     [self.bridge callHandler:@"room.getSceneState" completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteSceneState *jsState = [WhiteSceneState modelWithJSON:value];
+            WhiteSceneState *jsState = [WhiteSceneState _white_yy_modelWithJSON:value];
             result(jsState);
         }
     }];
@@ -450,7 +450,7 @@
             NSArray *values = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             NSMutableArray *array = [NSMutableArray arrayWithCapacity:[values count]];
             for (id v in values) {
-                [array addObject:[WhiteRoomMember modelWithJSON:v]];
+                [array addObject:[WhiteRoomMember _white_yy_modelWithJSON:v]];
             }
             result(array);
         }
@@ -482,7 +482,7 @@
 {
     [self.bridge callHandler:@"room.state.getRoomState" completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteRoomState *state = [WhiteRoomState modelWithJSON:value];
+            WhiteRoomState *state = [WhiteRoomState _white_yy_modelWithJSON:value];
             result(state);
         }
     }];
@@ -496,7 +496,7 @@
             NSArray *values = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             NSMutableArray<WhiteScene *> *array = [NSMutableArray arrayWithCapacity:[values count]];
             for (id v in values) {
-                [array addObject:[WhiteScene modelWithJSON:v]];
+                [array addObject:[WhiteScene _white_yy_modelWithJSON:v]];
             }
             result(array);
         }
@@ -507,7 +507,7 @@
 {
     [self.bridge callHandler:@"room.getBroadcastState" completionHandler:^(id  _Nullable value) {
         if (result) {
-            WhiteBroadcastState *jsState = [WhiteBroadcastState modelWithJSON:value];
+            WhiteBroadcastState *jsState = [WhiteBroadcastState _white_yy_modelWithJSON:value];
             result(jsState);
         }
     }];
@@ -662,7 +662,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
         NSMutableDictionary *results = [NSMutableDictionary dictionary];
         
         for (NSString *key in dict.allKeys) {
-            WhiteAppSyncAttributes *para = [WhiteAppSyncAttributes modelWithJSON:dict[key]];
+            WhiteAppSyncAttributes *para = [WhiteAppSyncAttributes _white_yy_modelWithJSON:dict[key]];
             results[key] = para;
         }
         completionHandler(results, nil);
@@ -681,7 +681,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
             completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             return;
         }
-        WhiteAppSyncAttributes* result = [WhiteAppSyncAttributes modelWithJSON:value];
+        WhiteAppSyncAttributes* result = [WhiteAppSyncAttributes _white_yy_modelWithJSON:value];
         completionHandler(result, nil);
     }];
 }

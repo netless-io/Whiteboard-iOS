@@ -22,7 +22,7 @@ FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMini;
 FOUNDATION_EXPORT WhiteWindowBoxState const WhiteWindowBoxStateMax;
 
 /** 互动白板实时房间和回放房间共有的状态。 */
-@interface WhiteDisplayerState : WhiteObject<YYModel>
+@interface WhiteDisplayerState : WhiteObject<White_YYModel>
 
 /**
  设置自定义全局状态。

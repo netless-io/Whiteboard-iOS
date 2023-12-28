@@ -56,7 +56,7 @@
     event.payload = @{@"k": @"v"};
     NSDictionary *dict = [event jsonDict];
     
-    WhiteEvent *event1 = [WhiteEvent modelWithJSON:dict];
+    WhiteEvent *event1 = [WhiteEvent _white_yy_modelWithJSON:dict];
     XCTAssertTrue([event1.payload isEqual:event.payload]);
     
     event1.payload = @"";
@@ -69,7 +69,7 @@
     event.payload = @"313131";
     NSDictionary *dict = [event jsonDict];
     
-    WhiteEvent *event1 = [WhiteEvent modelWithJSON:dict];
+    WhiteEvent *event1 = [WhiteEvent _white_yy_modelWithJSON:dict];
     XCTAssertTrue([self whiteEventEqual:event event:event1]);
 
     event1.payload = @"";
@@ -83,7 +83,7 @@
     event.payload = @(num);
     NSDictionary *dict = [event jsonDict];
     
-    WhiteEvent *event1 = [WhiteEvent modelWithJSON:dict];
+    WhiteEvent *event1 = [WhiteEvent _white_yy_modelWithJSON:dict];
     XCTAssertTrue([self whiteEventEqual:event event:event1]);
     
     event1.payload = @"";
@@ -124,7 +124,7 @@
     
     // 不能直接初始化复制，直接从字典生成一个
     NSDictionary *dict = @{@"globalState": @{@"name": @"value"}};
-    WhiteDisplayerState *result = [WhiteDisplayerState modelWithJSON:dict];
+    WhiteDisplayerState *result = [WhiteDisplayerState _white_yy_modelWithJSON:dict];
     
     XCTAssertNotNil(result.globalState);
     XCTAssertTrue([result.globalState isKindOfClass:[CustomGlobalTestClass class]]);
@@ -137,7 +137,7 @@
     
     // 不能直接初始化复制，直接从字典生成一个
     NSDictionary *dict = @{@"globalState": @{@"name": @"value"}};
-    WhiteRoomState *result = [WhiteRoomState modelWithJSON:dict];
+    WhiteRoomState *result = [WhiteRoomState _white_yy_modelWithJSON:dict];
     
     XCTAssertNotNil(result.globalState);
     XCTAssertTrue([result.globalState isKindOfClass:[CustomGlobalTestClass class]]);
@@ -150,7 +150,7 @@
     
     // 不能直接初始化复制，直接从字典生成一个
     NSDictionary *dict = @{@"globalState": @{@"name": @"value"}};
-    WhitePlayerState *result = [WhitePlayerState modelWithJSON:dict];
+    WhitePlayerState *result = [WhitePlayerState _white_yy_modelWithJSON:dict];
     
     XCTAssertNotNil(result.globalState);
     XCTAssertTrue([result.globalState isKindOfClass:[CustomGlobalTestClass class]]);
@@ -164,7 +164,7 @@
     memberState.strokeWidth = @1;
     NSDictionary *dict1 = [memberState jsonDict];
     
-    WhiteReadonlyMemberState *readonlyState = [WhiteReadonlyMemberState modelWithJSON:dict1];
+    WhiteReadonlyMemberState *readonlyState = [WhiteReadonlyMemberState _white_yy_modelWithJSON:dict1];
     
     XCTAssertNotNil(readonlyState);
     XCTAssertNotNil(readonlyState.strokeWidth);

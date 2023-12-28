@@ -51,7 +51,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 {
     [WhiteDisplayerState setCustomGlobalStateClass:[CustomGlobalTestModel class]];
     NSDictionary *dict = @{@"globalState": @{@"name": @"testName"}};
-    WhiteDisplayerState *result = [WhiteDisplayerState modelWithJSON:dict];
+    WhiteDisplayerState *result = [WhiteDisplayerState _white_yy_modelWithJSON:dict];
     [self.room setGlobalState:result.globalState];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
