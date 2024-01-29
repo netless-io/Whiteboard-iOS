@@ -16,6 +16,8 @@
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
+@property (nonatomic, assign) BOOL delayJoinRoom;
+
 @end
 
 #import "WhiteUtils.h"
@@ -45,10 +47,12 @@
     
     self.view.backgroundColor = [UIColor orangeColor];
 
-    if ([self.roomUuid length] > 0) {
-        [self joinExistRoom];
-    } else {
-        [self joinNewRoom];
+    if (!self.delayJoinRoom) {
+        if ([self.roomUuid length] > 0) {
+            [self joinExistRoom];
+        } else {
+            [self joinNewRoom];
+        }
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidDismiss:) name:UIKeyboardDidHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:@"refresh" object:nil];

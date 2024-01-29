@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WhiteRoomViewController (UnitTest)
 
+@property (nonatomic, assign) BOOL delayJoinRoom;
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
