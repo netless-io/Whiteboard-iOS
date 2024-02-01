@@ -30,6 +30,9 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 @property (nonatomic, assign) BOOL debug;
 /** 暗黑模式, 本地效果， 不会同步到远端， 默认Light, 设置auto只有在iOS13以上才会生效*/
 @property (nonatomic, copy) WhitePrefersColorScheme prefersColorScheme;
+/** 是否定时更新本地视角 */
+@property (nonatomic, assign) BOOL polling;
+
 
 @end
 
