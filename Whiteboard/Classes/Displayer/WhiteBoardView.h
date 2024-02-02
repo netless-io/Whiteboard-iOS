@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)init;
 
+- (instancetype)initCustomUrl:(NSString *)customUrl;
+
 @end
 
 NS_ASSUME_NONNULL_END
