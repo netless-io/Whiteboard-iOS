@@ -9,7 +9,7 @@
 
 @class WhiteRoomCallbacks, WhitePlayerEvent, WhiteCommonCallbacks, WhiteSdkConfiguration;
 
-@interface WhiteBoardView ()<WKScriptMessageHandler>
+@interface WhiteBoardView ()
 
 @property (nonatomic, strong, nullable) WhiteRoomCallbacks *roomCallbacks;
 @property (nonatomic, strong, nullable) WhitePlayerEvent *playerEvent;
