@@ -22,6 +22,20 @@
     }
 #endif
 
+@interface WebConsoleInteruptScriptHandler: NSObject<WKScriptMessageHandler>
+@property (nonatomic, copy) void (^handler)(WKScriptMessage *message);
+@end
+
+@implementation WebConsoleInteruptScriptHandler
+
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    if (self.handler) {
+        self.handler(message);
+    }
+}
+
+@end
+
 @interface WhiteBoardView ()
 
 @property (nonatomic, strong) BridgeCallRecorder* recorder;
@@ -198,13 +212,14 @@ window.addEventListener('error', function(e) {\
     ";
     WKUserScript *script = [[WKUserScript alloc] initWithSource:logCaptureJsScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO];
     [self.configuration.userContentController addUserScript:script];
-    [self.configuration.userContentController addScriptMessageHandler:self name:@"_netless_web_console_log_"];
-}
-
-- (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
-    [self.commonCallbacks logger: @{
-        @"[WhiteWKConsole]": message.body
-    }];
+    WebConsoleInteruptScriptHandler *handler = [[WebConsoleInteruptScriptHandler alloc] init];
+    __weak typeof(self) weakSelf = self;
+    handler.handler = ^(WKScriptMessage *message) {
+        [weakSelf.commonCallbacks logger:@{
+            @"[WhiteWKConsole]": message.body
+        }];
+    };
+    [self.configuration.userContentController addScriptMessageHandler:handler name:@"_netless_web_console_log_"];
 }
 
 #pragma mark - Override
