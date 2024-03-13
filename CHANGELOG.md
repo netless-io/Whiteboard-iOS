@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.89] - 2024-03-13
+- 新增 `WhiteWindowParams.overwriteStyles`，用于窗口样式覆盖
 ## [2.16.88] - 2024-02-05
 - 更新 `@netless/app-slide` 至 0.2.55
 - 更新 `@netless/slide-rtc-plugin` 至 1.3.1
