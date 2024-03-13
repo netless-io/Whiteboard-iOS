@@ -52,6 +52,7 @@
 		8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E62806A0070095F499 /* ExampleControlView.swift */; };
 		8A86A4EA2806A0070095F499 /* ControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E72806A0070095F499 /* ControlCell.swift */; };
 		8A86A4ED2806A5FE0095F499 /* CommandHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4EC2806A5FE0095F499 /* CommandHandler.m */; };
+		8AAE81BA2BA050D50080A1DA /* RoomLeakTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AAE81B92BA050D50080A1DA /* RoomLeakTest.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AB1A7812880127E000AE9A1 /* SyncedStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */; };
 		8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */; };
@@ -137,6 +138,7 @@
 		8A86A4E72806A0070095F499 /* ControlCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlCell.swift; sourceTree = "<group>"; };
 		8A86A4EB2806A5FE0095F499 /* CommandHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandHandler.h; sourceTree = "<group>"; };
 		8A86A4EC2806A5FE0095F499 /* CommandHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommandHandler.m; sourceTree = "<group>"; };
+		8AAE81B92BA050D50080A1DA /* RoomLeakTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomLeakTest.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AB1A776287FEA6F000AE9A1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		8AB1A777287FEA74000AE9A1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -263,6 +265,8 @@
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
+				8A13C17E2B6359F700290F8F /* RoomPerformTest.m */,
+				8AAE81B92BA050D50080A1DA /* RoomLeakTest.m */,
 				8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */,
 				8A18D2A327EDA89500EC29B1 /* MultiViewsRoomTest.m */,
 				8A34EC9D2AF88D760057B1DA /* LoggerTest.m */,
@@ -545,6 +549,7 @@
 				8AF1F04428153AFB00AA7535 /* SDKTest.m in Sources */,
 				39E4206023A3B861002B9B38 /* WhiteObjectTests.m in Sources */,
 				8A71723E288A7EFE00E0E3C7 /* WebCrashTest.m in Sources */,
+				8AAE81BA2BA050D50080A1DA /* RoomLeakTest.m in Sources */,
 				8A18D2A627F154DB00EC29B1 /* CustomAppTest.m in Sources */,
 				8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */,
 				8A05A21E27D5FE1B00B3F329 /* WhiteTestSocket.m in Sources */,
