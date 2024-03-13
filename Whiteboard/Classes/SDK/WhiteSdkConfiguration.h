@@ -25,7 +25,7 @@ FOUNDATION_EXPORT WhiteSdkRenderEngineKey const WhiteSdkRenderEngineCanvas;
 
 /** 日志类型 */
 typedef NSString * WhiteSDKLoggerOptionLevelKey NS_STRING_ENUM;
-/** Debug 为最详细的日志，目前内容与 Info 一致 */
+/** Debug 为最详细的日志，会将 WebView 上所有的 Console 信息都打印到 native 上 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelDebug;
 /** info 主要为连接日志 */
 FOUNDATION_EXPORT WhiteSDKLoggerOptionLevelKey const WhiteSDKLoggerOptionLevelInfo;
