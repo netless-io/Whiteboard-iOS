@@ -32,6 +32,8 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 @property (nonatomic, copy) WhitePrefersColorScheme prefersColorScheme;
 /** 是否定时更新本地视角 */
 @property (nonatomic, assign) BOOL polling;
+/** 窗口样式覆盖 */
+@property (nonatomic, copy) NSString *overwriteStyles;
 
 
 @end

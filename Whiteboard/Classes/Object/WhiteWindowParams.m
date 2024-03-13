@@ -21,6 +21,7 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     _fullscreen = NO;
     _prefersColorScheme = WhitePrefersColorSchemeLight;
     _polling = NO;
+    _overwriteStyles = @"";
     return self;
 }
 
