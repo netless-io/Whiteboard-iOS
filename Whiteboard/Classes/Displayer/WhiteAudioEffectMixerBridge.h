@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (int)setVolumeOfEffect:(int)soundId withVolume:(double)volume;
 
-- (int)playEffect:(int)soundId filePath:(NSString * _Nullable)filePath loopCount:(int)loopCount pitch:(double)pitch pan:(double)pan gain:(double)gain publish:(BOOL)publish startPos:(int)startPos;
+- (int)playEffect:(int)soundId filePath:(NSString * _Nullable)filePath loopCount:(int)loopCount pitch:(double)pitch pan:(double)pan gain:(double)gain publish:(BOOL)publish startPos:(int)startPos identifier:(NSString *)identifier;
 
 - (int)stopEffect:(int)soundId;
 

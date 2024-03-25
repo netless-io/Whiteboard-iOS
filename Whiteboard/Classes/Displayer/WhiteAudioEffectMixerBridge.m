@@ -105,11 +105,12 @@ typedef void (^JSNumberCallback)(NSNumber * _Nullable result,BOOL complete);
     NSNumber *gain = params[@"gain"];
     BOOL publish = [params[@"publish"] boolValue];
     NSNumber *startPos = params[@"startPos"];
+    NSString *identifier = params[@"identifier"];
     
-    if ([self.delegate respondsToSelector:@selector(playEffect:filePath:loopCount:pitch:pan:gain:publish:startPos:)]) {
-        int res = [self.delegate playEffect:[soundId intValue] filePath:filePath loopCount:[loopCount intValue] pitch:[pitch doubleValue] pan:[pan doubleValue] gain:[gain doubleValue] publish:publish startPos:[startPos intValue]];
+    if ([self.delegate respondsToSelector:@selector(playEffect:filePath:loopCount:pitch:pan:gain:publish:startPos:identifier:)]) {
+        int res = [self.delegate playEffect:[soundId intValue] filePath:filePath loopCount:[loopCount intValue] pitch:[pitch doubleValue] pan:[pan doubleValue] gain:[gain doubleValue] publish:publish startPos:[startPos intValue] identifier:identifier];
         if (_debugLog) {
-            NSLog(@"play effect res %d, soundId %d, filePath: %@, loopCount: %d, startPos: %d", res, [soundId intValue], filePath, [loopCount intValue], [startPos intValue]);
+            NSLog(@"play effect res %d, soundId %d, filePath: %@, loopCount: %d, startPos: %d, identifier: %@", res, [soundId intValue], filePath, [loopCount intValue], [startPos intValue], identifier);
         }
         completionHandler(@(res), YES);
     } else {
