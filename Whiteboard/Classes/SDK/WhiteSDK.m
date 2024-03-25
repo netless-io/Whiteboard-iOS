@@ -242,4 +242,9 @@
     }
 }
 
+- (void)setParameters:(NSDictionary *)parameters
+{
+    [self.bridge callHandler:@"sdk.setParameters" arguments:@[parameters]];
+}
+
 @end

@@ -180,5 +180,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)requestSlideLogToFilePath:(NSString *)path result:(void(^)(BOOL success, NSError *error))result;
 
+#pragma mark - Private
+- (void)setParameters:(NSDictionary *)parameters;
+
 @end
 NS_ASSUME_NONNULL_END
