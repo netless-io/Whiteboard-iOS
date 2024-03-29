@@ -4,10 +4,10 @@ PODS:
   - NTLBridge (3.1.6)
   - SSZipArchive (2.4.3)
   - White_YYModel (1.0.5)
-  - Whiteboard (2.16.89):
-    - Whiteboard/Whiteboard-Basic (= 2.16.89)
-  - Whiteboard/Resource (2.16.89)
-  - Whiteboard/Whiteboard-Basic (2.16.89):
+  - Whiteboard (2.16.90):
+    - Whiteboard/Whiteboard-Basic (= 2.16.90)
+  - Whiteboard/Resource (2.16.90)
+  - Whiteboard/Whiteboard-Basic (2.16.90):
     - NTLBridge (~> 3.1.4)
     - White_YYModel
     - Whiteboard/Resource
@@ -36,7 +36,7 @@ SPEC CHECKSUMS:
   NTLBridge: 6ef7f3c1fc956f2e2d701a89828d51674bd479c7
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   White_YYModel: b71cacc651398e636fa872d625d3f59713ce3715
-  Whiteboard: b0100fe4c3b98272944e60c0e439bc43d10c3616
+  Whiteboard: a2eed4f41bbc298c4a76a99c4382acefd74d481d
 
 PODFILE CHECKSUM: 95aae5767e3ee1197fa3ca543ca2900d16bd9399
 
