@@ -10,20 +10,28 @@
 
 @interface WhiteConverterTaskV5 : NSObject
 
+@property (nonatomic, copy) NSString *token;
+@property (nonatomic, copy) WhiteRegionKey region;
+@property (nonatomic, copy) WhiteConvertTypeV5 type;
 @property (nonatomic, copy) ConvertProgressHandlerV5 progressHandler;
 @property (nonatomic, copy) ConvertCompletionHandlerV5 completionHandler;
 
-- (instancetype)initWithProgressHandler:(ConvertProgressHandlerV5)progressHandler
-               completionHandler:(ConvertCompletionHandlerV5)completionHandler;
+- (instancetype)initWithToken:(NSString *)token
+                       region:(WhiteRegionKey)region
+                         type:(WhiteConvertTypeV5)type
+              progressHandler:(ConvertProgressHandlerV5)progressHandler
+            completionHandler:(ConvertCompletionHandlerV5)completionHandler;
 
 @end
 
 @implementation WhiteConverterTaskV5
 
-- (instancetype)initWithProgressHandler:(ConvertProgressHandlerV5)progressHandler
-               completionHandler:(ConvertCompletionHandlerV5)completionHandler
+- (instancetype)initWithToken:(NSString *)token region:(WhiteRegionKey)region type:(WhiteConvertTypeV5)type progressHandler:(ConvertProgressHandlerV5)progressHandler completionHandler:(ConvertCompletionHandlerV5)completionHandler
 {
     if (self = [super init]) {
+        self.token = token;
+        self.region = region;
+        self.type = type;
         self.progressHandler = progressHandler;
         self.completionHandler = completionHandler;
     }
@@ -32,10 +40,12 @@
 
 @end
 
-static NSString * const ConverterApiOriginV5 = @"https://api.netless.link/v5";
-static NSString * const kHttpCode = @"httpCode";
-static NSString * const kErrorCode = @"errorCode";
-static NSString * const kErrorDomain = @"errorDomain";
+static NSString* const ConverterApiOriginV5 = @"https://api.netless.link/v5";
+static NSString* const FallbackConverterApiOriginV5 = @"https://api.whiteboard.agora.io/v5";
+static NSString* const kHttpCode = @"httpCode";
+static NSString* const kErrorCode = @"errorCode";
+static NSString* const kErrorDomain = @"errorDomain";
+static NSString* currentApiOrigin = ConverterApiOriginV5;
 
 @interface WhiteConverterV5 ()<URLRequestPollingDelegate>
 
@@ -83,8 +93,7 @@ static NSString * const kErrorDomain = @"errorDomain";
 {
     WhiteConverterTaskV5 *task = self.pollingTasks[taskUUID];
     if (!task) {
-        WhiteConverterTaskV5 *newTask = [[WhiteConverterTaskV5 alloc] initWithProgressHandler:progress
-                                                                            completionHandler:result];
+        WhiteConverterTaskV5 *newTask = [[WhiteConverterTaskV5 alloc] initWithToken:token region:region type: type progressHandler:progress completionHandler:result];
         self.pollingTasks[taskUUID] = newTask;
     } else {
         task.progressHandler = progress;
@@ -112,7 +121,12 @@ static NSString * const kErrorDomain = @"errorDomain";
         }
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (error) {
-            result(nil, error);
+            if (request.URL.host == FallbackConverterApiOriginV5) {
+                result(nil, error);
+            } else {
+                currentApiOrigin = FallbackConverterApiOriginV5;
+                [self checkProgressWithTaskUUID:taskUUID token:token region:region taskType:type result:result];
+            }
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             WhiteConversionInfoV5 *info = [WhiteConversionInfoV5 _white_yy_modelWithJSON:responseObject];
@@ -144,8 +158,20 @@ static NSString * const kErrorDomain = @"errorDomain";
     if (!task) { return; }
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     if (error) {
-        task.completionHandler(NO, nil, error);
+        if (error.code != -1004) {
+            task.completionHandler(NO, nil, error);
+            [self cancelPollingTaskWithTaskUUID:identifier];
+            return;
+        }
+        NSURL* failingUrl = error.userInfo[NSURLErrorFailingURLErrorKey];
+        if ([FallbackConverterApiOriginV5 containsString:failingUrl.host]) {
+            task.completionHandler(NO, nil, error);
+            [self cancelPollingTaskWithTaskUUID:identifier];
+            return;
+        }
+        currentApiOrigin = FallbackConverterApiOriginV5;
         [self cancelPollingTaskWithTaskUUID:identifier];
+        [self insertPollingTaskWithTaskUUID:identifier token:task.token region:task.region taskType:task.type progress:task.progressHandler result:task.completionHandler];
     } else if (httpResponse.statusCode == 200) {
         NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         WhiteConversionInfoV5 *info = [WhiteConversionInfoV5 _white_yy_modelWithJSON:responseObject];
@@ -173,7 +199,7 @@ static NSString * const kErrorDomain = @"errorDomain";
                                      region:(WhiteRegionKey)region
                                       token:(NSString *)token
 {
-    NSString *questUrl = [ConverterApiOriginV5 stringByAppendingString:[NSString stringWithFormat:@"/services/conversion/tasks/%@?type=%@", taskUUID, type]];
+    NSString *questUrl = [currentApiOrigin stringByAppendingString:[NSString stringWithFormat:@"/services/conversion/tasks/%@?type=%@", taskUUID, type]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:questUrl]];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
