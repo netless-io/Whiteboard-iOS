@@ -10,20 +10,25 @@
 
 @interface ProjectorTask : NSObject
 
+@property (nonatomic, copy) NSString *token;
+@property (nonatomic, copy) WhiteRegionKey region;
 @property (nonatomic, copy) ProjectorProgressHandler progressHandler;
 @property (nonatomic, copy) ProjectorCompletionHandler completionHandler;
 
-- (instancetype)initWithProgressHandler:(ProjectorProgressHandler)progressHandler
+- (instancetype)initWithToken:(NSString *)token 
+                       region:(WhiteRegionKey)region
+              progressHandler:(ProjectorProgressHandler)progressHandler
                completionHandler:(ProjectorCompletionHandler)completionHandler;
 
 @end
 
 @implementation ProjectorTask
 
-- (instancetype)initWithProgressHandler:(ProjectorProgressHandler)progressHandler
-               completionHandler:(ProjectorCompletionHandler)completionHandler
+- (instancetype)initWithToken:(NSString *)token region:(WhiteRegionKey)region progressHandler:(ProjectorProgressHandler)progressHandler completionHandler:(ProjectorCompletionHandler)completionHandler
 {
     if (self = [super init]) {
+        self.token = token;
+        self.region = region;
         self.progressHandler = progressHandler;
         self.completionHandler = completionHandler;
     }
@@ -32,10 +37,12 @@
 
 @end
 
-static NSString * const ProjectorApiOrigin = @"https://api.netless.link/v5/projector";
-static NSString * const kHttpCode = @"httpCode";
-static NSString * const kErrorCode = @"errorCode";
-static NSString * const kErrorDomain = @"errorDomain";
+static NSString* const ProjectorApiOrigin = @"https://api.netless.link/v5/projector";
+static NSString* const FallbackProjectorApiOrigin = @"https://api.whiteboard.agora.io/v5/projector";
+static NSString* const kHttpCode = @"httpCode";
+static NSString* const kErrorCode = @"errorCode";
+static NSString* const kErrorDomain = @"errorDomain";
+static NSString* currentApiOrigin = ProjectorApiOrigin;
 
 @interface WhiteProjectorPolling ()<URLRequestPollingDelegate>
 
@@ -82,8 +89,7 @@ static NSString * const kErrorDomain = @"errorDomain";
 {
     ProjectorTask *task = self.pollingTasks[taskUUID];
     if (!task) {
-        ProjectorTask *newTask = [[ProjectorTask alloc] initWithProgressHandler:progress
-                                                                            completionHandler:result];
+        ProjectorTask *newTask = [[ProjectorTask alloc] initWithToken:token region:region progressHandler:progress completionHandler:result];
         self.pollingTasks[taskUUID] = newTask;
     } else {
         task.progressHandler = progress;
@@ -110,7 +116,12 @@ static NSString * const kErrorDomain = @"errorDomain";
         }
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (error) {
-            result(nil, error);
+            if (request.URL.host == FallbackProjectorApiOrigin) {
+                result(nil, error);
+            } else {
+                currentApiOrigin = FallbackProjectorApiOrigin;
+                [self checkProgressWithTaskUUID:taskUUID token:token region:region result:result];
+            }
         } else if (httpResponse.statusCode == 200) {
             NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             WhiteProjectorQueryResult *info = [WhiteProjectorQueryResult _white_yy_modelWithJSON:responseObject];
@@ -142,8 +153,20 @@ static NSString * const kErrorDomain = @"errorDomain";
     if (!task) { return; }
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     if (error) {
-        task.completionHandler(NO, nil, error);
+        if (error.code != -1004 ) {
+            task.completionHandler(NO, nil, error);
+            [self cancelPollingTaskWithTaskUUID:identifier];
+            return;
+        }
+        NSURL* failingUrl = error.userInfo[NSURLErrorFailingURLErrorKey];
+        if ([FallbackProjectorApiOrigin containsString:failingUrl.host]) {
+            task.completionHandler(NO, nil, error);
+            [self cancelPollingTaskWithTaskUUID:identifier];
+            return;
+        }
+        currentApiOrigin = FallbackProjectorApiOrigin;
         [self cancelPollingTaskWithTaskUUID:identifier];
+        [self insertPollingTaskWithTaskUUID:identifier token:task.token region:task.region progress:task.progressHandler result:task.completionHandler];
     } else if (httpResponse.statusCode == 200) {
         NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         WhiteProjectorQueryResult *info = [WhiteProjectorQueryResult _white_yy_modelWithJSON:responseObject];
@@ -170,7 +193,7 @@ static NSString * const kErrorDomain = @"errorDomain";
                                      region:(WhiteRegionKey)region
                                       token:(NSString *)token
 {
-    NSString *questUrl = [ProjectorApiOrigin stringByAppendingString:[NSString stringWithFormat:@"/tasks/%@", taskUUID]];
+    NSString *questUrl = [currentApiOrigin stringByAppendingString:[NSString stringWithFormat:@"/tasks/%@", taskUUID]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:questUrl]];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
