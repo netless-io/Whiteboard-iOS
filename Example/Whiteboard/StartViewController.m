@@ -22,6 +22,9 @@
 
 @interface StartViewController ()
 @property (nonatomic, strong) UITextField *inputV;
+@property (nonatomic, strong) WhiteAdvanceConvertProgressPolling *advancePolling;
+@property (nonatomic, strong) WhiteProjectorPolling *polling;
+@property (nonatomic, strong) WhiteConverterV5 *pollingV5;
 @end
 
 @implementation StartViewController
@@ -74,6 +77,10 @@
     
     createBtn = [self createButtonWithTitle: NSLocalizedString(@"自定义插件房间", nil)];
     [createBtn addTarget:self action:@selector(customAppRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:createBtn];
+    
+    createBtn = [self createButtonWithTitle: NSLocalizedString(@"转码查询", nil)];
+    [createBtn addTarget:self action:@selector(convertPolling:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
     for (UIView *view in stackView.arrangedSubviews) {
@@ -189,6 +196,46 @@
     #endif
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)convertPolling:(UIButton *)sender
+{
+//    self.polling = [[WhiteProjectorPolling alloc] init];
+//    [self.polling insertPollingTaskWithTaskUUID:@"" token:@"" region:WhiteRegionCN progress:^(CGFloat progress, WhiteProjectorQueryResult * _Nullable info) {
+//        NSLog(@"progress %f", progress);
+//    } result:^(BOOL success, WhiteProjectorQueryResult * _Nullable info, NSError * _Nullable error) {
+//        NSLog(@"success %d, %@", success, error);
+//    }];
+//    [self.polling startPolling];
+    
+//    [WhiteProjectorPolling checkProgressWithTaskUUID:@"" token:@"" region:WhiteRegionCN result:^(WhiteProjectorQueryResult * _Nullable info, NSError * _Nullable error) {
+//        NSLog(@"success %@, %@", error);
+//    }];
+    
+//    self.pollingV5 = [[WhiteConverterV5 alloc] init];
+//    [self.pollingV5 insertPollingTaskWithTaskUUID:@"" token:@"" region:WhiteRegionCN taskType:WhiteConvertTypeStatic progress:^(CGFloat progress, WhiteConversionInfoV5 * _Nullable info) {
+//        
+//    } result:^(BOOL success, WhiteConversionInfoV5 * _Nullable info, NSError * _Nullable error) {
+//        NSLog(@"success %d, %@", success, error);
+//    }];
+//    [self.pollingV5 startPolling];
+    
+    
+//    [WhiteConverterV5 checkProgressWithTaskUUID:@"" token:@"" region:WhiteRegionCN taskType:WhiteConvertTypeStatic result:^(WhiteConversionInfoV5 * _Nullable info, NSError * _Nullable error) {
+//        NSLog(@"success %@", error);
+//    }];
+    
+//    self.advancePolling = [[WhiteAdvanceConvertProgressPolling alloc] init];
+//    [self.advancePolling insertV5PollingTaskWithTaskUUID:@"" token:@"" region:WhiteRegionCN taskType:WhiteConvertTypeStatic progress:^(CGFloat progress) {
+//    } result:^(BOOL success, WhiteConversionInfoV5 * _Nullable info, NSError * _Nullable error) {
+//        NSLog(@"success %d, %@", success, error);
+//    }];
+//    [self.advancePolling insertProjectorPollingTaskWithTaskUUID:@"" token:@"" region:WhiteRegionCN progress:^(CGFloat progress) {
+//        
+//    } result:^(BOOL success, WhiteProjectorQueryResult * _Nullable info, NSError * _Nullable error) {
+//        NSLog(@"success %d, %@", success, error);
+//    }];
+//    [self.advancePolling startPolling];
 }
 
 @end
