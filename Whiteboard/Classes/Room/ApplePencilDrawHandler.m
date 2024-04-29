@@ -34,6 +34,10 @@
                 *stop = YES;
                 return YES;
             }
+            if ([[obj.classForCoder description] isEqualToString:@"WKTouchEventsGestureRecognizer"]) {
+                *stop = YES;
+                return YES;
+            }
             return NO;
         }];
         

@@ -47,6 +47,7 @@
 		8A3CC7312824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */; };
 		8A3CC734282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */; };
 		8A48FAE327E33A9E00D6F98B /* WritableDetectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */; };
+		8A592E422BDF4AC600393A0C /* ApplePencilDrawTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A592E412BDF4AC600393A0C /* ApplePencilDrawTest.m */; };
 		8A71723E288A7EFE00E0E3C7 /* WebCrashTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A71723D288A7EFE00E0E3C7 /* WebCrashTest.m */; };
 		8A86A4E82806A0070095F499 /* ControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A86A4E52806A0070095F499 /* ControlCell.xib */; };
 		8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E62806A0070095F499 /* ExampleControlView.swift */; };
@@ -131,6 +132,7 @@
 		8A3CC7302824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombinePlayerOnlyVideoTest.m; sourceTree = "<group>"; };
 		8A3CC733282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombinePlayerOnlyWhiteTest.m; sourceTree = "<group>"; };
 		8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WritableDetectTest.m; sourceTree = "<group>"; };
+		8A592E412BDF4AC600393A0C /* ApplePencilDrawTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApplePencilDrawTest.m; sourceTree = "<group>"; };
 		8A71723D288A7EFE00E0E3C7 /* WebCrashTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebCrashTest.m; sourceTree = "<group>"; };
 		8A86A4E52806A0070095F499 /* ControlCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ControlCell.xib; sourceTree = "<group>"; };
 		8A86A4E62806A0070095F499 /* ExampleControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleControlView.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */,
 				39E4205F23A3B861002B9B38 /* WhiteObjectTests.m */,
 				8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */,
+				8A592E412BDF4AC600393A0C /* ApplePencilDrawTest.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -559,6 +562,7 @@
 				8A3CC7312824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m in Sources */,
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
 				8A10E27E27F42F6E0098C49F /* TestUtility.m in Sources */,
+				8A592E422BDF4AC600393A0C /* ApplePencilDrawTest.m in Sources */,
 				8A18D2A427EDA89500EC29B1 /* MultiViewsRoomTest.m in Sources */,
 				8AB1A7812880127E000AE9A1 /* SyncedStoreTest.m in Sources */,
 			);
