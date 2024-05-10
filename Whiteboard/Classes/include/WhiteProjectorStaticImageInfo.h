@@ -1,0 +1,1 @@
+../Converter/Projector/WhiteProjectorStaticImageInfo.h
