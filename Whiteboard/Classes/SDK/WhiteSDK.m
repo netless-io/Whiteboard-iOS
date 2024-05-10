@@ -74,6 +74,21 @@
     return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:nil];
 }
 
++ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable)seconds attachingSuperView:(UIView * _Nullable)superView
+{
+    seconds = seconds ? seconds : @(3600 * 12); // Default is 12 hours.
+    float expire = [seconds floatValue] * 1000;
+    WhiteBoardView *foo = [[WhiteBoardView alloc] init];
+    foo.alpha = 0;
+    [foo setHidden:YES];
+    superView = superView ? superView : UIApplication.sharedApplication.keyWindow;
+    [superView addSubview:foo];
+    NSDictionary *params = @{@"appId": appId, @"region": region, @"expire": @(expire)};
+    [foo callHandler:@"sdk.prepareWhiteConnection" arguments:@[params] completionHandler:^(id  _Nullable value) {
+        [foo removeFromSuperview];
+    }];
+}
+
 #pragma mark - 字体
 
 - (void)setupFontFaces:(NSArray <WhiteFontFace *>*)fontFaces
