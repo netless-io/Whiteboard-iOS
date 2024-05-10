@@ -61,12 +61,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  提前选择最佳接入域名，用于加快用户首次连接速度。
- @params appId: SDK 的 appId
- @params region: 需要选择的数据中心
- @params expireSeconds: 数据缓存时间，单位为秒，可为空，默认为 24 小时
- @params superView: 挂载的父视图，可为空，默认为 UIApplication.shared.keyWindow
+ @param appId SDK 的 appId
+ @param region 需要选择的数据中心
+ @param expireSeconds 数据缓存时间，单位为秒，可为空，默认为 24 小时
+ @param superView 挂载的父视图，可为空，默认为 UIApplication.shared.keyWindow
  */
-+ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable )seconds attachingSuperView: (UIView * _Nullable)superView;
++ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable )expireSeconds attachingSuperView: (UIView * _Nullable)superView;
 
 /**
  Play effect 混音设置。

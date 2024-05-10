@@ -74,10 +74,10 @@
     return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:nil];
 }
 
-+ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable)seconds attachingSuperView:(UIView * _Nullable)superView
++ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable)expireSeconds attachingSuperView:(UIView * _Nullable)superView
 {
-    seconds = seconds ? seconds : @(3600 * 12); // Default is 12 hours.
-    float expire = [seconds floatValue] * 1000;
+    expireSeconds = expireSeconds ? expireSeconds : @(3600 * 12); // Default is 12 hours.
+    float expire = [expireSeconds floatValue] * 1000;
     WhiteBoardView *foo = [[WhiteBoardView alloc] init];
     foo.alpha = 0;
     [foo setHidden:YES];
