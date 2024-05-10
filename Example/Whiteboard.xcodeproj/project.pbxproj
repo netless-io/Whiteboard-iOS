@@ -53,6 +53,7 @@
 		8A86A4E92806A0070095F499 /* ExampleControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E62806A0070095F499 /* ExampleControlView.swift */; };
 		8A86A4EA2806A0070095F499 /* ControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4E72806A0070095F499 /* ControlCell.swift */; };
 		8A86A4ED2806A5FE0095F499 /* CommandHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A86A4EC2806A5FE0095F499 /* CommandHandler.m */; };
+		8A87A4D82BD12369001F5533 /* PrepareTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A87A4D72BD12369001F5533 /* PrepareTest.m */; };
 		8AAE81BA2BA050D50080A1DA /* RoomLeakTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AAE81B92BA050D50080A1DA /* RoomLeakTest.m */; };
 		8AB02BCF27C5CE7E00792EF6 /* ConverterV5Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */; };
 		8AB1A7812880127E000AE9A1 /* SyncedStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1A780288011E1000AE9A1 /* SyncedStoreTest.m */; };
@@ -139,6 +140,7 @@
 		8A86A4E72806A0070095F499 /* ControlCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlCell.swift; sourceTree = "<group>"; };
 		8A86A4EB2806A5FE0095F499 /* CommandHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandHandler.h; sourceTree = "<group>"; };
 		8A86A4EC2806A5FE0095F499 /* CommandHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommandHandler.m; sourceTree = "<group>"; };
+		8A87A4D72BD12369001F5533 /* PrepareTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrepareTest.m; sourceTree = "<group>"; };
 		8AAE81B92BA050D50080A1DA /* RoomLeakTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomLeakTest.m; sourceTree = "<group>"; };
 		8AB02BCE27C5CE7E00792EF6 /* ConverterV5Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConverterV5Test.m; sourceTree = "<group>"; };
 		8AB1A776287FEA6F000AE9A1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				8A71723D288A7EFE00E0E3C7 /* WebCrashTest.m */,
 				8AF1F04328153AFB00AA7535 /* SDKTest.m */,
 				39E4205923A3B74F002B9B38 /* DisplayerTests.m */,
+				8A87A4D72BD12369001F5533 /* PrepareTest.m */,
 				39E4205B23A3B790002B9B38 /* PlayerTests.m */,
 				39E4205D23A3B81C002B9B38 /* RoomTests.m */,
 				8A13C17E2B6359F700290F8F /* RoomPerformTest.m */,
@@ -558,6 +561,7 @@
 				8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */,
 				8A3CC734282621C3002DCE39 /* CombinePlayerOnlyWhiteTest.m in Sources */,
 				39E4205E23A3B81C002B9B38 /* RoomTests.m in Sources */,
+				8A87A4D82BD12369001F5533 /* PrepareTest.m in Sources */,
 				8A13C17F2B6359F700290F8F /* RoomPerformTest.m in Sources */,
 				8A3CC7312824FADA002DCE39 /* CombinePlayerOnlyVideoTest.m in Sources */,
 				39E4205A23A3B74F002B9B38 /* DisplayerTests.m in Sources */,
