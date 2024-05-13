@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param expireSeconds 数据缓存时间，单位为秒，可为空，默认为 24 小时
  @param superView 挂载的父视图，可为空，默认为 UIApplication.shared.keyWindow
  */
-+ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable )expireSeconds attachingSuperView: (UIView * _Nullable)superView;
++ (void)prepareWhiteConnectionForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable )expireSeconds attachingSuperView: (UIView * _Nullable)superView;
 
 /**
  Play effect 混音设置。

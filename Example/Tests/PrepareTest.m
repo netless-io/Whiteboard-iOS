@@ -44,7 +44,7 @@
                 BOOL isNull = [v isKindOfClass:[NSNull class]];
                 XCTAssertTrue(isNull);
                 
-                [WhiteSDK prepareForAppId:@"asdf/sdf" region:WhiteRegionCN expireSeconds:nil attachingSuperView:nil];
+                [WhiteSDK prepareWhiteConnectionForAppId:@"asdf/sdf" region:WhiteRegionCN expireSeconds:nil attachingSuperView:nil];
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [wb evaluateJavaScript:@"localStorage.getItem('white-prefer-gateway')" completionHandler:^(id _Nullable v, NSError * _Nullable error) {

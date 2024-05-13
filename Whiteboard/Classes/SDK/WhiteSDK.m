@@ -74,7 +74,7 @@
     return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:nil];
 }
 
-+ (void)prepareForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable)expireSeconds attachingSuperView:(UIView * _Nullable)superView
++ (void)prepareWhiteConnectionForAppId:(NSString *)appId region:(WhiteRegionKey)region expireSeconds:(NSNumber * _Nullable)expireSeconds attachingSuperView:(UIView * _Nullable)superView
 {
     expireSeconds = expireSeconds ? expireSeconds : @(3600 * 12); // Default is 12 hours.
     float expire = [expireSeconds floatValue] * 1000;

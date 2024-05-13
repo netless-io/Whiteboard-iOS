@@ -7,9 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## [2.16.93] - 2024-05-10
+## [2.16.94] - 2024-05-13
 - 更新 `white-web-sdk` 至 2.16.51
-- 新增 `WhiteSDK.prepareForAppId` 方法用于提前选择线路以加快首次连接速度
+- 新增 `WhiteSDK.prepareWhiteConnectionForAppId` 方法用于提前选择线路以加快首次连接速度
 - 新增支持 Projector 查询静态转换结果
 - 修复 drawOnlyPencil 在 17 以上版本失效的问题
 ## [2.16.92] - 2024-04-02
