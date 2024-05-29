@@ -9,6 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NSString * PPTInvisibleBehaviorKey NS_STRING_ENUM;
+
+extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyFrozen;
+extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
+
 @interface WhiteSlideAppParams : WhiteObject
 
 /**
@@ -72,6 +77,11 @@ NS_ASSUME_NONNULL_BEGIN
  background color for slide animations. ex. "#ff0000" (默认 nil）。
  */
 @property (nonatomic, copy, nullable) NSString *bgColor;
+
+/**
+ Specify the behavior after hiding the slide; Freeze will destroy the slide and replace it with a snapshot, while Pause simply pauses the slide @default: 'frozen'
+ */
+@property (nonatomic, copy, nullable) PPTInvisibleBehaviorKey invisibleBehavior;
 
 @end
 

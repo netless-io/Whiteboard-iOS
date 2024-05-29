@@ -7,6 +7,9 @@
 
 #import "WhiteSlideAppParams.h"
 
+PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyFrozen = @"frozen";
+PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause = @"pause";
+
 @implementation WhiteSlideAppParams
 
 - (instancetype)init
@@ -22,6 +25,7 @@
         _maxResolutionLevel = @2;
         _forceCanvas = FALSE;
         _bgColor = nil;
+        _invisibleBehavior = nil;
     }
     return self;
 }
