@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.95] - 2024-05-29
+- 更新 `@netless/app-slide` 至 0.2.57
 ## [2.16.94] - 2024-05-13
 - 更新 `white-web-sdk` 至 2.16.51
 - 新增 `WhiteSDK.prepareWhiteConnectionForAppId` 方法用于提前选择线路以加快首次连接速度
