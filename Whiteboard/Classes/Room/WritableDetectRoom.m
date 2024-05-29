@@ -108,6 +108,7 @@ static NSMutableArray* assertableMethodNames;
             [assertableMethodNames addObject:name];
         }
     }
+    free(methods);
 }
 
 + (NSString *)newMethodNameForMethodName:(NSString *)name {
