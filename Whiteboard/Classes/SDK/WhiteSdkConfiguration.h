@@ -204,6 +204,8 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /** 是否开启多窗口，默认为 NO，开启后，各种 API 会进行更改。*/
 @property (nonatomic, assign) BOOL useMultiViews;
 
+@property (nonatomic, assign) BOOL enableAppliancePlugin;
+
 /**
  * 配置白板的 API 服务器域名列表，可以用于服务器代理。配置后，白板不再使用 sdk 自带配置。
  * @example

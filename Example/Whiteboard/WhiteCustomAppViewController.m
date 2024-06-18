@@ -67,7 +67,9 @@
     WhiteAppParam* app = [[WhiteAppParam alloc] initWithKind:@"EmbeddedPage"
                                                      options:options
                                                        attrs:@{
-        @"src": @"https://example.org/"
+//        @"src": @"https://example.org/"
+        @"src": @"https://cocfight.cn:5555/ "
+//        @"src": @"http://10.131.56.43:5500/index.html"
     }];
     [self.room addApp:app completionHandler:^(NSString * _Nonnull appId) {
         

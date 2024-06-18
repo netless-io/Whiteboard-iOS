@@ -7,6 +7,11 @@
 
 #import "WhiteMemberState.h"
 
+WhiteStrokeType const WhiteStrokeTypeNormal = @"Normal";
+WhiteStrokeType const WhiteStrokeTypeStroke = @"Stroke";
+WhiteStrokeType const WhiteStrokeTypeDotted = @"Dotted";
+WhiteStrokeType const WhiteStrokeTypeLongDotted = @"LongDotted";
+
 WhiteApplianceNameKey const ApplianceClicker = @"clicker";
 WhiteApplianceNameKey const AppliancePencil = @"pencil";
 WhiteApplianceNameKey const ApplianceSelector = @"selector";
@@ -20,6 +25,7 @@ WhiteApplianceNameKey const ApplianceArrow = @"arrow";
 WhiteApplianceNameKey const ApplianceHand = @"hand";
 WhiteApplianceNameKey const ApplianceLaserPointer = @"laserPointer";
 WhiteApplianceNameKey const ApplianceShape = @"shape";
+WhiteApplianceNameKey const ApplianceLaserPen = @"laserPen";
 
 WhiteApplianceShapeTypeKey const ApplianceShapeTypeTriangle = @"triangle";
 /** Shape 图形性状：菱形 */
@@ -32,6 +38,7 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
 
 @interface WhiteReadonlyMemberState ()
 @property (nonatomic, copy) WhiteApplianceNameKey currentApplianceName;
+@property (nonatomic, copy) WhiteStrokeType strokeType;
 @property (nonatomic, copy) NSArray<NSNumber *> *strokeColor;
 @property (nonatomic, strong) NSNumber *strokeWidth;
 @property (nonatomic, copy) NSArray<NSNumber *> *textColor;

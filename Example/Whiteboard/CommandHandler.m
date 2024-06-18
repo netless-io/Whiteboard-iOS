@@ -75,6 +75,99 @@ static BOOL onlyApplePencil = NO;
 
 + (NSDictionary<NSString*, void(^)(WhiteRoom* room)> *)generateCommandsForRoom:(WhiteRoom *)room roomToken:(NSString *)roomToken {
     return @{
+        NSLocalizedString(@"insert ppt", nil): ^(WhiteRoom* room) {
+            WhiteAppParam *param = [WhiteAppParam createSlideApp:@"/test" taskId:@"3e3a2b8845194f998e6e05adab70e1a1" url:@"https://conversion-demo-cn.oss-cn-hangzhou.aliyuncs.com/demo/dynamicConvert" title:@"projector app"];
+            [room addApp:param completionHandler:^(NSString * _Nonnull appId) {
+            }];
+        },
+        NSLocalizedString(@"undo", nil): ^(WhiteRoom* room) {
+            [room undo];
+        },
+        NSLocalizedString(@"redo", nil): ^(WhiteRoom* room) {
+            [room redo];
+        },
+        NSLocalizedString(@"clean", nil): ^(WhiteRoom* room) {
+            [room cleanScene:YES];
+        },
+        NSLocalizedString(@"insert image", nil): ^(WhiteRoom* room) {
+            WhiteImageInformation *info = [[WhiteImageInformation alloc] initWithSize:CGSizeMake(100, 200)];
+            info.centerX = 0;
+            info.centerY = 0;
+            [room insertImage:info src:@"https://p5.ssl.qhimg.com/t01a2bd87890397464a.png"];
+        },
+        NSLocalizedString(@"stroke normal", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.strokeType = WhiteStrokeTypeNormal;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"stroke stroke", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.strokeType = WhiteStrokeTypeStroke;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"stroke dot", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.strokeType = WhiteStrokeTypeDotted;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"stroke longdot", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.strokeType = WhiteStrokeTypeLongDotted;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"laserpen", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = ApplianceLaserPen;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"select", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = ApplianceSelector;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"eraser", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = ApplianceEraser;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"text", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = ApplianceText;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"penta", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.shapeType = ApplianceShapeTypePentagram;
+            state.currentApplianceName = ApplianceShape;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"clicker", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = ApplianceClicker;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"hand", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = ApplianceHand;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"pencil", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+            state.currentApplianceName = AppliancePencil;
+            [room setMemberState:state];
+        },
+        NSLocalizedString(@"reset camera", nil): ^(WhiteRoom* room) {
+            WhiteCameraConfig *config = [[WhiteCameraConfig alloc] init];
+            config.centerX = @(0);
+            config.centerY = @(0);
+            config.scale = @(1);
+            [room moveCamera:config];
+//            WhiteMemberState *state = [[WhiteMemberState alloc] init];
+//            state.currentApplianceName = AppliancePencil;
+//            [room setMemberState:state];
+        },
+    };
+    return @{
         NSLocalizedString(@"改变布局", nil): ^(WhiteRoom* room) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"changeframe" object:nil];
         }

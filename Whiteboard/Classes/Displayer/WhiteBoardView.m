@@ -107,6 +107,7 @@
 }
 
 - (NSURL *)resourceURL {
+//    return [NSURL URLWithString:@"http://10.6.0.90:8080/"];
     if (self.customResourceUrl) {
         return [NSURL URLWithString:self.customResourceUrl];
     }
