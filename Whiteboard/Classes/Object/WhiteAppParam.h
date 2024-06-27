@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
  推荐使用
  */
 + (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title;
++ (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title previewlist:(NSArray <NSString *>*)previewList resourceList: (NSArray <NSString *>*)resourceList;
 
 /*
  创建一个ppt窗口。
