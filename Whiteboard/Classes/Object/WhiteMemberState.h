@@ -11,6 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - ApplianceName
 
+typedef NSString * WhiteStrokeType NS_STRING_ENUM;
+
+extern WhiteStrokeType const WhiteStrokeTypeNormal;
+extern WhiteStrokeType const WhiteStrokeTypeStroke;
+extern WhiteStrokeType const WhiteStrokeTypeDotted;
+extern WhiteStrokeType const WhiteStrokeTypeLongDotted;
+
 /** 白板绘图工具。 */
 typedef NSString * WhiteApplianceNameKey NS_STRING_ENUM;
 /** 点击工具，无任何作用。 */
@@ -37,6 +44,8 @@ extern WhiteApplianceNameKey const ApplianceArrow;
 extern WhiteApplianceNameKey const ApplianceHand;
 /** 激光笔工具。 */
 extern WhiteApplianceNameKey const ApplianceLaserPointer;
+/** 激光画笔工具，该教具仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时可用。 */
+extern WhiteApplianceNameKey const ApplianceLaserPen;
 /** 图形工具，需要设置 `ShapeType` 属性，如果不设置，则默认设置为三角形。
  @since 2.12.24 */
 extern WhiteApplianceNameKey const ApplianceShape;
@@ -65,6 +74,7 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 
 /** 互动白板实时房间内当前使用的工具名称。初始工具为pencil，无默认值。 */
 @property (nonatomic, copy, readonly) WhiteApplianceNameKey currentApplianceName;
+@property (nonatomic, copy, readonly) WhiteStrokeType strokeType;
 /** 线条颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
 @property (nonatomic, copy, readonly) NSArray<NSNumber *> *strokeColor;
 /** 线条粗细。 */
@@ -86,6 +96,7 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 @interface WhiteMemberState : WhiteReadonlyMemberState
 /** 互动白板实时房间内当前使用的工具名称。初始工具为pencil，无默认值。 */
 @property (nonatomic, copy, readwrite, nullable) WhiteApplianceNameKey currentApplianceName;
+@property (nonatomic, copy, readwrite, nullable) WhiteStrokeType strokeType;
 /** 线条颜色，为 RGB 格式，例如，(0, 0, 255) 表示蓝色。 */
 @property (nonatomic, copy, readwrite, nullable) NSArray<NSNumber *> *strokeColor;
 /** 线条粗细。 */
