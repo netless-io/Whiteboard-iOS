@@ -76,6 +76,7 @@ WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon = @"speechBallo
 
 @implementation WhiteMemberState
 @dynamic currentApplianceName;
+@dynamic strokeType;
 @dynamic strokeColor;
 @dynamic textColor;
 @dynamic strokeWidth;
