@@ -63,6 +63,10 @@
     [joinWindowBtn addTarget:self action:@selector(joinWindowRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:joinWindowBtn];
     
+    UIButton *joinAppliancePluginWindowRoomBtn = [self createButtonWithTitle: NSLocalizedString(@"加入多窗口房间(AppliancePlugin)", nil)];
+    [joinAppliancePluginWindowRoomBtn addTarget:self action:@selector(joinAppliancePluginWindowRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:joinAppliancePluginWindowRoomBtn];
+    
     UIButton *createBtn = [self createButtonWithTitle: NSLocalizedString(@"创建新房间", nil)];
     [createBtn addTarget:self action:@selector(createRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
@@ -147,6 +151,14 @@
     WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
     vc.roomUuid = self.inputV.text;
     vc.useMultiViews = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)joinAppliancePluginWindowRoom:(UIButton *)sender {
+    WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
+    vc.roomUuid = self.inputV.text;
+    vc.useMultiViews = YES;
+    vc.sdkConfig.enableAppliancePlugin = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
