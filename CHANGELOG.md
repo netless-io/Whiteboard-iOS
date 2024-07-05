@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.98] - 2024-07-05
+- 新增 @netless/appliance-plugin，版本为 1.0.1。
+- 新增 WhiteSdkConfiguration.enableAppliancePlugin 配置项，用于启用 Appliance 插件。启用后，原基础教具将被替换。请确保同一房间的所有终端使用相同配置。
+- 新增 ApplianceLaserPen 教具，该教具仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时可用。
 ## [2.16.97] - 2024-07-02
 - 更新 `@netless/app-slide` 至 0.2.59
 ## [2.16.96] - 2024-06-27
