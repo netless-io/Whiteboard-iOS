@@ -22,6 +22,15 @@ typedef void(^WhiteEventBlock)(WhiteEvent *event);
 static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 #define CustomEventPayload @{@"test": @"1234"}
 
+- (void)sdkConfigDidSetup:(WhiteSdkConfiguration *)sdkConfig {
+    if ([self.name containsString:@"testPluginPreview"]) {
+        sdkConfig.enableAppliancePlugin = YES;
+    }
+    if ([self.name containsString:@"testPluginCover"]) {
+        sdkConfig.enableAppliancePlugin = YES;
+    }
+}
+
 - (void)testRefreshViewSize {
     [self.room refreshViewSize];
 }
@@ -30,15 +39,15 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     WhitePanEvent *panEvent = [[WhitePanEvent alloc] init];
     panEvent.x = 11;
     panEvent.y = 22;
-
+    
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
+    
     [self.room convertToPointInWorld:panEvent result:^(WhitePanEvent * _Nonnull convertPoint) {
         NSLog(@"convertToPointInWorld:%@", convertPoint);
         XCTAssertNotNil(convertPoint);
         [exp fulfill];
     }];
-
+    
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -49,9 +58,9 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 - (void)testEventListener {
     [self.room addMagixEventListener:kTestingCustomEventName];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
-
+    
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
+    
     __weak typeof(self)weakSelf = self;
     self.eventBlock = ^(WhiteEvent *event) {
         id self = weakSelf;
@@ -59,7 +68,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
         XCTAssertTrue([event.payload isEqualToDictionary:CustomEventPayload]);
         [exp fulfill];
     };
-
+    
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -71,19 +80,19 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [self.room addMagixEventListener:kTestingCustomEventName];
     [self.room removeMagixEventListener:kTestingCustomEventName];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
-
+    
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
+    
     __weak typeof(self)weakSelf = self;
     self.eventBlock = ^(WhiteEvent *event) {
         typeof(weakSelf) self = weakSelf;
         XCTFail(@"移除失败");
     };
-
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kTimeout / 5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [exp fulfill];
     });
-
+    
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -93,16 +102,33 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 
 - (void)testFrequencyEventListener {
     [self.room addHighFrequencyEventListener:kTestingCustomEventName fireInterval:500];
-
+    
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
     [self.room dispatchMagixEvent:kTestingCustomEventName payload:CustomEventPayload];
-
+    
     self.exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
 
+- (void)testPluginPreview {
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSString *path = self.room.sceneState.scenePath;
+    [self.room getScenePreviewImage:path completion:^(UIImage * _Nullable image) {
+        if (image) {
+            XCTAssertTrue(self.roomVC.sdkConfig.enableAppliancePlugin);
+            [exp fulfill];
+        }
+    }];
+    
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -111,10 +137,9 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 }
 
 - (void)testPreview {
-
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-
-    [self.room getScenePreviewImage:@"/init" completion:^(UIImage * _Nullable image) {
+    NSString *path = self.room.sceneState.scenePath;
+    [self.room getScenePreviewImage:path completion:^(UIImage * _Nullable image) {
         if (image) {
             [exp fulfill];
         }
@@ -127,11 +152,27 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     }];
 }
 
-- (void)testCover {
-
+- (void)testPluginCover {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSString *path = self.room.sceneState.scenePath;
+    [self.room getSceneSnapshotImage:path completion:^(UIImage * _Nullable image) {
+        if (image) {
+            XCTAssertTrue(self.roomVC.sdkConfig.enableAppliancePlugin);
+            [exp fulfill];
+        }
+    }];
 
-    [self.room getSceneSnapshotImage:@"/init" completion:^(UIImage * _Nullable image) {
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testCover {
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSString *path = self.room.sceneState.scenePath;
+    [self.room getSceneSnapshotImage:path completion:^(UIImage * _Nullable image) {
         if (image) {
             [exp fulfill];
         }
