@@ -7,7 +7,6 @@
 
 #import "WhiteBoardView.h"
 #import "WhiteBoardView+Private.h"
-#import "WhiteWebViewInjection.h"
 #import "WhiteObject.h"
 #import "WhiteCommonCallbacks.h"
 #import "WhiteCallBridgeCommand.h"
@@ -61,11 +60,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:FALSE];
-}
-
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration
 {
     configuration.allowsInlineMediaPlayback = YES;
@@ -80,7 +74,6 @@
     _commonCallbacks = [[WhiteCommonCallbacks alloc] init];
     [self addJavascriptObject:_commonCallbacks namespace:@"sdk"];
     
-    [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:TRUE];
     self.scrollView.scrollEnabled = NO;
     
     self.recorder = [[BridgeCallRecorder alloc] initWithRecordKeys:@{

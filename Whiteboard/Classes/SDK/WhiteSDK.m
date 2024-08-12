@@ -11,6 +11,7 @@
 #import "WhiteSdkConfiguration+Private.h"
 #import "WhiteDisplayer+Private.h"
 #import "WhiteConsts.h"
+#import "WhiteWebViewInjection.h"
 
 @interface WhiteSDK()
 
@@ -89,6 +90,13 @@
     }];
 }
 
+- (void)dealloc
+{
+    if (self.config.useWebKeyboardInjection) {
+        [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:FALSE];
+    }
+}
+
 #pragma mark - 字体
 
 - (void)setupFontFaces:(NSArray <WhiteFontFace *>*)fontFaces
@@ -146,6 +154,9 @@
 #pragma mark - Private
 - (void)setupWebSdk
 {
+    if (self.config.useWebKeyboardInjection) {
+        [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:TRUE];
+    }
     if ([self.config.loggerOptions[@"printLevelMask"] isEqualToString:WhiteSDKLoggerOptionLevelDebug]) {
         [self.bridge observeWKWebViewConsole];
     }

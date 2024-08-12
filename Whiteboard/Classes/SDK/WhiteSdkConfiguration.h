@@ -217,6 +217,13 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  */
 @property (nonatomic, copy, nullable) NSArray<NSString*> *apiHosts;
 
+
+/**
+ * 用于配置是否允许通过程序聚焦到 WKWebview 上，这个开关可能会影响应用中其他 WKWebView 实例上，如果不需要自动聚焦功能可以选择关闭。
+ * 默认为 YES。
+ */
+@property (nonatomic, assign) BOOL useWebKeyboardInjection;
+
 @end
 
 @implementation WhiteSdkConfiguration (Deleted)

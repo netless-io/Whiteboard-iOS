@@ -76,6 +76,7 @@ static NSString *const kJSDeviceType = @"deviceType";
     _disableNewPencilStroke = NO;
     _whiteSlideAppParams = [[WhiteSlideAppParams alloc] init];
     _enableSlideInterrupterAPI = NO;
+    _useWebKeyboardInjection = YES;
     return self;
 }
 
