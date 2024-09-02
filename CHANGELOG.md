@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.102] - 2024-09-02
+- 更新 `@netless/window-manager`至 0.4.74
 ## [2.16.102] - 2024-08-12
 - 更新 @netless/appliance-plugin，至 1.0.8
 - 新增 `WhiteSdkConfiguration.useWebKeyboardInjection` 参数
