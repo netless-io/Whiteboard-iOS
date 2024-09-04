@@ -192,7 +192,8 @@ static BOOL onlyApplePencil = NO;
         NSLocalizedString(@"插入图片", nil): ^(WhiteRoom* room) {
             WhiteImageInformation *info = [[WhiteImageInformation alloc] initWithSize:CGSizeMake(200, 300)];
             //这一行与注释的两行代码等效
-            [room insertImage:info src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
+            [room insertImage:info src:@"https://p5.ssl.qhimg.com/t01a2bd87890397464a.png"];
+//            "https://flat-storage.oss-accelerate.aliyuncs.com/cloud-storage/2023-08/02/2f137026-eb2a-4872-9cee-d2004d91e07a/2f137026-eb2a-4872-9cee-d2004d91e07a.jpeg"
             //            [room insertImage:info];
             //            [room completeImageUploadWithUuid:info.uuid src:@"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/image/Rectangle.png"];
         }
