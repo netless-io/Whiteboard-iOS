@@ -35,7 +35,7 @@
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer {
-    NSLog(@"WhiteSDK test: 0.1.0-beta.7");
+    NSLog(@"WhiteSDK app-media-player: 0.1.0-beta.9");
     self = [super init];
     if (self) {
         _bridge = boardView;
