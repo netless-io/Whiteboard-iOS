@@ -190,6 +190,7 @@
     __weak typeof(self) weakSelf = self;
     [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
         if (success) {
+            [room disableSerialization:NO];
             [weakSelf actionAfterSuccessJoinRoom:room roomToken:roomToken];
         } else if (weakSelf.roomBlock) {
             weakSelf.roomBlock(nil, error);

@@ -91,18 +91,22 @@ static BOOL onlyApplePencil = NO;
             [room scalePptToFit:WhiteAnimationModeContinuous];
         }
         ,
-        NSLocalizedString(@"撤销重做", nil): ^(WhiteRoom* room) {
-            // 开启 本地序列化后，才能使用 redo undo
-            [room disableSerialization:NO];
-            // 在这 10 秒中画点东西
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLocalizedString(@"撤销", nil): ^(WhiteRoom* room) {
+//            // 开启 本地序列化后，才能使用 redo undo
+//            [room disableSerialization:NO];
+//            // 在这 10 秒中画点东西
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [room undo];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [room redo];
-                });
-            });
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                    [room redo];
+//                });
+//            });
         }
         ,
+        NSLocalizedString(@"重做", nil): ^(WhiteRoom* room) {
+            [room redo];
+        },
+        
         NSLocalizedString(@"删除", nil): ^(WhiteRoom* room) {
             [room duplicate];
             [room copy];
@@ -208,6 +212,7 @@ static BOOL onlyApplePencil = NO;
             NSString *path = room.state.sceneState.scenePath;
             [room getScenePreviewImage:path completion:^(UIImage * _Nullable image) {
                 __unused UIImageView *imgV = [[UIImageView alloc] initWithImage:image];
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
                 [UIPasteboard generalPasteboard].image = image;
             }];
         }
@@ -216,6 +221,7 @@ static BOOL onlyApplePencil = NO;
             NSString *path = room.state.sceneState.scenePath;
             [room getSceneSnapshotImage:path completion:^(UIImage * _Nullable image) {
                 __unused UIImageView *imgV = [[UIImageView alloc] initWithImage:image];
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
                 [UIPasteboard generalPasteboard].image = image;
             }];
         }
@@ -294,6 +300,34 @@ static BOOL onlyApplePencil = NO;
         NSLocalizedString(@"箭头教具", nil): ^(WhiteRoom* room) {
             WhiteMemberState *mState = [[WhiteMemberState alloc] init];
             mState.currentApplianceName = ApplianceArrow;
+            [room setMemberState:mState];
+        }
+        ,
+        NSLocalizedString(@"三角形", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *mState = [[WhiteMemberState alloc] init];
+            mState.currentApplianceName = ApplianceShape;
+            mState.shapeType = ApplianceShapeTypeTriangle;
+            [room setMemberState:mState];
+        }
+        ,
+        NSLocalizedString(@"菱形", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *mState = [[WhiteMemberState alloc] init];
+            mState.currentApplianceName = ApplianceShape;
+            mState.shapeType = ApplianceShapeTypeRhombus;
+            [room setMemberState:mState];
+        }
+        ,
+        NSLocalizedString(@"五角星", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *mState = [[WhiteMemberState alloc] init];
+            mState.currentApplianceName = ApplianceShape;
+            mState.shapeType = ApplianceShapeTypePentagram;
+            [room setMemberState:mState];
+        }
+        ,
+        NSLocalizedString(@"对话气泡", nil): ^(WhiteRoom* room) {
+            WhiteMemberState *mState = [[WhiteMemberState alloc] init];
+            mState.currentApplianceName = ApplianceShape;
+            mState.shapeType = ApplianceShapeTypeSpeechBalloon;
             [room setMemberState:mState];
         }
         ,
