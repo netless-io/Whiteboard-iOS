@@ -31,7 +31,7 @@
 
 + (NSString *)version
 {
-    return @"2.16.104-canary.0";
+    return @"2.16.105-canary.0";
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer {
