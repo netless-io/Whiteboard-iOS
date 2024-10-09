@@ -15,6 +15,7 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 
 @interface MultiViewsRoomTest : BaseRoomTest <WhiteSlideDelegate>
 @property (nonatomic, assign) BOOL didCallSlideInterrupter;
+@property (nonatomic, assign) BOOL didCallSlideError;
 @end
 
 @implementation MultiViewsRoomTest
@@ -90,6 +91,29 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     [self.roomVC.room addApp:slide completionHandler:^(NSString * _Nonnull appId) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             XCTAssertTrue(weakSelf.didCallSlideInterrupter);
+            [weakRoom closeApp:appId completionHandler:^{
+                [exp fulfill];
+            }];
+        });
+    }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testSlideError
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.roomVC.sdk setSlideDelegate:self];
+    WhiteAppParam* slide = [WhiteAppParam createSlideApp:@"/test_error" taskId:@"1bef9ed799aa40078dafbd2a3feb2c25" url:@"https://white-cover.oss-cn-hangzhou.aliyuncs.com/flat/dynamicConvert" title:@"test_error"];
+    self.didCallSlideError = NO;
+    __weak typeof(self.room) weakRoom = self.room;
+    __weak typeof(self) weakSelf = self;
+    [self.roomVC.room addApp:slide completionHandler:^(NSString * _Nonnull appId) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            XCTAssertTrue(weakSelf.didCallSlideError);
             [weakRoom closeApp:appId completionHandler:^{
                 [exp fulfill];
             }];
@@ -518,6 +542,10 @@ static WhiteAppParam* _Nonnull testPptAppParam;
             completionHandler(signedUrl);
         }
     }] resume] ;
+}
+
+- (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex {
+    self.didCallSlideError = YES;
 }
 
 @end
