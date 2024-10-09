@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL enableRtcIntercept;
 @property (nonatomic, assign) BOOL enableRtcAudioEffectIntercept;
+@property (nonatomic, assign) BOOL enablePcmDataCallback;
 @property (nonatomic, copy) NSArray<NSString *> *netlessUA;
 
 @end
