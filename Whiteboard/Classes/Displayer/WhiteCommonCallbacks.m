@@ -119,6 +119,19 @@
     if (dict && [dict[@"type"] isEqualToString:@"@slide/_report_volume_"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Slide-Volume" object:nil userInfo:dict];
     }
+    if (dict && [dict[@"type"] isEqualToString:@"@slide/_error_"]) {
+        WhiteSlideErrorType errorType = dict[@"errorType"];
+        NSString* errorMsg = dict[@"errorMsg"];
+        NSString* slideId = dict[@"slideId"];
+        NSNumber* slideIndexNumber = dict[@"slideIndex"];
+        if (slideIndexNumber) {
+            NSInteger slideIndex = [slideIndexNumber integerValue];
+            if ([self.slideDelegate respondsToSelector:@selector(onSlideError:errorMessage:slideId:slideIndex:)]) {
+                [self.slideDelegate onSlideError:errorType errorMessage:errorMsg slideId:slideId slideIndex:slideIndex];
+                return @"";
+            }
+        }
+    }
     if (dict && [self.delegate respondsToSelector:@selector(customMessage:)]) {
         [self.delegate customMessage:dict];
     }

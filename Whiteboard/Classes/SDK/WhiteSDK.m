@@ -181,6 +181,17 @@
     });
 }
 
+- (void)recoverSlide:(NSString *)slideId slideIndex:(NSInteger)slideIndex {
+    NSString *js = [NSString stringWithFormat:@"window.postMessage({type: '@slide/_recover_', recoverBy: 'renderOtherPage', slideId: '%@', payload: { slideIndex: %ld }}, '*');", slideId, slideIndex];
+    [self.bridge evaluateJavaScript:js completionHandler:nil];
+}
+
+- (void)recoverSlide:(NSString *)slideId
+{
+    NSString *js = [NSString stringWithFormat:@"window.postMessage({type: '@slide/_recover_', recoverBy: 'reloadCurrentPage', slideId: '%@'}, '*');", slideId];
+    [self.bridge evaluateJavaScript:js completionHandler:nil];
+}
+
 - (void)updateSlideVolume:(CGFloat)volume
 {
     __weak typeof(self) weakSelf = self;
