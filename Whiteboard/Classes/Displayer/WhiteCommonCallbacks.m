@@ -8,10 +8,10 @@
 #import "WhiteCommonCallbacks.h"
 #import "WhiteConsts.h"
 #import "WhiteObject.h"
-#if __has_include(<NTLBridge/DWKWebView.h>)
-#import <NTLBridge/DWKWebView.h>
+#if __has_include(<NTLBridge/NTLDWKWebView.h>)
+#import <NTLBridge/NTLDWKWebView.h>
 #else
-#import "DWKWebView.h"
+#import "NTLDWKWebView.h"
 #endif
 
 @implementation WhiteCommonCallbacks
