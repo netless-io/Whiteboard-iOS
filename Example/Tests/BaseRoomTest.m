@@ -7,7 +7,7 @@
 //
 
 #import "BaseRoomTest.h"
-#import "DWKWebview.h"
+#import "NTLDWKWebview.h"
 
 @implementation BaseRoomTest
 
@@ -128,7 +128,7 @@
 }
 
 - (void)catchAnyError {
-    DWKWebView *webView = [self.room valueForKey:@"bridge"];
+    NTLDWKWebView *webView = [self.room valueForKey:@"bridge"];
     [webView addJavascriptObject:self namespace:@"_whiteboardiOSTest"];
     [webView evaluateJavaScript:@"window.addEventListener('unhandledrejection', (event) => { \
      window.a = event; \
