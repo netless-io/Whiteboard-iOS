@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
       spec.public_header_files = 'Whiteboard/Classes/Model/**.h', 'Whiteboard/Classes/Object/**.h', 'Whiteboard/Classes/Converter/**/*.h', 'Whiteboard/Classes/Displayer/**.h', 'Whiteboard/Classes/SDK/**.h', 'Whiteboard/Classes/Whiteboard.h', 'Whiteboard/Classes/Room/**.h', 'Whiteboard/Classes/Replayer/**.h', 'Whiteboard/Classes/NativeReplayer/**.h'
       spec.private_header_files = 'Whiteboard/Classes/Object/*+Private.h', 'Whiteboard/Classes/Displayer/*+Private.h', 'Whiteboard/Classes/SDK/*+Private.h', 'Whiteboard/Classes/Room/*+Private.h', 'Whiteboard/Classes/Room/Private/**.h', 'Whiteboard/Classes/Replayer/*+Private.h', 'Whiteboard/Classes/NativeReplayer/*+Private.h'
       spec.frameworks = 'UIKit', 'WebKit', 'AVFoundation'
-      spec.dependency 'NTLBridge', '~> 3.2.0'
+      spec.dependency 'NTLBridge', '~> 4.0.0'
       spec.dependency 'White_YYModel'
       spec.dependency 'Whiteboard/Resource'
   end
