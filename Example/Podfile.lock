@@ -1,14 +1,14 @@
 PODS:
   - Masonry (1.1.0)
   - NETURLSchemeHandler (0.1.5)
-  - NTLBridge (3.1.6)
+  - NTLBridge (4.0.0)
   - SSZipArchive (2.4.3)
-  - White_YYModel (1.0.5)
+  - White_YYModel (1.0.6)
   - Whiteboard (2.16.102):
     - Whiteboard/Whiteboard-Basic (= 2.16.102)
   - Whiteboard/Resource (2.16.102)
   - Whiteboard/Whiteboard-Basic (2.16.102):
-    - NTLBridge (~> 3.1.4)
+    - NTLBridge (~> 4.0.0)
     - White_YYModel
     - Whiteboard/Resource
 
@@ -33,10 +33,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   NETURLSchemeHandler: 7e3b68bea1d06062f22adf8fbcb971149cbc1379
-  NTLBridge: 6ef7f3c1fc956f2e2d701a89828d51674bd479c7
+  NTLBridge: b90c5bd836f221ee9eee0ea04518f50882b2d6d9
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  White_YYModel: b71cacc651398e636fa872d625d3f59713ce3715
-  Whiteboard: caf7531e24fc900e81fdd3a755202eb12ae177bc
+  White_YYModel: 4ed7b231471784ec709d4db954e1ca61a4fbe54d
+  Whiteboard: 33b955ba8daaae5d048af28fd0da1f334b57a27e
 
 PODFILE CHECKSUM: 95aae5767e3ee1197fa3ca543ca2900d16bd9399
 
