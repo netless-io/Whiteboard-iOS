@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.110] - 2025-02-18
+- 更新 `@netless/appliance-plugin` 至 1.1.9, 修复配置 `RoomParams.floatBar` 不生效问题。
 ## [2.16.109] - 2025-01-02
 - 更新 `NTLBridge` 至 4.0.0
 - 更新 `@netless/app-slide` 至 0.2.63
