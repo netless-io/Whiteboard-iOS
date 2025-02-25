@@ -88,6 +88,13 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
 /** 当教具为 `Shape` 时，所选定的 shape 图形。
  @since 2.12.24 */
 @property (nonatomic, strong, readonly, nullable) WhiteApplianceShapeTypeKey shapeType;
+
+/** 线框透明度，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。*/
+@property (nonatomic, strong, readonly, nullable) NSNumber *strokeOpacity;
+/** 填充样式 ，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。*/
+@property (nonatomic, copy, readonly, nullable) NSArray<NSNumber *> *fillColor;
+/** 填充透明度，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。*/
+@property (nonatomic, strong, readonly, nullable) NSNumber *fillOpacity;
 @end
 
 #pragma mark - MemberState
@@ -124,6 +131,13 @@ extern WhiteApplianceShapeTypeKey const ApplianceShapeTypeSpeechBalloon;
  @since 2.12.24
  */
 @property (nonatomic, strong, readwrite, nullable) WhiteApplianceShapeTypeKey shapeType;
+
+/** 线框透明度 ，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。*/
+@property (nonatomic, assign, readwrite, nullable) NSNumber *strokeOpacity;
+/** 填充样式 ，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。*/
+@property (nonatomic, copy, readwrite, nullable) NSArray<NSNumber *> *fillColor;
+/** 填充透明度 ，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。*/
+@property (nonatomic, assign, readwrite, nullable) NSNumber *fillOpacity;
 
 @end
 

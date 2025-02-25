@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.111] - 2025-02-25
+- 新增 `WhiteMemberState.strokeOpacity`, 用于更改线框透明度，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。
+- 新增 `WhiteMemberState.fillOpacity`, 用于更改填充颜色，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。
+- 新增 `WhiteMemberState.fillColor`, 用于更改填充透明度，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。
 ## [2.16.110] - 2025-02-18
 - 更新 `@netless/appliance-plugin` 至 1.1.9, 修复配置 `RoomParams.floatBar` 不生效问题。
 ## [2.16.109] - 2025-01-02
@@ -105,7 +109,7 @@
 ## [2.16.72] - 2023-09-18
 - 更新 `@netless/app-slide` 至 0.2.43
 - 更新 `WhiteSlideAppParams.maxResolutionLevel`, 取值范围变更为 0-4
-- 新增 `WhiteMemberState.pencilEraserSize`, 用于更改局部橡皮擦尺寸，取之范围 1-3
+- 新增 `WhiteMemberState.pencilEraserSize`, 用于更改局部橡皮擦尺寸，取值范围 1-3
 ## [2.16.71] - 2023-09-15
 - 新增 `WhiteSlideAppParams.minFPS`, `WhiteSlideAppParams.maxFPS`, 用于控制 PPT 动画帧率
 - 新增 `WhiteSlideAppParams.resolution`, `WhiteSlideAppParams.maxResolutionLevel`, 用于控制 PPT 渲染分辨率
