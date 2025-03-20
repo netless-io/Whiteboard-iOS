@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.112] - 2025-03-19
+- 更新 `white-web-sdk` 至 2.16.53
 ## [2.16.111] - 2025-02-25
 - 新增 `WhiteMemberState.strokeOpacity`, 用于更改线框透明度，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。
 - 新增 `WhiteMemberState.fillOpacity`, 用于更改填充透明度，仅在 WhiteSdkConfiguration.enableAppliancePlugin 启用时有效。
