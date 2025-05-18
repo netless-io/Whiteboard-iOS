@@ -14,6 +14,7 @@
 #import "WhiteRegisterAppParams.h"
 #import "WhiteSlideDelegate.h"
 #import "WhiteAudioEffectMixerBridge.h"
+#import "WhiteAudioPcmDataDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
 
 /** 白板 SDK 相关方法。 */
@@ -33,6 +34,17 @@ NS_ASSUME_NONNULL_BEGIN
  @return 初始化的 `WhiteSDK` 对象。
  */
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer;
+
+/**
+ 设置 RTC 混音并初始化 `WhiteSDK` 对象。
+ 请确保在调用其他 API 前先调用该方法创建并初始化白板 SDK 对象。
+ @param boardView     白板界面，详见 [WhiteBoardView](WhiteBoardView)。
+ @param config        白板 SDK 对象配置，详见 [WhiteSdkConfiguration](WhiteSdkConfiguration)。
+ @param callback      通用回调事件，详见 [WhiteCommonCallbackDelegate](WhiteCommonCallbackDelegate)。
+ @param pcmDataDelegate   PCM 裸数据回调 ，详见 [WhiteAudioPcmDataDelegate](WhiteAudioPcmDataDelegate)。设置该对象之后，白板中的所有音频会以 pcm data 的形式传出。
+ @return 初始化的 `WhiteSDK` 对象。
+ */
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback pcmDataDelegate:(nullable id<WhiteAudioPcmDataDelegate>)pcmDataDelegate;
 
 /**
  @deprecated 已废弃，请使用 initWithWhiteBoardView:config: commonCallbackDelegate:effectMixerBridgeDelegate: 。

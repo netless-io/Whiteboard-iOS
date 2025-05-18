@@ -18,6 +18,7 @@
 @property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
 @property (nonatomic, strong, readwrite) WhiteAudioMixerBridge *audioMixer;
 @property (nonatomic, strong, readwrite) WhiteAudioEffectMixerBridge *effectMixer;
+@property (nonatomic, strong, readwrite) WhiteAudioPcmDataBrige *pcmBridge;
 
 @property (nonatomic, copy) NSString *requestingSlideLogSessionId;
 @property (nonatomic, copy) NSString *slideLogPath;
@@ -34,7 +35,7 @@
     return @"2.16.114";
 }
 
-- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer {
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer pcmDataDelegate:(nullable id<WhiteAudioPcmDataDelegate>)pcmDataDelegate {
     self = [super init];
     if (self) {
         _bridge = boardView;
@@ -50,23 +51,32 @@
             _effectMixer = [[WhiteAudioEffectMixerBridge alloc] initWithBridge:boardView delegate:effectMixer];
             [self.bridge addJavascriptObject:_effectMixer namespace:@"rtc"];
         }
+        if ([pcmDataDelegate conformsToProtocol:@protocol(WhiteAudioPcmDataDelegate)]) {
+            config.enablePcmDataCallback = YES;
+            _pcmBridge = [[WhiteAudioPcmDataBrige alloc] initWithBridge:boardView delegate:pcmDataDelegate];
+            [self.bridge addJavascriptObject:_pcmBridge namespace:@"pcm"];
+        }
         [self setupWebSdk];
     }
     return self;
 }
 
+- (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(id<WhiteCommonCallbackDelegate>)callback  pcmDataDelegate:(id<WhiteAudioPcmDataDelegate>)pcmDataDelegate {
+    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil effectMixerBridgeDelegate:nil pcmDataDelegate:pcmDataDelegate];
+}
+
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer {
-    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil effectMixerBridgeDelegate:effectMixer];
+    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil effectMixerBridgeDelegate:effectMixer pcmDataDelegate:nil];
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer
 {
-    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:mixer effectMixerBridgeDelegate:nil];
+    return [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:mixer effectMixerBridgeDelegate:nil pcmDataDelegate:nil];
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback
 {
-    self = [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil effectMixerBridgeDelegate:nil];
+    self = [self initWithWhiteBoardView:boardView config:config commonCallbackDelegate:callback audioMixerBridgeDelegate:nil effectMixerBridgeDelegate:nil pcmDataDelegate:nil];
     return self;
 }
 
