@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3.0.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - run: npm install rabbit-tools -g
       - run: rabbit clone

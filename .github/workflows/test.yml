@@ -11,10 +11,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/setup-node@v3.0.0
+      - uses: actions/setup-node@v4
       - run: npm install rabbit-tools -g
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - run: rabbit clone
       - name: UpdateDebugResource
         run: |
