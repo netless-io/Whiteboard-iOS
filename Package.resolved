@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "DSBridge-IOS",
-        "repositoryURL": "https://github.com/netless-io/DSBridge-IOS.git",
-        "state": {
-          "branch": null,
-          "revision": "44cff2254caf6cbd925c2b57e6f45faa86ac30cd",
-          "version": "3.1.1"
-        }
-      },
-      {
-        "package": "YYModel",
-        "repositoryURL": "https://github.com/vince-hz/YYModel.git",
-        "state": {
-          "branch": null,
-          "revision": "9debfef44bcd46557e2b6e3eade95b89eeffeb62",
-          "version": "1.1.0"
-        }
+  "pins" : [
+    {
+      "identity" : "dsbridge-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/netless-io/DSBridge-IOS.git",
+      "state" : {
+        "revision" : "44cff2254caf6cbd925c2b57e6f45faa86ac30cd",
+        "version" : "3.1.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "white_yymodel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/netless-io/White_YYModel.git",
+      "state" : {
+        "revision" : "35a418aefda55bd9bfbdbae94517dc81b82089ed",
+        "version" : "1.0.6"
+      }
+    }
+  ],
+  "version" : 2
 }
