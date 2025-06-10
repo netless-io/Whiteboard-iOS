@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.116] - 2025-06-10
+- 更新 `@netless/app-slide` 至 0.2.73
+- 更新 `@netless/window-manager` 至 1.0.4
+- 更新 `@netless/appliance-plugin` 至 1.1.17
 ## [2.16.115] - 2025-05-21
 - 新增 `WhiteAudioPcmDataDelegate` 回调，支持获取白板音频数据
 - 更新 `@netless/app-slide` 至 0.2.72
