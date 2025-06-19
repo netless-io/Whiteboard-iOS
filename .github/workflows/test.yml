@@ -11,10 +11,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
       - run: npm install rabbit-tools -g
-      - name: Checkout
-        uses: actions/checkout@v4
       - run: rabbit clone
       - name: UpdateDebugResource
         run: |
@@ -34,7 +32,7 @@ jobs:
         run: |
           sh test.sh test_out
       - name: Upload artifacts On Fail
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: test_out

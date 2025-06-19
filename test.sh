@@ -16,13 +16,10 @@ xcodebuild \
   -skip-testing:$SCHEME/WebCrashTest \
   -skip-testing:$SCHEME/RoomPerformTest \
   test | xcbeautify > $OUTPATH
-  PASSSTR='Test Succeeded'
-  TEST_TAIL=$(tail -n 1 $OUTPATH)
-  ISPASS=$(echo $TEST_TAIL | grep "${PASSSTR}")
-  if [[ "$ISPASS" != "" ]]
-  then
-    echo "TEST Succeeded"
-  else
-    echo "TEST FAIL SEE $OUTPATH"
-    exit 1
-  fi
+
+test_result=${PIPESTATUS[0]}
+if [[ "$test_result" != "0" ]]
+then
+  echo "TEST FAIL SEE $OUTPATH"
+  exit 1
+fi
