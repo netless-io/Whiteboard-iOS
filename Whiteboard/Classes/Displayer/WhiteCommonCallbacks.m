@@ -18,11 +18,12 @@
 
 - (NSString *)logger:(NSDictionary *)log
 {
-    if ([self.delegate respondsToSelector:@selector(logger:)]) {
-        [self.delegate logger:log];
-    } else {
-        NSLog(@"[White]: %@", log);
-    }
+    NSLog(@"[White]: %@", log);
+//    if ([self.delegate respondsToSelector:@selector(logger:)]) {
+//        [self.delegate logger:log];
+//    } else {
+//        NSLog(@"[White]: %@", log);
+//    }
     return @"";
 }
 

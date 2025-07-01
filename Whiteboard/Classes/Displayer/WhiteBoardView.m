@@ -212,9 +212,10 @@ window.addEventListener('error', function(e) {\
     WebConsoleInteruptScriptHandler *handler = [[WebConsoleInteruptScriptHandler alloc] init];
     __weak typeof(self) weakSelf = self;
     handler.handler = ^(WKScriptMessage *message) {
-        [weakSelf.commonCallbacks logger:@{
-            @"[WhiteWKConsole]": message.body
-        }];
+        NSLog(@"[WhiteWKConsole] %@", message.body);
+//        [weakSelf.commonCallbacks logger:@{
+//            @"[WhiteWKConsole]": message.body
+//        }];
     };
     [self.configuration.userContentController addScriptMessageHandler:handler name:@"_netless_web_console_log_"];
 }

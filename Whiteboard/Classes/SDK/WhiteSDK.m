@@ -39,6 +39,8 @@
     self = [super init];
     if (self) {
         _bridge = boardView;
+        config.log = YES;
+        config.loggerOptions = @{@"printLevelMask": WhiteSDKLoggerOptionLevelDebug};
         _config = config;
         _bridge.commonCallbacks.delegate = callback;
         if ([mixer conformsToProtocol:@protocol(WhiteAudioMixerBridgeDelegate)]) {
