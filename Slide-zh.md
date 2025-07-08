@@ -4,13 +4,13 @@
 
 Slide 有部分回调功能在 `WhiteSlideDelegate` 中，如果需要使用的话，需要首先通过 `WhiteSDK.setSlideDelegate` 来设置对应的回调处理对象。
 
-### Customlink
+### CustomLinks
 
 该功能支持在点击 ppt 链接的时候，由外部控制跳转。
 
 使用该功能首先要设置 `WhiteSlideDelegate`
 
-其次在创建 slide 的时候，填入 customlinks。对应的方法如下：
+其次在创建 slide 的时候，填入 customLinks。对应的方法如下：
 
 ```
 @interface WhiteAppParam : WhiteObject
