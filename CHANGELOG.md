@@ -10,6 +10,7 @@
 ## [2.16.119] - 2025-07-08
 - `WhiteAppParam.createSlideApp` 支持 customLinks 参数
 - `WhiteSlideDelegate` 新增 `slideOpenUrl` 回调，用于监听 PPT 点击链接事件
+- 更新 `@netless/app-slide` 至 0.2.78
 ## [2.16.118] - 2025-06-26
 - 更新 `@netless/app-slide` 至 0.2.76
 ## [2.16.117] - 2025-06-19
