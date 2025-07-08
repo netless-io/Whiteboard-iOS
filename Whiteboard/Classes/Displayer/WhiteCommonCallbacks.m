@@ -53,6 +53,14 @@
     }
 }
 
+- (NSString *)slideOpenUrl:(NSString *)url
+{
+    if ([self.slideDelegate respondsToSelector:@selector(slideOpenUrl:)]) {
+        [self.slideDelegate slideOpenUrl:url];
+    }
+    return @"";
+}
+
 - (NSString *)urlInterrupter:(NSString *)url
 {
     if ([self.delegate respondsToSelector:@selector(urlInterrupter:)]) {

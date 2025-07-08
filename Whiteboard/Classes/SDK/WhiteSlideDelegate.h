@@ -35,6 +35,12 @@ typedef void (^SlideUrlInterrupterCallback)(NSString * _Nullable result);
  */
 - (void)slideUrlInterrupter:(NSString * _Nullable)url completionHandler:(SlideUrlInterrupterCallback _Nullable )completionHandler;
 
+/**
+ - 当 ppt 点击链接时触发该回调。
+ @param url 点击的链接地址。
+ */
+- (void)slideOpenUrl:(NSString *)url;
+
 - (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex;
 
 @end
