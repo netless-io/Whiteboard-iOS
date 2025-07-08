@@ -66,7 +66,7 @@ static NSString *kPPTScheme = @"netless";
         self.schemeHandler = [[NETURLSchemeHandler alloc] initWithScheme:kPPTScheme directory:NSTemporaryDirectory()];
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
         [config setURLSchemeHandler:self.schemeHandler forURLScheme:kPPTScheme];
-        self.boardView = [[WhiteBoardView alloc] initWithFrame:CGRectZero configuration:config];
+        self.boardView = [[WhiteBoardView alloc] initWithFrame:CGRectZero];
     } else {
         self.boardView = [[WhiteBoardView alloc] init];
     }

@@ -46,17 +46,13 @@
 @implementation WhiteBoardView
 
 - (instancetype)init {
-    if (self = [self initWithFrame:CGRectZero]) {
-        [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
-    }
+    self = [self initWithFrame:CGRectZero];
     return self;
 }
 
 - (instancetype)initCustomUrl:(NSString *)customUrl {
-    if (self = [self initWithFrame:CGRectZero]) {
-        self.customResourceUrl = customUrl;
-        [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
-    }
+    self.customResourceUrl = customUrl;
+    self = [self initWithFrame:CGRectZero];
     return self;
 }
 
