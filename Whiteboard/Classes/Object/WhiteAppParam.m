@@ -56,6 +56,10 @@
 }
 
 + (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title previewlist:(NSArray<NSString *> *)previewList resourceList:(NSArray<NSString *> *)resourceList {
+    return [self createSlideApp:dir taskId:taskId url:url title:title previewlist:previewList resourceList:resourceList customLinks:@[]];
+}
+
++ (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title previewlist:(NSArray <NSString *>*)previewList resourceList: (NSArray <NSString *>*)resourceList customLinks:(NSArray <WhiteSlideCustomLink *>*)customLinks {
   WhiteAppParam *param = [[WhiteAppParam alloc] init];
   param.kind = @"Slide";
   
@@ -68,7 +72,8 @@
       @"taskId": taskId,
       @"url": url,
       @"previewList": previewList,
-      @"resourceList": resourceList
+      @"resourceList": resourceList,
+      @"customLinks": customLinks
   };
   
   return param;

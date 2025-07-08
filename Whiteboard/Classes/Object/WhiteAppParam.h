@@ -6,6 +6,7 @@
 
 #import "WhiteObject.h"
 #import "WhiteScene.h"
+#import "WhiteSlideCustomLink.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title;
 + (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title previewlist:(NSArray <NSString *>*)previewList resourceList: (NSArray <NSString *>*)resourceList;
++ (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title previewlist:(NSArray <NSString *>*)previewList resourceList: (NSArray <NSString *>*)resourceList customLinks:(NSArray <WhiteSlideCustomLink *>*)customLinks;
 
 /*
  创建一个ppt窗口。
