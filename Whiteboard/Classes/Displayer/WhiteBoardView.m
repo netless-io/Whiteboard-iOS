@@ -46,7 +46,7 @@
 @implementation WhiteBoardView
 
 - (instancetype)init {
-    self.customResourceUrl = @"http://10.6.0.43:8080/";
+    self.customResourceUrl = @"http://10.90.0.92:8081/";
     self = [self initWithFrame:CGRectZero];
     return self;
 }
