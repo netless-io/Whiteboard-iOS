@@ -185,6 +185,7 @@
 - (void)pureReplayRoom:(UIButton *)sender
 {
     WhitePureReplayViewController *vc = [[WhitePureReplayViewController alloc] init];
+    vc.useMultiViews = YES;
     vc.roomUuid = self.inputV.text;
 
     #if defined(WhiteRoomUUID) && defined(WhiteRoomToken)
