@@ -13,6 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface WhiteBoardView ()
+@property (nonatomic, strong, nullable) WhiteCommonCallbacks *commonCallbacks;
+@end
+
 @interface WhiteSDK ()
 @property (nonatomic, weak) WhiteBoardView *bridge;
 @end

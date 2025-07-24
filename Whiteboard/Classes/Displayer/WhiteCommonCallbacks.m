@@ -131,13 +131,14 @@
         WhiteSlideErrorType errorType = dict[@"errorType"];
         NSString* errorMsg = dict[@"errorMsg"];
         NSString* slideId = dict[@"slideId"];
+        NSInteger slideIndex = -1;
         NSNumber* slideIndexNumber = dict[@"slideIndex"];
-        if (slideIndexNumber) {
+        if (slideIndexNumber && [slideIndexNumber isKindOfClass:[NSNumber class]]) {
             NSInteger slideIndex = [slideIndexNumber integerValue];
-            if ([self.slideDelegate respondsToSelector:@selector(onSlideError:errorMessage:slideId:slideIndex:)]) {
-                [self.slideDelegate onSlideError:errorType errorMessage:errorMsg slideId:slideId slideIndex:slideIndex];
-                return @"";
-            }
+        }
+        if ([self.slideDelegate respondsToSelector:@selector(onSlideError:errorMessage:slideId:slideIndex:)]) {
+            [self.slideDelegate onSlideError:errorType errorMessage:errorMsg slideId:slideId slideIndex:slideIndex];
+            return @"";
         }
     }
     if (dict && [self.delegate respondsToSelector:@selector(customMessage:)]) {

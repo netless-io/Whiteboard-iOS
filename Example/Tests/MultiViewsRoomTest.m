@@ -16,6 +16,7 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 @interface MultiViewsRoomTest : BaseRoomTest <WhiteSlideDelegate>
 @property (nonatomic, assign) BOOL didCallSlideInterrupter;
 @property (nonatomic, assign) BOOL didCallSlideError;
+@property (nonatomic, assign) NSInteger slideErrorIndex;
 @end
 
 @implementation MultiViewsRoomTest
@@ -119,6 +120,37 @@ static WhiteAppParam* _Nonnull testPptAppParam;
             }];
         });
     }];
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testNonIndexSlideError
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.roomVC.sdk setSlideDelegate:self];
+    // 测试非数字类型
+    NSDictionary *invalidDict = @{
+        @"type": @"@slide/_error_",
+        @"errorType": @"loadError",
+        @"errorMsg": @"Failed to load slide",
+        @"slideId": @"slide1",
+        @"slideIndex": @"invalid"
+    };
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertTrue(weakSelf.didCallSlideError);
+        XCTAssertEqual(weakSelf.slideErrorIndex, -1);
+        [exp fulfill];
+    });
+    NSData *data = [NSJSONSerialization dataWithJSONObject:invalidDict options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *invalidJson = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    SEL sel = NSSelectorFromString(@"postMessage:");
+    [self.roomVC.boardView.commonCallbacks performSelector:sel withObject:invalidJson];
     [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"%s error: %@", __FUNCTION__, error);
@@ -546,6 +578,7 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 
 - (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex {
     self.didCallSlideError = YES;
+    self.slideErrorIndex = slideIndex;
 }
 
 @end

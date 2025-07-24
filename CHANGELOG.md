@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.120] - 
+- 修复 `onSlideError` 回调中 `slideIndex` 可能不存在的错误
 ## [2.16.119] - 2025-07-08
 - `WhiteAppParam.createSlideApp` 支持 customLinks 参数
 - `WhiteSlideDelegate` 新增 `slideOpenUrl` 回调，用于监听 PPT 点击链接事件
