@@ -134,7 +134,7 @@
         NSInteger slideIndex = -1;
         NSNumber* slideIndexNumber = dict[@"slideIndex"];
         if (slideIndexNumber && [slideIndexNumber isKindOfClass:[NSNumber class]]) {
-            NSInteger slideIndex = [slideIndexNumber integerValue];
+            slideIndex = [slideIndexNumber integerValue];
         }
         if ([self.slideDelegate respondsToSelector:@selector(onSlideError:errorMessage:slideId:slideIndex:)]) {
             [self.slideDelegate onSlideError:errorType errorMessage:errorMsg slideId:slideId slideIndex:slideIndex];
