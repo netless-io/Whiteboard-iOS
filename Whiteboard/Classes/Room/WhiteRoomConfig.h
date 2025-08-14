@@ -10,6 +10,7 @@
 #import "WhiteCameraBound.h"
 #import "WhiteConsts.h"
 #import "WhiteWindowParams.h"
+#import "WhiteAppliancePluginOptions.h"
 NS_ASSUME_NONNULL_BEGIN
 
 
@@ -199,6 +200,11 @@ NS_ASSUME_NONNULL_BEGIN
  该参数默认为`NO`
  */
 @property (nonatomic, assign) BOOL drawOnlyApplePencil;
+
+/**
+ * 白板增强插件参数。
+ */
+@property (nonatomic, strong) WhiteAppliancePluginOptions* appliancePluginOptions;
 
 @end
 
