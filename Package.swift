@@ -9,27 +9,30 @@ let package = Package(
     products: [
         .library(
             name: "Whiteboard",
-            targets: ["Whiteboard"]),
+            targets: ["Whiteboard"]
+        )
     ],
     dependencies: [
-        .package(name: "DSBridge-IOS", url: "https://github.com/netless-io/DSBridge-IOS.git", from: .init(3, 1, 1)),
-        .package(name: "White_YYModel", url: "https://github.com/netless-io/White_YYModel.git", from: .init(1, 0, 6))
+        .package(url: "https://github.com/netless-io/DSBridge-IOS.git", from: .init(4, 0, 2)),
+        .package(url: "https://github.com/netless-io/White_YYModel.git", from: .init(1, 0, 7))
     ],
     targets: [
         .target(name: "Whiteboard",
-                dependencies: ["White_YYModel", "DSBridge-IOS"],
+                dependencies: [
+                    .product(name: "NTLBridge", package: "DSBridge-IOS"),
+                    .product(name: "White_YYModel", package: "White_YYModel")
+                ],
                 path: "Whiteboard",
                 exclude: [
                     "Classes/include/cpScript.sh",
-                    "Classes/SyncPlayer/WhiteReplayer+AtomPlayer.swift",
+                    "Classes/SyncPlayer/WhiteReplayer+AtomPlayer.swift"
                 ],
                 sources: ["Classes"],
                 resources: [
                     .process("Resource")
                 ],
                 publicHeadersPath: "Classes/include",
-                cSettings: .headers
-               )
+                cSettings: .headers)
     ]
 )
 

@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/netless-io/DSBridge-IOS.git",
       "state" : {
-        "revision" : "9243ee58d82b4452addb6705a40988cd0ea8f142",
-        "version" : "3.1.6"
+        "revision" : "4c780b208af869a577977c24f5bbb453c716f3ce",
+        "version" : "4.0.2"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/netless-io/White_YYModel.git",
       "state" : {
-        "revision" : "35a418aefda55bd9bfbdbae94517dc81b82089ed",
-        "version" : "1.0.6"
+        "revision" : "c7b8527150ecce0a1758f0f84c73fab13dc73fcd",
+        "version" : "1.0.7"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/ZipArchive/ZipArchive.git",
       "state" : {
         "branch" : "master",
-        "revision" : "1d2c7b604c74b9eef0b99bfc83f07f4c29216e13"
+        "revision" : "acc61be58181e635ae77718e66530b4ee7dea4be"
       }
     }
   ],
