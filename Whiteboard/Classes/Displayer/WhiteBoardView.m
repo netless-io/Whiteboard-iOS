@@ -11,6 +11,7 @@
 #import "WhiteCommonCallbacks.h"
 #import "WhiteCallBridgeCommand.h"
 #import "BridgeCallRecorder.h"
+#import "WhiteboardResourceLoader.h"
 
 #ifndef dispatch_main_async_safe
 #define dispatch_main_async_safe(block)\
@@ -39,29 +40,66 @@
 
 @property (nonatomic, strong) BridgeCallRecorder* recorder;
 @property (nonatomic, copy) NSString* customResourceUrl;
+@property (nonatomic, strong) WhiteboardLocalFileResourceLoader *resourceLoader;
+@property (nonatomic, assign) BOOL enableHttpsScheme;
 
+- (void)loadInitialResource;
+- (instancetype)initWithFrame:(CGRect)frame
+                 configuration:(WKWebViewConfiguration *)configuration
+             customResourceUrl:(nullable NSString *)customResourceUrl
+            enableHttpsScheme:(BOOL)enableHttpsScheme;
 
 @end
 
 @implementation WhiteBoardView
 
 - (instancetype)init {
-    self = [self initWithFrame:CGRectZero];
+    self = [self initWithEnableHttpsScheme:NO];
     return self;
 }
 
-- (instancetype)initCustomUrl:(NSString *)customUrl {
-    self.customResourceUrl = customUrl;
-    self = [self initWithFrame:CGRectZero];
+- (instancetype)initCustomUrl:(nullable NSString *)customUrl {
+    self = [self initCustomUrl:customUrl enableHttpsScheme:NO];
+    return self;
+}
+
+- (instancetype)initWithEnableHttpsScheme:(BOOL)enableHttpsScheme {
+    self = [self initCustomUrl:nil enableHttpsScheme:enableHttpsScheme];
+    return self;
+}
+
+- (instancetype)initCustomUrl:(nullable NSString *)customUrl enableHttpsScheme:(BOOL)enableHttpsScheme {
+    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    self = [self initWithFrame:CGRectZero
+                 configuration:configuration
+             customResourceUrl:customUrl
+            enableHttpsScheme:enableHttpsScheme];
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration
 {
+    self = [self initWithFrame:frame
+                 configuration:configuration
+             customResourceUrl:nil
+            enableHttpsScheme:NO];
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+                 configuration:(WKWebViewConfiguration *)configuration
+             customResourceUrl:(nullable NSString *)customResourceUrl
+            enableHttpsScheme:(BOOL)enableHttpsScheme
+{
     configuration.allowsInlineMediaPlayback = YES;
     configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
     
     self = [super initWithFrame:frame configuration:configuration];
+    if (!self) {
+        return nil;
+    }
+    _customResourceUrl = [customResourceUrl copy];
+    _enableHttpsScheme = enableHttpsScheme;
     
     if (@available(iOS 11.0, *)) {
         self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -80,8 +118,10 @@
         @"sdk.registerApp": @(TRUE),
         @"sdk.joinRoom": @(TRUE)
     }];
-    
-    [self loadRequest:[NSURLRequest requestWithURL:[self resourceURL]]];
+    if (self.enableHttpsScheme) {
+        self.resourceLoader = [[WhiteboardLocalFileResourceLoader alloc] initWithWebView:self resourceBundle:[self whiteSDKBundle]];
+    }
+    [self loadInitialResource];
     
 #if DEBUG
     if (@available(iOS 16.4, *)) {
@@ -103,7 +143,7 @@
 }
 
 - (void)reloadFromCrash:(void (^)(void))completionHandler {
-    [self loadUrl:[self.resourceURL absoluteString]];
+    [self loadInitialResource];
     [self.recorder resumeCommandsFromBridgeView:self completionHandler:completionHandler];
 }
 
@@ -275,6 +315,19 @@ window.addEventListener('error', function(e) {\
     } else {
         self.opaque = NO;
     }
+}
+
+-(void)loadInitialResource
+{
+    NSURL *url = [self resourceURL];
+    if (self.enableHttpsScheme && self.resourceLoader) {
+        NSString *bundleId = [NSBundle mainBundle].bundleIdentifier ?: @"localhost";
+        NSString *baseURLString = [NSString stringWithFormat:@"https://%@", bundleId];
+        NSURL *baseURL = [NSURL URLWithString:baseURLString];
+        [self.resourceLoader loadResourceURL:url baseURL:baseURL];
+        return;
+    }
+    [self loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
 

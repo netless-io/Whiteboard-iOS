@@ -38,7 +38,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)init;
 
-- (instancetype)initCustomUrl:(NSString *)customUrl;
+/**
+ 使用自定义 URL 加载白板资源。
+ */
+- (instancetype)initCustomUrl:(nullable NSString *)customUrl;
+
+/**
+ 初始化白板界面，并配置是否启用 https scheme 的本地资源加载方式（试验性功能）。
+ */
+- (instancetype)initWithEnableHttpsScheme:(BOOL)enableHttpsScheme;
+
+/**
+ 使用自定义 URL 加载白板资源，并配置是否启用 https scheme 的本地资源加载方式（试验性功能）。
+ */
+- (instancetype)initCustomUrl:(nullable NSString *)customUrl enableHttpsScheme:(BOOL)enableHttpsScheme;
 
 @end
 
