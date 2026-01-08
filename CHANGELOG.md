@@ -7,6 +7,8 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.129] - 2026-01-08
+- `WhiteboardView` 新增 `enableHttpsScheme` 参数用于使用 `WKWebview.loadHTMLString:baseURL:` 加载本地资源。
 ## [2.16.128] - 2025-12-30
 - 更新 `@netless/app-slide` 至 0.2.93
 ## [2.16.127] - 2025-11-04
