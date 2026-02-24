@@ -19,6 +19,7 @@ WhiteWindowBoxState const WhiteWindowBoxStateMax = @"maximized";
 @property (nonatomic, strong, readwrite) WhiteCameraState *cameraState;
 @property (nonatomic, copy, nullable, readwrite) WhiteWindowBoxState windowBoxState;
 @property (nonatomic, strong, readwrite) WhitePageState *pageState;
+@property (nonatomic, strong, readwrite) WhiteAppState *appState;
 
 @end
 
