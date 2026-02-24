@@ -75,15 +75,6 @@ static BOOL onlyApplePencil = NO;
 
 + (NSDictionary<NSString*, void(^)(WhiteRoom* room)> *)generateCommandsForRoom:(WhiteRoom *)room roomToken:(NSString *)roomToken {
     return @{
-        NSLocalizedString(@"toggle", nil): ^(WhiteRoom* room) {
-            NSDate *date = [NSDate date];
-            [room setWritable:!room.isWritable completionHandler:^(BOOL isWritable, NSError * _Nullable error) {
-                NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:date];
-                NSLog(@"setWritable:%d error:%@ cost:%.2f", isWritable, error.userInfo, interval);
-            }];
-        }
-    };
-    return @{
         NSLocalizedString(@"改变布局", nil): ^(WhiteRoom* room) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"changeframe" object:nil];
         }
