@@ -42,12 +42,19 @@
 @property (nonatomic, copy) NSString* customResourceUrl;
 @property (nonatomic, strong) WhiteboardLocalFileResourceLoader *resourceLoader;
 @property (nonatomic, assign) BOOL enableHttpsScheme;
+@property (nonatomic, assign) BOOL whiteHasVisibilitySnapshot;
+@property (nonatomic, assign) BOOL whiteLastVisible;
 
 - (void)loadInitialResource;
 - (instancetype)initWithFrame:(CGRect)frame
                  configuration:(WKWebViewConfiguration *)configuration
              customResourceUrl:(nullable NSString *)customResourceUrl
             enableHttpsScheme:(BOOL)enableHttpsScheme;
+- (void)whiteLogVisibilityWithEvent:(NSString *)event
+                              extra:(nullable NSDictionary *)extra
+                              force:(BOOL)force;
+- (BOOL)whiteIsVisible;
+- (NSString *)whiteInvisibleReason;
 
 @end
 
@@ -132,6 +139,7 @@
 #endif
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHandler:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [self whiteLogVisibilityWithEvent:@"init" extra:nil force:YES];
     return self;
 }
 
@@ -171,8 +179,65 @@
 
 - (void)setBounds:(CGRect)bounds
 {
+    CGRect oldBounds = self.bounds;
     [super setBounds:bounds];
     [self autoRefresh];
+    if (!CGSizeEqualToSize(oldBounds.size, bounds.size)) {
+        [self whiteLogVisibilityWithEvent:@"bounds-size-changed"
+                                    extra:@{
+                                        @"oldBounds": NSStringFromCGRect(oldBounds),
+                                        @"newBounds": NSStringFromCGRect(bounds)
+                                    }
+                                    force:YES];
+    }
+}
+
+- (void)setHidden:(BOOL)hidden
+{
+    BOOL oldHidden = self.hidden;
+    [super setHidden:hidden];
+    if (oldHidden != hidden) {
+        [self whiteLogVisibilityWithEvent:@"hidden-changed"
+                                    extra:@{
+                                        @"oldHidden": @(oldHidden),
+                                        @"newHidden": @(hidden)
+                                    }
+                                    force:YES];
+    }
+}
+
+- (void)setAlpha:(CGFloat)alpha
+{
+    CGFloat oldAlpha = self.alpha;
+    [super setAlpha:alpha];
+    if (fabs(oldAlpha - alpha) > FLT_EPSILON) {
+        [self whiteLogVisibilityWithEvent:@"alpha-changed"
+                                    extra:@{
+                                        @"oldAlpha": @(oldAlpha),
+                                        @"newAlpha": @(alpha)
+                                    }
+                                    force:YES];
+    }
+}
+
+- (void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+    [self whiteLogVisibilityWithEvent:@"didMoveToSuperview"
+                                extra:@{
+                                    @"superview": self.superview ? NSStringFromClass(self.superview.class) : @"nil"
+                                }
+                                force:YES];
+}
+
+- (void)didMoveToWindow
+{
+    [super didMoveToWindow];
+    [self whiteLogVisibilityWithEvent:@"didMoveToWindow"
+                                extra:@{
+                                    @"window": self.window ? NSStringFromClass(self.window.class) : @"nil"
+                                }
+                                force:YES];
 }
 
 - (void)layoutSubviews {
@@ -181,6 +246,7 @@
         self.subviews.lastObject.backgroundColor = self.backgroundColor;
     }
     [super layoutSubviews];
+    [self whiteLogVisibilityWithEvent:@"layoutSubviews" extra:nil force:NO];
 }
 
 - (void)autoRefresh
@@ -188,6 +254,111 @@
     if (self.room || self.player) {
         [self callHandler:@"displayer.refreshViewSize" arguments:nil];
     }
+}
+
+- (void)whiteLogVisibilityWithEvent:(NSString *)event
+                              extra:(nullable NSDictionary *)extra
+                              force:(BOOL)force
+{
+    BOOL visible = [self whiteIsVisible];
+    BOOL changed = !self.whiteHasVisibilitySnapshot || self.whiteLastVisible != visible;
+    if (!force && !changed) {
+        return;
+    }
+    self.whiteHasVisibilitySnapshot = YES;
+    self.whiteLastVisible = visible;
+    
+    NSMutableDictionary *payload = [@{
+        @"event": event ?: @"unknown",
+        @"visible": @(visible),
+        @"invisibleReason": [self whiteInvisibleReason],
+        @"hidden": @(self.hidden),
+        @"alpha": @(self.alpha),
+        @"hasWindow": @(self.window != nil),
+        @"bounds": NSStringFromCGRect(self.bounds),
+        @"frame": NSStringFromCGRect(self.frame),
+        @"superview": self.superview ? NSStringFromClass(self.superview.class) : @"nil"
+    } mutableCopy];
+    if (extra.count > 0) {
+        payload[@"extra"] = extra;
+    }
+    
+    [self.commonCallbacks logger:@{
+        @"[WhiteViewVisibility]": payload
+    }];
+}
+
+- (BOOL)whiteIsVisible
+{
+    if (self.hidden) {
+        return NO;
+    }
+    if (self.alpha <= 0.01f) {
+        return NO;
+    }
+    if (!self.window) {
+        return NO;
+    }
+    if (CGRectIsEmpty(self.bounds) || CGRectIsNull(self.bounds)) {
+        return NO;
+    }
+    
+    UIView *ancestor = self.superview;
+    while (ancestor) {
+        if (ancestor.hidden || ancestor.alpha <= 0.01f) {
+            return NO;
+        }
+        ancestor = ancestor.superview;
+    }
+    
+    CGRect rectInWindow = [self convertRect:self.bounds toView:self.window];
+    if (CGRectIsNull(rectInWindow) || CGRectIsEmpty(rectInWindow)) {
+        return NO;
+    }
+    CGRect intersection = CGRectIntersection(rectInWindow, self.window.bounds);
+    if (CGRectIsNull(intersection) || CGRectIsEmpty(intersection)) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (NSString *)whiteInvisibleReason
+{
+    if (self.hidden) {
+        return @"hidden";
+    }
+    if (self.alpha <= 0.01f) {
+        return @"alpha<=0.01";
+    }
+    if (!self.window) {
+        return @"no-window";
+    }
+    if (CGRectIsEmpty(self.bounds) || CGRectIsNull(self.bounds)) {
+        return @"empty-bounds";
+    }
+    
+    UIView *ancestor = self.superview;
+    while (ancestor) {
+        if (ancestor.hidden) {
+            return @"ancestor-hidden";
+        }
+        if (ancestor.alpha <= 0.01f) {
+            return @"ancestor-alpha<=0.01";
+        }
+        ancestor = ancestor.superview;
+    }
+    
+    CGRect rectInWindow = [self convertRect:self.bounds toView:self.window];
+    if (CGRectIsNull(rectInWindow) || CGRectIsEmpty(rectInWindow)) {
+        return @"invalid-rect-in-window";
+    }
+    CGRect intersection = CGRectIntersection(rectInWindow, self.window.bounds);
+    if (CGRectIsNull(intersection) || CGRectIsEmpty(intersection)) {
+        return @"outside-window-bounds";
+    }
+    
+    return @"visible";
 }
 
 #pragma mark - Private.h Methods
