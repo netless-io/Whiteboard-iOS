@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.133] - 2026-03-24
+- 新增 `WhiteSlideAppParams.resourceMaxRetries` 参数，用于控制 PPT 资源加载最大重试次数，默认值为 3。
+- `WhiteSlideDelegate` 新增 `onSlideResourceMaxRetries:error:` 回调，用于监听 PPT 资源加载失败达到最大重试次数事件，返回资源 URL 与错误信息。
 ## [2.16.132] - 2026-03-11
 - 更新 `@netless/app-slide` 至 0.2.97
 ## [2.16.131] - 2026-02-27
