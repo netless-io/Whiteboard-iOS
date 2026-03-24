@@ -83,6 +83,11 @@ extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
  */
 @property (nonatomic, copy, nullable) PPTInvisibleBehaviorKey invisibleBehavior;
 
+/**
+ 设置 Slide 资源加载最大重试次数 (默认 3)。
+ */
+@property (nonatomic, strong) NSNumber *resourceMaxRetries;
+
 @end
 
 NS_ASSUME_NONNULL_END

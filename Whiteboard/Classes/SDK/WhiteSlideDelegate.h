@@ -41,6 +41,13 @@ typedef void (^SlideUrlInterrupterCallback)(NSString * _Nullable result);
  */
 - (void)slideOpenUrl:(NSString *)url;
 
+/**
+ Slide 资源加载失败达到最大重试次数时触发。
+ @param url 资源地址。
+ @param error 错误信息。`NSLocalizedDescriptionKey` 为错误消息，`NSDebugDescriptionErrorKey` 为 JS 堆栈。
+ */
+- (void)onSlideResourceMaxRetries:(NSString *)url error:(NSError *)error;
+
 - (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex;
 
 @end

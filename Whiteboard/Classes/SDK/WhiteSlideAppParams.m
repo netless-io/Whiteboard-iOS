@@ -26,6 +26,7 @@ PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause = @"pause";
         _forceCanvas = FALSE;
         _bgColor = nil;
         _invisibleBehavior = nil;
+        _resourceMaxRetries = @3;
     }
     return self;
 }

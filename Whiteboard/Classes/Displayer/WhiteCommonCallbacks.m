@@ -61,6 +61,22 @@
     return @"";
 }
 
+- (NSString *)slideResourceMaxRetries:(NSDictionary *)info
+{
+    if ([self.slideDelegate respondsToSelector:@selector(onSlideResourceMaxRetries:error:)]) {
+        NSString *url = info[@"url"] ?: @"";
+        NSString *message = info[@"message"] ?: @"";
+        NSString *jsStack = info[@"jsStack"] ?: @"";
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: message,
+            NSDebugDescriptionErrorKey: jsStack
+        };
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-70100 userInfo:userInfo];
+        [self.slideDelegate onSlideResourceMaxRetries:url error:error];
+    }
+    return @"";
+}
+
 - (NSString *)urlInterrupter:(NSString *)url
 {
     if ([self.delegate respondsToSelector:@selector(urlInterrupter:)]) {
