@@ -22,5 +22,7 @@
 - (void)reloadFromCrash:(void (^__nullable)(void))completionHandler;
 
 - (void)observeWKWebViewConsole;
+- (void)setDebugViewStateLoggingEnabled:(BOOL)enabled;
+- (void)logDebugViewStateWithReason:(NSString *)reason force:(BOOL)force;
 
 @end

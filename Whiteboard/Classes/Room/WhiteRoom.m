@@ -563,6 +563,9 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
 #pragma mark - WKNavigationDelegate
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+    if ([webView isKindOfClass:[WhiteBoardView class]]) {
+        [(WhiteBoardView *)webView logDebugViewStateWithReason:@"webViewWebContentProcessDidTerminate" force:YES];
+    }
     [self updatePhase:WhiteRoomPhaseDisconnected];
     if ([self.bridge.roomCallbacks.delegate respondsToSelector:@selector(fireRoomStateChanged:)]) {
         [self.bridge.roomCallbacks.delegate firePhaseChanged:WhiteRoomPhaseDisconnected];
@@ -614,12 +617,14 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
                 if ([self.bridge.commonCallbacks.delegate respondsToSelector:@selector(endRecoveringFromMemoryIssues:)]) {
                     [weakSelf.bridge.commonCallbacks.delegate endRecoveringFromMemoryIssues:TRUE];
                 }
+                [weakSelf.bridge logDebugViewStateWithReason:@"reloadFromCrash.success" force:YES];
             }];
         } else {
             // 失败后就不再继续
             if ([self.bridge.commonCallbacks.delegate respondsToSelector:@selector(endRecoveringFromMemoryIssues:)]) {
                 [weakSelf.bridge.commonCallbacks.delegate endRecoveringFromMemoryIssues:FALSE];
             }
+            [weakSelf.bridge logDebugViewStateWithReason:@"reloadFromCrash.failed" force:YES];
         }
     }];
 }

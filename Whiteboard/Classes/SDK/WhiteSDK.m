@@ -168,6 +168,7 @@
         [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:TRUE];
     }
     if ([self.config.loggerOptions[@"printLevelMask"] isEqualToString:WhiteSDKLoggerOptionLevelDebug]) {
+        [self.bridge setDebugViewStateLoggingEnabled:YES];
         [self.bridge observeWKWebViewConsole];
     }
     [self.bridge setupWebSDKWithConfig:self.config completion:nil];
