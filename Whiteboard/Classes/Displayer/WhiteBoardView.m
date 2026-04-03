@@ -45,6 +45,8 @@
 @property (nonatomic, assign) BOOL debugViewStateLoggingEnabled;
 @property (nonatomic, copy) NSString *lastDebugViewStateSignature;
 @property (nonatomic, strong) NSDate *lastDebugViewStateLogTime;
+@property (nonatomic, strong) dispatch_source_t debugViewStateMonitorTimer;
+@property (nonatomic, copy) NSString *lastDebugVisibilitySignature;
 
 - (void)loadInitialResource;
 - (instancetype)initWithFrame:(CGRect)frame
@@ -59,6 +61,8 @@
 static const NSTimeInterval WhiteBoardViewDebugLogMinInterval = 1.5;
 static const NSUInteger WhiteBoardViewDebugLogMaxTrackedSubviews = 8;
 static const NSUInteger WhiteBoardViewDebugLogMaxSuperviewLevels = 4;
+static const NSTimeInterval WhiteBoardViewDebugLogMonitorInterval = 4.0;
+static const NSUInteger WhiteBoardViewDebugLogMaxLength = 2048;
 
 - (instancetype)init {
     self = [self initWithEnableHttpsScheme:NO];
@@ -142,6 +146,12 @@ static const NSUInteger WhiteBoardViewDebugLogMaxSuperviewLevels = 4;
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self white_stopDebugViewStateMonitor];
+}
+
 - (NSURL *)resourceURL {
     if (self.customResourceUrl) {
         return [NSURL URLWithString:self.customResourceUrl];
@@ -181,6 +191,12 @@ static const NSUInteger WhiteBoardViewDebugLogMaxSuperviewLevels = 4;
 {
     [super setBounds:bounds];
     [self autoRefresh];
+}
+
+- (void)setHidden:(BOOL)hidden
+{
+    [super setHidden:hidden];
+    [self logDebugViewStateWithReason:hidden ? @"setHidden:YES" : @"setHidden:NO" force:YES];
 }
 
 - (void)layoutSubviews {
@@ -276,9 +292,11 @@ window.addEventListener('error', function(e) {\
 
 - (void)setDebugViewStateLoggingEnabled:(BOOL)enabled {
     _debugViewStateLoggingEnabled = enabled;
+    [self white_updateDebugViewStateMonitor];
     if (enabled) {
         self.lastDebugViewStateSignature = nil;
         self.lastDebugViewStateLogTime = nil;
+        self.lastDebugVisibilitySignature = nil;
         [self logDebugViewStateWithReason:@"debugLoggingEnabled" force:YES];
     }
 }
@@ -289,25 +307,23 @@ window.addEventListener('error', function(e) {\
     }
 
     UIView *superview = self.superview;
-    NSArray<UIView *> *siblings = superview ? superview.subviews : @[];
-    NSArray<UIView *> *subviews = self.subviews ?: @[];
     NSString *frameString = NSStringFromCGRect(self.frame);
     NSString *boundsString = NSStringFromCGRect(self.bounds);
     NSString *superviewBoundsString = superview ? NSStringFromCGRect(superview.bounds) : @"nil";
     NSString *superviewClassName = superview ? NSStringFromClass(superview.class) : @"nil";
     NSString *superviewAlphaSignature = superview ? [NSString stringWithFormat:@"%.3f", superview.alpha] : @"nil";
     NSString *superviewHiddenSignature = superview ? (superview.isHidden ? @"1" : @"0") : @"nil";
-    NSString *signature = [NSString stringWithFormat:@"%@|%.3f|%@|%@|%@|%lu|%lu|%@|%@|%@",
+    NSString *superviewHierarchySignature = [self white_debugSuperviewSignature:superview];
+    NSString *signature = [NSString stringWithFormat:@"%@|%.3f|%@|%@|%@|%@|%@|%@",
                            frameString,
                            self.alpha,
                            self.isHidden ? @"1" : @"0",
                            self.window ? @"1" : @"0",
                            superviewClassName,
-                           (unsigned long)siblings.count,
-                           (unsigned long)subviews.count,
                            superviewBoundsString,
                            superviewAlphaSignature,
-                           superviewHiddenSignature];
+                           superviewHiddenSignature,
+                           superviewHierarchySignature];
 
     NSDate *now = [NSDate date];
     if (!force) {
@@ -322,7 +338,7 @@ window.addEventListener('error', function(e) {\
     self.lastDebugViewStateSignature = signature;
     self.lastDebugViewStateLogTime = now;
 
-    NSString *payload = [NSString stringWithFormat:@"VIEW_STATE: reason=%@, frame=%@, bounds=%@, alpha=%.3f, hidden=%@, opaque=%@, backgroundColor=%@, windowAttached=%@, superviewClass=%@, superviewBounds=%@, superviewAlpha=%@, superviewHidden=%@, selfSubviews=%@, superviewSubviews=%@",
+    NSString *payload = [NSString stringWithFormat:@"VIEW_STATE: reason=%@, frame=%@, bounds=%@, alpha=%.3f, hidden=%@, opaque=%@, backgroundColor=%@, windowAttached=%@, superviewClass=%@, superviewBounds=%@, superviewAlpha=%@, superviewHidden=%@, superviewHierarchy=%@",
                          reason ?: @"unknown",
                          frameString,
                          boundsString,
@@ -335,39 +351,29 @@ window.addEventListener('error', function(e) {\
                          superviewBoundsString,
                          superview ? [NSString stringWithFormat:@"%.3f", superview.alpha] : @"nil",
                          superview ? (superview.isHidden ? @"YES" : @"NO") : @"nil",
-                         [[self white_debugViewSummaryList:subviews] componentsJoinedByString:@" | "],
-                         [self white_debugSuperviewSummary:superview fallbackViews:siblings]];
+                         [self white_debugSuperviewSummary:superview]];
+    payload = [self white_truncatedDebugLogString:payload];
     [self.commonCallbacks logger:@{
         @"[WhiteWKConsole]": payload
     }];
 }
 
-- (NSArray<NSString *> *)white_debugViewSummaryList:(NSArray<UIView *> *)views {
-    NSMutableArray<NSString *> *result = [NSMutableArray array];
-    NSUInteger count = MIN(views.count, WhiteBoardViewDebugLogMaxTrackedSubviews);
-    for (NSUInteger i = 0; i < count; i++) {
-        UIView *view = views[i];
-        NSString *marker = view == self ? @"(self)" : @"";
-        [result addObject:[NSString stringWithFormat:@"%@%@ frame=%@ alpha=%.3f hidden=%@",
-                           NSStringFromClass(view.class),
-                           marker,
-                           NSStringFromCGRect(view.frame),
-                           view.alpha,
-                           view.isHidden ? @"YES" : @"NO"]];
+- (NSString *)white_truncatedDebugLogString:(NSString *)logString {
+    if (!logString || logString.length <= WhiteBoardViewDebugLogMaxLength) {
+        return logString ?: @"";
     }
-    if (views.count > count) {
-        [result addObject:[NSString stringWithFormat:@"... %lu more", (unsigned long)(views.count - count)]];
+
+    static NSString *suffix = @" ...(truncated)";
+    NSUInteger maxContentLength = WhiteBoardViewDebugLogMaxLength > suffix.length ? (WhiteBoardViewDebugLogMaxLength - suffix.length) : 0;
+    if (maxContentLength == 0) {
+        return [suffix substringToIndex:MIN(suffix.length, WhiteBoardViewDebugLogMaxLength)];
     }
-    return [result copy];
+    return [[logString substringToIndex:maxContentLength] stringByAppendingString:suffix];
 }
 
-- (NSString *)white_debugSuperviewSummary:(UIView *)superview fallbackViews:(NSArray<UIView *> *)fallbackViews {
+- (NSString *)white_debugSuperviewSummary:(UIView *)superview {
     if (!superview) {
-        NSArray<NSString *> *summary = [self white_debugViewSummaryList:fallbackViews ?: @[]];
-        if (summary.count == 0) {
-            return @"level0:nil";
-        }
-        return [NSString stringWithFormat:@"level0:nil subviews=%@", [summary componentsJoinedByString:@" | "]];
+        return @"level0:nil";
     }
 
     NSMutableArray<NSString *> *levels = [NSMutableArray array];
@@ -376,17 +382,12 @@ window.addEventListener('error', function(e) {\
     while (currentSuperview && level <= WhiteBoardViewDebugLogMaxSuperviewLevels) {
         NSString *className = NSStringFromClass(currentSuperview.class) ?: @"nil";
         NSString *boundsString = NSStringFromCGRect(currentSuperview.bounds);
-        NSString *subviewsSummary = [[self white_debugViewSummaryList:currentSuperview.subviews ?: @[]] componentsJoinedByString:@" | "];
-        if (subviewsSummary.length == 0) {
-            subviewsSummary = @"none";
-        }
-        [levels addObject:[NSString stringWithFormat:@"level%lu:%@ bounds=%@ alpha=%.3f hidden=%@ subviews=%@",
+        [levels addObject:[NSString stringWithFormat:@"level%lu:%@ bounds=%@ alpha=%.3f hidden=%@",
                            (unsigned long)level,
                            className,
                            boundsString,
                            currentSuperview.alpha,
-                           currentSuperview.isHidden ? @"YES" : @"NO",
-                           subviewsSummary]];
+                           currentSuperview.isHidden ? @"YES" : @"NO"]];
         currentSuperview = currentSuperview.superview;
         level += 1;
     }
@@ -398,6 +399,92 @@ window.addEventListener('error', function(e) {\
         [levels addObject:@"... more superviews"];
     }
     return [levels componentsJoinedByString:@" || "];
+}
+
+- (NSString *)white_debugSuperviewSignature:(UIView *)superview {
+    if (!superview) {
+        return @"level0:nil";
+    }
+
+    NSMutableArray<NSString *> *levels = [NSMutableArray array];
+    UIView *currentSuperview = superview;
+    NSUInteger level = 1;
+    while (currentSuperview && level <= WhiteBoardViewDebugLogMaxSuperviewLevels) {
+        [levels addObject:[NSString stringWithFormat:@"level%lu:%@:%@:%@:%@",
+                           (unsigned long)level,
+                           NSStringFromClass(currentSuperview.class) ?: @"nil",
+                           currentSuperview.isHidden ? @"1" : @"0",
+                           [NSString stringWithFormat:@"%.3f", currentSuperview.alpha],
+                           NSStringFromCGRect(currentSuperview.bounds)]];
+        currentSuperview = currentSuperview.superview;
+        level += 1;
+    }
+    if (currentSuperview) {
+        [levels addObject:@"more"];
+    }
+    return [levels componentsJoinedByString:@"|"];
+}
+
+- (void)white_updateDebugViewStateMonitor {
+    if (!self.debugViewStateLoggingEnabled) {
+        [self white_stopDebugViewStateMonitor];
+        return;
+    }
+
+    if (self.debugViewStateMonitorTimer) {
+        return;
+    }
+
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    if (!timer) {
+        return;
+    }
+    dispatch_source_set_timer(timer,
+                              dispatch_time(DISPATCH_TIME_NOW, (int64_t)(WhiteBoardViewDebugLogMonitorInterval * NSEC_PER_SEC)),
+                              (uint64_t)(WhiteBoardViewDebugLogMonitorInterval * NSEC_PER_SEC),
+                              (uint64_t)(0.1 * NSEC_PER_SEC));
+    __weak typeof(self) weakSelf = self;
+    dispatch_source_set_event_handler(timer, ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || !strongSelf.debugViewStateLoggingEnabled) {
+            return;
+        }
+        [strongSelf white_checkVisibilityChange];
+    });
+    dispatch_resume(timer);
+    self.debugViewStateMonitorTimer = timer;
+}
+
+- (void)white_stopDebugViewStateMonitor {
+    if (self.debugViewStateMonitorTimer) {
+        dispatch_source_cancel(self.debugViewStateMonitorTimer);
+        self.debugViewStateMonitorTimer = nil;
+    }
+}
+
+- (NSString *)white_visibilitySignature {
+    NSMutableString *sig = [NSMutableString stringWithFormat:@"%@|%.3f",
+                            self.isHidden ? @"H" : @"V",
+                            self.alpha];
+    UIView *ancestor = self.superview;
+    NSUInteger level = 0;
+    while (ancestor && level < WhiteBoardViewDebugLogMaxSuperviewLevels) {
+        [sig appendFormat:@"|%@:%.3f",
+         ancestor.isHidden ? @"H" : @"V",
+         ancestor.alpha];
+        ancestor = ancestor.superview;
+        level += 1;
+    }
+    return [sig copy];
+}
+
+- (void)white_checkVisibilityChange {
+    NSString *currentSig = [self white_visibilitySignature];
+    if ([currentSig isEqualToString:self.lastDebugVisibilitySignature]) {
+        return;
+    }
+    self.lastDebugVisibilitySignature = currentSig;
+    [self logDebugViewStateWithReason:@"visibilityChanged" force:YES];
 }
 
 #pragma mark - Override
