@@ -437,11 +437,13 @@ window.addEventListener('error', function(e) {\
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
     [super setBackgroundColor:backgroundColor];
-    NSString *payload = [NSString stringWithFormat:@"VIEW_STATE: reason=setBackgroundColor, backgroundColor=%@",
-                         self.backgroundColor.description ?: @"nil"];
-    [self.commonCallbacks logger:@{
-        @"[WhiteWKConsole]": payload
-    }];
+    if (self.debugViewStateLoggingEnabled) {
+        NSString *payload = [NSString stringWithFormat:@"VIEW_STATE: reason=setBackgroundColor, backgroundColor=%@",
+                             self.backgroundColor.description ?: @"nil"];
+        [self.commonCallbacks logger:@{
+            @"[WhiteWKConsole]": payload
+        }];
+    }
     
     if (self.room || self.player) {
         CGFloat r;
