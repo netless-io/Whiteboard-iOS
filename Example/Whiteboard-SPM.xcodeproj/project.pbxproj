@@ -20,7 +20,6 @@
 		8AC5C6CE27A3F1460002D430 /* WhitePureReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B327A3F1460002D430 /* WhitePureReplayViewController.m */; };
 		8AC5C6CF27A3F1460002D430 /* WhiteRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B427A3F1460002D430 /* WhiteRoomViewController.m */; };
 		8AC5C6D027A3F1460002D430 /* NETAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B527A3F1460002D430 /* NETAppDelegate.m */; };
-		8AC5C6D127A3F1460002D430 /* Whiteboard-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6B627A3F1460002D430 /* Whiteboard-Info.plist */; };
 		8AC5C6D327A3F1460002D430 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6BB27A3F1460002D430 /* LaunchScreen.storyboard */; };
 		8AC5C6D427A3F1460002D430 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8AC5C6BD27A3F1460002D430 /* Main.storyboard */; };
 		8AC5C6D527A3F1460002D430 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5C6BF27A3F1460002D430 /* StartViewController.m */; };
@@ -224,7 +223,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AC5C6D127A3F1460002D430 /* Whiteboard-Info.plist in Resources */,
 				8AC5C6D427A3F1460002D430 /* Main.storyboard in Resources */,
 				8AC5C6D327A3F1460002D430 /* LaunchScreen.storyboard in Resources */,
 				8AC5C6D727A3F1460002D430 /* Images.xcassets in Resources */,

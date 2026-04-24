@@ -9,6 +9,10 @@
 #import "WhiteRoomViewController.h"
 #import "CommandHandler.h"
 
+@interface WhiteBaseViewController (WhiteRoomViewControllerSDKAccess)
+- (void)initSDK;
+@end
+
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic, copy) NSString *roomToken;
@@ -17,12 +21,40 @@
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @property (nonatomic, assign) BOOL delayJoinRoom;
+@property (nonatomic, assign) BOOL embeddedPageRegistered;
 
 @end
 
 #import "WhiteUtils.h"
 
 @implementation WhiteRoomViewController
+
+static NSString * const WhiteEmbeddedPlyrPageURL = @"https://plyr-cdn.netless.group/index.html";
+static NSString * const WhiteEmbeddedPlyrMediaURL = @"https://www.youtube.com/watch?v=bTqVqk7FSmY";
+static NSString * const WhiteEmbeddedPageAppScriptURL = @"https://cdn.jsdelivr.net/npm/@netless/app-embedded-page@0.1.3/dist/main.iife.js";
+static NSString * const WhiteEmbeddedPageAppVariable = @"NetlessAppEmbeddedPageForExample";
+
+static NSString *WhiteEmbeddedPlyrAppIdentityURL(void) {
+    NSString *bundleId = [NSBundle mainBundle].bundleIdentifier ?: @"localhost";
+    return [NSString stringWithFormat:@"https://%@", bundleId];
+}
+
+static WhiteRegisterAppParams *WhiteCreateEmbeddedPageRegisterParams(void) {
+    NSString *jsPath = [[NSBundle mainBundle] pathForResource:@"embedPage.iife" ofType:@"js"];
+    NSError *readError = nil;
+    NSString *jsString = jsPath ? [NSString stringWithContentsOfURL:[NSURL fileURLWithPath:jsPath] encoding:NSUTF8StringEncoding error:&readError] : nil;
+    if (jsString.length > 0) {
+        jsString = [jsString stringByAppendingFormat:@"\nvar %@ = (typeof NetlessAppEmbeddedPage !== 'undefined' && (NetlessAppEmbeddedPage.default || NetlessAppEmbeddedPage));\n", WhiteEmbeddedPageAppVariable];
+        return [WhiteRegisterAppParams paramsWithJavascriptString:jsString
+                                                             kind:@"EmbeddedPage"
+                                                       appOptions:@{}
+                                                         variable:WhiteEmbeddedPageAppVariable];
+    }
+    NSLog(@"load local embedPage.iife.js failed: %@", readError);
+    return [WhiteRegisterAppParams paramsWithUrl:WhiteEmbeddedPageAppScriptURL
+                                            kind:@"EmbeddedPage"
+                                      appOptions:@{}];
+}
 
 - (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
 {
@@ -58,6 +90,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:@"refresh" object:nil];
 }
 
+- (void)initSDK
+{
+    [super initSDK];
+    if (self.useMultiViews) {
+        [self registerEmbeddedPageAppIfNeeded];
+    }
+}
+
 #pragma mark - CallbackDelegate
 - (id<WhiteRoomCallbackDelegate>)roomCallbackDelegate
 {
@@ -83,11 +123,19 @@
 #pragma mark - BarItem
 - (void)setupShareBarItem
 {
+    NSMutableArray<UIBarButtonItem *> *items = [NSMutableArray array];
+    if (self.useMultiViews) {
+        UIBarButtonItem *plyrItem = [[UIBarButtonItem alloc] initWithTitle:@"Plyr"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(addEmbeddedPlyr)];
+        [items addObject:plyrItem];
+    }
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"分享", nil) style:UIBarButtonItemStylePlain target:self action:@selector(shareRoom:)];
     UIBarButtonItem *item3 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"pre", nil) style:UIBarButtonItemStylePlain target:self action:@selector(pptPreviousStep)];
     UIBarButtonItem *item4 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"next", nil) style:UIBarButtonItemStylePlain target:self action:@selector(pptNextStep)];
-    
-    self.navigationItem.rightBarButtonItems = @[item2, item3, item4];
+    [items addObjectsFromArray:@[item2, item3, item4]];
+    self.navigationItem.rightBarButtonItems = items;
 }
 
 - (void)pptPreviousStep
@@ -111,6 +159,115 @@
 - (void)refresh
 {
     [self.room refreshViewSize];
+}
+
+- (void)registerEmbeddedPageAppIfNeeded
+{
+    if (self.embeddedPageRegistered || !self.sdk) {
+        return;
+    }
+    self.embeddedPageRegistered = YES;
+
+    WhiteRegisterAppParams *params = WhiteCreateEmbeddedPageRegisterParams();
+
+    __weak typeof(self) weakSelf = self;
+    [self.sdk registerAppWithParams:params completionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            weakSelf.embeddedPageRegistered = NO;
+            NSLog(@"registerEmbeddedPageAppIfNeeded failed: %@", error);
+        } else {
+            NSLog(@"registerEmbeddedPageAppIfNeeded success");
+        }
+    }];
+}
+
+- (void)addEmbeddedPlyr
+{
+    NSString *title = @"Embedded Plyr";
+    WhiteAppOptions *options = [[WhiteAppOptions alloc] init];
+    options.title = title;
+
+    WhiteAppParam *app = [[WhiteAppParam alloc] initWithKind:@"EmbeddedPage"
+                                                     options:options
+                                                       attrs:[self embeddedPlyrAttributesWithPageURL:WhiteEmbeddedPlyrPageURL
+                                                                                            mediaURL:WhiteEmbeddedPlyrMediaURL
+                                                                                               title:title]];
+
+    [self.room addApp:app completionHandler:^(NSString * _Nonnull appId) {
+        NSLog(@"Embedded Plyr app added from WhiteRoomViewController: %@", appId);
+    }];
+}
+
+- (NSDictionary *)embeddedPlyrAttributesWithPageURL:(NSString *)pageURL
+                                           mediaURL:(NSString *)mediaURL
+                                              title:(NSString *)title
+{
+    return @{
+        @"src": pageURL ?: @"",
+        @"store": @{
+            @"state": [self embeddedPlyrStateWithMediaURL:mediaURL title:title]
+        }
+    };
+}
+
+- (NSDictionary *)embeddedPlyrStateWithMediaURL:(NSString *)mediaURL title:(NSString *)title
+{
+    NSTimeInterval nowMs = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    NSMutableDictionary *state = [@{
+        @"src": mediaURL ?: @"",
+        @"type": [self embeddedPlyrTypeForMediaURL:mediaURL],
+        @"poster": @"",
+        @"paused": @YES,
+        @"currentTime": @0,
+        @"useNewPlayer": @YES,
+        @"useCustomControls": @YES,
+        @"volume": @1,
+        @"muted": @NO,
+        @"playTimeState": @[@YES, @((long long)nowMs), @((long long)nowMs)],
+        @"syncVolume": @NO,
+        @"syncMuted": @NO,
+        @"customControlsTitle": title ?: @"Embedded Plyr",
+        @"allowBackgroundPlayback": @YES,
+        @"keepPlayerStateInSync": @YES
+    } mutableCopy];
+
+    NSString *provider = [self embeddedPlyrProviderForMediaURL:mediaURL];
+    if (provider.length > 0) {
+        state[@"provider"] = provider;
+        state[@"type"] = @"";
+        if ([provider isEqualToString:@"youtube"]) {
+            NSString *appIdentityURL = WhiteEmbeddedPlyrAppIdentityURL();
+            state[@"youtubeOrigin"] = appIdentityURL;
+            state[@"youtubeWidgetReferrer"] = appIdentityURL;
+        }
+    }
+
+    return state.copy;
+}
+
+- (nullable NSString *)embeddedPlyrProviderForMediaURL:(NSString *)mediaURL
+{
+    NSString *lowercased = mediaURL.lowercaseString;
+    if ([lowercased containsString:@"youtube.com"] || [lowercased containsString:@"youtu.be"]) {
+        return @"youtube";
+    }
+    if ([lowercased containsString:@"vimeo.com"]) {
+        return @"vimeo";
+    }
+    return nil;
+}
+
+- (NSString *)embeddedPlyrTypeForMediaURL:(NSString *)mediaURL
+{
+    NSString *sanitized = [[mediaURL componentsSeparatedByString:@"?"] firstObject] ?: mediaURL;
+    NSString *lowercased = sanitized.lowercaseString;
+    if ([lowercased hasSuffix:@".mp4"]) return @"video/mp4";
+    if ([lowercased hasSuffix:@".mp3"]) return @"audio/mpeg";
+    if ([lowercased hasSuffix:@".m4a"]) return @"audio/mp4";
+    if ([lowercased hasSuffix:@".webm"]) return @"video/webm";
+    if ([lowercased hasSuffix:@".wav"]) return @"audio/wav";
+    if ([lowercased hasSuffix:@".m3u8"]) return @"application/vnd.apple.mpegurl";
+    return @"";
 }
 
 #pragma mark - Room Action

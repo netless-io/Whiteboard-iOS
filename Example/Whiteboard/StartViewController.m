@@ -52,6 +52,9 @@
     UITextField *field = [[UITextField alloc] init];
     field.enabled = YES;
     field.placeholder = NSLocalizedString(@"输入房间ID，加入房间", nil);
+#if defined(WhiteRoomUUID)
+    field.text = WhiteRoomUUID;
+#endif
     [stackView addArrangedSubview:field];
     self.inputV = field;
     
@@ -79,7 +82,7 @@
     [createBtn addTarget:self action:@selector(pureReplayRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     
-    createBtn = [self createButtonWithTitle: NSLocalizedString(@"自定义插件房间", nil)];
+    createBtn = [self createButtonWithTitle: NSLocalizedString(@"自定义插件房间(EmbeddedPlyr)", nil)];
     [createBtn addTarget:self action:@selector(customAppRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:createBtn];
     

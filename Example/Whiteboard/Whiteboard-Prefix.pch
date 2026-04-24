@@ -10,13 +10,14 @@
 #warning "This project uses features only available in iOS SDK 5.0 and later."
 #endif
 
-//#define WhiteSDKToken <#@sdk Token#>
-//#define WhiteAppIdentifier <#@App identifier#>
+// The example can run with an existing room, so SDK token can stay empty.
+#define WhiteSDKToken @""
+#define WhiteAppIdentifier @"1234567890/123456789"
 
 
-// 如果需要进入特定房间，取消以下两行注释，同时填入对应的 UUID 以及 roomToken
-//#define WhiteRoomUUID  <#Room UUID#>
-//#define WhiteRoomToken <#Room Token#>
+// 默认进入指定联调房间，便于与 Web / iOS 同房测试。
+#define WhiteRoomUUID @"cd52d9c03f1811f1b3fbb5ef9fade420"
+#define WhiteRoomToken @"NETLESSROOM_YWs9VWtNUk92M1JIN2I2Z284dCZleHBpcmVBdD0xNzc3MDM3NTI4MDQ4Jm5vbmNlPWQzMzVjZjAwLTNmMTgtMTFmMS1iYzM4LWQ3Yjg5YzgwZTNlMSZyb2xlPTEmc2lnPTQxOTVhNGZmODI2YTNhYTBiYzZhMTI0OGRiOTcxMzNhNzBhN2ZlZjUxMjA2NzljYjM2NzJmNDk4ZDI1NmYzYWYmdXVpZD1jZDUyZDljMDNmMTgxMWYxYjNmYmI1ZWY5ZmFkZTQyMA"
 
 #ifdef __OBJC__
     @import UIKit;
