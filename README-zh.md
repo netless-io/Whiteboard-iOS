@@ -25,6 +25,8 @@
 
 [官网文档](https://developer.netless.link) —— [iOS部分](https://developer.netless.link/ios-zh/home)
 
+- [多窗口使用文档](./multi_window_usage_ios-zh.md)
+
 ## 引用
 
 - ### CocoaPods
