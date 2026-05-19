@@ -17,6 +17,15 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 @property (nonatomic, assign) BOOL didCallSlideInterrupter;
 @property (nonatomic, assign) BOOL didCallSlideError;
 @property (nonatomic, assign) NSInteger slideErrorIndex;
+@property (nonatomic, assign) BOOL didCallSlidePageStateChanged;
+@property (nonatomic, copy, nullable) NSString *slidePageStateAppId;
+@property (nonatomic, assign) NSInteger slidePageStatePage;
+@property (nonatomic, assign) NSInteger slidePageStatePageCount;
+@property (nonatomic, copy, nullable) NSString *expectedWindowBoxState;
+@property (nonatomic, copy, nullable) void (^windowBoxStateChangeBlock)(WhiteRoomState *state);
+@property (nonatomic, copy, nullable) NSString *expectedSlideAppId;
+@property (nonatomic, copy, nullable) NSString *expectedSlideTitle;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, WhiteAppSyncAttributes *> *slideAppsBeforeAdd;
 @end
 
 @implementation MultiViewsRoomTest
@@ -158,6 +167,36 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     }];
 }
 
+- (void)testSlidePageStateChangedCallback
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.roomVC.sdk setSlideDelegate:self];
+    self.didCallSlidePageStateChanged = NO;
+    NSString *appId = @"Slide-test";
+    NSDictionary *pageState = @{
+        @"appId": appId,
+        @"page": @2,
+        @"pageCount": @12
+    };
+
+    SEL sel = NSSelectorFromString(@"slidePageStateChanged:");
+    [self.roomVC.boardView.commonCallbacks performSelector:sel withObject:pageState];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertTrue(self.didCallSlidePageStateChanged);
+        XCTAssertEqualObjects(self.slidePageStateAppId, appId);
+        XCTAssertEqual(self.slidePageStatePage, 2);
+        XCTAssertEqual(self.slidePageStatePageCount, 12);
+        [exp fulfill];
+    });
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 - (void)testPptLocalSnapShot
 {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
@@ -290,6 +329,68 @@ static WhiteAppParam* _Nonnull testPptAppParam;
     }];
 }
 
+- (void)testSetWindowBoxState
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    self.expectedWindowBoxState = WhiteWindowBoxStateMax;
+    __weak typeof(self) weakSelf = self;
+    self.windowBoxStateChangeBlock = ^(WhiteRoomState *state) {
+        XCTAssertEqualObjects(state.windowBoxState, WhiteWindowBoxStateMax);
+        weakSelf.windowBoxStateChangeBlock = nil;
+        [exp fulfill];
+    };
+
+    [self.room setWindowBoxState:WhiteWindowBoxStateMax];
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
+- (void)testAddSlideAppQuerySlidePageState
+{
+    XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.roomVC.sdk setSlideDelegate:self];
+    __weak typeof(self) weakSelf = self;
+    NSString *title = [NSString stringWithFormat:@"Mao Slide Integration %@", NSUUID.UUID.UUIDString];
+    self.expectedSlideTitle = title;
+    WhiteAppParam *slideApp = [self createMaoSlideAppParamWithTitle:title];
+    [self.room queryAllAppsWithCompletionHandler:^(NSDictionary<NSString *,WhiteAppSyncAttributes *> * _Nonnull apps, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        weakSelf.slideAppsBeforeAdd = apps ?: @{};
+        [weakSelf.room addApp:slideApp completionHandler:^(NSString * _Nonnull appId) {
+            [weakSelf resolveAddedSlideAppId:appId remainingRetryCount:12 completionHandler:^(NSString * _Nullable resolvedAppId, NSError * _Nullable resolveError) {
+                XCTAssertNil(resolveError);
+                XCTAssertTrue(resolvedAppId.length > 0);
+                weakSelf.expectedSlideAppId = resolvedAppId;
+                [weakSelf.room queryApp:resolvedAppId completionHandler:^(WhiteAppSyncAttributes * _Nonnull appParam, NSError * _Nullable queryError) {
+                    XCTAssertNil(queryError);
+                    XCTAssertEqualObjects(appParam.kind, @"Slide");
+                    XCTAssertEqualObjects(appParam.options[@"title"], title);
+                    [weakSelf.room querySlidePageState:resolvedAppId completionHandler:^(WhiteSlidePageState * _Nullable pageState, NSError * _Nullable pageStateError) {
+                        if (!pageStateError) {
+                            XCTAssertEqualObjects(pageState.appId, resolvedAppId);
+                            XCTAssertTrue(pageState.page > 0);
+                            XCTAssertTrue(pageState.pageCount > 0);
+                        }
+                        [weakSelf.room closeApp:resolvedAppId completionHandler:^{
+                            [exp fulfill];
+                        }];
+                    }];
+                }];
+            }];
+        }];
+    }];
+
+    [self waitForExpectationsWithTimeout:kTimeout handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%s error: %@", __FUNCTION__, error);
+        }
+    }];
+}
+
 - (void)testSceneStateUpdate {
     XCTestExpectation *exp = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     NSString *sceneName = [[NSUUID UUID] UUIDString];
@@ -309,12 +410,27 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 }
 
 - (void)fireRoomStateChanged:(WhiteRoomState *)modifyState {
+    if (modifyState.windowBoxState &&
+        [modifyState.windowBoxState isEqualToString:self.expectedWindowBoxState] &&
+        self.windowBoxStateChangeBlock) {
+        self.windowBoxStateChangeBlock(modifyState);
+    }
     if (modifyState.sceneState) {
         if (_stateChangeBlock) {
             _stateChangeBlock(modifyState.sceneState);
             _stateChangeBlock = nil;
         }
     }
+}
+
+- (NSString *)onJSAnyError:(NSString *)reason {
+    if ([reason containsString:@"[Docs Viewer]: empty scenes."]) {
+        return @"";
+    }
+    if ([reason containsString:@"[Slide] no taskId"]) {
+        return @"";
+    }
+    return [super onJSAnyError:reason];
 }
 
 #pragma mark - DocsEvent
@@ -543,6 +659,59 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 }
 
 #pragma - private
+- (WhiteAppParam *)createMaoSlideAppParamWithTitle:(NSString *)title
+{
+    NSString *scenePath = [NSString stringWithFormat:@"/mao-slide/%@", NSUUID.UUID.UUIDString];
+    return [WhiteAppParam createSlideApp:scenePath
+                                  taskId:@"46e8ff5db5714fec818f5594a6c55083"
+                                     url:@"https://white-cover.oss-cn-hangzhou.aliyuncs.com/flat/dynamicConvert"
+                                   title:title];
+}
+
+- (void)resolveAddedSlideAppId:(NSString *)appId remainingRetryCount:(NSInteger)remainingRetryCount completionHandler:(void (^)(NSString * _Nullable appId, NSError * _Nullable error))completionHandler
+{
+    if (appId.length > 0) {
+        completionHandler(appId, nil);
+        return;
+    }
+    if (remainingRetryCount <= 0) {
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Timed out waiting for added Slide app id"};
+        completionHandler(nil, [NSError errorWithDomain:NSStringFromClass([self class]) code:-1002 userInfo:userInfo]);
+        return;
+    }
+
+    __weak typeof(self) weakSelf = self;
+    [self.room queryAllAppsWithCompletionHandler:^(NSDictionary<NSString *,WhiteAppSyncAttributes *> * _Nonnull apps, NSError * _Nullable error) {
+        if (!error) {
+            NSString *resolvedAppId = [weakSelf findAddedMaoSlideAppId:apps ?: @{}];
+            if (resolvedAppId.length > 0) {
+                completionHandler(resolvedAppId, nil);
+                return;
+            }
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf resolveAddedSlideAppId:appId remainingRetryCount:remainingRetryCount - 1 completionHandler:completionHandler];
+        });
+    }];
+}
+
+- (NSString *)findAddedMaoSlideAppId:(NSDictionary<NSString *, WhiteAppSyncAttributes *> *)apps
+{
+    __block NSString *candidate = nil;
+    NSDictionary<NSString *, WhiteAppSyncAttributes *> *previousApps = self.slideAppsBeforeAdd ?: @{};
+    [apps enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, WhiteAppSyncAttributes * _Nonnull obj, BOOL * _Nonnull stop) {
+        if (previousApps[key]) {
+            return;
+        }
+        if (([key hasPrefix:@"Slide-"] || [obj.kind isEqualToString:@"Slide"]) &&
+            (!self.expectedSlideTitle || [obj.options[@"title"] isEqualToString:self.expectedSlideTitle])) {
+            candidate = key;
+            *stop = YES;
+        }
+    }];
+    return candidate;
+}
+
 - (void)loopToOnlyOnePage:(void (^)(void))completionHandler
 {
     [self.room getRoomStateWithResult:^(WhiteRoomState * _Nonnull state) {
@@ -579,6 +748,16 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 - (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex {
     self.didCallSlideError = YES;
     self.slideErrorIndex = slideIndex;
+}
+
+- (void)onSlidePageStateChanged:(NSString *)appId page:(NSInteger)page pageCount:(NSInteger)pageCount {
+    if (self.expectedSlideAppId && ![self.expectedSlideAppId isEqualToString:appId]) {
+        return;
+    }
+    self.didCallSlidePageStateChanged = YES;
+    self.slidePageStateAppId = appId;
+    self.slidePageStatePage = page;
+    self.slidePageStatePageCount = pageCount;
 }
 
 @end

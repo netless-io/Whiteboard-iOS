@@ -50,6 +50,15 @@ typedef void (^SlideUrlInterrupterCallback)(NSString * _Nullable result);
 
 - (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex;
 
+/**
+ Slide 页面状态变化回调。
+
+ @param appId SlideApp 的窗口 ID。
+ @param page 当前页码，从 1 开始。
+ @param pageCount 页面总数。
+ */
+- (void)onSlidePageStateChanged:(NSString *)appId page:(NSInteger)page pageCount:(NSInteger)pageCount;
+
 @end
 
 NS_ASSUME_NONNULL_END

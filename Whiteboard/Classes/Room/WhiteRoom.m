@@ -197,6 +197,16 @@
     [self.bridge callHandler:@"room.setWindowManagerAttributes" arguments:@[attributes]];
 }
 
+- (void)setWindowBoxState:(WhiteWindowBoxState)state
+{
+    if (![state isEqualToString:WhiteWindowBoxStateNormal] &&
+        ![state isEqualToString:WhiteWindowBoxStateMini] &&
+        ![state isEqualToString:WhiteWindowBoxStateMax]) {
+        return;
+    }
+    [self.bridge callHandler:@"room.setWindowBoxState" arguments:@[state]];
+}
+
 - (void)putScenes:(NSString *)dir scenes:(NSArray<WhiteScene *> *)scenes index:(NSUInteger)index
 {
     [self.bridge callHandler:@"room.putScenes" arguments:@[dir, scenes, @(index)]];
@@ -690,7 +700,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
             completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
             return;
         }
-        WhiteAppSyncAttributes* result = [WhiteAppSyncAttributes _white_yy_modelWithJSON:value];
+        WhiteAppSyncAttributes* result = [WhiteAppSyncAttributes _white_yy_modelWithJSON:dict];
         completionHandler(result, nil);
     }];
 }
@@ -706,6 +716,43 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
         } else {
             completionHandler(NO);
         }
+    }];
+}
+
+- (void)querySlidePageStateWithCompletionHandler:(void (^)(WhiteSlidePageState * _Nullable, NSError * _Nullable))completionHandler
+{
+    [self querySlidePageState:nil completionHandler:completionHandler];
+}
+
+- (void)querySlidePageState:(NSString *)appId completionHandler:(void (^)(WhiteSlidePageState * _Nullable, NSError * _Nullable))completionHandler
+{
+    NSArray *args = appId ? @[appId] : @[[NSNull null]];
+    [self.bridge callHandler:@"room.querySlidePageState" arguments:args completionHandler:^(id  _Nullable value) {
+        NSDictionary *dict = nil;
+        if ([value isKindOfClass:[NSString class]]) {
+            NSData *data = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding];
+            dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        } else if ([value isKindOfClass:[NSDictionary class]]) {
+            dict = value;
+        }
+        if (![dict isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *userInfo = @{
+                NSLocalizedDescriptionKey: @"Invalid slide page state response",
+                NSDebugDescriptionErrorKey: [NSString stringWithFormat:@"%@", value ?: @"nil"]
+            };
+            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
+            return;
+        }
+        NSDictionary *error = dict[@"__error"];
+        if (error) {
+            NSString *desc = error[@"message"] ? : @"";
+            NSString *description = error[@"jsStack"] ? : @"";
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
+            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
+            return;
+        }
+        WhiteSlidePageState *result = [WhiteSlidePageState _white_yy_modelWithJSON:dict];
+        completionHandler(result, nil);
     }];
 }
 

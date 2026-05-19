@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)roomVCDidSetup:(WhiteRoomViewController *)roomVC;
 - (void)pushRoomVC;
 - (void)popToRoot;
+- (NSString *)onJSAnyError:(NSString *)reason;
 
 @end
 

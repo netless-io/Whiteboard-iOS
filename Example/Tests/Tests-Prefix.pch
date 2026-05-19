@@ -3,12 +3,29 @@
 #ifdef __OBJC__
 
 
-#define WhiteAppIdentifier <#@App identifier#>
-#define WhiteSDKToken <#@sdk Token#>
-#define WhiteRoomUUID <#Room UUID#>
-#define WhiteRoomToken <#Room Token#>
-#define WhiteReplayRoomUUID <#Replay UUID#>
-#define WhiteReplayRoomToken <#Replay Token#>
+#ifndef WhiteAppIdentifier
+#define WhiteAppIdentifier @""
+#endif
+
+#ifndef WhiteSDKToken
+#define WhiteSDKToken @""
+#endif
+
+#ifndef WhiteRoomUUID
+#define WhiteRoomUUID @""
+#endif
+
+#ifndef WhiteRoomToken
+#define WhiteRoomToken @""
+#endif
+
+#ifndef WhiteReplayRoomUUID
+#define WhiteReplayRoomUUID @""
+#endif
+
+#ifndef WhiteReplayRoomToken
+#define WhiteReplayRoomToken @""
+#endif
 
 
 #endif

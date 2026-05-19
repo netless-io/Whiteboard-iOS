@@ -12,6 +12,7 @@
 #import "WhitePureReplayViewController.h"
 #import "NETURLSchemeHandler.h"
 #import "WhiteCustomAppViewController.h"
+#import "MaoRoomViewController.h"
 #if IS_SPM
 #import "ZipArchive.h"
 #import "Whiteboard.h"
@@ -66,6 +67,10 @@
     UIButton *joinAppliancePluginWindowRoomBtn = [self createButtonWithTitle: NSLocalizedString(@"加入多窗口房间(AppliancePlugin)", nil)];
     [joinAppliancePluginWindowRoomBtn addTarget:self action:@selector(joinAppliancePluginWindowRoom:) forControlEvents:UIControlEventTouchUpInside];
     [stackView addArrangedSubview:joinAppliancePluginWindowRoomBtn];
+
+    UIButton *maoRoomBtn = [self createButtonWithTitle:@"Mao Custom Window"];
+    [maoRoomBtn addTarget:self action:@selector(maoCustomWindowRoom:) forControlEvents:UIControlEventTouchUpInside];
+    [stackView addArrangedSubview:maoRoomBtn];
     
     UIButton *createBtn = [self createButtonWithTitle: NSLocalizedString(@"创建新房间", nil)];
     [createBtn addTarget:self action:@selector(createRoom:) forControlEvents:UIControlEventTouchUpInside];
@@ -159,6 +164,12 @@
     vc.roomUuid = self.inputV.text;
     vc.useMultiViews = YES;
     vc.sdkConfig.enableAppliancePlugin = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)maoCustomWindowRoom:(UIButton *)sender
+{
+    MaoRoomViewController *vc = [[MaoRoomViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

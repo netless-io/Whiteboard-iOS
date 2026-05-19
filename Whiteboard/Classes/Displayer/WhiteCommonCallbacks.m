@@ -77,6 +77,17 @@
     return @"";
 }
 
+- (NSString *)slidePageStateChanged:(NSDictionary *)info
+{
+    if ([self.slideDelegate respondsToSelector:@selector(onSlidePageStateChanged:page:pageCount:)]) {
+        NSString *appId = info[@"appId"] ?: @"";
+        NSInteger page = [info[@"page"] integerValue];
+        NSInteger pageCount = [info[@"pageCount"] integerValue];
+        [self.slideDelegate onSlidePageStateChanged:appId page:page pageCount:pageCount];
+    }
+    return @"";
+}
+
 - (NSString *)urlInterrupter:(NSString *)url
 {
     if ([self.delegate respondsToSelector:@selector(urlInterrupter:)]) {
