@@ -290,6 +290,71 @@
     }
 }
 
+#pragma mark - LocalLog
+- (void)getLocalLogStateWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler
+{
+    [self callLocalLogMethod:@"sdk.getLocalLogState" completionHandler:completionHandler];
+}
+
+- (void)collectLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler
+{
+    [self callLocalLogMethod:@"sdk.collectLocalLogs" completionHandler:completionHandler];
+}
+
+- (void)flushLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler
+{
+    [self callLocalLogMethod:@"sdk.flushLocalLogs" completionHandler:completionHandler];
+}
+
+- (void)uploadLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler
+{
+    [self callLocalLogMethod:@"sdk.uploadLocalLogs" completionHandler:completionHandler];
+}
+
+- (void)callLocalLogMethod:(NSString *)method completionHandler:(WhiteLocalLogCompletionHandler)completionHandler
+{
+    [self.bridge callHandler:method arguments:nil completionHandler:^(id  _Nullable value) {
+        [self handleLocalLogBridgeValue:value completionHandler:completionHandler];
+    }];
+}
+
+- (void)handleLocalLogBridgeValue:(id)value completionHandler:(WhiteLocalLogCompletionHandler)completionHandler
+{
+    if (!completionHandler) {
+        return;
+    }
+    NSDictionary *dict = nil;
+    if ([value isKindOfClass:[NSDictionary class]]) {
+        dict = value;
+    } else if ([value isKindOfClass:[NSString class]]) {
+        NSData *data = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding];
+        id object = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            dict = object;
+        }
+    }
+
+    if (!dict) {
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Invalid local log bridge response"};
+        completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-400 userInfo:userInfo]);
+        return;
+    }
+
+    NSDictionary *errorInfo = dict[@"__error"];
+    if ([errorInfo isKindOfClass:[NSDictionary class]]) {
+        NSString *message = errorInfo[@"message"] ?: @"Local log bridge error";
+        NSString *jsStack = errorInfo[@"jsStack"] ?: errorInfo[@"stack"] ?: @"";
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: message,
+            NSDebugDescriptionErrorKey: jsStack
+        };
+        completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-400 userInfo:userInfo]);
+        return;
+    }
+
+    completionHandler(dict, nil);
+}
+
 - (void)setParameters:(NSDictionary *)parameters
 {
     [self.bridge callHandler:@"sdk.setParameters" arguments:@[parameters]];

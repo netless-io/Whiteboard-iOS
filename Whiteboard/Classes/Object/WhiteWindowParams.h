@@ -32,6 +32,8 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 @property (nonatomic, copy) WhitePrefersColorScheme prefersColorScheme;
 /** 是否定时更新本地视角 */
 @property (nonatomic, assign) BOOL polling;
+/** 是否使用每个窗口独立的 boxesStatus 状态管理。该参数需要在加入房间或创建回放前设置。 */
+@property (nonatomic, assign) BOOL useBoxesStatus;
 /** 窗口样式覆盖 */
 @property (nonatomic, copy) NSString *overwriteStyles;
 

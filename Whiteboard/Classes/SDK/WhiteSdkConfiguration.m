@@ -10,6 +10,15 @@
 #import "WhiteSDK.h"
 #import <sys/utsname.h>
 
+@implementation WhitePresentationViewport
+@end
+
+@implementation WhitePresentationAppOptions
+@end
+
+@implementation WhiteLocalLogOptions
+@end
+
 @implementation WhitePptParams
 
 - (instancetype)init {
@@ -95,6 +104,15 @@ static NSString *const kJSDeviceType = @"deviceType";
     } else {
         dic[kJSDeviceType] = @"touch";
     }
+    NSDictionary *localLog = [_localLogOptions jsonDict];
+    if (localLog.count > 0) {
+        NSMutableDictionary *loggerOptions = [dic[@"loggerOptions"] isKindOfClass:[NSDictionary class]] ?
+            [dic[@"loggerOptions"] mutableCopy] :
+            [NSMutableDictionary dictionary];
+        loggerOptions[@"localLog"] = localLog;
+        dic[@"loggerOptions"] = [loggerOptions copy];
+    }
+    dic[@"localLogOptions"] = nil;
     return YES;
 }
 

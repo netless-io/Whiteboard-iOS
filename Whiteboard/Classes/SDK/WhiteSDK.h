@@ -17,6 +17,8 @@
 #import "WhiteAudioPcmDataDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^WhiteLocalLogCompletionHandler)(NSDictionary * _Nullable result, NSError * _Nullable error);
+
 /** 白板 SDK 相关方法。 */
 @interface WhiteSDK : NSObject
 
@@ -215,6 +217,28 @@ NS_ASSUME_NONNULL_BEGIN
  @param result 日志写入结果
  */
 - (void)requestSlideLogToFilePath:(NSString *)path result:(void(^)(BOOL success, NSError *error))result;
+
+#pragma mark - LocalLog
+
+/**
+ 获取 WebView 内本地日志状态。
+ */
+- (void)getLocalLogStateWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler;
+
+/**
+ 收集 WebView 内本地日志。该接口主要用于诊断。
+ */
+- (void)collectLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler;
+
+/**
+ 将 WebView 内本地日志刷新到持久化存储。
+ */
+- (void)flushLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler;
+
+/**
+ 触发 WebView 内本地日志上传。
+ */
+- (void)uploadLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler;
 
 #pragma mark - Private
 - (void)setParameters:(NSDictionary *)parameters;

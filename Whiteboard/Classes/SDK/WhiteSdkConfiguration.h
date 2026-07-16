@@ -41,6 +41,35 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportAlways;
 /** 不上报日志 */
 FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
+@interface WhitePresentationViewport : WhiteObject
+@property (nonatomic, strong, nullable) NSNumber *x;
+@property (nonatomic, strong, nullable) NSNumber *y;
+@property (nonatomic, strong, nullable) NSNumber *width;
+@property (nonatomic, strong, nullable) NSNumber *height;
+@end
+
+@interface WhitePresentationAppOptions : WhiteObject
+@property (nonatomic, strong, nullable) NSNumber *disableCameraTransform;
+@property (nonatomic, strong, nullable) NSNumber *maxCameraScale;
+@property (nonatomic, strong, nullable) WhitePresentationViewport *viewport;
+@property (nonatomic, strong, nullable) NSNumber *justDocsViewReadonly;
+@property (nonatomic, strong, nullable) NSNumber *useScrollbar;
+@property (nonatomic, strong, nullable) NSNumber *debounceSync;
+@property (nonatomic, strong, nullable) NSNumber *goToPageByClick;
+@property (nonatomic, strong, nullable) NSNumber *useClipView;
+@end
+
+/** WebView 内本地日志配置。 */
+@interface WhiteLocalLogOptions : WhiteObject
+
+/** 是否开启 WebView 内本地日志。未设置时不启用，需要显式设置为 YES。 */
+@property (nonatomic, strong, nullable) NSNumber *enabled;
+
+/** 是否触发本地日志上传。该开关仅在 enabled 为 YES 时生效，不影响本地日志写入。 */
+@property (nonatomic, strong, nullable) NSNumber *enabledUpload;
+
+@end
+
 /** 设置动态 PPT 参数。 */
 @interface WhitePptParams : WhiteObject
 
@@ -181,6 +210,12 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 /** SlideApp 参数。详见 [WhiteSlideAppParams](WhiteSlideAppParams)  */
 @property (nonatomic, strong) WhiteSlideAppParams *whiteSlideAppParams;
+
+/** Window Manager 内置 Presentation 的本地配置。 */
+@property (nonatomic, strong, nullable) WhitePresentationAppOptions *presentationAppOptions;
+
+/** WebView 内本地日志配置。内部会序列化到 loggerOptions.localLog。 */
+@property (nonatomic, strong, nullable) WhiteLocalLogOptions *localLogOptions;
 
 /**
  是否开启 Slide 资源 url 拦截替换功能。

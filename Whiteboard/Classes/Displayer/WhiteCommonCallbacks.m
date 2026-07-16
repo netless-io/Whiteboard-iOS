@@ -26,6 +26,14 @@
     return @"";
 }
 
+- (NSString *)localLogStateChange:(NSDictionary *)state
+{
+    if ([self.delegate respondsToSelector:@selector(localLogStateChange:)]) {
+        [self.delegate localLogStateChange:state];
+    }
+    return @"";
+}
+
 - (NSString *)throwError:(NSDictionary *)errInfo
 {
     if ([self.delegate respondsToSelector:@selector(throwError:)]) {

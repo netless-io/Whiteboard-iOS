@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)createSlideApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title;
 + (instancetype)createDocsViewerApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title;
++ (instancetype)createPresentationApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title;
 + (instancetype)createMediaPlayerApp:(NSString *)src title:(NSString *)title;
 
 /** 特定的App，一般用来创建自定义的App插入参数

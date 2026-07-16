@@ -7,6 +7,9 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## Unreleased
+- `WhiteWindowParams` 新增 `useBoxesStatus` 参数，用于开启每个窗口独立的状态管理，实时房间与回放房间共用该配置。
+
 ## [2.16.136] - 2026-06-29
 - 更新 `@netless/appliance-plugin` 至 1.1.37。
 - 同步 `Whiteboard-bridge` 至 `a22fe08`。

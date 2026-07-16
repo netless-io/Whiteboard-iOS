@@ -9,10 +9,11 @@
 #import "Masonry.h"
 #import "WhiteUtils.h"
 
-static NSString * const MaoDemoAppId = @"123/123";
 static NSString * const MaoSlidePrefix = @"https://white-cover.oss-cn-hangzhou.aliyuncs.com/flat/dynamicConvert";
 static NSString * const MaoSlideTaskId = @"46e8ff5db5714fec818f5594a6c55083";
+static NSString * const MaoPresentationScenesJSON = @"[{\"name\":\"1\",\"ppt\":{\"height\":1010.0,\"src\":\"https://convertcdn.netless.link/staticConvert/0764816000c411ecbfbbb9230f6dd80f/1.png\",\"width\":714.0}},{\"name\":\"2\",\"ppt\":{\"height\":1010.0,\"src\":\"https://convertcdn.netless.link/staticConvert/0764816000c411ecbfbbb9230f6dd80f/2.png\",\"width\":714.0}},{\"name\":\"3\",\"ppt\":{\"height\":1010.0,\"src\":\"https://convertcdn.netless.link/staticConvert/0764816000c411ecbfbbb9230f6dd80f/3.png\",\"width\":714.0}},{\"name\":\"4\",\"ppt\":{\"height\":1010.0,\"src\":\"https://convertcdn.netless.link/staticConvert/0764816000c411ecbfbbb9230f6dd80f/4.png\",\"width\":714.0}}]";
 static NSInteger const MaoFallbackPageCount = 12;
+static NSInteger const MaoBottomPanelHeight = 190;
 
 @interface WhiteRoomViewController (MaoRoomViewControllerPrivate)
 - (void)setupViews;
@@ -22,7 +23,7 @@ static NSInteger const MaoFallbackPageCount = 12;
 - (void)fireRoomStateChanged:(WhiteRoomState *)modifyState;
 @end
 
-@interface MaoRoomViewController () <WhiteRoomCallbackDelegate, WhiteSlideDelegate>
+@interface MaoRoomViewController () <WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate, WhiteSlideDelegate>
 
 @property (nonatomic, strong) UIView *toolbarView;
 @property (nonatomic, strong) UIScrollView *appScrollView;
@@ -31,6 +32,7 @@ static NSInteger const MaoFallbackPageCount = 12;
 @property (nonatomic, strong) UILabel *pageStateLabel;
 @property (nonatomic, strong) UIScrollView *previewScrollView;
 @property (nonatomic, strong) UIStackView *previewStackView;
+@property (nonatomic, strong) UIScrollView *actionScrollView;
 @property (nonatomic, strong) UITextView *logTextView;
 @property (nonatomic, strong) NSDictionary<NSString *, WhiteAppSyncAttributes *> *apps;
 @property (nonatomic, strong) NSCache<NSString *, UIImage *> *previewCache;
@@ -54,11 +56,26 @@ static NSInteger const MaoFallbackPageCount = 12;
         _loadingPreviewURLs = [NSMutableSet set];
         _currentPage = 1;
         _pageCount = MaoFallbackPageCount;
-        WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:MaoDemoAppId];
+        WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
         config.useMultiViews = YES;
         config.renderEngine = WhiteSdkRenderEngineCanvas;
         config.region = WhiteRegionCN;
         config.log = YES;
+        config.enableAppliancePlugin = YES;
+        config.loggerOptions = @{
+            @"printLevelMask": WhiteSDKLoggerOptionLevelDebug
+        };
+        config.whiteSlideAppParams.enableScale = YES;
+
+        WhiteLocalLogOptions *localLogOptions = [[WhiteLocalLogOptions alloc] init];
+        localLogOptions.enabled = @YES;
+        localLogOptions.enabledUpload = @YES;
+        config.localLogOptions = localLogOptions;
+
+        WhitePresentationAppOptions *presentationAppOptions = [[WhitePresentationAppOptions alloc] init];
+        presentationAppOptions.maxCameraScale = @4;
+        presentationAppOptions.useScrollbar = @YES;
+        config.presentationAppOptions = presentationAppOptions;
         self.sdkConfig = config;
     }
     return self;
@@ -82,7 +99,7 @@ static NSInteger const MaoFallbackPageCount = 12;
     [self.boardView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom).offset(48);
         make.left.right.equalTo(self.view);
-        make.bottom.equalTo(self.view).offset(-158);
+        make.bottom.equalTo(self.view).offset(-MaoBottomPanelHeight);
     }];
 }
 
@@ -95,6 +112,7 @@ static NSInteger const MaoFallbackPageCount = 12;
         roomConfig.region = WhiteRegionCN;
         roomConfig.windowParams = [[WhiteWindowParams alloc] init];
         roomConfig.windowParams.fullscreen = YES;
+        roomConfig.windowParams.useBoxesStatus = YES;
         self.roomConfig = roomConfig;
     }
     [super joinRoomWithToken:roomToken];
@@ -103,7 +121,7 @@ static NSInteger const MaoFallbackPageCount = 12;
 - (void)actionAfterSuccessJoinRoom:(WhiteRoom *)room roomToken:(NSString *)roomToken
 {
     [super actionAfterSuccessJoinRoom:room roomToken:roomToken];
-    [self log:@"joined room"];
+    [self log:[NSString stringWithFormat:@"joined room uuid: %@ user id: %@", self.roomUuid ?: room.uuid, self.roomConfig.uid ?: @"1"]];
     [self refreshApps];
     if (!self.didAddInitialSlideApp) {
         self.didAddInitialSlideApp = YES;
@@ -173,7 +191,7 @@ static NSInteger const MaoFallbackPageCount = 12;
     [self.view addSubview:bottomView];
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.view);
-        make.height.equalTo(@158);
+        make.height.equalTo(@(MaoBottomPanelHeight));
     }];
 
     self.previewScrollView = [[UIScrollView alloc] init];
@@ -194,19 +212,33 @@ static NSInteger const MaoFallbackPageCount = 12;
         make.height.equalTo(self.previewScrollView).offset(-12);
     }];
 
+    self.actionScrollView = [[UIScrollView alloc] init];
+    self.actionScrollView.showsHorizontalScrollIndicator = YES;
+    [bottomView addSubview:self.actionScrollView];
+    [self.actionScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(bottomView).offset(8);
+        make.right.equalTo(bottomView).offset(-8);
+        make.top.equalTo(self.previewScrollView.mas_bottom).offset(8);
+        make.height.equalTo(@44);
+    }];
+
     UIStackView *actionStack = [[UIStackView alloc] init];
     actionStack.axis = UILayoutConstraintAxisHorizontal;
     actionStack.spacing = 8;
     actionStack.alignment = UIStackViewAlignmentCenter;
-    [bottomView addSubview:actionStack];
+    [self.actionScrollView addSubview:actionStack];
     [actionStack mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(bottomView).offset(8);
-        make.top.equalTo(self.previewScrollView.mas_bottom).offset(8);
-        make.height.equalTo(@44);
+        make.edges.equalTo(self.actionScrollView);
+        make.height.equalTo(self.actionScrollView);
     }];
     [actionStack addArrangedSubview:[self controlButton:@"Add Slide" action:@selector(addSlideApp)]];
+    [actionStack addArrangedSubview:[self controlButton:@"Add Presentation" action:@selector(addPresentationApp)]];
+    [actionStack addArrangedSubview:[self controlButton:@"Scale 2x" action:@selector(scalePage2x)]];
+    [actionStack addArrangedSubview:[self controlButton:@"Scale 1x" action:@selector(scalePage1x)]];
     [actionStack addArrangedSubview:[self controlButton:@"Prev" action:@selector(prevPage)]];
     [actionStack addArrangedSubview:[self controlButton:@"Next" action:@selector(nextPage)]];
+    [actionStack addArrangedSubview:[self controlButton:@"Upload Logs" action:@selector(uploadLocalLogs)]];
+    [actionStack addArrangedSubview:[self controlButton:@"Log State" action:@selector(getLocalLogState)]];
 
     self.pageStateLabel = [[UILabel alloc] init];
     self.pageStateLabel.font = [UIFont monospacedDigitSystemFontOfSize:14 weight:UIFontWeightMedium];
@@ -221,9 +253,9 @@ static NSInteger const MaoFallbackPageCount = 12;
     self.logTextView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1];
     [bottomView addSubview:self.logTextView];
     [self.logTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(actionStack.mas_right).offset(8);
+        make.left.equalTo(bottomView).offset(8);
         make.right.equalTo(bottomView).offset(-8);
-        make.top.equalTo(self.previewScrollView.mas_bottom).offset(6);
+        make.top.equalTo(self.actionScrollView.mas_bottom).offset(6);
         make.bottom.equalTo(bottomView).offset(-6);
     }];
 }
@@ -273,6 +305,45 @@ static NSInteger const MaoFallbackPageCount = 12;
         dispatch_async(dispatch_get_main_queue(), ^{
             weakSelf.currentSlideAppId = appId;
             [weakSelf log:[NSString stringWithFormat:@"add slide: %@", appId]];
+            [weakSelf refreshApps];
+            [weakSelf querySlidePageState];
+        });
+    }];
+}
+
+- (NSArray<WhiteScene *> *)presentationScenes
+{
+    NSData *data = [MaoPresentationScenesJSON dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray *sceneObjects = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSMutableArray<WhiteScene *> *scenes = [NSMutableArray array];
+    if (![sceneObjects isKindOfClass:[NSArray class]]) {
+        return scenes;
+    }
+    for (NSDictionary *sceneObject in sceneObjects) {
+        WhiteScene *scene = [WhiteScene _white_yy_modelWithJSON:sceneObject];
+        if (scene) {
+            [scenes addObject:scene];
+        }
+    }
+    return scenes;
+}
+
+- (void)addPresentationApp
+{
+    if (!self.room) {
+        [self log:@"room not ready"];
+        return;
+    }
+    NSArray<WhiteScene *> *scenes = [self presentationScenes];
+    NSString *path = [NSString stringWithFormat:@"/mao-presentation/%@", NSUUID.UUID.UUIDString];
+    WhiteAppParam *param = [WhiteAppParam createPresentationApp:path
+                                                         scenes:scenes
+                                                          title:@"Mao Presentation"];
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:param completionHandler:^(NSString * _Nonnull appId) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.currentSlideAppId = appId;
+            [weakSelf log:[NSString stringWithFormat:@"add presentation: %@ scenes: %lu", appId, (unsigned long)scenes.count]];
             [weakSelf refreshApps];
             [weakSelf querySlidePageState];
         });
@@ -409,33 +480,71 @@ static NSInteger const MaoFallbackPageCount = 12;
 
 - (void)prevPage
 {
-    [self dispatchDocsEvent:WhiteWindowDocsEventPrevPage page:nil];
+    [self dispatchDocsEvent:WhiteWindowDocsEventPrevPage page:nil scale:nil resetScaleAfterSuccess:YES];
 }
 
 - (void)nextPage
 {
-    [self dispatchDocsEvent:WhiteWindowDocsEventNextPage page:nil];
+    [self dispatchDocsEvent:WhiteWindowDocsEventNextPage page:nil scale:nil resetScaleAfterSuccess:YES];
 }
 
 - (void)jumpToPage:(NSNumber *)page
 {
-    [self dispatchDocsEvent:WhiteWindowDocsEventJumpToPage page:page];
+    [self dispatchDocsEvent:WhiteWindowDocsEventJumpToPage page:page scale:nil resetScaleAfterSuccess:YES];
+}
+
+- (void)scalePage2x
+{
+    [self dispatchScalePage:@2.0];
+}
+
+- (void)scalePage1x
+{
+    [self dispatchScalePage:@1.0];
+}
+
+- (void)dispatchScalePage:(NSNumber *)scale
+{
+    [self dispatchDocsEvent:WhiteWindowDocsEventScalePage page:nil scale:scale resetScaleAfterSuccess:NO];
 }
 
 - (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)event page:(NSNumber * _Nullable)page
+{
+    [self dispatchDocsEvent:event page:page scale:nil resetScaleAfterSuccess:NO];
+}
+
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)event page:(NSNumber * _Nullable)page scale:(NSNumber * _Nullable)scale resetScaleAfterSuccess:(BOOL)resetScaleAfterSuccess
 {
     if (!self.room) {
         return;
     }
     WhiteWindowDocsEventOptions *options = nil;
-    if (page) {
+    if (page || scale) {
         options = [[WhiteWindowDocsEventOptions alloc] init];
         options.page = page;
+        options.scale = scale;
     }
     __weak typeof(self) weakSelf = self;
     [self.room dispatchDocsEvent:event options:options completionHandler:^(bool success) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf log:[NSString stringWithFormat:@"dispatch %@: %@", event, success ? @"YES" : @"NO"]];
+            if (success && resetScaleAfterSuccess) {
+                [weakSelf resetScalePageAfterPageChange:event];
+                return;
+            }
+            [weakSelf querySlidePageState];
+        });
+    }];
+}
+
+- (void)resetScalePageAfterPageChange:(WhiteWindowDocsEventKey)event
+{
+    __weak typeof(self) weakSelf = self;
+    WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
+    options.scale = @1.0;
+    [self.room dispatchDocsEvent:WhiteWindowDocsEventScalePage options:options completionHandler:^(bool success) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf log:[NSString stringWithFormat:@"dispatch %@ reset scalePage 1: %@", event, success ? @"YES" : @"NO"]];
             [weakSelf querySlidePageState];
         });
     }];
@@ -560,10 +669,48 @@ static NSInteger const MaoFallbackPageCount = 12;
     [task resume];
 }
 
+- (void)getLocalLogState
+{
+    __weak typeof(self) weakSelf = self;
+    [self.sdk getLocalLogStateWithCompletionHandler:^(NSDictionary * _Nullable result, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [weakSelf log:[NSString stringWithFormat:@"getLocalLogState failed: %@", error.localizedDescription]];
+            } else {
+                [weakSelf log:[NSString stringWithFormat:@"getLocalLogState: %@", result]];
+            }
+        });
+    }];
+}
+
+- (void)uploadLocalLogs
+{
+    __weak typeof(self) weakSelf = self;
+    [self.sdk uploadLocalLogsWithCompletionHandler:^(NSDictionary * _Nullable result, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [weakSelf log:[NSString stringWithFormat:@"uploadLocalLogs failed: %@", error.localizedDescription]];
+            } else {
+                [weakSelf log:[NSString stringWithFormat:@"uploadLocalLogs: %@", result]];
+            }
+        });
+    }];
+}
+
 - (void)log:(NSString *)message
 {
     NSString *current = self.logTextView.text ?: @"";
     self.logTextView.text = [NSString stringWithFormat:@"%@\n%@", message, current];
+}
+
+#pragma mark - WhiteCommonCallbackDelegate
+
+- (void)localLogStateChange:(NSDictionary *)state
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self log:[NSString stringWithFormat:@"localLogStateChange: %@", state]];
+    });
+    NSLog(@"[MaoRoom] localLogStateChange: %@", state);
 }
 
 #pragma mark - WhiteRoomCallbackDelegate

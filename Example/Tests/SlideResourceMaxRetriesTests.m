@@ -57,6 +57,15 @@
     XCTAssertEqual([slideAppOptions[@"resourceMaxRetries"] integerValue], 6);
 }
 
+- (void)testSdkConfigSlideAppOptionsEnableScale
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"];
+    config.whiteSlideAppParams.enableScale = YES;
+    NSDictionary *slideAppOptions = [config jsonDict][@"slideAppOptions"];
+
+    XCTAssertEqualObjects(slideAppOptions[@"enableScale"], @YES);
+}
+
 - (void)testSlideResourceMaxRetriesCallback
 {
     WhiteCommonCallbacks *callbacks = [[WhiteCommonCallbacks alloc] init];

@@ -20,18 +20,34 @@
 @implementation WhiteAppParam
 
 + (instancetype)createDocsViewerApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title {
-    
+
     WhiteAppParam *param = [[WhiteAppParam alloc] init];
     param.kind = @"DocsViewer";
-    
+
     WhiteAppOptions *ops = [[WhiteAppOptions alloc] init];
     ops.scenePath = dir;
     ops.scenes = scenes;
     ops.title = title;
     param.options = ops;
-    
+
     param.attrs = @{};
-    
+
+    return param;
+}
+
++ (instancetype)createPresentationApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title {
+
+    WhiteAppParam *param = [[WhiteAppParam alloc] init];
+    param.kind = @"Presentation";
+
+    WhiteAppOptions *ops = [[WhiteAppOptions alloc] init];
+    ops.scenePath = dir;
+    ops.scenes = scenes;
+    ops.title = title;
+    param.options = ops;
+
+    param.attrs = @{};
+
     return param;
 }
 
@@ -39,14 +55,14 @@
 {
     WhiteAppParam *param = [[WhiteAppParam alloc] init];
     param.kind = @"MediaPlayer";
-    
+
     WhiteAppOptions *ops = [[WhiteAppOptions alloc] init];
     ops.title = title;
     param.options = ops;
-    
+
     NSAssert(src.length > 0, @"src cann't be nil");
     param.attrs = @{@"src": src ? src : @""};
-    
+
     return param;
 }
 
@@ -62,12 +78,12 @@
 + (instancetype)createSlideApp:(NSString *)dir taskId:(NSString *)taskId url:(NSString *)url title:(NSString *)title previewlist:(NSArray <NSString *>*)previewList resourceList: (NSArray <NSString *>*)resourceList customLinks:(NSArray <WhiteSlideCustomLink *>*)customLinks {
   WhiteAppParam *param = [[WhiteAppParam alloc] init];
   param.kind = @"Slide";
-  
+
   WhiteAppOptions *ops = [[WhiteAppOptions alloc] init];
   ops.scenePath = dir;
   ops.title = title;
   param.options = ops;
-  
+
   param.attrs = @{
       @"taskId": taskId,
       @"url": url,
@@ -75,22 +91,22 @@
       @"resourceList": resourceList,
       @"customLinks": customLinks
   };
-  
+
   return param;
 }
 
 + (instancetype)createSlideApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title {
     WhiteAppParam *param = [[WhiteAppParam alloc] init];
     param.kind = @"Slide";
-    
+
     WhiteAppOptions *ops = [[WhiteAppOptions alloc] init];
     ops.scenePath = dir;
     ops.scenes = scenes;
     ops.title = title;
     param.options = ops;
-    
+
     param.attrs = @{};
-    
+
     return param;
 }
 

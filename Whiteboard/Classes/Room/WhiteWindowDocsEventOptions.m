@@ -12,6 +12,7 @@ WhiteWindowDocsEventKey const WhiteWindowDocsEventNextPage = @"nextPage";
 WhiteWindowDocsEventKey const WhiteWindowDocsEventPrevStep = @"prevStep";
 WhiteWindowDocsEventKey const WhiteWindowDocsEventNextStep = @"nextStep";
 WhiteWindowDocsEventKey const WhiteWindowDocsEventJumpToPage = @"jumpToPage";
+WhiteWindowDocsEventKey const WhiteWindowDocsEventScalePage = @"scalePage";
 
 @implementation WhiteWindowDocsEventOptions
 

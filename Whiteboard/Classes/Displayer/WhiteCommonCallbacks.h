@@ -85,6 +85,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)logger:(NSDictionary *)dict;
 
 /**
+ WebView 内本地日志状态变化回调。
+
+ @param state 本地日志运行状态。
+ */
+- (void)localLogStateChange:(NSDictionary *)state;
+
+/**
  发生了内存不足问题，SDK 即将开始恢复白板
  目前只有实时房间有可能触发该回调
  该回调最多会触发三次

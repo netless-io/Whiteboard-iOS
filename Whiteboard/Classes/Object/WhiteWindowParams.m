@@ -21,6 +21,7 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     _fullscreen = NO;
     _prefersColorScheme = WhitePrefersColorSchemeLight;
     _polling = NO;
+    _useBoxesStatus = NO;
     _overwriteStyles = @"";
     return self;
 }
@@ -43,4 +44,3 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
 }
 
 @end
-

@@ -88,6 +88,11 @@ extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
  */
 @property (nonatomic, strong) NSNumber *resourceMaxRetries;
 
+/**
+ 是否允许缩放 Slide 内容 (默认 NO)。
+ */
+@property (nonatomic, assign) BOOL enableScale;
+
 @end
 
 NS_ASSUME_NONNULL_END

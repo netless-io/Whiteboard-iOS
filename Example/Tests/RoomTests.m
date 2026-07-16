@@ -18,6 +18,36 @@
 
 typedef void(^InterrupterBlock)(NSString *url);
 
+@interface BuiltinAppOptionsTests : XCTestCase
+@end
+
+@implementation BuiltinAppOptionsTests
+
+- (void)testPresentationAppOptionsInSdkConfiguration
+{
+    WhitePresentationAppOptions *presentation = [[WhitePresentationAppOptions alloc] init];
+    presentation.useScrollbar = @YES;
+    presentation.debounceSync = @NO;
+
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app-id"];
+    config.presentationAppOptions = presentation;
+
+    NSDictionary *json = [config jsonDict][@"presentationAppOptions"];
+    XCTAssertEqualObjects(json[@"useScrollbar"], @YES);
+    XCTAssertEqualObjects(json[@"debounceSync"], @NO);
+}
+
+- (void)testWindowParamsUseBoxesStatus
+{
+    WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
+    windowParams.useBoxesStatus = YES;
+
+    NSDictionary *json = [windowParams jsonDict];
+    XCTAssertEqualObjects(json[@"useBoxesStatus"], @YES);
+}
+
+@end
+
 @interface RoomTests : BaseRoomTest
 @property (nonatomic, copy) InterrupterBlock interrupterBlock;
 @end

@@ -22,9 +22,12 @@ FOUNDATION_EXPORT WhiteWindowDocsEventKey const WhiteWindowDocsEventPrevStep;
 FOUNDATION_EXPORT WhiteWindowDocsEventKey const WhiteWindowDocsEventNextStep;
 /// 跳转到某一页 ( 需要配合 `WhiteWindowDocsEventOptions` 使用 )
 FOUNDATION_EXPORT WhiteWindowDocsEventKey const WhiteWindowDocsEventJumpToPage;
+/// 缩放当前课件页，scale 取值范围为 1 到 4，可传入小数。
+FOUNDATION_EXPORT WhiteWindowDocsEventKey const WhiteWindowDocsEventScalePage;
 
 @interface WhiteWindowDocsEventOptions : WhiteObject
-@property (nonatomic, strong) NSNumber *page;
+@property (nonatomic, strong, nullable) NSNumber *page;
+@property (nonatomic, strong, nullable) NSNumber *scale;
 @end
 
 NS_ASSUME_NONNULL_END
