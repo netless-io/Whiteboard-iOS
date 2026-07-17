@@ -7,7 +7,11 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
-## Unreleased
+## [2.16.137] - 2026-07-17
+- 同步 `Whiteboard-bridge` 至 `22e7584`，内置 `white-web-sdk@2.16.56`、`@netless/window-manager@1.0.17`。
+- 新增 `WhiteLocalLogOptions.enabled/enabledUpload` 配置，以及本地日志状态、收集、刷新、上传接口。
+- 新增 Presentation 内置课件配置与 `createPresentationApp`。
+- 新增 `WhiteWindowDocsEventOptions.ScalePage` 和 `WhiteSlideAppParams.enableScale`，用于统一缩放课件页。
 - `WhiteWindowParams` 新增 `useBoxesStatus` 参数，用于开启每个窗口独立的状态管理，实时房间与回放房间共用该配置。
 
 ## [2.16.136] - 2026-06-29
