@@ -7,6 +7,7 @@
 //
 
 #import "BaseRoomTest.h"
+#import "NTLDWKWebView.h"
 
 @interface CustomGlobalTestModel : WhiteGlobalState
 @property (nonatomic, copy) NSString *name;
@@ -133,6 +134,28 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
             NSLog(@"%s error: %@", __FUNCTION__, error);
         }
     }];
+}
+
+- (void)testSetSyncMode
+{
+    NTLDWKWebView *webView = [self.room valueForKey:@"bridge"];
+    XCTestExpectation *enabled = [self expectationWithDescription:@"sync mode enabled"];
+    [self.room setSyncMode:YES];
+    [webView evaluateJavaScript:@"window.room.syncMode" completionHandler:^(NSNumber *value, NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(value, @YES);
+        [enabled fulfill];
+    }];
+    [self waitForExpectations:@[enabled] timeout:kTimeout];
+
+    XCTestExpectation *disabled = [self expectationWithDescription:@"sync mode disabled"];
+    [self.room setSyncMode:NO];
+    [webView evaluateJavaScript:@"window.room.syncMode" completionHandler:^(NSNumber *value, NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(value, @NO);
+        [disabled fulfill];
+    }];
+    [self waitForExpectations:@[disabled] timeout:kTimeout];
 }
 
 - (void)testSetBroadcaster

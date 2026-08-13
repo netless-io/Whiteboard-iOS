@@ -422,6 +422,11 @@
     self.delay = delay;
 }
 
+- (void)setSyncMode:(BOOL)useSyncMode
+{
+    [self.bridge callHandler:@"room.syncMode" arguments:@[@(useSyncMode)]];
+}
+
 #pragma mark - Custom Event
 
 - (void)dispatchMagixEvent:(NSString *)eventName payload:(NSDictionary *)payload;

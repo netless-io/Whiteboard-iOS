@@ -266,6 +266,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTimeDelay:(NSTimeInterval)delay;
 @property (nonatomic, assign, readonly) NSTimeInterval delay;
 
+/**
+ 设置远端白板消息的同步策略。
+
+ 默认情况下，SDK 会以较平滑的速度处理同步消息。设置为 `YES` 后，SDK 会在收到消息时立即处理，
+ 以提高同步实时性。
+
+ @param useSyncMode 是否立即处理收到的同步消息。
+ */
+- (void)setSyncMode:(BOOL)useSyncMode;
+
 @end
 
 
