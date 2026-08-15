@@ -7,6 +7,10 @@
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。
 开源版本，版本延续旧版本数字，在此数字基础上，进行版本更新。
+## [2.16.139] - 2026-08-15
+- 同步 `Whiteboard-bridge` 至 `42c7f0d`，内置 `@netless/appliance-plugin@1.1.40`。
+- Appliance Plugin 的默认 Worker 渲染模式与 Canvas context 兼容性策略下沉至插件内部，Bridge 继续透传宿主 `appliancePluginOptions`。
+
 ## [2.16.138] - 2026-08-14
 - 同步 `Whiteboard-bridge` 至 `aa1dfd7`，内置 `@netless/appliance-plugin@1.1.39`、`@netless/window-manager@1.0.18`。
 - `WhiteRoom` 新增 `setSyncMode:` 方法，用于切换远端白板消息的平滑处理与即时处理策略。
