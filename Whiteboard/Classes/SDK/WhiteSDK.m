@@ -13,6 +13,22 @@
 #import "WhiteConsts.h"
 #import "WhiteWebViewInjection.h"
 
+@implementation WhiteReloadBackgroundImageParams
+@end
+
+@implementation WhiteReloadBackgroundImageResult
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary
+{
+    self = [super init];
+    if (self) {
+        _accepted = [dictionary[@"accepted"] boolValue];
+        _reloadedCount = [dictionary[@"reloadedCount"] integerValue];
+        _reason = [dictionary[@"reason"] isKindOfClass:NSString.class] ? dictionary[@"reason"] : nil;
+    }
+    return self;
+}
+@end
+
 @interface WhiteSDK()
 
 @property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
@@ -309,6 +325,33 @@
 - (void)uploadLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler
 {
     [self callLocalLogMethod:@"sdk.uploadLocalLogs" completionHandler:completionHandler];
+}
+
+- (void)reloadBackgroundImage:(WhiteReloadBackgroundImageParams *)params
+            completionHandler:(WhiteReloadBackgroundImageCompletionHandler)completionHandler
+{
+    [self.bridge callHandler:@"sdk.reloadBackgroundImage" arguments:@[params] completionHandler:^(id value) {
+        NSDictionary *dict = nil;
+        if ([value isKindOfClass:NSDictionary.class]) {
+            dict = value;
+        } else if ([value isKindOfClass:NSString.class]) {
+            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+            id object = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
+            dict = [object isKindOfClass:NSDictionary.class] ? object : nil;
+        }
+        NSDictionary *errorInfo = dict[@"__error"];
+        if (!dict || [errorInfo isKindOfClass:NSDictionary.class]) {
+            NSString *message = errorInfo[@"message"] ?: @"Invalid reloadBackgroundImage response";
+            NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain
+                                                  code:-400
+                                              userInfo:@{NSLocalizedDescriptionKey: message}];
+            if (completionHandler) completionHandler(nil, error);
+            return;
+        }
+        if (completionHandler) {
+            completionHandler([[WhiteReloadBackgroundImageResult alloc] initWithDictionary:dict], nil);
+        }
+    }];
 }
 
 - (void)callLocalLogMethod:(NSString *)method completionHandler:(WhiteLocalLogCompletionHandler)completionHandler

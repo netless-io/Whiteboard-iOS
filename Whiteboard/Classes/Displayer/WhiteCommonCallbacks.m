@@ -6,6 +6,22 @@
 //
 
 #import "WhiteCommonCallbacks.h"
+
+@implementation WhiteBackgroundImageLoadEvent
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+    if (self) {
+        _name = [dictionary[@"name"] isKindOfClass:NSString.class] ? dictionary[@"name"] : @"";
+        _state = [dictionary[@"state"] isKindOfClass:NSString.class] ? dictionary[@"state"] : @"";
+        _source = [dictionary[@"source"] isKindOfClass:NSString.class] ? dictionary[@"source"] : @"";
+        _resourceId = [dictionary[@"resourceId"] isKindOfClass:NSString.class] ? dictionary[@"resourceId"] : @"";
+        _resourceUrl = [dictionary[@"resourceUrl"] isKindOfClass:NSString.class] ? dictionary[@"resourceUrl"] : @"";
+        _viewId = [dictionary[@"viewId"] isKindOfClass:NSString.class] ? dictionary[@"viewId"] : @"";
+        _scenePath = [dictionary[@"scenePath"] isKindOfClass:NSString.class] ? dictionary[@"scenePath"] : @"";
+    }
+    return self;
+}
+@end
 #import "WhiteConsts.h"
 #import "WhiteObject.h"
 #if __has_include(<NTLBridge/NTLDWKWebView.h>)
@@ -174,6 +190,14 @@
         if ([self.slideDelegate respondsToSelector:@selector(onSlideError:errorMessage:slideId:slideIndex:)]) {
             [self.slideDelegate onSlideError:errorType errorMessage:errorMsg slideId:slideId slideIndex:slideIndex];
             return @"";
+        }
+    }
+    if ([dict[@"name"] isEqualToString:@"backgroundImageLoad"] &&
+        [self.delegate respondsToSelector:@selector(onBackgroundImageLoad:)]) {
+        @try {
+            [self.delegate onBackgroundImageLoad:[[WhiteBackgroundImageLoadEvent alloc] initWithDictionary:dict]];
+        } @catch (NSException *exception) {
+            NSLog(@"WhiteSDK onBackgroundImageLoad callback failed: %@", exception);
         }
     }
     if (dict && [self.delegate respondsToSelector:@selector(customMessage:)]) {

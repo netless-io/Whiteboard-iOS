@@ -94,6 +94,12 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 
 @end
 
+@interface WhiteBackgroundImageLoadOptions : WhiteObject
+@property (nonatomic, assign) NSInteger maxRetries;
+@property (nonatomic, assign) NSInteger timeoutMs;
+@property (nonatomic, assign) NSInteger retryIntervalMs;
+@end
+
 /** 用于配置 `WhiteSdk` 对象。*/
 @interface WhiteSdkConfiguration : WhiteObject
 
@@ -124,6 +130,8 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  @since 2.12.0
  */
 @property (nonatomic, assign) BOOL enableImgErrorCallback;
+/** 可见背景图片的超时与重试策略。 */
+@property (nonatomic, strong, nullable) WhiteBackgroundImageLoadOptions *backgroundImageLoadOptions;
 /**
  是否启用 iframe 插件。
 

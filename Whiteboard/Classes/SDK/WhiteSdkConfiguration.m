@@ -16,6 +16,39 @@
 @implementation WhitePresentationAppOptions
 @end
 
+@implementation WhiteBackgroundImageLoadOptions
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _maxRetries = 3;
+        _timeoutMs = 15000;
+        _retryIntervalMs = 1000;
+    }
+    return self;
+}
+- (void)setMaxRetries:(NSInteger)value {
+    if (value < -1 || value > 10) {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"maxRetries must be -1 or from 0 to 10"];
+    }
+    _maxRetries = value;
+}
+- (void)setTimeoutMs:(NSInteger)value {
+    if (value < 1000 || value > 120000) {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"timeoutMs must be from 1000 to 120000"];
+    }
+    _timeoutMs = value;
+}
+- (void)setRetryIntervalMs:(NSInteger)value {
+    if (value < 0 || value > 30000) {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"retryIntervalMs must be from 0 to 30000"];
+    }
+    _retryIntervalMs = value;
+}
+@end
+
 @implementation WhiteLocalLogOptions
 @end
 

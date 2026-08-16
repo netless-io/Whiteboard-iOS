@@ -10,6 +10,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface WhiteBackgroundImageLoadEvent : NSObject
+@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *state;
+@property (nonatomic, copy, readonly) NSString *source;
+@property (nonatomic, copy, readonly) NSString *resourceId;
+@property (nonatomic, copy, readonly) NSString *resourceUrl;
+@property (nonatomic, copy, readonly) NSString *viewId;
+@property (nonatomic, copy, readonly) NSString *scenePath;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+@end
+
 /** 白板通用回调。 */
 @protocol WhiteCommonCallbackDelegate <NSObject>
 
@@ -75,6 +86,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param dict 字典格式的消息。只有当消息为字典格式时，本地用户才能收到。
  */
 - (void)customMessage:(NSDictionary *)dict;
+
+/** 可见背景图片加载状态回调。 */
+- (void)onBackgroundImageLoad:(WhiteBackgroundImageLoadEvent *)event;
 
 /**
  * @param dict 

@@ -62,6 +62,9 @@ static NSInteger const MaoBottomPanelHeight = 190;
         config.region = WhiteRegionCN;
         config.log = YES;
         config.enableAppliancePlugin = YES;
+        WhiteBackgroundImageLoadOptions *backgroundImageLoadOptions = [[WhiteBackgroundImageLoadOptions alloc] init];
+        backgroundImageLoadOptions.maxRetries = 1;
+        config.backgroundImageLoadOptions = backgroundImageLoadOptions;
         config.loggerOptions = @{
             @"printLevelMask": WhiteSDKLoggerOptionLevelDebug
         };
@@ -714,6 +717,36 @@ static NSInteger const MaoBottomPanelHeight = 190;
 }
 
 #pragma mark - WhiteRoomCallbackDelegate
+
+- (void)onBackgroundImageLoad:(WhiteBackgroundImageLoadEvent *)event
+{
+    [self log:[NSString stringWithFormat:@"backgroundImageLoad: %@ %@ %@",
+               event.state, event.viewId, event.scenePath]];
+    if (![event.state isEqualToString:@"failed"]) {
+        return;
+    }
+    // mainView 可直接比较；appId 对应的路径由 reload API 在插件内原子校验。
+    if ([event.viewId isEqualToString:@"mainView"] &&
+        ![self.room.state.sceneState.scenePath isEqualToString:event.scenePath]) {
+        return;
+    }
+    WhiteReloadBackgroundImageParams *params = [[WhiteReloadBackgroundImageParams alloc] init];
+    params.source = event.source;
+    params.viewId = event.viewId;
+    params.scenePath = event.scenePath;
+    __weak typeof(self) weakSelf = self;
+    [self.sdk reloadBackgroundImage:params completionHandler:^(WhiteReloadBackgroundImageResult * _Nullable result,
+                                                               NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [weakSelf log:[NSString stringWithFormat:@"reloadBackgroundImage failed: %@", error.localizedDescription]];
+            } else {
+                [weakSelf log:[NSString stringWithFormat:@"reloadBackgroundImage accepted: %d, count: %ld, reason: %@",
+                               result.accepted, (long)result.reloadedCount, result.reason ?: @"none"]];
+            }
+        });
+    }];
+}
 
 - (void)firePhaseChanged:(WhiteRoomPhase)phase
 {

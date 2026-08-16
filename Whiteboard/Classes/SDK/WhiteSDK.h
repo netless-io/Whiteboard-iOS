@@ -19,6 +19,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^WhiteLocalLogCompletionHandler)(NSDictionary * _Nullable result, NSError * _Nullable error);
 
+@interface WhiteReloadBackgroundImageParams : WhiteObject
+@property (nonatomic, copy) NSString *source;
+@property (nonatomic, copy) NSString *viewId;
+@property (nonatomic, copy, nullable) NSString *scenePath;
+@property (nonatomic, copy, nullable) NSString *url;
+@end
+
+@interface WhiteReloadBackgroundImageResult : NSObject
+@property (nonatomic, assign, readonly) BOOL accepted;
+@property (nonatomic, assign, readonly) NSInteger reloadedCount;
+@property (nonatomic, copy, readonly, nullable) NSString *reason;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+@end
+
+typedef void (^WhiteReloadBackgroundImageCompletionHandler)(WhiteReloadBackgroundImageResult * _Nullable result, NSError * _Nullable error);
+
 /** 白板 SDK 相关方法。 */
 @interface WhiteSDK : NSObject
 
@@ -239,6 +255,10 @@ typedef void (^WhiteLocalLogCompletionHandler)(NSDictionary * _Nullable result, 
  触发 WebView 内本地日志上传。
  */
 - (void)uploadLocalLogsWithCompletionHandler:(WhiteLocalLogCompletionHandler)completionHandler;
+
+/** 重新加载当前聚焦场景中此前加载失败的背景图片。 */
+- (void)reloadBackgroundImage:(WhiteReloadBackgroundImageParams *)params
+            completionHandler:(WhiteReloadBackgroundImageCompletionHandler)completionHandler;
 
 #pragma mark - Private
 - (void)setParameters:(NSDictionary *)parameters;
