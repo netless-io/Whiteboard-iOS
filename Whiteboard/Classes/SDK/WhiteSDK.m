@@ -16,6 +16,9 @@
 @implementation WhiteReloadBackgroundImageParams
 @end
 
+@implementation WhiteHasBackgroundImageParams
+@end
+
 @implementation WhiteReloadBackgroundImageResult
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
@@ -351,6 +354,34 @@
         if (completionHandler) {
             completionHandler([[WhiteReloadBackgroundImageResult alloc] initWithDictionary:dict], nil);
         }
+    }];
+}
+
+- (void)hasBackgroundImage:(WhiteHasBackgroundImageParams *)params
+         completionHandler:(WhiteHasBackgroundImageCompletionHandler)completionHandler
+{
+    [self.bridge callHandler:@"sdk.hasBackgroundImage" arguments:@[params] completionHandler:^(id value) {
+        if ([value isKindOfClass:NSNumber.class]) {
+            if (completionHandler) completionHandler([value boolValue], nil);
+            return;
+        }
+
+        NSDictionary *dict = nil;
+        if ([value isKindOfClass:NSDictionary.class]) {
+            dict = value;
+        } else if ([value isKindOfClass:NSString.class]) {
+            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+            id object = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
+            dict = [object isKindOfClass:NSDictionary.class] ? object : nil;
+        }
+        NSDictionary *errorInfo = [dict[@"__error"] isKindOfClass:NSDictionary.class]
+            ? dict[@"__error"]
+            : nil;
+        NSString *message = errorInfo[@"message"] ?: @"Invalid hasBackgroundImage response";
+        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain
+                                              code:-400
+                                          userInfo:@{NSLocalizedDescriptionKey: message}];
+        if (completionHandler) completionHandler(NO, error);
     }];
 }
 

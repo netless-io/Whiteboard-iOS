@@ -49,6 +49,21 @@
     
 }
 
+- (void)testHasBackgroundImageParamsToJson
+{
+    WhiteHasBackgroundImageParams *params = [[WhiteHasBackgroundImageParams alloc] init];
+    params.viewId = @"mainView";
+    params.scenePath = @"/scene-1";
+    params.imageUrl = @"https://example.com/background.webp?token=value#fragment";
+    params.sources = @[@"appliance"];
+
+    NSDictionary *dict = [params jsonDict];
+    XCTAssertEqualObjects(dict[@"viewId"], params.viewId);
+    XCTAssertEqualObjects(dict[@"scenePath"], params.scenePath);
+    XCTAssertEqualObjects(dict[@"imageUrl"], params.imageUrl);
+    XCTAssertEqualObjects(dict[@"sources"], params.sources);
+}
+
 #pragma mark - WhiteEvent
 - (void)testWhiteEventConvertDict {
     WhiteEvent *event = [[WhiteEvent alloc] init];

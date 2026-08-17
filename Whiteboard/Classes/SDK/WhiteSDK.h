@@ -35,6 +35,15 @@ typedef void (^WhiteLocalLogCompletionHandler)(NSDictionary * _Nullable result, 
 
 typedef void (^WhiteReloadBackgroundImageCompletionHandler)(WhiteReloadBackgroundImageResult * _Nullable result, NSError * _Nullable error);
 
+@interface WhiteHasBackgroundImageParams : WhiteObject
+@property (nonatomic, copy) NSString *viewId;
+@property (nonatomic, copy) NSString *scenePath;
+@property (nonatomic, copy) NSString *imageUrl;
+@property (nonatomic, copy) NSArray<NSString *> *sources;
+@end
+
+typedef void (^WhiteHasBackgroundImageCompletionHandler)(BOOL exists, NSError * _Nullable error);
+
 /** 白板 SDK 相关方法。 */
 @interface WhiteSDK : NSObject
 
@@ -259,6 +268,10 @@ typedef void (^WhiteReloadBackgroundImageCompletionHandler)(WhiteReloadBackgroun
 /** 重新加载当前聚焦场景中此前加载失败的背景图片。 */
 - (void)reloadBackgroundImage:(WhiteReloadBackgroundImageParams *)params
             completionHandler:(WhiteReloadBackgroundImageCompletionHandler)completionHandler;
+
+/** 查询指定白板、场景和 URL 是否已有任一来源的背景图。 */
+- (void)hasBackgroundImage:(WhiteHasBackgroundImageParams *)params
+         completionHandler:(WhiteHasBackgroundImageCompletionHandler)completionHandler;
 
 #pragma mark - Private
 - (void)setParameters:(NSDictionary *)parameters;
