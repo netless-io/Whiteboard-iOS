@@ -32,6 +32,7 @@
 		8AC5C6E027A3F1940002D430 /* NETURLSchemeHandler in Frameworks */ = {isa = PBXBuildFile; productRef = 8AC5C6DF27A3F1940002D430 /* NETURLSchemeHandler */; };
 		8AC8B95427D731CA002F1D53 /* Whiteboard in Frameworks */ = {isa = PBXBuildFile; productRef = 8AC8B95327D731CA002F1D53 /* Whiteboard */; };
 		A13900000000000000000001 /* MaoRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A13900000000000000000003 /* MaoRoomViewController.m */; };
+		A1390000000000000000000A /* WhiteAppliancePluginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1390000000000000000000C /* WhiteAppliancePluginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,8 @@
 		8AC8B95127D731C2002F1D53 /* Whiteboard-iOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "Whiteboard-iOS"; path = ..; sourceTree = "<group>"; };
 		A13900000000000000000002 /* MaoRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaoRoomViewController.h; sourceTree = "<group>"; };
 		A13900000000000000000003 /* MaoRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaoRoomViewController.m; sourceTree = "<group>"; };
+		A1390000000000000000000B /* WhiteAppliancePluginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteAppliancePluginViewController.h; sourceTree = "<group>"; };
+		A1390000000000000000000C /* WhiteAppliancePluginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteAppliancePluginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +113,8 @@
 			children = (
 				A13900000000000000000002 /* MaoRoomViewController.h */,
 				A13900000000000000000003 /* MaoRoomViewController.m */,
+				A1390000000000000000000B /* WhiteAppliancePluginViewController.h */,
+				A1390000000000000000000C /* WhiteAppliancePluginViewController.m */,
 				8A0961DD28339C660083158D /* WhiteCustomAppViewController.h */,
 				8A0961DC28339C660083158D /* WhiteCustomAppViewController.m */,
 				8A0961DA28339C3E0083158D /* ExampleControlView.swift */,
@@ -247,6 +252,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A13900000000000000000001 /* MaoRoomViewController.m in Sources */,
+				A1390000000000000000000A /* WhiteAppliancePluginViewController.m in Sources */,
 				8AC5C6CB27A3F1460002D430 /* PlayerCommandListController.m in Sources */,
 				8AC5C6DA27A3F1460002D430 /* WhiteBaseViewController.m in Sources */,
 				8A0961D928339B440083158D /* ControlCell.swift in Sources */,
