@@ -55,6 +55,7 @@ static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1
         slideParams.minFPS = @5;
         slideParams.maxFPS = @15;
         slideParams.enableGlobalClick = NO;
+        slideParams.enableScale = YES;
         config.whiteSlideAppParams = slideParams;
 
         WhiteLocalLogOptions *localLogOptions = [[WhiteLocalLogOptions alloc] init];
@@ -108,6 +109,10 @@ static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1
         }];
         roomConfig.region = WhiteRegionCN;
         roomConfig.isWritable = NO;
+
+        WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
+        windowParams.overwriteStyles = @".netless-app-slide-wb-view {clip-path: none !important;}";
+        roomConfig.windowParams = windowParams;
 
         WhiteAppliancePluginOptions *pluginOptions = [[WhiteAppliancePluginOptions alloc] init];
         pluginOptions.extras = [self appliancePluginExtras];
