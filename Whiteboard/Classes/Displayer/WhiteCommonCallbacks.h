@@ -21,6 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @end
 
+/** Appliance 插件初始化进度事件。 */
+@interface WhiteApplianceInitLoadingChangeEvent : NSObject
+@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, assign, readonly) BOOL loading;
+@property (nonatomic, copy, readonly) NSString *phase;
+@property (nonatomic, copy, readonly) NSString *status;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+@end
+
 /** 白板通用回调。 */
 @protocol WhiteCommonCallbackDelegate <NSObject>
 
@@ -89,6 +98,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 可见背景图片加载状态回调。 */
 - (void)onBackgroundImageLoad:(WhiteBackgroundImageLoadEvent *)event;
+
+/** Appliance 插件初始化进度回调。 */
+- (void)onApplianceInitLoadingChange:(WhiteApplianceInitLoadingChangeEvent *)event;
 
 /**
  * @param dict 

@@ -22,6 +22,19 @@
     return self;
 }
 @end
+
+@implementation WhiteApplianceInitLoadingChangeEvent
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+    if (self) {
+        _name = [dictionary[@"name"] isKindOfClass:NSString.class] ? dictionary[@"name"] : @"";
+        _loading = [dictionary[@"loading"] boolValue];
+        _phase = [dictionary[@"phase"] isKindOfClass:NSString.class] ? dictionary[@"phase"] : @"";
+        _status = [dictionary[@"status"] isKindOfClass:NSString.class] ? dictionary[@"status"] : @"";
+    }
+    return self;
+}
+@end
 #import "WhiteConsts.h"
 #import "WhiteObject.h"
 #if __has_include(<NTLBridge/NTLDWKWebView.h>)
@@ -198,6 +211,14 @@
             [self.delegate onBackgroundImageLoad:[[WhiteBackgroundImageLoadEvent alloc] initWithDictionary:dict]];
         } @catch (NSException *exception) {
             NSLog(@"WhiteSDK onBackgroundImageLoad callback failed: %@", exception);
+        }
+    }
+    if ([dict[@"name"] isEqualToString:@"applianceInitLoadingChange"] &&
+        [self.delegate respondsToSelector:@selector(onApplianceInitLoadingChange:)]) {
+        @try {
+            [self.delegate onApplianceInitLoadingChange:[[WhiteApplianceInitLoadingChangeEvent alloc] initWithDictionary:dict]];
+        } @catch (NSException *exception) {
+            NSLog(@"WhiteSDK onApplianceInitLoadingChange callback failed: %@", exception);
         }
     }
     if (dict && [self.delegate respondsToSelector:@selector(customMessage:)]) {
