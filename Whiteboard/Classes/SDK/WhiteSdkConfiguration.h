@@ -225,7 +225,11 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 /** Window Manager 内置 Presentation 的本地配置。 */
 @property (nonatomic, strong, nullable) WhitePresentationAppOptions *presentationAppOptions;
 
-/** WebView 内本地日志配置。内部会序列化到 loggerOptions.localLog。 */
+/**
+ WebView 内本地日志配置。内部会序列化到 loggerOptions.localLog。
+
+ iOS 12 及以下会强制关闭 enabled 与 enabledUpload，以规避低版本 WKWebView Worker IndexedDB 不可用问题。
+ */
 @property (nonatomic, strong, nullable) WhiteLocalLogOptions *localLogOptions;
 
 /**

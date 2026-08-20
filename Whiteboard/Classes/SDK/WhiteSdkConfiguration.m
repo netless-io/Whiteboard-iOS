@@ -84,6 +84,56 @@ WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan = @"banReport";
 
 static NSString *const kJSDeviceType = @"deviceType";
 
+static NSInteger WhiteIOSMajorVersionFromPlatformUA(NSString *platformUA)
+{
+    if (![platformUA isKindOfClass:NSString.class]) {
+        return NSNotFound;
+    }
+
+    NSArray<NSString *> *rawComponents = [platformUA componentsSeparatedByCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+    NSMutableArray<NSString *> *components = [NSMutableArray arrayWithCapacity:rawComponents.count];
+    for (NSString *component in rawComponents) {
+        if (component.length > 0) {
+            [components addObject:component];
+        }
+    }
+    if (components.count < 3 || ![components.firstObject.lowercaseString isEqualToString:@"ios"]) {
+        return NSNotFound;
+    }
+
+    NSInteger majorVersion = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:components.lastObject];
+    if (![scanner scanInteger:&majorVersion] || majorVersion <= 0) {
+        return NSNotFound;
+    }
+    return majorVersion;
+}
+
+static BOOL WhiteShouldDisableLocalLogForPlatformUA(NSString *platformUA)
+{
+    NSInteger majorVersion = WhiteIOSMajorVersionFromPlatformUA(platformUA);
+    return majorVersion != NSNotFound && majorVersion <= 12;
+}
+
+static void WhiteApplyIOS12LocalLogCompatibility(NSMutableDictionary *loggerOptions, NSDictionary *nativeTags)
+{
+    @try {
+        NSString *platformUA = [nativeTags[@"platform"] isKindOfClass:NSString.class] ? nativeTags[@"platform"] : nil;
+        if (!WhiteShouldDisableLocalLogForPlatformUA(platformUA)) {
+            return;
+        }
+
+        NSMutableDictionary *effectiveLocalLog = [loggerOptions[@"localLog"] isKindOfClass:NSDictionary.class] ?
+            [loggerOptions[@"localLog"] mutableCopy] :
+            [NSMutableDictionary dictionary];
+        effectiveLocalLog[@"enabled"] = @NO;
+        effectiveLocalLog[@"enabledUpload"] = @NO;
+        loggerOptions[@"localLog"] = [effectiveLocalLog copy];
+    } @catch (__unused NSException *exception) {
+        // This compatibility guard must never block SDK initialization or whiteboard usage.
+    }
+}
+
 + (instancetype)defaultConfig
 {
     NSAssert(NO, @"WhiteSdkConfiguration must have appIdentifier, please use initWithApp:");
@@ -137,12 +187,17 @@ static NSString *const kJSDeviceType = @"deviceType";
     } else {
         dic[kJSDeviceType] = @"touch";
     }
+    NSMutableDictionary *loggerOptions = [dic[@"loggerOptions"] isKindOfClass:[NSDictionary class]] ?
+        [dic[@"loggerOptions"] mutableCopy] :
+        [NSMutableDictionary dictionary];
     NSDictionary *localLog = [_localLogOptions jsonDict];
     if (localLog.count > 0) {
-        NSMutableDictionary *loggerOptions = [dic[@"loggerOptions"] isKindOfClass:[NSDictionary class]] ?
-            [dic[@"loggerOptions"] mutableCopy] :
-            [NSMutableDictionary dictionary];
         loggerOptions[@"localLog"] = localLog;
+    }
+
+    NSDictionary *serializedNativeTags = [dic[@"__nativeTags"] isKindOfClass:NSDictionary.class] ? dic[@"__nativeTags"] : _nativeTags;
+    WhiteApplyIOS12LocalLogCompatibility(loggerOptions, serializedNativeTags);
+    if (loggerOptions.count > 0) {
         dic[@"loggerOptions"] = [loggerOptions copy];
     }
     dic[@"localLogOptions"] = nil;
