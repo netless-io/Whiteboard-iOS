@@ -3,6 +3,10 @@
 
 ---
 
+## [2.16.140] - 2026-08-21
+- 同步 `Whiteboard-bridge` 至 `a4ab46c`，内置 `white-web-sdk@2.16.58`、`@netless/app-slide@0.2.100`、`@netless/appliance-plugin@1.1.42`。
+- 对齐三端新增背景图恢复、Slide 性能默认值、Appliance Plugin 选项和房间生命周期接口。
+
 
 # Whiteboard 版本记录
 - 基于 White-SDK-iOS 基础上，整理结构，进行开源。

@@ -15,8 +15,8 @@
 
 
 // 如果需要进入特定房间，取消以下两行注释，同时填入对应的 UUID 以及 roomToken
-#define WhiteRoomUUID  @"cd1221809b8111f1aaeead87383431cf"
-#define WhiteRoomToken @"NETLESSROOM_YWs9VWtNUk92M1JIN2I2Z284dCZleHBpcmVBdD0xNzg3Mzc4Mzk0OTY3Jm5vbmNlPTg4MzQzNjcwLTlkMjUtMTFmMS1iYzM4LWQ3Yjg5YzgwZTNlMSZyb2xlPTEmc2lnPWZkYjI5MjRkNmMwYTkxMmMzZWQ5YmU5OGZmMTZlNjA3ZDQyYjgxMzljNzA4NTVjMzVkOGM5NzlmOGJjMmY0NTUmdXVpZD1jZDEyMjE4MDliODExMWYxYWFlZWFkODczODM0MzFjZg"
+#define WhiteRoomUUID  @""
+#define WhiteRoomToken @""
 
 #ifdef __OBJC__
     @import UIKit;
