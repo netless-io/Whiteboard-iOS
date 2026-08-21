@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - CallbackDelegate
 @property (nonatomic, weak, nullable) id<WhiteRoomCallbackDelegate> roomCallbackDelegate;
 
+- (void)leaveRoomWithCompletion:(nullable dispatch_block_t)completion;
+
 @end
 
 
@@ -35,6 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
+@property (nonatomic, assign, readonly, getter=isRoomLoadingVisible) BOOL roomLoadingVisible;
+
+- (void)firePhaseChanged:(WhiteRoomPhase)phase;
 
 @end
 

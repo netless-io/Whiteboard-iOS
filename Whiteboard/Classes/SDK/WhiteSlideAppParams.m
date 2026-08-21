@@ -9,6 +9,8 @@
 
 PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyFrozen = @"frozen";
 PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause = @"pause";
+WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyFIFO = @"fifo";
+WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyLatestPendingRender = @"latest-pending-render";
 
 @implementation WhiteSlideAppParams
 
@@ -19,10 +21,6 @@ PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause = @"pause";
         _showRenderError = NO;
         _debug = NO;
         _enableGlobalClick = YES;
-        _minFPS = @25;
-        _maxFPS = @30;
-        _resolution = @1;
-        _maxResolutionLevel = @2;
         _forceCanvas = FALSE;
         _bgColor = nil;
         _invisibleBehavior = nil;

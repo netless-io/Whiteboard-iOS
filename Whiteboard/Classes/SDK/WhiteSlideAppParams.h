@@ -14,6 +14,11 @@ typedef NSString * PPTInvisibleBehaviorKey NS_STRING_ENUM;
 extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyFrozen;
 extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
 
+typedef NSString * WhiteSlideSyncEventQueuePolicy NS_STRING_ENUM;
+
+extern WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyFIFO;
+extern WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyLatestPendingRender;
+
 @interface WhiteSlideAppParams : WhiteObject
 
 /**
@@ -35,20 +40,20 @@ extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
 @property (nonatomic, assign) BOOL enableGlobalClick;
 
 /**
- 设置最小 fps, 应用会尽量保证实际 fps 高于此值, 此值越小, cpu 开销越小 (默认 25)。
+ 设置最小 fps, 应用会尽量保证实际 fps 高于此值, 此值越小, cpu 开销越小。未设置时由内嵌 Bridge 根据 WebView UA 决定。
  */
-@property (nonatomic, strong) NSNumber *minFPS;
+@property (nonatomic, strong, nullable) NSNumber *minFPS;
 
 /**
- 设置最大 fps, 应用会保证实际 fps 低于此值, 此值越小, cpu 开销越小 (默认 30)。
+ 设置最大 fps, 应用会保证实际 fps 低于此值, 此值越小, cpu 开销越小。未设置时由内嵌 Bridge 根据 WebView UA 决定。
  */
-@property (nonatomic, strong) NSNumber *maxFPS;
+@property (nonatomic, strong, nullable) NSNumber *maxFPS;
 
 /**
  渲染分辨倍率, 原始 ppt 有自己的像素尺寸，当在 2k 或者 4k 屏幕下，如果按原始 ppt 分辨率显示，画面会比较模糊。可以调整此值，使画面更清晰，同时性能开销也变高。
- 建议保持默认值就行，或者固定为 1  (默认 1)。
+ 未设置时由内嵌 Bridge 根据 WebView UA 决定。
  */
-@property (nonatomic, strong) NSNumber *resolution;
+@property (nonatomic, strong, nullable) NSNumber *resolution;
 
 /**
  Used to set the maximum display resolution. This value not only affects the canvas rendering resolution, but also affects the texture quality.
@@ -64,9 +69,9 @@ extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
  
  [4] 3K 3200 × 1800, greater than 4 is calculated as 4; --- default setting for PC devices.
  
- By default, PC devices are set to 3K, and mobile devices are set to 720P（默认 2）。
+ If unset, the embedded Bridge chooses a value based on the WebView user agent.
  */
-@property (nonatomic, strong) NSNumber *maxResolutionLevel;
+@property (nonatomic, strong, nullable) NSNumber *maxResolutionLevel;
 
 /**
  Whether to force the use of 2D rendering, forcing the use of 2D rendering will lose some 3D, filters, and effects. (默认 NO)。
@@ -92,6 +97,11 @@ extern PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause;
  是否允许缩放 Slide 内容 (默认 NO)。
  */
 @property (nonatomic, assign) BOOL enableScale;
+
+/**
+ Slide 同步事件队列策略。`fifo` 按顺序处理全部事件；`latest-pending-render` 允许交互模式跳过积压的中间页面渲染。未设置时由 Slide 使用 `fifo`。
+ */
+@property (nonatomic, copy, nullable) WhiteSlideSyncEventQueuePolicy syncEventQueuePolicy;
 
 @end
 

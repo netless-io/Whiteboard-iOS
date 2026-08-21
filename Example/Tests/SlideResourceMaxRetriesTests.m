@@ -36,6 +36,47 @@
     XCTAssertEqual(params.resourceMaxRetries.integerValue, 3);
 }
 
+- (void)testSlidePerformanceOptionsHaveNoNativeDefaults
+{
+    WhiteSlideAppParams *params = [[WhiteSlideAppParams alloc] init];
+    XCTAssertNil(params.minFPS);
+    XCTAssertNil(params.maxFPS);
+    XCTAssertNil(params.resolution);
+    XCTAssertNil(params.maxResolutionLevel);
+    XCTAssertNil(params.syncEventQueuePolicy);
+
+    NSDictionary *slideAppOptions = [[[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"] jsonDict][@"slideAppOptions"];
+    XCTAssertNil(slideAppOptions[@"minFPS"]);
+    XCTAssertNil(slideAppOptions[@"maxFPS"]);
+    XCTAssertNil(slideAppOptions[@"resolution"]);
+    XCTAssertNil(slideAppOptions[@"maxResolutionLevel"]);
+    XCTAssertNil(slideAppOptions[@"syncEventQueuePolicy"]);
+}
+
+- (void)testSlideSyncEventQueuePolicySerializesExplicitValue
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"];
+    config.whiteSlideAppParams.syncEventQueuePolicy = WhiteSlideSyncEventQueuePolicyLatestPendingRender;
+
+    NSDictionary *slideAppOptions = [config jsonDict][@"slideAppOptions"];
+    XCTAssertEqualObjects(slideAppOptions[@"syncEventQueuePolicy"], @"latest-pending-render");
+}
+
+- (void)testSlidePerformanceOptionsSerializeExplicitValues
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"];
+    config.whiteSlideAppParams.minFPS = @10;
+    config.whiteSlideAppParams.maxFPS = @20;
+    config.whiteSlideAppParams.resolution = @1.5;
+    config.whiteSlideAppParams.maxResolutionLevel = @3;
+
+    NSDictionary *slideAppOptions = [config jsonDict][@"slideAppOptions"];
+    XCTAssertEqualObjects(slideAppOptions[@"minFPS"], @10);
+    XCTAssertEqualObjects(slideAppOptions[@"maxFPS"], @20);
+    XCTAssertEqualObjects(slideAppOptions[@"resolution"], @1.5);
+    XCTAssertEqualObjects(slideAppOptions[@"maxResolutionLevel"], @3);
+}
+
 - (void)testSdkConfigSlideAppOptionsDefaultResourceMaxRetries
 {
     WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"];

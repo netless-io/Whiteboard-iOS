@@ -175,6 +175,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) NSNumber *timeout;
 
+/**
+ 撤销/重做最多保留的场景缓存数量。不设置时使用 Web SDK 默认值。
+ */
+@property (nonatomic, strong, nullable) NSNumber *undoCacheScenesCount;
+
 ///** 是否开启多窗口，默认为 NO，开启后，各种 API 会进行更改。正式版该 API 已经迁移到 WhiteSDKConfiguration 中 */
 //@property (nonatomic, assign) BOOL useMultiViews;
 

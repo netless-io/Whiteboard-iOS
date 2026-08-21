@@ -8,15 +8,20 @@
 
 #import "WhiteRoomViewController.h"
 #import "CommandHandler.h"
+#import "WhiteRoomLifecycleGuard.h"
 
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate, WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic, copy) NSString *roomToken;
-@property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, copy, nullable) RoomBlock roomBlock;
 @property (nonatomic, strong, nullable) WhiteRoomConfig *roomConfig;
 @property (nonatomic, copy, nullable) BeginJoinRoomBlock beginJoinRoomBlock;
 @property (nonatomic, assign) BOOL delayJoinRoom;
+@property (nonatomic, strong) WhiteRoomLifecycleGuard *lifecycleGuard;
+@property (nonatomic, strong) UIView *roomLoadingOverlay;
+@property (nonatomic, strong) UIActivityIndicatorView *roomLoadingIndicator;
+@property (nonatomic, assign) BOOL handlingRecoveryJoin;
+@property (nonatomic, assign) BOOL leavingRoom;
 
 @end
 
@@ -46,6 +51,8 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor orangeColor];
+    [self setupRoomLoadingOverlay];
+    [self setupRoomLifecycleGuard];
 
     if (!self.delayJoinRoom) {
         if ([self.roomUuid length] > 0) {
@@ -56,6 +63,108 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidDismiss:) name:UIKeyboardDidHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:@"refresh" object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.isMovingFromParentViewController || self.isBeingDismissed || self.navigationController.isBeingDismissed) {
+        [self leaveRoomWithCompletion:nil];
+    }
+}
+
+- (void)dealloc
+{
+    [self.lifecycleGuard stop];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Room Lifecycle UI
+
+- (void)setupRoomLoadingOverlay
+{
+    UIView *overlay = [[UIView alloc] init];
+    overlay.translatesAutoresizingMaskIntoConstraints = NO;
+    overlay.backgroundColor = [UIColor colorWithWhite:1 alpha:0.88];
+    overlay.hidden = YES;
+    overlay.accessibilityIdentifier = @"room-reconnecting-overlay";
+    overlay.accessibilityViewIsModal = YES;
+    [self.view addSubview:overlay];
+
+    UIActivityIndicatorView *indicator;
+    if (@available(iOS 13.0, *)) {
+        indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
+    } else {
+        indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }
+    indicator.translatesAutoresizingMaskIntoConstraints = NO;
+    indicator.hidesWhenStopped = YES;
+
+    UILabel *label = [[UILabel alloc] init];
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    label.text = NSLocalizedString(@"正在重新连接...", nil);
+    label.textColor = [UIColor colorWithWhite:0.2 alpha:1];
+    label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 0;
+
+    UIStackView *stack = [[UIStackView alloc] initWithArrangedSubviews:@[indicator, label]];
+    stack.translatesAutoresizingMaskIntoConstraints = NO;
+    stack.axis = UILayoutConstraintAxisVertical;
+    stack.alignment = UIStackViewAlignmentCenter;
+    stack.spacing = 12;
+    [overlay addSubview:stack];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [overlay.topAnchor constraintEqualToAnchor:self.boardView.topAnchor],
+        [overlay.leadingAnchor constraintEqualToAnchor:self.boardView.leadingAnchor],
+        [overlay.trailingAnchor constraintEqualToAnchor:self.boardView.trailingAnchor],
+        [overlay.bottomAnchor constraintEqualToAnchor:self.boardView.bottomAnchor],
+        [stack.centerXAnchor constraintEqualToAnchor:overlay.centerXAnchor],
+        [stack.centerYAnchor constraintEqualToAnchor:overlay.centerYAnchor],
+        [stack.leadingAnchor constraintGreaterThanOrEqualToAnchor:overlay.leadingAnchor constant:24],
+        [stack.trailingAnchor constraintLessThanOrEqualToAnchor:overlay.trailingAnchor constant:-24],
+    ]];
+
+    self.roomLoadingOverlay = overlay;
+    self.roomLoadingIndicator = indicator;
+}
+
+- (void)setupRoomLifecycleGuard
+{
+    WhiteRoomLifecycleGuard *guard = [[WhiteRoomLifecycleGuard alloc] init];
+    __weak typeof(self) weakSelf = self;
+    guard.loadingHandler = ^(BOOL visible) {
+        [weakSelf setRoomLoadingVisible:visible];
+    };
+    guard.reconnectHandler = ^{
+        [weakSelf replaceRoomAfterUnexpectedDisconnect];
+    };
+    self.lifecycleGuard = guard;
+    [guard start];
+}
+
+- (void)setRoomLoadingVisible:(BOOL)visible
+{
+    void (^update)(void) = ^{
+        self.roomLoadingOverlay.hidden = !visible;
+        if (visible) {
+            [self.roomLoadingIndicator startAnimating];
+            [self.view bringSubviewToFront:self.roomLoadingOverlay];
+        } else {
+            [self.roomLoadingIndicator stopAnimating];
+        }
+    };
+    if ([NSThread isMainThread]) {
+        update();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), update);
+    }
+}
+
+- (BOOL)isRoomLoadingVisible
+{
+    return self.roomLoadingOverlay && !self.roomLoadingOverlay.hidden;
 }
 
 #pragma mark - CallbackDelegate
@@ -186,6 +295,7 @@
 
         self.roomConfig = roomConfig;
     }
+    self.roomConfig.undoCacheScenesCount = @32;
     
     __weak typeof(self) weakSelf = self;
     [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
@@ -206,16 +316,18 @@
     self.title = NSLocalizedString(@"我的白板", nil);
     self.roomToken = roomToken;
     self.room = room;
+    [self.lifecycleGuard rejoinDidSucceed];
     [self.room addMagixEventListener:WhiteCommandCustomEvent];
     [self setupShareBarItem];
 
-    if (self.roomBlock) {
+    if (self.roomBlock && !self.handlingRecoveryJoin) {
         self.roomBlock(room, nil);
     }
 }
 
 - (void)defaultActionAfterJoinRoomError:(NSError *)error
 {
+    [self.lifecycleGuard stop];
     self.title = NSLocalizedString(@"加入失败", nil);
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -223,6 +335,85 @@
     }];
     [alertVC addAction:action];
     [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)leaveRoomWithCompletion:(dispatch_block_t)completion
+{
+    if (self.leavingRoom) {
+        if (completion) {
+            completion();
+        }
+        return;
+    }
+
+    self.leavingRoom = YES;
+    [self.lifecycleGuard stop];
+    WhiteRoom *room = self.room;
+    self.room = nil;
+    if (!room || room.disconnectedBySelf || room.phase == WhiteRoomPhaseDisconnected) {
+        if (completion) {
+            completion();
+        }
+        return;
+    }
+    [room disconnect:completion];
+}
+
+- (void)replaceRoomAfterUnexpectedDisconnect
+{
+    if (!self.lifecycleGuard.isActive || !self.sdk || !self.roomConfig || self.roomToken.length == 0) {
+        [self.lifecycleGuard rejoinDidFail];
+        return;
+    }
+
+    WhiteRoom *oldRoom = self.room;
+    self.room = nil;
+    __weak typeof(self) weakSelf = self;
+    dispatch_block_t joinBlock = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf performRecoveryJoin];
+        });
+    };
+
+    if (oldRoom && !oldRoom.disconnectedBySelf && oldRoom.phase != WhiteRoomPhaseDisconnected) {
+        [oldRoom disconnect:joinBlock];
+    } else {
+        joinBlock();
+    }
+}
+
+- (void)performRecoveryJoin
+{
+    if (!self.lifecycleGuard.isActive) {
+        return;
+    }
+
+    __weak typeof(self) weakSelf = self;
+    [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong typeof(weakSelf) self = weakSelf;
+            if (!self) {
+                return;
+            }
+            if (!self.lifecycleGuard.isActive) {
+                if (success) {
+                    [room disconnect:nil];
+                }
+                return;
+            }
+            if (!success || !room) {
+                NSLog(@"Room lifecycle recovery join failed: %@", error.localizedDescription);
+                [self.lifecycleGuard rejoinDidFail];
+                return;
+            }
+
+            self.handlingRecoveryJoin = YES;
+            [self actionAfterSuccessJoinRoom:room roomToken:self.roomToken];
+            self.handlingRecoveryJoin = NO;
+            [self setupExampleControl];
+            NSLog(@"Room lifecycle recovery joined successfully");
+        });
+    }];
 }
 
 #pragma mark - Keyboard
@@ -241,21 +432,17 @@
 - (void)firePhaseChanged:(WhiteRoomPhase)phase
 {
     NSLog(@"%s, %ld", __FUNCTION__, (long)phase);
-    if (self.room.disconnectedBySelf || self.isReconnecting || !self.sdk) {
-        return;
-    }
-    
-    if (phase == WhiteRoomPhaseDisconnected && self.roomUuid && self.roomToken) {
-        self.reconnecting = YES;
-        [self.sdk joinRoomWithConfig:self.roomConfig callbacks:self completionHandler:^(BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error) {
-            self.reconnecting = NO;
-            NSLog(@"reconnected");
-            if (error) {
-                NSLog(@"error:%@", [error description]);
-            } else {
-                self.room = room;
-            }
-        }];
+    void (^handlePhase)(void) = ^{
+        if (self.room.disconnectedBySelf && !self.lifecycleGuard.isRecovering) {
+            [self.lifecycleGuard stop];
+            return;
+        }
+        [self.lifecycleGuard handlePhase:phase];
+    };
+    if ([NSThread isMainThread]) {
+        handlePhase();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), handlePhase);
     }
 }
 

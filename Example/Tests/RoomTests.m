@@ -47,6 +47,18 @@ typedef void(^InterrupterBlock)(NSString *url);
     XCTAssertEqualObjects(json[@"useBoxesStatus"], @YES);
 }
 
+- (void)testUndoCacheScenesCountSerialization
+{
+    WhiteRoomConfig *config = [[WhiteRoomConfig alloc] initWithUUID:@"room-uuid"
+                                                          roomToken:@"room-token"
+                                                                uid:@"uid"];
+    XCTAssertNil([config jsonDict][@"undoCacheScenesCount"]);
+
+    config.undoCacheScenesCount = @32;
+
+    XCTAssertEqualObjects([config jsonDict][@"undoCacheScenesCount"], @32);
+}
+
 @end
 
 @interface RoomTests : BaseRoomTest

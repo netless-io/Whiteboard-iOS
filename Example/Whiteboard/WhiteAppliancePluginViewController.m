@@ -10,7 +10,7 @@
 #import "WhiteUtils.h"
 
 static NSString * const kAppliancePluginRoomUUID = @"cd1221809b8111f1aaeead87383431cf";
-static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1JIN2I2Z284dCZleHBpcmVBdD0xNzg3MTk4MTIyMTI2Jm5vbmNlPWNkMzdhYWUwLTliODEtMTFmMS1iYzM4LWQ3Yjg5YzgwZTNlMSZyb2xlPTEmc2lnPTExNTk0NTVmMTVkYjE5MmY0NDgyMmVmYTlkNDQxNjBmODM3ZTVhNGQwYzRkNzlhNjc4MTFlNzAxZjUwODhhNmMmdXVpZD1jZDEyMjE4MDliODExMWYxYWFlZWFkODczODM0MzFjZg";
+static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1JIN2I2Z284dCZleHBpcmVBdD0xNzg3Mjg2MzQwNTkzJm5vbmNlPTMzODU3NjEwLTljNGYtMTFmMS1iYzM4LWQ3Yjg5YzgwZTNlMSZyb2xlPTEmc2lnPTgzM2Y3NzhjNWIwNDFkZGUzOGE5NmM2NGM0NDgxZjM1NDUyZmQzZWUxNmY5MDQ2ZjU3MWYxZmE5NGMzYTg1ZTEmdXVpZD1jZDEyMjE4MDliODExMWYxYWFlZWFkODczODM0MzFjZg";
 
 @interface WhiteRoomViewController (WhiteAppliancePluginPrivate)
 - (void)setupViews;
@@ -50,12 +50,9 @@ static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1
         config.backgroundImageLoadOptions = backgroundImageLoadOptions;
 
         WhiteSlideAppParams *slideParams = [[WhiteSlideAppParams alloc] init];
-        slideParams.resolution = @1;
-        slideParams.maxResolutionLevel = @2;
-        slideParams.minFPS = @5;
-        slideParams.maxFPS = @15;
         slideParams.enableGlobalClick = NO;
         slideParams.enableScale = YES;
+        slideParams.syncEventQueuePolicy = WhiteSlideSyncEventQueuePolicyLatestPendingRender;
         config.whiteSlideAppParams = slideParams;
 
         WhiteLocalLogOptions *localLogOptions = [[WhiteLocalLogOptions alloc] init];
@@ -234,7 +231,7 @@ static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1
 - (void)exitRoom:(UIButton *)sender
 {
     __weak typeof(self) weakSelf = self;
-    [self.room disconnect:^{
+    [self leaveRoomWithCompletion:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });
@@ -278,7 +275,6 @@ static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1
 - (NSDictionary *)appliancePluginExtras
 {
     return @{
-        @"useWorker": @"mainThread",
         @"useSimple": @YES,
         @"useBackgroundThread": @YES,
         @"canvasOpt": @{
