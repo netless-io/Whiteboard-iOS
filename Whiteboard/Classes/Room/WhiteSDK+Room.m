@@ -59,6 +59,9 @@
             if (error) {
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
+                [weakBridge.commonCallbacks logger:@{
+                    @"[WhiteSDK]": [NSString stringWithFormat:@"joinRoom bridge error: %@, jsStack: %@", desc, description]
+                }];
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: desc, NSDebugDescriptionErrorKey: description};
                 if ([desc containsString:@"Failed to OpenBackingStore"]) {
                     // 修复 indexDB 打开错误的问题。
