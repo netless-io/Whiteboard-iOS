@@ -17,6 +17,17 @@
 
 @end
 
+@interface WhiteUnifiedPageCallbackRecorder : NSObject <WhiteRoomCallbackDelegate>
+@property (nonatomic, strong) WhiteUnifiedPageStateChange *state;
+@end
+
+@implementation WhiteUnifiedPageCallbackRecorder
+- (void)onUnifiedPageStateChange:(WhiteUnifiedPageStateChange *)state
+{
+    self.state = state;
+}
+@end
+
 
 
 @interface WhiteObjectTests : XCTestCase
@@ -62,6 +73,53 @@
     XCTAssertEqualObjects(dict[@"scenePath"], params.scenePath);
     XCTAssertEqualObjects(dict[@"imageUrl"], params.imageUrl);
     XCTAssertEqualObjects(dict[@"sources"], params.sources);
+}
+
+- (void)testUnifiedPageOptionsAndReadonlyModels
+{
+    WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
+    options.target = @"Slide-1";
+    options.page = @2;
+    options.scale = @1.5;
+    XCTAssertEqualObjects([options jsonDict], (@{ @"target": @"Slide-1", @"page": @2, @"scale": @1.5 }));
+
+    WhiteWindowPageStateOptions *stateOptions = [[WhiteWindowPageStateOptions alloc] init];
+    stateOptions.target = @"Presentation-1";
+    XCTAssertEqualObjects([stateOptions jsonDict], (@{ @"target": @"Presentation-1" }));
+
+    WhiteUnifiedPageState *state = [WhiteUnifiedPageState _white_yy_modelWithJSON:@{
+        @"target": @"Presentation", @"appId": @"Presentation-1", @"page": @2,
+        @"pageCount": @5, @"scale": @1.5,
+    }];
+    XCTAssertEqualObjects(state.target, @"Presentation");
+    XCTAssertEqualObjects(state.appId, @"Presentation-1");
+    XCTAssertEqual(state.page, 2);
+    XCTAssertEqual(state.pageCount, 5);
+    XCTAssertEqualObjects(state.scale, @1.5);
+
+    WhiteDispatchDocsEventResult *result = [WhiteDispatchDocsEventResult _white_yy_modelWithJSON:@{
+        @"accepted": @NO,
+        @"reason": @"eventNotSupported",
+        @"message": @"DocsViewer does not support scalePage",
+    }];
+    XCTAssertFalse(result.accepted);
+    XCTAssertEqualObjects(result.reason, WhiteDispatchDocsEventFailureReasonEventNotSupported);
+    XCTAssertEqualObjects(result.message, @"DocsViewer does not support scalePage");
+}
+
+- (void)testUnifiedPageCallbackForwardsCompletePayload
+{
+    WhiteUnifiedPageCallbackRecorder *recorder = [[WhiteUnifiedPageCallbackRecorder alloc] init];
+    WhiteCommonCallbacks *callbacks = [[WhiteCommonCallbacks alloc] init];
+    callbacks.roomDelegate = recorder;
+    [callbacks unifiedPageStateChange:@{
+        @"target": @"DocsViewer", @"appId": @"DocsViewer-1", @"page": @2,
+        @"pageCount": @3, @"scale": @1.25, @"status": @"success", @"changeType": @"scale",
+    }];
+    XCTAssertEqualObjects(recorder.state.target, @"DocsViewer");
+    XCTAssertEqualObjects(recorder.state.status, @"success");
+    XCTAssertEqualObjects(recorder.state.changeType, @"scale");
+    XCTAssertEqualObjects(recorder.state.scale, @1.25);
 }
 
 #pragma mark - WhiteEvent

@@ -45,6 +45,11 @@ windowParams.containerSizeRatio = @(9.0 / 16.0);
 windowParams.chessboard = YES;
 windowParams.prefersColorScheme = WhitePrefersColorSchemeLight;
 windowParams.useBoxesStatus = NO;
+windowParams.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:1280 height:900];
+WhiteWindowPageScaleRange *pageScaleRange = [[WhiteWindowPageScaleRange alloc] init];
+pageScaleRange.minScale = @0.5;
+pageScaleRange.maxScale = @4;
+windowParams.pageScaleRange = pageScaleRange;
 
 roomConfig.windowParams = windowParams;
 
@@ -83,7 +88,7 @@ playerConfig.windowParams = windowParams;
 
 ### `WhiteWindowParams` 常用字段
 
-`WhiteWindowParams` 对应的是多窗口模式下的本地显示参数，只影响当前客户端，不会直接同步到远端。
+`WhiteWindowParams` 主要是多窗口模式下的本地显示参数；`originSize` 是例外，可写端首次设置或改值时会重置并同步 MainView camera-size contract。
 
 - `containerSizeRatio`：多窗口区域的高宽比。建议多端保持一致，否则同一房间内可能出现布局不一致。
 - `chessboard`：超出主窗口比例区域的部分是否显示棋盘背景。
@@ -94,6 +99,8 @@ playerConfig.windowParams = windowParams;
 - `debug`：是否输出多窗口相关调试日志。
 - `polling`：是否定时更新本地视角。
 - `useBoxesStatus`：是否使用每个窗口独立的状态管理。开启后窗口最大化、最小化状态会按窗口分别同步；同一房间内多端建议保持一致。回放带窗口房间时也需要在 `WhitePlayerConfig.windowParams` 中设置同样的值。
+- `originSize`：MainView 的归一化参考尺寸。可写端首次设置或传入不同尺寸时，WindowManager 会重置并同步 MainView 的 origin/active camera-size contract；不会隐式改写 Slide/Presentation App 参数。
+- `pageScaleRange`：`scalePage` 的可选相对倍率范围。`minScale`、`maxScale` 均可省略；未配置时不施加业务范围限制。
 
 ## 核心窗口操作
 
@@ -238,21 +245,21 @@ WhiteAppParam *appParam = [WhiteAppParam createMediaPlayerApp:@"https://example.
 
 ## 文档窗口控制
 
-`dispatchDocsEvent:options:completionHandler:` 用于操作当前聚焦的文档窗口。文档窗口加载完成前不要调用这个接口。
+`dispatchDocsEvent:options:completionHandler:` 统一控制 MainView、DocsViewer、Slide 和 Presentation。`options.target` 可传 `@"mainView"` 或具体 appId；省略时使用当前聚焦 App，没有聚焦 App 时回退 MainView。返回对象只表示命令是否被接受，实际状态以 `onUnifiedPageStateChange:` 为准。
 
 ### 上一页 / 下一页
 
 ```objective-c
 [self.room dispatchDocsEvent:WhiteWindowDocsEventPrevPage
                      options:nil
-           completionHandler:^(bool success) {
-    NSLog(@"prev page: %d", success);
+           completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    NSLog(@"prev page accepted: %d, reason: %@", result.accepted, result.reason);
 }];
 
 [self.room dispatchDocsEvent:WhiteWindowDocsEventNextPage
                      options:nil
-           completionHandler:^(bool success) {
-    NSLog(@"next page: %d", success);
+           completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    NSLog(@"next page accepted: %d, reason: %@", result.accepted, result.reason);
 }];
 ```
 
@@ -261,14 +268,14 @@ WhiteAppParam *appParam = [WhiteAppParam createMediaPlayerApp:@"https://example.
 ```objective-c
 [self.room dispatchDocsEvent:WhiteWindowDocsEventPrevStep
                      options:nil
-           completionHandler:^(bool success) {
-    NSLog(@"prev step: %d", success);
+           completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    NSLog(@"prev step accepted: %d", result.accepted);
 }];
 
 [self.room dispatchDocsEvent:WhiteWindowDocsEventNextStep
                      options:nil
-           completionHandler:^(bool success) {
-    NSLog(@"next step: %d", success);
+           completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    NSLog(@"next step accepted: %d", result.accepted);
 }];
 ```
 
@@ -276,13 +283,48 @@ WhiteAppParam *appParam = [WhiteAppParam createMediaPlayerApp:@"https://example.
 
 ```objective-c
 WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
+options.target = appId;
 options.page = @(3);
 
 [self.room dispatchDocsEvent:WhiteWindowDocsEventJumpToPage
                      options:options
-           completionHandler:^(bool success) {
-    NSLog(@"jump to page: %d", success);
+           completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    NSLog(@"jump to page accepted: %d", result.accepted);
 }];
+```
+
+`page` 为 1-based。`prevStep/nextStep` 在 Slide 中表示动画步骤，在 DocsViewer 中沿用翻页 alias；Presentation 和 MainView 返回 `eventNotSupported`。
+
+### 缩放页面
+
+```objective-c
+WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
+options.target = @"mainView";
+options.scale = @1.5;
+
+[self.room dispatchDocsEvent:WhiteWindowDocsEventScalePage
+                     options:options
+           completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    if (!result.accepted) {
+        NSLog(@"scale rejected: %@, %@", result.reason, result.message);
+    }
+}];
+```
+
+`scale` 是相对于适配尺寸的倍率，`1` 表示适配尺寸，不是底层 `view.camera.scale`。DocsViewer 不支持缩放，固定返回 `eventNotSupported` 和原因 `DocsViewer does not support scalePage`。
+
+### 查询与监听状态
+
+```objective-c
+WhiteWindowPageStateOptions *options = [[WhiteWindowPageStateOptions alloc] init];
+options.target = appId;
+[self.room getPageState:options completionHandler:^(WhiteUnifiedPageState *state, NSError *error) {
+    NSLog(@"page: %ld/%ld, relative scale: %@", state.page, state.pageCount, state.scale);
+}];
+
+- (void)onUnifiedPageStateChange:(WhiteUnifiedPageStateChange *)state {
+    NSLog(@"target: %@, status: %@, changeType: %@", state.target, state.status, state.changeType);
+}
 ```
 
 ## Slide 相关接口
@@ -356,10 +398,10 @@ sdkConfig.enableSlideInterrupterAPI = YES;
 ## 注意事项
 
 1. `useMultiViews` 是所有窗口能力的前置条件，只设置 `windowParams` 不够。
-2. `WhiteRoomConfig.windowParams` 和 `WhitePlayerConfig.windowParams` 只影响本地显示，不会自动同步到其他端。
+2. `WhiteRoomConfig.windowParams` 和 `WhitePlayerConfig.windowParams` 主要影响本地显示；实时房间可写端的 `originSize` 会按约定重置并同步 MainView camera-size contract。
 3. `containerSizeRatio` 建议各端保持一致，否则同房间展示区域可能错位。
 4. 重复插入同一个 PPT 时，`addApp` 可能失败，返回的 `appId` 为 `nil`。
-5. `dispatchDocsEvent` 只适用于当前聚焦的文档窗口，并且不适合在转场动画未结束时连续调用。
+5. `dispatchDocsEvent` 可通过 `target` 控制 MainView 或指定文档 App；省略时才跟随焦点，并且不适合在转场动画未结束时连续调用。
 6. `getWindowManagerAttributesWithResult:` / `setWindowManagerWithAttributes:` 更适合做状态快照恢复，不建议把它当作公开、稳定的手写配置协议来维护。
 7. `slideUrlInterrupter` 只有在 `enableSlideInterrupterAPI = YES` 时才会触发。
 8. `recoverSlide` 更适合用于异常恢复，不建议把它当作日常翻页接口使用。

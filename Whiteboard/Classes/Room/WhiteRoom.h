@@ -22,6 +22,7 @@
 #import "WhiteSDK+Room.h"
 #import "WhiteAppParam.h"
 #import "WhiteWindowDocsEventOptions.h"
+#import "WhiteUnifiedPageState.h"
 #import "WhiteAppSyncAttributes.h"
 #import "WhiteSlidePageState.h"
 
@@ -696,17 +697,23 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param docsEvent 事件类型。
  * @param options 可选事件参数。
- * @params completionHandler 完成回调。
+ * @params completionHandler 返回命令是否接受；拒绝时包含稳定 reason 和可读 message。
  *
  * @warning 该方法只有在文档视图加载完毕时才能调用。不支持多次连续调用，只有当当前的转场动画完毕之后才能进行下一次调用。
  */
-- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent options:( WhiteWindowDocsEventOptions * _Nullable )options completionHandler:(void (^)(bool success))completionHandler;
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent
+                  options:(WhiteWindowDocsEventOptions * _Nullable)options
+        completionHandler:(void (^)(WhiteDispatchDocsEventResult *result))completionHandler;
 
 /** 查询当前聚焦 SlideApp 的页面状态。页码从 1 开始。 */
 - (void)querySlidePageStateWithCompletionHandler:(void (^)(WhiteSlidePageState * _Nullable pageState, NSError * _Nullable error))completionHandler;
 
 /** 查询指定 SlideApp 的页面状态。页码从 1 开始。 */
 - (void)querySlidePageState:(NSString * _Nullable)appId completionHandler:(void (^)(WhiteSlidePageState * _Nullable pageState, NSError * _Nullable error))completionHandler;
+
+/** 查询当前可观察的统一页面状态。 */
+- (void)getPageState:(WhiteWindowPageStateOptions * _Nullable)options
+   completionHandler:(void (^)(WhiteUnifiedPageState * _Nullable pageState, NSError * _Nullable error))completionHandler;
 
 @end
 

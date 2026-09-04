@@ -37,6 +37,8 @@
 @end
 #import "WhiteConsts.h"
 #import "WhiteObject.h"
+#import "WhiteRoomCallbacks.h"
+#import "WhiteUnifiedPageState.h"
 #if __has_include(<NTLBridge/NTLDWKWebView.h>)
 #import <NTLBridge/NTLDWKWebView.h>
 #else
@@ -44,6 +46,15 @@
 #endif
 
 @implementation WhiteCommonCallbacks
+
+- (NSString *)unifiedPageStateChange:(NSDictionary *)info
+{
+    if ([self.roomDelegate respondsToSelector:@selector(onUnifiedPageStateChange:)]) {
+        WhiteUnifiedPageStateChange *state = [WhiteUnifiedPageStateChange _white_yy_modelWithJSON:info];
+        [self.roomDelegate onUnifiedPageStateChange:state];
+    }
+    return @"";
+}
 
 - (NSString *)logger:(NSDictionary *)log
 {

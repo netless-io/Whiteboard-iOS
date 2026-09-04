@@ -528,10 +528,11 @@ static NSInteger const MaoBottomPanelHeight = 190;
         options.scale = scale;
     }
     __weak typeof(self) weakSelf = self;
-    [self.room dispatchDocsEvent:event options:options completionHandler:^(bool success) {
+    [self.room dispatchDocsEvent:event options:options completionHandler:^(WhiteDispatchDocsEventResult *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf log:[NSString stringWithFormat:@"dispatch %@: %@", event, success ? @"YES" : @"NO"]];
-            if (success && resetScaleAfterSuccess) {
+            NSString *failure = result.message.length ? [NSString stringWithFormat:@" (%@: %@)", result.reason, result.message] : @"";
+            [weakSelf log:[NSString stringWithFormat:@"dispatch %@: %@%@", event, result.accepted ? @"YES" : @"NO", failure]];
+            if (result.accepted && resetScaleAfterSuccess) {
                 [weakSelf resetScalePageAfterPageChange:event];
                 return;
             }
@@ -545,9 +546,10 @@ static NSInteger const MaoBottomPanelHeight = 190;
     __weak typeof(self) weakSelf = self;
     WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
     options.scale = @1.0;
-    [self.room dispatchDocsEvent:WhiteWindowDocsEventScalePage options:options completionHandler:^(bool success) {
+    [self.room dispatchDocsEvent:WhiteWindowDocsEventScalePage options:options completionHandler:^(WhiteDispatchDocsEventResult *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf log:[NSString stringWithFormat:@"dispatch %@ reset scalePage 1: %@", event, success ? @"YES" : @"NO"]];
+            NSString *failure = result.message.length ? [NSString stringWithFormat:@" (%@: %@)", result.reason, result.message] : @"";
+            [weakSelf log:[NSString stringWithFormat:@"dispatch %@ reset scalePage 1: %@%@", event, result.accepted ? @"YES" : @"NO", failure]];
             [weakSelf querySlidePageState];
         });
     }];

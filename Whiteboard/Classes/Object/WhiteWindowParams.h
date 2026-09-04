@@ -16,6 +16,20 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeAuto;
 FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeLight;
 FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 
+/** MainView reference size used by WindowManager originSize mode. */
+@interface WhiteWindowOriginSize : WhiteObject
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithWidth:(CGFloat)width height:(CGFloat)height;
+@property (nonatomic, assign, readonly) CGFloat width;
+@property (nonatomic, assign, readonly) CGFloat height;
+@end
+
+/** Optional scale bounds relative to fitted content size. */
+@interface WhiteWindowPageScaleRange : WhiteObject
+@property (nonatomic, strong, nullable) NSNumber *minScale;
+@property (nonatomic, strong, nullable) NSNumber *maxScale;
+@end
+
 @interface WhiteWindowParams : WhiteObject
 
 /** 各个端本地显示多窗口内容时，高与宽比例，默认为 9:16。该值应该各个端保持统一，否则会有不可预见的情况。 */
@@ -36,6 +50,10 @@ FOUNDATION_EXPORT WhitePrefersColorScheme const WhitePrefersColorSchemeDark;
 @property (nonatomic, assign) BOOL useBoxesStatus;
 /** 窗口样式覆盖 */
 @property (nonatomic, copy) NSString *overwriteStyles;
+/** MainView reference size. Slide/Presentation receive originSize through addApp attributes. */
+@property (nonatomic, strong, nullable) WhiteWindowOriginSize *originSize;
+/** Optional relative scale bounds for dispatchDocsEvent scalePage. */
+@property (nonatomic, strong, nullable) WhiteWindowPageScaleRange *pageScaleRange;
 
 
 @end

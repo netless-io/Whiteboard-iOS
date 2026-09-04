@@ -710,17 +710,27 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     }];
 }
 
-- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent options:(WhiteWindowDocsEventOptions *)options completionHandler:(void (^)(bool))completionHandler {
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)docsEvent options:(WhiteWindowDocsEventOptions *)options completionHandler:(void (^)(WhiteDispatchDocsEventResult *))completionHandler {
     WhiteWindowDocsEventOptions *ops = options;
     if (!ops) {
         ops = [[WhiteWindowDocsEventOptions alloc] init];
     }
-    [self.bridge callHandler:@"room.dispatchDocsEvent" arguments:@[docsEvent, ops] completionHandler:^(id  _Nullable value) {
-        if ([value isKindOfClass:[NSNumber class]]) {
-            return completionHandler([(NSNumber *)value boolValue]);
-        } else {
-            completionHandler(NO);
+    [self.bridge callHandler:@"room.dispatchDocsEvent" arguments:@[docsEvent, ops] completionHandler:^(id _Nullable value) {
+        NSDictionary *dict = nil;
+        if ([value isKindOfClass:NSString.class]) {
+            NSData *data = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding];
+            dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        } else if ([value isKindOfClass:NSDictionary.class]) {
+            dict = value;
         }
+        if (![dict isKindOfClass:NSDictionary.class] || ![dict[@"accepted"] isKindOfClass:NSNumber.class]) {
+            dict = @{
+                @"accepted": @NO,
+                @"reason": WhiteDispatchDocsEventFailureReasonCommandFailed,
+                @"message": @"Invalid dispatchDocsEvent response",
+            };
+        }
+        completionHandler([WhiteDispatchDocsEventResult _white_yy_modelWithJSON:dict]);
     }];
 }
 
@@ -758,6 +768,28 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
         }
         WhiteSlidePageState *result = [WhiteSlidePageState _white_yy_modelWithJSON:dict];
         completionHandler(result, nil);
+    }];
+}
+
+- (void)getPageState:(WhiteWindowPageStateOptions *)options completionHandler:(void (^)(WhiteUnifiedPageState * _Nullable, NSError * _Nullable))completionHandler {
+    WhiteWindowPageStateOptions *ops = options ?: [[WhiteWindowPageStateOptions alloc] init];
+    [self.bridge callHandler:@"room.getPageState" arguments:@[ops] completionHandler:^(id _Nullable value) {
+        NSDictionary *dict = nil;
+        if ([value isKindOfClass:NSString.class]) {
+            dict = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        } else if ([value isKindOfClass:NSDictionary.class]) {
+            dict = value;
+        }
+        NSDictionary *error = dict[@"__error"];
+        if (error) {
+            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:@{NSLocalizedDescriptionKey: error[@"message"] ?: @"getPageState failed"}]);
+            return;
+        }
+        if (![dict isKindOfClass:NSDictionary.class]) {
+            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:@{NSLocalizedDescriptionKey: @"Invalid page state response"}]);
+            return;
+        }
+        completionHandler([WhiteUnifiedPageState _white_yy_modelWithJSON:dict], nil);
     }];
 }
 

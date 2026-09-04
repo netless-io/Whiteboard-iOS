@@ -47,6 +47,20 @@ typedef void(^InterrupterBlock)(NSString *url);
     XCTAssertEqualObjects(json[@"useBoxesStatus"], @YES);
 }
 
+- (void)testWindowParamsOriginSizeAndPageScaleRange
+{
+    WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
+    windowParams.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:1280 height:900];
+    WhiteWindowPageScaleRange *range = [[WhiteWindowPageScaleRange alloc] init];
+    range.minScale = @0.5;
+    range.maxScale = @4;
+    windowParams.pageScaleRange = range;
+
+    NSDictionary *json = [windowParams jsonDict];
+    XCTAssertEqualObjects(json[@"originSize"], (@{ @"width": @1280, @"height": @900 }));
+    XCTAssertEqualObjects(json[@"pageScaleRange"], (@{ @"minScale": @0.5, @"maxScale": @4 }));
+}
+
 - (void)testUndoCacheScenesCountSerialization
 {
     WhiteRoomConfig *config = [[WhiteRoomConfig alloc] initWithUUID:@"room-uuid"

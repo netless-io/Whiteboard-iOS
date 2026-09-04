@@ -11,6 +11,27 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeAuto = @"auto";
 WhitePrefersColorScheme const WhitePrefersColorSchemeLight = @"light";
 WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
 
+@interface WhiteWindowOriginSize ()
+@property (nonatomic, assign, readwrite) CGFloat width;
+@property (nonatomic, assign, readwrite) CGFloat height;
+@end
+
+@implementation WhiteWindowOriginSize
+
+- (instancetype)initWithWidth:(CGFloat)width height:(CGFloat)height {
+    self = [super init];
+    if (self) {
+        _width = width;
+        _height = height;
+    }
+    return self;
+}
+
+@end
+
+@implementation WhiteWindowPageScaleRange
+@end
+
 @implementation WhiteWindowParams
 
 - (instancetype)init {

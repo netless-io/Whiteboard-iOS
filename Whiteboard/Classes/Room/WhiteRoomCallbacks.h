@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
     WhiteRoomPhaseDisconnected,        
 };
 
-@class WhiteRoomState, WhiteEvent;
+@class WhiteRoomState, WhiteEvent, WhiteUnifiedPageStateChange;
 
 /** 房间事件回调。*/
 @protocol WhiteRoomCallbackDelegate <NSObject>
@@ -110,6 +110,9 @@ typedef NS_ENUM(NSInteger, WhiteRoomPhase) {
  @param events 高频自定义事件。详见 [WhiteEvent](WhiteEvent)。
  */
 - (void)fireHighFrequencyEvent:(NSArray<WhiteEvent *>*)events;
+
+/** MainView、DocsViewer、Slide 或 Presentation 的统一页面/缩放状态变化。 */
+- (void)onUnifiedPageStateChange:(WhiteUnifiedPageStateChange *)state;
 
 @end
 

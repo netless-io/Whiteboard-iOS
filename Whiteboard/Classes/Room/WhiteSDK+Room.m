@@ -36,6 +36,7 @@
     
     if (callbacks) {
         self.bridge.roomCallbacks.delegate = callbacks;
+        self.bridge.commonCallbacks.roomDelegate = callbacks;
     }
     __weak typeof(self.bridge)weakBridge = self.bridge;
     WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:config.uuid bridge:weakBridge];

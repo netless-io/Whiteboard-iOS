@@ -444,31 +444,31 @@ static WhiteAppParam* _Nonnull testPptAppParam;
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            WhiteWindowDocsEventOptions *ops = [[WhiteWindowDocsEventOptions alloc] init];
 //            ops.page = @(1);
-//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventJumpToPage options:ops completionHandler:^(bool success) {
+//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventJumpToPage options:ops completionHandler:^(WhiteDispatchDocsEventResult *result) {
 //                XCTAssert(success, @"WhiteWindowDocsEventJumpPage Fail");
 //            }];
 //        });
 //        
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventNextPage options:nil completionHandler:^(bool success) {
+//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventNextPage options:nil completionHandler:^(WhiteDispatchDocsEventResult *result) {
 //                XCTAssert(success, @"WhiteWindowDocsEventNextPage Fail");
 //            }];
 //        });
 //        
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventPrevPage options:nil completionHandler:^(bool success) {
+//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventPrevPage options:nil completionHandler:^(WhiteDispatchDocsEventResult *result) {
 //                XCTAssert(success, @"WhiteWindowDocsEventPrevPage Fail");
 //            }];
 //        });
 //        
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(20 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventNextStep options:nil completionHandler:^(bool success) {
+//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventNextStep options:nil completionHandler:^(WhiteDispatchDocsEventResult *result) {
 //                XCTAssert(success, @"WhiteWindowDocsEventNextStep Fail");
 //            }];
 //        });
 //        
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventPrevStep options:nil completionHandler:^(bool success) {
+//            [weakRoom dispatchDocsEvent:WhiteWindowDocsEventPrevStep options:nil completionHandler:^(WhiteDispatchDocsEventResult *result) {
 //                XCTAssert(success, @"WhiteWindowDocsEventPrevStep Fail");
 //            }];
 //        });

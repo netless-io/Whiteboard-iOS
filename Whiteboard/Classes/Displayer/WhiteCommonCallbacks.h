@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "WhiteSlideDelegate.h"
+@protocol WhiteRoomCallbackDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -147,8 +148,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, weak) id<WhiteCommonCallbackDelegate> delegate;
 @property (nonatomic, weak) id<WhiteSlideDelegate> slideDelegate;
+@property (nonatomic, weak) id<WhiteRoomCallbackDelegate> roomDelegate;
 
 - (NSString *)logger:(NSDictionary *)log;
+- (NSString *)unifiedPageStateChange:(NSDictionary *)info;
 
 @end
 
