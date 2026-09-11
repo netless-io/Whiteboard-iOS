@@ -650,42 +650,20 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     [self.bridge callHandler:@"room.disableWindowOperation" arguments:@[@(disable)]];
 }
 
-- (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
+- (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString * _Nullable appId))completionHandler;
 {
     [self.bridge callHandler:@"room.addApp" arguments:@[appParams.kind, appParams.options, appParams.resolvedAttrs] completionHandler:^(id  _Nullable value) {
         if (completionHandler) {
-            completionHandler(value);
+            NSString *appId = [value isKindOfClass:NSString.class] ? value : nil;
+            if ([appId hasPrefix:@"{"]) {
+                NSData *data = [appId dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *dict = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
+                if ([dict isKindOfClass:NSDictionary.class] && dict[@"__error"]) {
+                    appId = nil;
+                }
+            }
+            completionHandler(appId.length > 0 ? appId : nil);
         }
-    }];
-}
-
-- (void)addAppAndWaitForSetup:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))completionHandler
-{
-    [self.bridge callHandler:@"room.addAppAndWaitForSetup" arguments:@[appParams.kind, appParams.options, appParams.resolvedAttrs] completionHandler:^(id _Nullable value) {
-        NSDictionary *dict = nil;
-        if ([value isKindOfClass:NSString.class]) {
-            NSData *data = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding];
-            id json = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
-            dict = [json isKindOfClass:NSDictionary.class] ? json : nil;
-        } else if ([value isKindOfClass:NSDictionary.class]) {
-            dict = value;
-        }
-        NSDictionary *error = dict[@"__error"];
-        if (error) {
-            NSDictionary *userInfo = @{
-                NSLocalizedDescriptionKey: error[@"message"] ?: @"App setup failed",
-                NSDebugDescriptionErrorKey: error[@"jsStack"] ?: @"",
-            };
-            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:userInfo]);
-            return;
-        }
-        if (![value isKindOfClass:NSString.class] || [(NSString *)value length] == 0) {
-            completionHandler(nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:@{
-                NSLocalizedDescriptionKey: @"Invalid addAppAndWaitForSetup response",
-            }]);
-            return;
-        }
-        completionHandler(value, nil);
     }];
 }
 

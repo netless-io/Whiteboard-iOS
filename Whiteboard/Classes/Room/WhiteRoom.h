@@ -658,15 +658,10 @@ NS_ASSUME_NONNULL_BEGIN
  * 添加窗口
  * @param appParams app 类型以及配置内容
  *
+ * completionHandler 会在 Web App setup 完成后调用。setup 失败时会清理半初始化窗口并返回 nil。
  * @warning 多次插入同一个 ppt 时，插入会失败，返回的 appId 为 nil 。
  */
-- (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
-
-/**
- * 添加窗口并等待 App setup 完成。setup 失败时返回 NSError，并清理半初始化窗口。
- */
-- (void)addAppAndWaitForSetup:(WhiteAppParam *)appParams
-            completionHandler:(void (^)(NSString * _Nullable appId, NSError * _Nullable error))completionHandler;
+- (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString * _Nullable appId))completionHandler;
 
 /** 恢复 MainView 的 originSize 与原始相机状态。未配置 originSize 时不执行操作。 */
 - (void)fitOriginSizeAndCamera;

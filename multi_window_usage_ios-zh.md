@@ -123,17 +123,16 @@ WhiteAppParam *appParam = [WhiteAppParam createSlideApp:scenePath
 // Slide / Presentation 的 originSize 需要配置在 App 参数上。
 appParam.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:1280 height:900];
 
-[self.room addAppAndWaitForSetup:appParam
-              completionHandler:^(NSString * _Nullable appId, NSError * _Nullable error) {
-    if (error) {
-        NSLog(@"slide setup failed: %@", error);
+[self.room addApp:appParam completionHandler:^(NSString * _Nullable appId) {
+    if (!appId) {
+        NSLog(@"slide setup failed");
         return;
     }
     NSLog(@"slide app id: %@", appId);
 }];
 ```
 
-`addApp:` 保留原有兼容语义，在窗口创建后即完成；`addAppAndWaitForSetup:` 会等待 Web App 的 `setup()` 完成，失败时通过 `NSError` 返回并清理未完成初始化的窗口。
+`addApp:` 会等待 Web App 的 `setup()` 完成；setup 失败时返回 `nil`，并清理未完成初始化的窗口。公开方法名和调用签名保持兼容。
 
 ### 恢复 MainView 的参考尺寸与相机
 
