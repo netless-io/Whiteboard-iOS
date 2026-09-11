@@ -107,6 +107,19 @@
     XCTAssertEqualObjects(result.message, @"DocsViewer does not support scalePage");
 }
 
+- (void)testWindowAppOriginSizeUsesAttributesContract
+{
+    WhiteAppOptions *options = [[WhiteAppOptions alloc] init];
+    WhiteAppParam *param = [[WhiteAppParam alloc] initWithKind:@"Slide" options:options attrs:@{
+        @"taskId": @"task-1",
+    }];
+    param.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:1280 height:900];
+    XCTAssertEqualObjects(param.resolvedAttrs, (@{
+        @"taskId": @"task-1",
+        @"originSize": @{ @"width": @1280, @"height": @900 },
+    }));
+}
+
 - (void)testUnifiedPageCallbackForwardsCompletePayload
 {
     WhiteUnifiedPageCallbackRecorder *recorder = [[WhiteUnifiedPageCallbackRecorder alloc] init];

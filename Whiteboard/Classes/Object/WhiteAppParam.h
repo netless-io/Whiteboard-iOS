@@ -7,6 +7,7 @@
 #import "WhiteObject.h"
 #import "WhiteScene.h"
 #import "WhiteSlideCustomLink.h"
+#import "WhiteWindowParams.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,6 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) WhiteAppOptions *options;
 /** 插件所需要的一些额外可选属性,可以不填 */
 @property (nonatomic, copy, readonly) NSDictionary *attrs;
+/** Slide / Presentation 的固定参考尺寸，序列化为 attributes.originSize。 */
+@property (nonatomic, strong, nullable) WhiteWindowOriginSize *originSize;
+
+/** 合并通用 attributes 与强类型 originSize 后的 Bridge 参数。 */
+- (NSDictionary *)resolvedAttrs;
 
 /*
  创建一个ppt窗口。

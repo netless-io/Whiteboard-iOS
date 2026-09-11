@@ -19,6 +19,19 @@
 
 @implementation WhiteAppParam
 
+- (NSDictionary *)resolvedAttrs
+{
+    if (!self.originSize) {
+        return self.attrs ?: @{};
+    }
+    NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithDictionary:self.attrs ?: @{}];
+    attrs[@"originSize"] = @{
+        @"width": @(self.originSize.width),
+        @"height": @(self.originSize.height),
+    };
+    return attrs;
+}
+
 + (instancetype)createDocsViewerApp:(NSString *)dir scenes:(NSArray <WhiteScene *>*)scenes title:(NSString *)title {
 
     WhiteAppParam *param = [[WhiteAppParam alloc] init];

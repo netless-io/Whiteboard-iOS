@@ -120,9 +120,27 @@ WhiteAppParam *appParam = [WhiteAppParam createSlideApp:scenePath
                                                     url:prefixUrl
                                                   title:@"Projector App"];
 
-[self.room addApp:appParam completionHandler:^(NSString *appId) {
+// Slide / Presentation 的 originSize 需要配置在 App 参数上。
+appParam.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:1280 height:900];
+
+[self.room addAppAndWaitForSetup:appParam
+              completionHandler:^(NSString * _Nullable appId, NSError * _Nullable error) {
+    if (error) {
+        NSLog(@"slide setup failed: %@", error);
+        return;
+    }
     NSLog(@"slide app id: %@", appId);
 }];
+```
+
+`addApp:` 保留原有兼容语义，在窗口创建后即完成；`addAppAndWaitForSetup:` 会等待 Web App 的 `setup()` 完成，失败时通过 `NSError` 返回并清理未完成初始化的窗口。
+
+### 恢复 MainView 的参考尺寸与相机
+
+配置 `WhiteWindowParams.originSize` 后，可将 MainView 恢复到该参考尺寸和初始相机状态：
+
+```objective-c
+[self.room fitOriginSizeAndCamera];
 ```
 
 #### 插入带自定义链接的动态 PPT

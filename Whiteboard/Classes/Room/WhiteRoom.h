@@ -663,6 +663,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString *appId))completionHandler;
 
 /**
+ * 添加窗口并等待 App setup 完成。setup 失败时返回 NSError，并清理半初始化窗口。
+ */
+- (void)addAppAndWaitForSetup:(WhiteAppParam *)appParams
+            completionHandler:(void (^)(NSString * _Nullable appId, NSError * _Nullable error))completionHandler;
+
+/** 恢复 MainView 的 originSize 与原始相机状态。未配置 originSize 时不执行操作。 */
+- (void)fitOriginSizeAndCamera;
+
+/**
  * 关闭窗口
  * 该方法仅在多窗口下有效, 无论appId是否有效都会触发回调
  *
