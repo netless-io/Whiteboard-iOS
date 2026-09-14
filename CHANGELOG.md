@@ -3,6 +3,13 @@
 
 ---
 
+## [2.16.143] - 2026-09-14
+- 同步正式版 `Whiteboard-bridge`，内置 `@netless/appliance-plugin@1.1.43`，包含 ImageBitmap simple Worker service render barrier 修复。
+- 保持 MainThread、OffscreenTransfer 和非 simple Worker 渲染流程不变。
+- 升级内嵌 Bridge 运行时依赖至 `@netless/window-manager@1.0.21`、`@netless/app-slide@0.2.104`。
+- `WhiteAppParam` 新增强类型 `originSize`，序列化为 `attributes.originSize`。
+- `WhiteRoom.addApp:completionHandler:` 等待 Web App setup 完成，失败时返回 `nil` 并清理半初始化窗口；新增 `fitOriginSizeAndCamera`。
+
 ## [Unreleased]
 - 升级内嵌 Bridge 运行时依赖至 `@netless/window-manager@1.0.21`、`@netless/app-slide@0.2.104`。
 - `WhiteAppParam` 新增强类型 `originSize`，序列化为 `attributes.originSize`。
