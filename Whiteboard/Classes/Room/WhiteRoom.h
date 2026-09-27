@@ -658,7 +658,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 添加窗口
  * @param appParams app 类型以及配置内容
  *
- * completionHandler 会在 Web App setup 完成后调用。setup 失败时会清理半初始化窗口并返回 nil。
+ * completionHandler 会在 Box 创建及本次焦点请求处理后调用。请求在 pending 中被取代时可返回 appId；setup 失败或超时不单独决定返回值。创建失败或应提交的焦点未提交时返回 nil。
  * @warning 多次插入同一个 ppt 时，插入会失败，返回的 appId 为 nil 。
  */
 - (void)addApp:(WhiteAppParam *)appParams completionHandler:(void (^)(NSString * _Nullable appId))completionHandler;
@@ -681,6 +681,15 @@ NS_ASSUME_NONNULL_BEGIN
  * @param appId 添加app时返回的id
  */
 - (void)focusApp:(NSString *)appId;
+
+/**
+ * 切换聚焦窗口，并在焦点真正提交后返回结果。
+ * Lazy 模式会等待目标 App setup 和 focus 提交；非 Lazy 模式保持原同步切换行为并立即返回 YES。
+ *
+ * @param appId 添加 app 时返回的 id
+ * @param completionHandler YES 表示房间 focus 与本地 Box 焦点、zIndex 已提交；NO 表示请求被取代或状态未提交。setup 失败或超时仅记录日志，不决定返回值
+ */
+- (void)focusApp:(NSString *)appId completionHandler:(void (^ _Nullable)(BOOL committed))completionHandler;
 
 /** 查询所有 App 信息
  *  该方法仅在多窗口下有效

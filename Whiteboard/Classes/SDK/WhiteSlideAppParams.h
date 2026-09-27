@@ -19,6 +19,11 @@ typedef NSString * WhiteSlideSyncEventQueuePolicy NS_STRING_ENUM;
 extern WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyFIFO;
 extern WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyLatestPendingRender;
 
+typedef NSString * WhiteSlideNavigationButtonMode NS_STRING_ENUM;
+
+extern WhiteSlideNavigationButtonMode const WhiteSlideNavigationButtonModePage;
+extern WhiteSlideNavigationButtonMode const WhiteSlideNavigationButtonModeStep;
+
 @interface WhiteSlideAppParams : WhiteObject
 
 /**
@@ -102,6 +107,11 @@ extern WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyLatest
  Slide 同步事件队列策略。`fifo` 按顺序处理全部事件；`latest-pending-render` 允许交互模式跳过积压的中间页面渲染。未设置时由 Slide 使用 `fifo`。
  */
 @property (nonatomic, copy, nullable) WhiteSlideSyncEventQueuePolicy syncEventQueuePolicy;
+
+/**
+ Slide 底部前后导航按钮的行为。未设置时由 Slide 使用按页切换。
+ */
+@property (nonatomic, copy, nullable) WhiteSlideNavigationButtonMode navigationButtonMode;
 
 @end
 

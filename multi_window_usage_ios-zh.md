@@ -125,14 +125,14 @@ appParam.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:1280 height:9
 
 [self.room addApp:appParam completionHandler:^(NSString * _Nullable appId) {
     if (!appId) {
-        NSLog(@"slide setup failed");
+        NSLog(@"slide app was not committed");
         return;
     }
     NSLog(@"slide app id: %@", appId);
 }];
 ```
 
-`addApp:` 会等待 Web App 的 `setup()` 完成；setup 失败时返回 `nil`，并清理未完成初始化的窗口。公开方法名和调用签名保持兼容。
+`addApp:` 会等待 Box 创建和本次焦点请求处理完成。setup 失败或超时会记录日志，不单独决定返回值；创建失败或应提交的焦点未提交时返回 `nil`。公开方法名和调用签名保持兼容。
 
 ### 恢复 MainView 的参考尺寸与相机
 
@@ -196,6 +196,17 @@ WhiteAppParam *appParam = [WhiteAppParam createMediaPlayerApp:@"https://example.
 
 ```objective-c
 [self.room focusApp:appId];
+
+// 如果切换焦点后需要立即翻页，应等待 focus 提交，再调用不带 appId 的分页接口。
+[self.room focusApp:appId completionHandler:^(BOOL committed) {
+    if (!committed) {
+        return;
+    }
+    [self.room dispatchDocsEvent:WhiteWindowDocsEventNextPage
+                         options:nil
+               completionHandler:^(WhiteDispatchDocsEventResult *result) {
+    }];
+}];
 ```
 
 ### 查询所有窗口

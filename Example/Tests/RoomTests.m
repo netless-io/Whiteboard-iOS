@@ -47,6 +47,27 @@ typedef void(^InterrupterBlock)(NSString *url);
     XCTAssertEqualObjects(json[@"useBoxesStatus"], @YES);
 }
 
+- (void)testWindowParamsForceMaximizedLazySetupAndCacheLimit
+{
+    WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
+    windowParams.useBoxesStatus = NO;
+    windowParams.forceMaximized = YES;
+    windowParams.lazySetupInMaximizedMode = YES;
+    windowParams.maxCachedAppsInMaximizedMode = @3;
+
+    NSDictionary *json = [windowParams jsonDict];
+    XCTAssertEqualObjects(json[@"useBoxesStatus"], @NO);
+    XCTAssertEqualObjects(json[@"forceMaximized"], @YES);
+    XCTAssertEqualObjects(json[@"lazySetupInMaximizedMode"], @YES);
+    XCTAssertEqualObjects(json[@"maxCachedAppsInMaximizedMode"], @3);
+}
+
+- (void)testWindowParamsOmitsUnsetCacheLimit
+{
+    NSDictionary *json = [[[WhiteWindowParams alloc] init] jsonDict];
+    XCTAssertNil(json[@"maxCachedAppsInMaximizedMode"]);
+}
+
 - (void)testWindowParamsOriginSizeAndPageScaleRange
 {
     WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];

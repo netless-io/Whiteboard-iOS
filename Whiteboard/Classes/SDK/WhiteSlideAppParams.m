@@ -11,6 +11,8 @@ PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyFrozen = @"frozen";
 PPTInvisibleBehaviorKey const PPTInvisibleBehaviorKeyPause = @"pause";
 WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyFIFO = @"fifo";
 WhiteSlideSyncEventQueuePolicy const WhiteSlideSyncEventQueuePolicyLatestPendingRender = @"latest-pending-render";
+WhiteSlideNavigationButtonMode const WhiteSlideNavigationButtonModePage = @"page";
+WhiteSlideNavigationButtonMode const WhiteSlideNavigationButtonModeStep = @"step";
 
 @implementation WhiteSlideAppParams
 
