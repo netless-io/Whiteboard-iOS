@@ -43,6 +43,8 @@ WhitePrefersColorScheme const WhitePrefersColorSchemeDark = @"dark";
     _prefersColorScheme = WhitePrefersColorSchemeLight;
     _polling = NO;
     _useBoxesStatus = NO;
+    _forceMaximized = NO;
+    _lazySetupInMaximizedMode = NO;
     _overwriteStyles = @"";
     return self;
 }

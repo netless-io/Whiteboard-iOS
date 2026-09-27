@@ -44,6 +44,7 @@
     XCTAssertNil(params.resolution);
     XCTAssertNil(params.maxResolutionLevel);
     XCTAssertNil(params.syncEventQueuePolicy);
+    XCTAssertNil(params.navigationButtonMode);
 
     NSDictionary *slideAppOptions = [[[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"] jsonDict][@"slideAppOptions"];
     XCTAssertNil(slideAppOptions[@"minFPS"]);
@@ -51,6 +52,20 @@
     XCTAssertNil(slideAppOptions[@"resolution"]);
     XCTAssertNil(slideAppOptions[@"maxResolutionLevel"]);
     XCTAssertNil(slideAppOptions[@"syncEventQueuePolicy"]);
+    XCTAssertNil(slideAppOptions[@"navigationButtonMode"]);
+}
+
+- (void)testSlideNavigationButtonModeSerializesExplicitValue
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"test-app-id"];
+    config.whiteSlideAppParams.navigationButtonMode = WhiteSlideNavigationButtonModePage;
+    XCTAssertEqualObjects([config jsonDict][@"slideAppOptions"][@"navigationButtonMode"], @"page");
+
+    config.whiteSlideAppParams.navigationButtonMode = WhiteSlideNavigationButtonModeStep;
+    XCTAssertEqualObjects([config jsonDict][@"slideAppOptions"][@"navigationButtonMode"], @"step");
+
+    config.whiteSlideAppParams.navigationButtonMode = nil;
+    XCTAssertNil([config jsonDict][@"slideAppOptions"][@"navigationButtonMode"]);
 }
 
 - (void)testSlideSyncEventQueuePolicySerializesExplicitValue

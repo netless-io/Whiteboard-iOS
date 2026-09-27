@@ -684,6 +684,14 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     [self.bridge callHandler:@"room.focusApp" arguments:@[appId]];
 }
 
+- (void)focusApp:(NSString *)appId completionHandler:(void (^)(BOOL committed))completionHandler {
+    [self.bridge callHandler:@"room.focusApp" arguments:@[appId] completionHandler:^(id _Nullable value) {
+        if (completionHandler) {
+            completionHandler([value respondsToSelector:@selector(boolValue)] && [value boolValue]);
+        }
+    }];
+}
+
 - (void)queryAllAppsWithCompletionHandler:(void (^)(NSDictionary<NSString *, WhiteAppSyncAttributes *> *apps, NSError * _Nullable error))completionHandler {
     [self.bridge callHandler:@"room.queryAllApps" arguments:@[] completionHandler:^(id  _Nullable value) {
         NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
