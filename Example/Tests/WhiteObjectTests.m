@@ -8,6 +8,13 @@
 
 #import <XCTest/XCTest.h>
 #import <Whiteboard/Whiteboard.h>
+#import "../../Whiteboard/Classes/Room/WhiteRoom+Private.h"
+
+@interface WhitePencilTestDelegate : NSObject <UIGestureRecognizerDelegate>
+@end
+
+@implementation WhitePencilTestDelegate
+@end
 
 @interface CustomGlobalTestClass : WhiteGlobalState
 @property (nonatomic, strong) NSString *name;
@@ -31,7 +38,7 @@
 
 
 @interface WhiteObjectTests : XCTestCase
-
+@property (nonatomic, strong) UIWindow *pencilWindow;
 @end
 
 @implementation WhiteObjectTests
@@ -41,10 +48,148 @@
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    self.pencilWindow.hidden = YES;
+    self.pencilWindow = nil;
 }
 
 #pragma mark - Commom
+- (WhiteBoardView *)pencilTestWebView
+{
+    WhiteBoardView *view = [[WhiteBoardView alloc] init];
+    view.frame = CGRectMake(0, 0, 200, 200);
+    self.pencilWindow = [[UIWindow alloc] initWithFrame:view.frame];
+    self.pencilWindow.rootViewController = [[UIViewController alloc] init];
+    [self.pencilWindow.rootViewController.view addSubview:view];
+    self.pencilWindow.hidden = NO;
+
+    NSPredicate *ready = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        for (UIView *content in view.scrollView.subviews) {
+            if (![[content.classForCoder description] isEqualToString:@"WKContentView"]) {
+                continue;
+            }
+            for (UIGestureRecognizer *gesture in content.gestureRecognizers) {
+                NSString *name = [gesture.classForCoder description];
+                if ([name isEqualToString:@"UIWebTouchEventsGestureRecognizer"] ||
+                    [name isEqualToString:@"WKTouchEventsGestureRecognizer"]) {
+                    return YES;
+                }
+            }
+        }
+        return NO;
+    }];
+    XCTNSPredicateExpectation *expectation = [[XCTNSPredicateExpectation alloc] initWithPredicate:ready object:view];
+    XCTAssertEqual([XCTWaiter waitForExpectations:@[expectation] timeout:10], XCTWaiterResultCompleted);
+    return view;
+}
+
+- (ApplePencilDrawHandler *)pencilHandlerWithGesture:(UIGestureRecognizer *)gesture
+                                  originalDelegate:(id<UIGestureRecognizerDelegate>)delegate
+{
+    ApplePencilDrawHandler *handler = [[ApplePencilDrawHandler alloc] init];
+    [handler setValue:gesture forKey:@"originalGesture"];
+    [handler setValue:delegate forKey:@"originalDelegate"];
+    gesture.delegate = (id<UIGestureRecognizerDelegate>)handler;
+    return handler;
+}
+
+- (void)testPencilInvalidateRestoresOriginalDelegateAndIsIdempotent
+{
+    UIGestureRecognizer *gesture = [[UIGestureRecognizer alloc] init];
+    WhitePencilTestDelegate *original = [[WhitePencilTestDelegate alloc] init];
+    ApplePencilDrawHandler *handler = [self pencilHandlerWithGesture:gesture originalDelegate:original];
+    [handler invalidate];
+    XCTAssertEqual(gesture.delegate, original);
+    XCTAssertNil([handler valueForKey:@"originalGesture"]);
+    XCTAssertNil([handler valueForKey:@"originalDelegate"]);
+    [handler invalidate];
+    XCTAssertEqual(gesture.delegate, original);
+}
+
+- (void)testPencilOldHandlerDeallocationPreservesSuccessor
+{
+    UIGestureRecognizer *gesture = [[UIGestureRecognizer alloc] init];
+    WhitePencilTestDelegate *original = [[WhitePencilTestDelegate alloc] init];
+    WhitePencilTestDelegate *successor = [[WhitePencilTestDelegate alloc] init];
+    @autoreleasepool {
+        __attribute__((objc_precise_lifetime)) ApplePencilDrawHandler *handler =
+            [self pencilHandlerWithGesture:gesture originalDelegate:original];
+        gesture.delegate = successor;
+        XCTAssertNotNil(handler);
+    }
+    XCTAssertEqual(gesture.delegate, successor);
+}
+
+- (void)testPencilDisconnectDetachesWhileRoomRemainsRetained
+{
+    WhiteRoom *room = [[WhiteRoom alloc] init];
+    UIGestureRecognizer *gesture = [[UIGestureRecognizer alloc] init];
+    WhitePencilTestDelegate *original = [[WhitePencilTestDelegate alloc] init];
+    __weak ApplePencilDrawHandler *weakHandler;
+    @autoreleasepool {
+        ApplePencilDrawHandler *handler = [self pencilHandlerWithGesture:gesture originalDelegate:original];
+        weakHandler = handler;
+        room.applePencilDrawHandler = handler;
+    }
+    [room disconnect:nil];
+    XCTAssertNil(room.applePencilDrawHandler);
+    XCTAssertNil(weakHandler);
+    XCTAssertEqual(gesture.delegate, original);
+    XCTAssertNotNil(room);
+}
+
+- (void)testPencilRoomDeallocationDetachesRetainedHandler
+{
+    UIGestureRecognizer *gesture = [[UIGestureRecognizer alloc] init];
+    WhitePencilTestDelegate *original = [[WhitePencilTestDelegate alloc] init];
+    ApplePencilDrawHandler *handler = [self pencilHandlerWithGesture:gesture originalDelegate:original];
+    @autoreleasepool {
+        __attribute__((objc_precise_lifetime)) WhiteRoom *room = [[WhiteRoom alloc] init];
+        room.applePencilDrawHandler = handler;
+    }
+    XCTAssertEqual(gesture.delegate, original);
+    XCTAssertNil([handler valueForKey:@"originalGesture"]);
+}
+
+- (void)testPencilReplacementOnWebViewPreservesOriginalDelegate
+{
+    WhiteBoardView *view = [self pencilTestWebView];
+    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:@"pencil-test" bridge:view];
+    [room prepareForApplePencilDrawOnly:YES];
+    ApplePencilDrawHandler *first = room.applePencilDrawHandler;
+    UIGestureRecognizer *gesture = [first valueForKey:@"originalGesture"];
+    id<UIGestureRecognizerDelegate> original = [first valueForKey:@"originalDelegate"];
+    XCTAssertNotNil(gesture);
+    XCTAssertNotNil(original);
+    [room prepareForApplePencilDrawOnly:YES];
+    ApplePencilDrawHandler *second = room.applePencilDrawHandler;
+    XCTAssertNotEqual(first, second);
+    XCTAssertNil([first valueForKey:@"originalGesture"]);
+    XCTAssertEqual([second valueForKey:@"originalDelegate"], original);
+    XCTAssertEqual(gesture.delegate, (id<UIGestureRecognizerDelegate>)second);
+    [room disconnect:nil];
+    XCTAssertEqual(gesture.delegate, original);
+}
+
+- (void)testPencilNewRoomSurvivesOldRoomDisconnectOnSharedWebView
+{
+    WhiteBoardView *view = [self pencilTestWebView];
+    WhiteRoom *oldRoom = [[WhiteRoom alloc] initWithUuid:@"old-room" bridge:view];
+    [oldRoom prepareForApplePencilDrawOnly:YES];
+    ApplePencilDrawHandler *oldHandler = oldRoom.applePencilDrawHandler;
+    UIGestureRecognizer *gesture = [oldHandler valueForKey:@"originalGesture"];
+    id<UIGestureRecognizerDelegate> original = [oldHandler valueForKey:@"originalDelegate"];
+    XCTAssertNotNil(gesture);
+    XCTAssertNotNil(original);
+    WhiteRoom *newRoom = [[WhiteRoom alloc] initWithUuid:@"new-room" bridge:view];
+    [newRoom prepareForApplePencilDrawOnly:YES];
+    ApplePencilDrawHandler *newHandler = newRoom.applePencilDrawHandler;
+    XCTAssertEqual([newHandler valueForKey:@"originalDelegate"], original);
+    [oldRoom disconnect:nil];
+    XCTAssertEqual(gesture.delegate, (id<UIGestureRecognizerDelegate>)newHandler);
+    [newRoom disconnect:nil];
+    XCTAssertEqual(gesture.delegate, original);
+}
+
 - (void)testBooleanToJson {
     NSDictionary *dict = @{@"k1": @YES, @"k2": @(YES), @"k3": [NSNumber numberWithBool:YES]};
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
