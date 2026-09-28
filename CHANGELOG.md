@@ -3,6 +3,12 @@
 
 ---
 
+## [2.16.145] - 2026-09-28
+- Fix SwiftPM public header export for unified page state queries and callbacks.
+- Use the SwiftPM module bundle to load SDK resources in apps and test hosts.
+- Detach Apple Pencil gesture handlers when rooms disconnect, replace handlers or deallocate; preserve successor gesture delegates.
+- Add Pencil lifecycle regression tests. Embedded Bridge resources remain at `27527d0`.
+
 ## [2.16.144] - 2026-09-28
 - 内嵌正式版 Bridge：`@netless/window-manager@1.0.23`、`@netless/app-slide@0.2.106`、`@netless/appliance-plugin@1.1.44`。
 - 新增强制最大化、lazy setup、本地 App 缓存及 Slide `navigationButtonMode` 配置。

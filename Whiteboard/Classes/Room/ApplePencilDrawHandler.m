@@ -21,6 +21,13 @@
 @implementation ApplePencilDrawHandler
 
 - (instancetype)initWithRoom:(WhiteRoom *)room drawOnlyPencil:(BOOL)drawOnlyPencil {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _drawOnlyApplePencil = drawOnlyPencil;
+    _room = room;
+
     NSUInteger wkContentIndex = [room.bridge.scrollView.subviews indexOfObjectPassingTest:^BOOL(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([[obj.classForCoder description] isEqualToString:@"WKContentView"]) {
             *stop = YES;
@@ -43,7 +50,12 @@
         
         if (gestureIndex != NSNotFound) {
             UIGestureRecognizer *webTouch = room.bridge.scrollView.subviews[wkContentIndex].gestureRecognizers[gestureIndex];
-            self.originalDelegate = webTouch.delegate;
+            id<UIGestureRecognizerDelegate> originalDelegate = webTouch.delegate;
+            if ([originalDelegate isKindOfClass:ApplePencilDrawHandler.class]) {
+                // A replaced handler must not become the predecessor delegate.
+                originalDelegate = ((ApplePencilDrawHandler *)originalDelegate).originalDelegate;
+            }
+            self.originalDelegate = originalDelegate;
             self.originalGesture = webTouch;
             webTouch.delegate = self;
         }
@@ -51,15 +63,20 @@
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(recoverApplianceFromTempRemove) name:UIApplicationWillResignActiveNotification object:nil];
     
-    if (self = [super init]) {
-        _drawOnlyApplePencil = drawOnlyPencil;
-        _room = room;
-    }
     return self;
 }
 
 - (void)dealloc {
-    self.originalGesture.delegate = self.originalDelegate;
+    [self invalidate];
+}
+
+- (void)invalidate {
+    if (self.originalGesture.delegate == self) {
+        self.originalGesture.delegate = self.originalDelegate;
+    }
+    self.originalGesture = nil;
+    self.originalDelegate = nil;
+    [NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 }
 
 - (void)setDrawOnlyApplePencil:(BOOL)drawOnlyPencil {

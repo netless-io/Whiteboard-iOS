@@ -112,7 +112,13 @@
 
 - (void)prepareForApplePencilDrawOnly:(BOOL)drawOnly
 {
+    [self.applePencilDrawHandler invalidate];
     self.applePencilDrawHandler = [[ApplePencilDrawHandler alloc] initWithRoom:self drawOnlyPencil:drawOnly];
+}
+
+- (void)dealloc
+{
+    [self.applePencilDrawHandler invalidate];
 }
 
 #pragma mark - Set Action
@@ -142,6 +148,9 @@
 {
     self.disconnectedBySelf = YES;
     [self.applePencilDrawHandler recoverApplianceFromTempRemove];
+    // Disconnect can leave the room retained after another room takes the WebView.
+    [self.applePencilDrawHandler invalidate];
+    self.applePencilDrawHandler = nil;
     [self.bridge callHandler:@"room.disconnect" completionHandler:^(id  _Nullable value) {
         if (completeHandler) {
             completeHandler();

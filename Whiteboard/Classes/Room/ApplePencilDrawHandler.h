@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)roomApplianceDidManualUpdate;
 - (void)recoverApplianceFromTempRemove;
 
+// Detach while the handler is alive, before its weak gesture delegate is cleared.
+- (void)invalidate;
+
 @end
 
 NS_ASSUME_NONNULL_END
