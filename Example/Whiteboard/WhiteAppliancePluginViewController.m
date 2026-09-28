@@ -9,8 +9,8 @@
 #import "Masonry.h"
 #import "WhiteUtils.h"
 
-static NSString * const kAppliancePluginRoomUUID = @"";
-static NSString * const kAppliancePluginRoomToken = @"";
+static NSString * const kAppliancePluginRoomUUID = @"b192fe80ba1b11f1b109bd7837044901";
+static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1JIN2I2Z284dCZleHBpcmVBdD0xNzkwNTYyNzUzMjg1Jm5vbmNlPWIxYWFmMzUwLWJhMWItMTFmMS1iYzM4LWQ3Yjg5YzgwZTNlMSZyb2xlPTEmc2lnPWQzODBiNzExNjE1ZjMwNmU2N2JiMzE5MDc5ODBiZmQ3MjA2NmJmZWI3ZjRiOGMyNjFlMGFmNzYzNjNkMTVmNjImdXVpZD1iMTkyZmU4MGJhMWIxMWYxYjEwOWJkNzgzNzA0NDkwMQ";
 static CGFloat const kAppliancePluginOriginWidth = 1280.0;
 static CGFloat const kAppliancePluginOriginHeight = 720.0;
 static NSString * const kAppliancePluginSlidePrefix = @"https://conversion-demo-cn.oss-cn-hangzhou.aliyuncs.com/demo/dynamicConvert";
