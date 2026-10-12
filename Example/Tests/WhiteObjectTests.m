@@ -43,6 +43,35 @@
 
 @implementation WhiteObjectTests
 
+- (void)testDynamicConfigRegionMapAndExplicitDefaults
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app"];
+    config.dynamicConfig = @{@"cn-hz": @"https://cn.example.com/ios/latest.json", @"sg": @"https://sg.example.com/ios/latest.json"};
+    NSDictionary *payload = config.jsonDict;
+    XCTAssertEqualObjects(payload[@"dynamicConfig"][@"sg"], @"https://sg.example.com/ios/latest.json");
+    XCTAssertTrue([payload[@"__nativeConfigDefaults"] containsObject:@"useMultiViews"]);
+    config.useMultiViews = NO;
+    XCTAssertFalse([config.jsonDict[@"__nativeConfigDefaults"] containsObject:@"useMultiViews"]);
+    XCTAssertEqualObjects(config.jsonDict[@"useMultiViews"], @NO);
+    config.dynamicConfig = nil;
+    XCTAssertNil(config.jsonDict[@"dynamicConfig"]);
+
+    WhiteRoomConfig *room = [[WhiteRoomConfig alloc] initWithUUID:@"uuid" roomToken:@"token" uid:@"uid"];
+    XCTAssertTrue([room.jsonDict[@"__nativeConfigDefaults"] containsObject:@"floatBar"]);
+    room.floatBar = NO;
+    room.disableOperations = NO;
+    XCTAssertFalse([room.jsonDict[@"__nativeConfigDefaults"] containsObject:@"floatBar"]);
+    XCTAssertFalse([room.jsonDict[@"__nativeConfigDefaults"] containsObject:@"disableDeviceInputs"]);
+    XCTAssertFalse([room.jsonDict[@"__nativeConfigDefaults"] containsObject:@"disableCameraTransform"]);
+    room.windowParams = [[WhiteWindowParams alloc] init];
+    NSDictionary *serialized = [NSJSONSerialization JSONObjectWithData:[room.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    XCTAssertTrue([serialized[@"windowParams"][@"__nativeConfigDefaults"] containsObject:@"chessboard"]);
+    room.windowParams.chessboard = NO;
+    room.windowParams.overwriteStyles = @"";
+    XCTAssertFalse([room.windowParams.jsonDict[@"__nativeConfigDefaults"] containsObject:@"chessboard"]);
+    XCTAssertFalse([room.windowParams.jsonDict[@"__nativeConfigDefaults"] containsObject:@"overwriteStyles"]);
+}
+
 - (void)setUp {
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }

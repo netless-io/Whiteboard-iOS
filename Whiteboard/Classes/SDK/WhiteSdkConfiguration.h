@@ -124,6 +124,13 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  */
 @property (nonatomic, copy) NSString *appIdentifier;
 
+/** Region -> this platform's public OSS latest.json URL. No OSS credentials are needed.
+ Missing region or unreadable JSON keeps local parameters; download timeout is 5 seconds.
+ Example: @{ @"cn-hz": @"https://example.cn/ios/latest.json", @"sg": @"https://example.com/ios/latest.json" }.
+ Supply iOS configuration URLs on iOS.
+ */
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *dynamicConfig;
+
 /**
  是否监听图片加载失败事件。
 

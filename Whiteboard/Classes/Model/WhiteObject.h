@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)jsonString;
 - (NSDictionary *)jsonDict;
 
+// Internal Native -> Bridge parameter provenance. These methods do not change API defaults.
+- (void)white_markExplicitConfigurationKey:(NSString *)key;
+- (void)white_addDefaultConfigurationKeys:(NSArray<NSString *> *)keys toDictionary:(NSMutableDictionary *)dictionary;
+
 @end
 
 NS_ASSUME_NONNULL_END
