@@ -82,6 +82,11 @@ WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan = @"banReport";
 
 @implementation WhiteSdkConfiguration
 
+@synthesize useMultiViews = _useMultiViews;
+@synthesize userCursor = _userCursor;
+@synthesize disableDeviceInputs = _disableDeviceInputs;
+@synthesize enableAppliancePlugin = _enableAppliancePlugin;
+
 static NSString *const kJSDeviceType = @"deviceType";
 
 static NSInteger WhiteIOSMajorVersionFromPlatformUA(NSString *platformUA)
@@ -182,6 +187,7 @@ static void WhiteApplyIOS12LocalLogCompatibility(NSMutableDictionary *loggerOpti
 }
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {
+    [self white_addDefaultConfigurationKeys:@[@"useMultiViews", @"userCursor", @"disableDeviceInputs", @"enableAppliancePlugin"] toDictionary:dic];
     if (_deviceType == WhiteDeviceTypeDesktop) {
         dic[kJSDeviceType] = @"desktop";
     } else {
@@ -231,6 +237,34 @@ static NSString *kLegacyReportLogKey = @"disableReportLog";
     }
     options[kLegacyReportLogKey] = nil;
     _loggerOptions = [options copy];
+}
+
+
+- (void)setUseMultiViews:(BOOL)useMultiViews
+{
+    _useMultiViews = useMultiViews;
+    [self white_markExplicitConfigurationKey:@"useMultiViews"];
+}
+
+
+- (void)setUserCursor:(BOOL)userCursor
+{
+    _userCursor = userCursor;
+    [self white_markExplicitConfigurationKey:@"userCursor"];
+}
+
+
+- (void)setDisableDeviceInputs:(BOOL)disableDeviceInputs
+{
+    _disableDeviceInputs = disableDeviceInputs;
+    [self white_markExplicitConfigurationKey:@"disableDeviceInputs"];
+}
+
+
+- (void)setEnableAppliancePlugin:(BOOL)enableAppliancePlugin
+{
+    _enableAppliancePlugin = enableAppliancePlugin;
+    [self white_markExplicitConfigurationKey:@"enableAppliancePlugin"];
 }
 
 @end

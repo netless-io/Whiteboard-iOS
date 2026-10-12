@@ -19,6 +19,13 @@
 
 @implementation WhiteRoomConfig
 
+@synthesize disableCameraTransform = _disableCameraTransform;
+@synthesize disableDeviceInputs = _disableDeviceInputs;
+@synthesize disableOperations = _disableOperations;
+@synthesize floatBar = _floatBar;
+@synthesize isWritable = _isWritable;
+@synthesize disableNewPencil = _disableNewPencil;
+
 
 - (instancetype)init
 {
@@ -56,15 +63,54 @@
 
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic
 {
+    [self white_addDefaultConfigurationKeys:@[@"disableCameraTransform", @"disableDeviceInputs", @"disableOperations", @"floatBar", @"isWritable", @"disableNewPencil"] toDictionary:dic];
     dic[@"timeout"] = @([self.timeout floatValue] * WhiteConstTimeUnitRatio);
     return true;
 }
 
 - (void)setDisableOperations:(BOOL)disableOperations
 {
+    [self white_markExplicitConfigurationKey:@"disableDeviceInputs"];
+    [self white_markExplicitConfigurationKey:@"disableCameraTransform"];
+    [self white_markExplicitConfigurationKey:@"disableOperations"];
     _disableOperations = disableOperations;
     _disableDeviceInputs = disableOperations;
     _disableCameraTransform = disableOperations;
+}
+
+
+- (void)setDisableCameraTransform:(BOOL)disableCameraTransform
+{
+    _disableCameraTransform = disableCameraTransform;
+    [self white_markExplicitConfigurationKey:@"disableCameraTransform"];
+}
+
+
+- (void)setDisableDeviceInputs:(BOOL)disableDeviceInputs
+{
+    _disableDeviceInputs = disableDeviceInputs;
+    [self white_markExplicitConfigurationKey:@"disableDeviceInputs"];
+}
+
+
+- (void)setFloatBar:(BOOL)floatBar
+{
+    _floatBar = floatBar;
+    [self white_markExplicitConfigurationKey:@"floatBar"];
+}
+
+
+- (void)setIsWritable:(BOOL)isWritable
+{
+    _isWritable = isWritable;
+    [self white_markExplicitConfigurationKey:@"isWritable"];
+}
+
+
+- (void)setDisableNewPencil:(BOOL)disableNewPencil
+{
+    _disableNewPencil = disableNewPencil;
+    [self white_markExplicitConfigurationKey:@"disableNewPencil"];
 }
 
 @end

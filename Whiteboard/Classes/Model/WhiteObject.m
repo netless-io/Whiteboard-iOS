@@ -6,8 +6,31 @@
 //
 
 #import "WhiteObject.h"
+#import <objc/runtime.h>
 
 @implementation WhiteObject
+
+static char WhiteExplicitConfigurationKeys;
+
+- (void)white_markExplicitConfigurationKey:(NSString *)key
+{
+    NSMutableSet *keys = objc_getAssociatedObject(self, &WhiteExplicitConfigurationKeys);
+    if (!keys) {
+        keys = [NSMutableSet set];
+        objc_setAssociatedObject(self, &WhiteExplicitConfigurationKeys, keys, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    [keys addObject:key];
+}
+
+- (void)white_addDefaultConfigurationKeys:(NSArray<NSString *> *)keys toDictionary:(NSMutableDictionary *)dictionary
+{
+    NSSet *explicit = objc_getAssociatedObject(self, &WhiteExplicitConfigurationKeys);
+    NSMutableArray *defaults = [NSMutableArray array];
+    for (NSString *key in keys) {
+        if (dictionary[key] && ![explicit containsObject:key]) [defaults addObject:key];
+    }
+    if (defaults.count) dictionary[@"__nativeConfigDefaults"] = defaults;
+}
 
 - (NSString *)description
 {
