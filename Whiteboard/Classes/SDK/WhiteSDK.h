@@ -273,6 +273,9 @@ typedef void (^WhiteHasBackgroundImageCompletionHandler)(BOOL exists, NSError * 
 - (void)hasBackgroundImage:(WhiteHasBackgroundImageParams *)params
          completionHandler:(WhiteHasBackgroundImageCompletionHandler)completionHandler;
 
+/** Wait for pending creation and Room/Player cleanup. Unknown cleanup blocks another join. */
+- (void)leaveRoomWithCompletionHandler:(void (^_Nullable)(NSError * _Nullable error))completion;
+
 #pragma mark - Private
 - (void)setParameters:(NSDictionary *)parameters;
 

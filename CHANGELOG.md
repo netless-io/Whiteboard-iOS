@@ -3,6 +3,12 @@
 
 ---
 
+## [2.16.147] - 2026-10-21
+
+- Upgrade embedded @netless/app-slide to 0.2.108 (Slide 1.4.65).
+- Serialize room/player session replacement and isolate stale lifecycle callbacks.
+- Add native join T0 telemetry.
+
 ## [2.16.146] - 2026-10-12
 
 - 新增按入房 region 读取对应平台 OSS 动态配置，下载超时 5 秒，缺省或读取失败时沿用本地参数。

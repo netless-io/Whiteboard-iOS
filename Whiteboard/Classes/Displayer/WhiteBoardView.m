@@ -36,9 +36,54 @@
 
 @end
 
+@interface NTLDWKWebView (WhiteLifecycleIncoming)
+- (NSString *)call:(NSString *)method :(NSString *)arguments;
+- (void)resetCallInfoList;
+@end
+
+@interface WhiteScopedBridge : NSProxy
+@property (nonatomic, weak) WhiteBoardView *target;
+@property (nonatomic, strong) NSNumber *generation;
+@end
+
+@interface WhiteReplacement : NSObject
+@property (nonatomic, strong) WhiteBoardView *host;
+@property (nonatomic, copy) NSString *identity;
+@property (nonatomic, copy) void (^start)(NSNumber *);
+@property (nonatomic, strong) NSNumber *generation;
+@property (nonatomic, copy) void (^failure)(NSError *);
+@property (nonatomic) BOOL waiting;
+@end
+@implementation WhiteReplacement
+@end
+
+static NSMutableDictionary<NSString *, WhiteBoardView *> *WhiteOwners(void) {
+    static NSMutableDictionary *owners; static dispatch_once_t once;
+    dispatch_once(&once, ^{ owners = [NSMutableDictionary dictionary]; }); return owners;
+}
+static NSMutableDictionary<NSString *, WhiteReplacement *> *WhiteReplacements(void) {
+    static NSMutableDictionary *requests; static dispatch_once_t once;
+    dispatch_once(&once, ^{ requests = [NSMutableDictionary dictionary]; }); return requests;
+}
+
 @interface WhiteBoardView ()
 
 @property (nonatomic, strong) BridgeCallRecorder* recorder;
+@property (nonatomic) BOOL whiteSdkClaimed;
+@property (nonatomic) BOOL whiteInvalid;
+@property (nonatomic, copy) NSString *whiteDocument;
+@property (nonatomic, copy) NSString *whiteState;
+@property (nonatomic, strong) NSNumber *whiteGeneration;
+@property (nonatomic, copy) void (^whitePending)(NSError *);
+@property (nonatomic, strong) NSMutableArray *whiteReady;
+@property (nonatomic, strong) NSMutableArray *whiteCloseCallbacks;
+@property (nonatomic, strong) NSError *whiteCloseError;
+@property (nonatomic) BOOL whiteCloseCompleted;
+@property (nonatomic, copy) NSArray *whiteSdkInitArgs;
+@property (nonatomic, strong) WhiteReplacement *whiteReplacement;
+@property (nonatomic, copy) NSString *whiteIdentity;
+- (void)whiteCall:(NSString *)method arguments:(NSArray *)args generation:(NSNumber *)generation completion:(void (^)(id))completion;
+
 @property (nonatomic, copy) NSString* customResourceUrl;
 @property (nonatomic, strong) WhiteboardLocalFileResourceLoader *resourceLoader;
 @property (nonatomic, assign) BOOL enableHttpsScheme;
@@ -109,6 +154,9 @@ static const NSUInteger WhiteBoardViewDebugLogMaxLength = 2048;
     if (!self) {
         return nil;
     }
+    _whiteState = @"idle";
+    _whiteGeneration = @0;
+    _whiteReady = [NSMutableArray array];
     _customResourceUrl = [customResourceUrl copy];
     _enableHttpsScheme = enableHttpsScheme;
     
@@ -161,8 +209,244 @@ static const NSUInteger WhiteBoardViewDebugLogMaxLength = 2048;
 
 - (void)reloadFromCrash:(void (^)(void))completionHandler {
     [self logDebugViewStateWithReason:@"reloadFromCrash.begin" force:YES];
-    [self loadInitialResource];
-    [self.recorder resumeCommandsFromBridgeView:self completionHandler:completionHandler];
+    // The old transport cannot be certified closed after a renderer exit. Never replay join implicitly.
+    [self whiteInvalidate];
+    if (completionHandler) completionHandler();
+}
+
+static NSError *WhiteLifecycleError(NSString *message) {
+    return [NSError errorWithDomain:@"WhiteLifecycle" code:-1100 userInfo:@{NSLocalizedDescriptionKey: message ?: @"LifecycleError"}];
+}
+static id WhiteLifecycleFailure(NSString *message) {
+    NSDictionary *value = @{@"__error": @{@"message": message ?: @"LifecycleError"}};
+    return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:value options:0 error:nil] encoding:NSUTF8StringEncoding];
+}
+- (BOOL)whiteClaimSdk {
+    @synchronized (self) {
+        if (self.whiteInvalid) return NO;
+        if (self.whiteSdkClaimed) return YES;
+        self.whiteSdkClaimed = YES;
+    }
+    [self whiteHandshake:NO];
+    return YES;
+}
+- (BOOL)whiteReplacementIsCurrent:(WhiteReplacement *)request {
+    return request.waiting && self.whiteReplacement == request && WhiteReplacements()[request.identity] == request;
+}
+- (void)whiteCancelReplacement:(WhiteReplacement *)request {
+    if (!request.waiting) return;
+    request.waiting = NO;
+    if (WhiteReplacements()[request.identity] == request) [WhiteReplacements() removeObjectForKey:request.identity];
+    if (request.host.whiteReplacement == request) request.host.whiteReplacement = nil;
+    request.failure(WhiteLifecycleError(@"Cancelled"));
+}
+- (void)whiteFinishReplacement:(WhiteReplacement *)request error:(NSError *)error {
+    if (![self whiteReplacementIsCurrent:request]) return;
+    request.waiting = NO; [WhiteReplacements() removeObjectForKey:request.identity]; self.whiteReplacement = nil;
+    if (error) request.failure(error);
+    else { WhiteOwners()[request.identity] = self; self.whiteIdentity = request.identity; request.start(request.generation); }
+}
+- (BOOL)whiteCanConfigureCallbacks {
+    return [self.whiteState isEqualToString:@"idle"] && !self.whiteReplacement;
+}
+- (void)whiteReplaceRoom:(NSString *)identity configuration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout bind:(void (^)(void))bind start:(void (^)(NSNumber *))start failure:(void (^)(NSError *))failure {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        WhiteReplacement *request = [WhiteReplacement new]; request.host = self; request.identity = identity;
+        request.start = start; request.failure = failure; request.waiting = YES;
+        WhiteReplacement *previous = WhiteReplacements()[identity]; WhiteReplacement *local = self.whiteReplacement;
+        WhiteReplacements()[identity] = request; self.whiteReplacement = request;
+        if (previous) [previous.host whiteCancelReplacement:previous];
+        if (local && local != previous) [self whiteCancelReplacement:local];
+        if (![self whiteReplacementIsCurrent:request]) return;
+        [self whiteLeave:nil completion:^(NSError *error) {
+            if (![self whiteReplacementIsCurrent:request]) return;
+            if (error) { [self whiteFinishReplacement:request error:error]; return; }
+            void (^closed)(NSError *) = ^(NSError *closeError) {
+                if (![self whiteReplacementIsCurrent:request]) return;
+                if (closeError) { [self whiteFinishReplacement:request error:closeError]; return; }
+                request.generation = [self whiteBeginCreation:@(timeout) cancellation:^(NSError *error) { [self whiteFinishReplacement:request error:error]; }];
+                if (!request.generation) { [self whiteFinishReplacement:request error:WhiteLifecycleError(@"Busy")]; return; }
+                WhiteOwners()[identity] = self; self.whiteIdentity = identity;
+                bind();
+                self.whiteSdkInitArgs = @[configuration];
+                [self whiteCall:@"sdk.newWhiteSdk" arguments:@[configuration] generation:request.generation completion:^(id value) {
+                    if (![self whiteReplacementIsCurrent:request] || ![self whiteCurrent:request.generation]) return;
+                    NSDictionary *result = [value isKindOfClass:NSString.class] ? [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
+                    NSError *setupError = !result ? WhiteLifecycleError(@"InvalidSetupResult") : result[@"__error"] ? WhiteLifecycleError(result[@"__error"][@"message"]) : nil;
+                    if (setupError) [self whiteComplete:request.generation success:NO];
+                    [self whiteFinishReplacement:request error:setupError];
+                }];
+            };
+            // The target owner may have switched identity while this host was closing.
+            WhiteBoardView *old = WhiteOwners()[identity];
+            if (old && old != self) [old whiteLeave:nil completion:closed]; else closed(nil);
+        }];
+    });
+}
+- (void)whiteHandshake:(BOOL)restoreSdk {
+    [self callHandler:@"sdk.getLifecycle" arguments:nil completionHandler:^(id envelope) {
+        @synchronized (self) {
+            if (self.whiteInvalid) return;
+            NSString *json = [envelope isKindOfClass:NSDictionary.class] ? envelope[@"value"] : nil;
+            NSDictionary *value = json ? [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
+            if (![value[@"documentId"] isKindOfClass:NSString.class]) { [self whiteInvalidate]; return; }
+            self.whiteDocument = value[@"documentId"];
+            NSArray *work = self.whiteReady.copy; [self.whiteReady removeAllObjects];
+            if (restoreSdk && self.whiteSdkInitArgs) [self whiteCall:@"sdk.newWhiteSdk" arguments:self.whiteSdkInitArgs generation:@0 completion:nil];
+            for (void (^block)(void) in work) block();
+        }
+    }];
+}
+- (NSNumber *)whiteBeginWithCancellation:(void (^)(NSError *))cancel {
+    if (self.whiteReplacement) return nil;
+    // Player creation is cancelled explicitly by the host, without a fixed deadline.
+    return [self whiteBeginCreation:nil cancellation:cancel];
+}
+- (NSNumber *)whiteBeginCreation:(NSNumber * _Nullable)timeout cancellation:(void (^)(NSError *))cancel {
+    @synchronized (self) {
+        if (self.whiteInvalid || ![self.whiteState isEqualToString:@"idle"]) return nil;
+        self.whiteState = @"joining";
+        self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1);
+        self.whitePending = cancel; self.whiteCloseCallbacks = nil; self.whiteCloseCompleted = NO; self.whiteCloseError = nil;
+        NSNumber *generation = self.whiteGeneration;
+        if (timeout) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout.doubleValue * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            @synchronized (self) {
+                if (![self.whiteGeneration isEqual:generation] || !self.whitePending || ![self.whiteState isEqualToString:@"joining"]) return;
+                self.whiteState = @"closing";
+                void (^pending)(NSError *) = self.whitePending; self.whitePending = nil;
+                pending(WhiteLifecycleError(@"JoinTimeout"));
+                [self whiteLeave:generation completion:nil];
+            }
+        });
+        return generation;
+    }
+}
+- (BOOL)whiteContinueJoin:(NSNumber *)generation cancellation:(void (^)(NSError *))cancel {
+    if (![self whiteCurrent:generation] || !self.whitePending) return NO;
+    self.whitePending = cancel;
+    return YES;
+}
+- (BOOL)whiteComplete:(NSNumber *)generation success:(BOOL)success {
+    @synchronized (self) {
+        if (self.whiteInvalid || ![generation isEqual:self.whiteGeneration] || !self.whitePending) return NO;
+        self.whitePending = nil;
+        if (success) self.whiteState = @"active";
+        else if (![self.whiteState isEqualToString:@"idle"] && ![self.whiteState isEqualToString:@"closing"]) self.whiteState = @"blocked";
+        return YES;
+    }
+}
+- (BOOL)whiteCurrent:(NSNumber *)generation {
+    return !self.whiteInvalid && [generation isEqual:self.whiteGeneration] &&
+        ([self.whiteState isEqualToString:@"joining"] || [self.whiteState isEqualToString:@"active"]);
+}
+- (WhiteBoardView *)whiteScopedBridge:(NSNumber *)generation {
+    WhiteScopedBridge *bridge = [WhiteScopedBridge alloc]; bridge.target = self; bridge.generation = generation;
+    return (WhiteBoardView *)bridge;
+}
+- (NSDictionary *)whiteScope:(NSNumber *)generation {
+    return @{@"documentId": self.whiteDocument ?: @"", @"generation": generation ?: self.whiteGeneration};
+}
+- (void)whiteCall:(NSString *)method arguments:(NSArray *)args generation:(NSNumber *)generation completion:(void (^)(id))completion {
+    dispatch_main_async_safe(^{
+        if (self.whiteInvalid) { if (completion) completion(WhiteLifecycleFailure(@"HostInvalid")); return; }
+        if (!self.whiteDocument) {
+            __weak typeof(self) weakSelf = self;
+            [self.whiteReady addObject:^{ [weakSelf whiteCall:method arguments:args generation:generation completion:completion]; }];
+            return;
+        }
+        if ([method isEqualToString:@"sdk.newWhiteSdk"] && generation.unsignedLongLongValue > 0 &&
+            ![self whiteCurrent:generation]) return;
+        if ([method isEqualToString:@"sdk.newWhiteSdk"]) self.whiteSdkInitArgs = args;
+        NSMutableArray *values = [NSMutableArray arrayWithObject:@{@"__whiteScope": [self whiteScope:generation]}];
+        [values addObjectsFromArray:args ?: @[]];
+        void (^response)(id) = completion ? ^(id envelope) {
+            if (![envelope isKindOfClass:NSDictionary.class] || ![envelope[@"scope"] isEqual:[self whiteScope:generation]] || self.whiteInvalid) {
+                if (completion) completion(WhiteLifecycleFailure(@"StaleScope")); return;
+            }
+            completion(envelope[@"value"] == NSNull.null ? nil : envelope[@"value"]);
+        } : nil;
+        [self callHandler:method arguments:values completionHandler:response];
+    });
+}
+- (void)whiteFinishLeave:(NSNumber *)generation value:(id)value {
+    @synchronized (self) {
+        if (![generation isEqual:self.whiteGeneration] || self.whiteCloseCompleted) return;
+        NSDictionary *dict = [value isKindOfClass:NSString.class] ? [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
+        self.whiteCloseError = dict[@"__error"] ? WhiteLifecycleError(dict[@"__error"][@"message"]) : nil;
+        if (!dict) self.whiteCloseError = WhiteLifecycleError(@"InvalidCloseResult");
+        self.whiteCloseCompleted = YES; self.whiteState = self.whiteCloseError ? @"blocked" : @"idle";
+        if (!self.whiteCloseError && self.whiteIdentity && WhiteOwners()[self.whiteIdentity] == self) [WhiteOwners() removeObjectForKey:self.whiteIdentity];
+        NSArray *callbacks = self.whiteCloseCallbacks.copy; self.whiteCloseCallbacks = nil;
+        for (void (^callback)(NSError *) in callbacks) callback(self.whiteCloseError);
+    }
+}
+- (void)whiteLeaveRoom:(void (^)(NSError *))completion {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.whiteReplacement) [self whiteCancelReplacement:self.whiteReplacement];
+        [self whiteLeave:nil completion:completion];
+    });
+}
+- (void)whiteLeave:(NSNumber *)generation completion:(void (^)(NSError *))completion {
+    @synchronized (self) {
+        generation = generation ?: self.whiteGeneration;
+        if (self.whiteInvalid || ![generation isEqual:self.whiteGeneration]) { if (completion) completion(WhiteLifecycleError(@"StaleScope")); return; }
+        if (self.whiteCloseCompleted) { if (completion) completion(self.whiteCloseError); return; }
+        if (self.whiteCloseCallbacks) { if (completion) [self.whiteCloseCallbacks addObject:completion]; return; }
+        if ([self.whiteState isEqualToString:@"idle"]) { if (completion) completion(nil); return; }
+        self.whiteState = @"closing"; self.whiteCloseCallbacks = [NSMutableArray array];
+        if (completion) [self.whiteCloseCallbacks addObject:completion];
+        void (^pending)(NSError *) = self.whitePending; self.whitePending = nil;
+        if (pending) pending(WhiteLifecycleError(@"Cancelled"));
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self whiteFinishLeave:generation value:WhiteLifecycleFailure(@"LeaveTimeout")];
+        });
+        [self whiteCall:@"sdk.leaveRoom" arguments:nil generation:generation completion:^(id value) {
+            [self whiteFinishLeave:generation value:value];
+        }];
+    }
+}
+- (void)whiteInvalidate {
+    @synchronized (self) {
+        if (self.whiteInvalid) return;
+        self.whiteInvalid = YES; self.whiteState = @"blocked"; [self.whiteReady removeAllObjects];
+        if (self.whiteReplacement) [self whiteFinishReplacement:self.whiteReplacement error:WhiteLifecycleError(@"HostInvalid")];
+        void (^pending)(NSError *) = self.whitePending; self.whitePending = nil;
+        if (pending) pending(WhiteLifecycleError(@"HostInvalid"));
+        NSArray *callbacks = self.whiteCloseCallbacks.copy; self.whiteCloseCallbacks = nil;
+        for (void (^callback)(NSError *) in callbacks) callback(WhiteLifecycleError(@"HostInvalid"));
+    }
+}
+// Keep original sync/async event signatures and URL conversion; only validate and remove the envelope.
+- (NSString *)call:(NSString *)method :(NSString *)arguments {
+    if ([method hasPrefix:@"_dsb."]) return [super call:method :arguments];
+    NSMutableDictionary *args = [[NSJSONSerialization JSONObjectWithData:[arguments dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil] mutableCopy];
+    NSDictionary *envelope = args[@"data"]; NSDictionary *scope = [envelope isKindOfClass:NSDictionary.class] ? envelope[@"scope"] : nil;
+    if (self.whiteInvalid || ![scope[@"documentId"] isEqual:self.whiteDocument] ||
+        ([scope[@"generation"] unsignedLongLongValue] && ![scope[@"generation"] isEqual:self.whiteGeneration])) return @"{\"code\":0}";
+    if ([method isEqualToString:@"sdk.lifecycleState"]) {
+        NSString *next = envelope[@"value"][@"state"];
+        if ([next isEqualToString:@"blocked"] || ([next isEqualToString:@"idle"] && self.whiteCloseCompleted && !self.whiteCloseError)) self.whiteState = next;
+        return @"{\"code\":0}";
+    }
+    args[@"data"] = envelope[@"value"] ?: NSNull.null;
+    NSString *unwrapped = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:args options:0 error:nil] encoding:NSUTF8StringEncoding];
+    return [super call:method :unwrapped];
+}
+- (WKNavigation *)loadRequest:(NSURLRequest *)request {
+    if (self.whiteDocument) [self whiteInvalidate];
+    return [super loadRequest:request];
+}
+- (WKNavigation *)reload {
+    if (!self.whiteDocument || self.whiteInvalid) return [super reload];
+    BOOL closed = [self.whiteState isEqualToString:@"idle"] &&
+        (self.whiteGeneration.unsignedLongLongValue == 0 || (self.whiteCloseCompleted && !self.whiteCloseError));
+    if (!closed) { [self whiteInvalidate]; return [super reload]; }
+    self.whiteDocument = nil; self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1);
+    [self.whiteReady removeAllObjects]; self.whiteCloseCallbacks = nil; self.whiteCloseCompleted = NO; self.whiteCloseError = nil;
+    [self resetCallInfoList];
+    WKNavigation *navigation = [super reload];
+    [self whiteHandshake:YES];
+    return navigation;
 }
 
 #pragma mark - Keyboard Notification
@@ -228,7 +512,8 @@ static const NSUInteger WhiteBoardViewDebugLogMaxLength = 2048;
 #pragma mark - Private.h Methods
 - (void)setupWebSDKWithConfig:(WhiteSdkConfiguration *)config completion:(void (^) (id _Nullable value))completionHandler
 {
-    [self callHandler:@"sdk.newWhiteSdk" arguments:@[config] completionHandler:nil];
+    self.whiteSdkInitArgs = @[config];
+    if ([self.whiteState isEqualToString:@"idle"]) [self callHandler:@"sdk.newWhiteSdk" arguments:@[config] completionHandler:completionHandler];
 }
 
 - (void)observeWKWebViewConsole {
@@ -490,6 +775,13 @@ window.addEventListener('error', function(e) {\
 #pragma mark - Override
 -(void)callHandler:(NSString *)methodName arguments:(NSArray *)args completionHandler:(void (^)(id  _Nullable value))completionHandler
 {
+    BOOL scoped = [args.firstObject isKindOfClass:NSDictionary.class] && args.firstObject[@"__whiteScope"] != nil;
+    if (!scoped && ![methodName isEqualToString:@"sdk.getLifecycle"] && ![methodName hasPrefix:@"_dsb."]) {
+        if ([methodName isEqualToString:@"sdk.newWhiteSdk"]) self.whiteSdkInitArgs = args;
+        NSNumber *generation = [methodName hasPrefix:@"sdk."] && ![methodName isEqualToString:@"sdk.hasBackgroundImage"] && ![methodName isEqualToString:@"sdk.reloadBackgroundImage"] ? @0 : self.whiteGeneration;
+        [self whiteCall:methodName arguments:args generation:generation completion:completionHandler];
+        return;
+    }
     WhiteCallBridgeCommand *command = [[WhiteCallBridgeCommand alloc] init];
     command.method = methodName;
     if (!args) {
@@ -589,4 +881,29 @@ window.addEventListener('error', function(e) {\
 #endif
 }
 
+@end
+
+@implementation WhiteScopedBridge
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector { return [WhiteBoardView instanceMethodSignatureForSelector:selector]; }
+- (void)forwardInvocation:(NSInvocation *)invocation {
+    if ([self.target whiteCurrent:self.generation]) [invocation invokeWithTarget:self.target];
+    else if (invocation.methodSignature.methodReturnLength) { void *zero = calloc(1, invocation.methodSignature.methodReturnLength); [invocation setReturnValue:zero]; free(zero); }
+}
+- (void)callHandler:(NSString *)method arguments:(NSArray *)args completionHandler:(void (^)(id))completion {
+    if (!self.target) { if (completion) completion(WhiteLifecycleFailure(@"HostInvalid")); return; }
+    if ([method isEqualToString:@"room.disconnect"] || [method isEqualToString:@"player.stop"]) {
+        [self.target whiteLeave:self.generation completion:^(NSError *error) { if (completion) completion(error ? WhiteLifecycleFailure(error.localizedDescription) : @"{\"closed\":true}"); }];
+        return;
+    }
+    if (![self.target whiteCurrent:self.generation]) { if (completion) completion(WhiteLifecycleFailure(@"StaleScope")); return; }
+    [self.target whiteCall:method arguments:args generation:self.generation completion:completion];
+}
+- (void)callHandler:(NSString *)method arguments:(NSArray *)args { [self callHandler:method arguments:args completionHandler:nil]; }
+- (void)callHandler:(NSString *)method completionHandler:(void (^)(id))completion { [self callHandler:method arguments:nil completionHandler:completion]; }
+- (void)evaluateJavaScript:(NSString *)script completionHandler:(void (^)(id, NSError *))completion {
+    if (![self.target whiteCurrent:self.generation]) { if (completion) completion(nil, WhiteLifecycleError(@"StaleScope")); return; }
+    NSData *data = [NSJSONSerialization dataWithJSONObject:[self.target whiteScope:self.generation] options:0 error:nil];
+    NSString *scope = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [self.target evaluateJavaScript:[NSString stringWithFormat:@"window.__whiteRunScoped(%@,function(){%@})", scope, script] completionHandler:completion];
+}
 @end
