@@ -7,9 +7,22 @@
 
 #import "WhiteBoardView.h"
 
-@class WhiteRoomCallbacks, WhitePlayerEvent, WhiteCommonCallbacks, WhiteSdkConfiguration;
+@class WhiteRoomCallbacks, WhitePlayerEvent, WhiteCommonCallbacks, WhiteSdkConfiguration, WhiteSDK;
 
 @interface WhiteBoardView ()
+- (BOOL)whiteClaimSdk;
+- (void)whiteReplaceRoom:(NSString *)identity configuration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout bind:(void (^)(void))bind start:(void (^)(NSNumber *generation))start failure:(void (^)(NSError *error))failure;
+- (BOOL)whiteCanConfigureCallbacks;
+@property (nonatomic, weak, nullable) WhiteSDK *whiteCallbackOwner;
+- (nullable NSNumber *)whiteBeginWithCancellation:(void (^)(NSError *error))cancel;
+- (BOOL)whiteContinueJoin:(NSNumber *)generation cancellation:(void (^)(NSError *error))cancel;
+- (BOOL)whiteComplete:(NSNumber *)generation success:(BOOL)success;
+- (WhiteBoardView *)whiteScopedBridge:(NSNumber *)generation;
+- (void)whiteLeaveRoom:(void (^ _Nullable)(NSError * _Nullable))completion;
+- (void)whiteLeave:(nullable NSNumber *)generation completion:(void (^_Nullable)(NSError * _Nullable error))completion;
+- (void)whiteInvalidate;
+- (BOOL)whiteCurrent:(NSNumber *)generation;
+
 
 @property (nonatomic, strong, nullable) WhiteRoomCallbacks *roomCallbacks;
 @property (nonatomic, strong, nullable) WhitePlayerEvent *playerEvent;
@@ -17,8 +30,7 @@
 
 - (void)setupWebSDKWithConfig:(WhiteSdkConfiguration *_Nonnull)config completion:(void (^_Nullable) (id _Nullable value))completionHandler;
 
-// 从 Crash 的状态中恢复回来。一般是内存原因导致的 WebKit 被 kill
-// 这个方法会重置callInfoList, 并且将指定记录过的 js call 重新回放一遍
+// Renderer exit invalidates this host. This entry no longer replays a pending/active join.
 - (void)reloadFromCrash:(void (^__nullable)(void))completionHandler;
 
 - (void)observeWKWebViewConsole;

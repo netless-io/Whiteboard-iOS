@@ -34,7 +34,6 @@
 
 @interface WhiteSDK()
 
-@property (nonatomic, strong, readwrite) WhiteSdkConfiguration *config;
 @property (nonatomic, strong, readwrite) WhiteAudioMixerBridge *audioMixer;
 @property (nonatomic, strong, readwrite) WhiteAudioEffectMixerBridge *effectMixer;
 @property (nonatomic, strong, readwrite) WhiteAudioPcmDataBrige *pcmBridge;
@@ -51,15 +50,17 @@
 
 + (NSString *)version
 {
-    return @"2.16.146";
+    return @"2.16.147";
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer pcmDataDelegate:(nullable id<WhiteAudioPcmDataDelegate>)pcmDataDelegate {
     self = [super init];
     if (self) {
+        if (![boardView whiteClaimSdk]) return nil;
         _bridge = boardView;
         _config = config;
-        _bridge.commonCallbacks.delegate = callback;
+        _commonCallbackDelegate = callback;
+        if ([boardView whiteCanConfigureCallbacks]) [self whiteBindCommonCallback];
         if ([mixer conformsToProtocol:@protocol(WhiteAudioMixerBridgeDelegate)]) {
             config.enableRtcIntercept = YES;
             _audioMixer = [[WhiteAudioMixerBridge alloc] initWithBridge:boardView delegate:mixer];
@@ -124,6 +125,10 @@
     if (self.config.useWebKeyboardInjection) {
         [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:FALSE];
     }
+}
+
+- (void)leaveRoomWithCompletionHandler:(void (^)(NSError * _Nullable))completion {
+    [self.bridge whiteLeaveRoom:completion];
 }
 
 #pragma mark - 字体
@@ -233,7 +238,14 @@
 #pragma mark - CommonCallback
 - (void)setCommonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callbackDelegate
 {
-    self.bridge.commonCallbacks.delegate = callbackDelegate;
+    _commonCallbackDelegate = callbackDelegate;
+    if (self.bridge.whiteCallbackOwner == self) self.bridge.commonCallbacks.delegate = callbackDelegate;
+}
+
+- (void)whiteBindCommonCallback
+{
+    self.bridge.whiteCallbackOwner = self;
+    self.bridge.commonCallbacks.delegate = self.commonCallbackDelegate;
 }
 
 #pragma mark - SlideCallback

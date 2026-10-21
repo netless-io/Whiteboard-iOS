@@ -9,6 +9,100 @@
 #import <XCTest/XCTest.h>
 #import <Whiteboard/Whiteboard.h>
 #import "../../Whiteboard/Classes/Room/WhiteRoom+Private.h"
+#import "../../Whiteboard/Classes/SDK/WhiteSDK+Private.h"
+#import "../../Whiteboard/Classes/Displayer/WhiteBoardView+Private.h"
+
+// Keep the real Native join/serialization path, with a held lifecycle-ready callback.
+@interface NativeJoinTagBridge : WhiteBoardView
+@property (nonatomic, copy) void (^startJoin)(NSNumber *generation);
+@property (nonatomic, strong) NSMutableArray<NSDictionary *> *joins;
+@property (nonatomic) BOOL rejectJoin;
+@end
+
+@implementation NativeJoinTagBridge
+- (BOOL)whiteClaimSdk { return YES; }
+- (void)setupWebSDKWithConfig:(WhiteSdkConfiguration *)config completion:(void (^)(id))completion {}
+- (void)whiteReplaceRoom:(NSString *)identity configuration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout bind:(void (^)(void))bind start:(void (^)(NSNumber *))start failure:(void (^)(NSError *))failure
+{
+    bind();
+    self.startJoin = start;
+}
+- (BOOL)whiteContinueJoin:(NSNumber *)generation cancellation:(void (^)(NSError *))cancel { return !self.rejectJoin; }
+- (WhiteBoardView *)whiteScopedBridge:(NSNumber *)generation { return self; }
+- (void)callHandler:(NSString *)method arguments:(NSArray *)arguments completionHandler:(void (^)(id))completion
+{
+    if (![method isEqualToString:@"sdk.joinRoom"]) return;
+    if (!self.joins) self.joins = [NSMutableArray array];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:arguments[0] options:0 error:nil];
+    [self.joins addObject:[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]];
+}
+@end
+
+@interface NativeJoinTagConfig : WhiteRoomConfig
+@end
+@implementation NativeJoinTagConfig
+- (NSString *)jsonString
+{
+    NSMutableDictionary *payload = [[NSJSONSerialization JSONObjectWithData:[[super jsonString] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] mutableCopy];
+    payload[@"__nativeTags"] = @{@"custom": @"retained", @"time": @"stale", @"traceId": @"stale"};
+    return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:payload options:0 error:nil] encoding:NSUTF8StringEncoding];
+}
+@end
+
+@interface NativeJoinTagTests : XCTestCase
+@end
+@implementation NativeJoinTagTests
+- (void)testDispatchTimeTraceAndImmutableConfig
+{
+    NativeJoinTagBridge *bridge = [[NativeJoinTagBridge alloc] initWithFrame:CGRectZero];
+    WhiteSDK *sdk = [[WhiteSDK alloc] initWithWhiteBoardView:bridge config:[[WhiteSdkConfiguration alloc] initWithApp:@"test-app"]];
+    WhiteRoomConfig *config = [[NativeJoinTagConfig alloc] initWithUUID:@"room" roomToken:@"mock" uid:@"uid"];
+    NSString *original = config.jsonString;
+    [sdk joinRoomWithConfig:config callbacks:nil completionHandler:nil];
+    XCTAssertEqual(bridge.joins.count, 0);
+
+    XCTestExpectation *ready = [self expectationWithDescription:@"delayed SDK readiness"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSDate *before = NSDate.date;
+        bridge.startJoin(@1);
+        NSDate *after = NSDate.date;
+        NSDictionary *tags = bridge.joins[0][@"__nativeTags"];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        formatter.timeZone = NSTimeZone.localTimeZone;
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        NSDate *time = [formatter dateFromString:tags[@"time"]];
+        XCTAssertNotNil(time);
+        XCTAssertGreaterThanOrEqual(time.timeIntervalSince1970, floor(before.timeIntervalSince1970));
+        XCTAssertLessThanOrEqual(time.timeIntervalSince1970, after.timeIntervalSince1970);
+        XCTAssertEqual([tags[@"time"] length], 19);
+        XCTAssertNotNil([[NSUUID alloc] initWithUUIDString:tags[@"traceId"]]);
+        XCTAssertEqualObjects(tags[@"custom"], @"retained");
+        XCTAssertEqualObjects(bridge.joins[0][@"uuid"], @"room");
+        XCTAssertEqualObjects(bridge.joins[0][@"uid"], @"uid");
+        [ready fulfill];
+    });
+    [self waitForExpectations:@[ready] timeout:5];
+    XCTAssertEqualObjects(config.jsonString, original);
+
+    [sdk joinRoomWithConfig:config callbacks:nil completionHandler:nil];
+    bridge.startJoin(@2);
+    XCTAssertEqual(bridge.joins.count, 2);
+    XCTAssertNotEqualObjects(bridge.joins[0][@"__nativeTags"][@"traceId"], bridge.joins[1][@"__nativeTags"][@"traceId"]);
+    XCTAssertEqualObjects(config.jsonString, original);
+}
+- (void)testCancelledJoinDoesNotDispatchOrStamp
+{
+    NativeJoinTagBridge *bridge = [[NativeJoinTagBridge alloc] initWithFrame:CGRectZero];
+    WhiteSDK *sdk = [[WhiteSDK alloc] initWithWhiteBoardView:bridge config:[[WhiteSdkConfiguration alloc] initWithApp:@"test-app"]];
+    WhiteRoomConfig *config = [[WhiteRoomConfig alloc] initWithUUID:@"room" roomToken:@"mock" uid:@"uid"];
+    [sdk joinRoomWithConfig:config callbacks:nil completionHandler:nil];
+    bridge.rejectJoin = YES;
+    bridge.startJoin(@1);
+    XCTAssertEqual(bridge.joins.count, 0);
+    XCTAssertNil(config.jsonDict[@"__nativeTags"]);
+}
+@end
 
 @interface WhitePencilTestDelegate : NSObject <UIGestureRecognizerDelegate>
 @end

@@ -43,74 +43,19 @@
     XCTAssertTrue(guard.isLoadingVisible);
 }
 
-- (void)testDisconnectingAndDisconnectedRequestOnlyOneReplacement
+- (void)testTerminalAndFailedJoinDoNotScheduleReplacement
 {
     WhiteRoomLifecycleGuard *guard = [self startedGuard];
     __block NSUInteger reconnectCount = 0;
-    guard.reconnectHandler = ^{
-        reconnectCount += 1;
-    };
-
+    guard.reconnectHandler = ^{ reconnectCount++; };
+    guard.scheduler = ^(NSTimeInterval delay, dispatch_block_t block) { XCTFail(@"Unknown exit must not schedule another join"); };
     [guard handlePhase:WhiteRoomPhaseDisconnecting];
     [guard handlePhase:WhiteRoomPhaseDisconnected];
-
-    XCTAssertTrue(guard.isRecovering);
+    [guard rejoinDidFail];
     XCTAssertTrue(guard.isLoadingVisible);
-    XCTAssertEqual(reconnectCount, (NSUInteger)1);
-}
-
-- (void)testFailedReplacementKeepsRetryingWithBackoff
-{
-    WhiteRoomLifecycleGuard *guard = [self startedGuard];
-    guard.initialRetryDelay = 1;
-    guard.maximumRetryDelay = 2;
-    __block NSUInteger reconnectCount = 0;
-    __block dispatch_block_t scheduledRetry = nil;
-    NSMutableArray<NSNumber *> *delays = [NSMutableArray array];
-    guard.reconnectHandler = ^{
-        reconnectCount += 1;
-    };
-    guard.scheduler = ^(NSTimeInterval delay, dispatch_block_t block) {
-        [delays addObject:@(delay)];
-        scheduledRetry = block;
-    };
-
-    [guard handlePhase:WhiteRoomPhaseDisconnected];
-    XCTAssertEqual(reconnectCount, (NSUInteger)1);
-
-    [guard rejoinDidFail];
-    XCTAssertNotNil(scheduledRetry);
-    scheduledRetry();
-    XCTAssertEqual(reconnectCount, (NSUInteger)2);
-
-    [guard rejoinDidFail];
-    scheduledRetry();
-    XCTAssertEqual(reconnectCount, (NSUInteger)3);
-
-    [guard rejoinDidFail];
-    XCTAssertEqualObjects(delays, (@[@1, @2, @2]));
-}
-
-- (void)testStopCancelsScheduledRetryAndHidesLoading
-{
-    WhiteRoomLifecycleGuard *guard = [self startedGuard];
-    __block NSUInteger reconnectCount = 0;
-    __block dispatch_block_t scheduledRetry = nil;
-    guard.reconnectHandler = ^{
-        reconnectCount += 1;
-    };
-    guard.scheduler = ^(NSTimeInterval delay, dispatch_block_t block) {
-        scheduledRetry = block;
-    };
-
-    [guard handlePhase:WhiteRoomPhaseDisconnected];
-    [guard rejoinDidFail];
+    XCTAssertEqual(reconnectCount, (NSUInteger)0);
     [guard stop];
-    scheduledRetry();
-
-    XCTAssertFalse(guard.isActive);
     XCTAssertFalse(guard.isLoadingVisible);
-    XCTAssertEqual(reconnectCount, (NSUInteger)1);
 }
 
 - (void)testViewControllerLoadingOverlayFollowsRoomPhase

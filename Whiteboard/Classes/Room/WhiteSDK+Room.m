@@ -7,6 +7,7 @@
 
 #import "WhiteSDK+Room.h"
 #import "WhiteSDK+Private.h"
+#import "WhiteSdkConfiguration.h"
 #import "WhiteBoardView+Private.h"
 #import "WhiteConsts.h"
 #import "WhiteRoom+Private.h"
@@ -26,6 +27,22 @@
 {
     NSAssert([config.roomToken length] > 0 && [config.uuid length] > 0, NSLocalizedString(@"room uuid 和 token 不能为空", nil));
     
+    if (!config.uuid.length || !config.roomToken.length || !config.uid.length) {
+        if (completionHandler) completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1100 userInfo:@{NSLocalizedDescriptionKey: @"InvalidJoinParameters"}]); return;
+    }
+    NSDictionary *sdkParameters = [NSJSONSerialization JSONObjectWithData:[self.config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:[config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    NSString *identity = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@[sdkParameters[@"appIdentifier"] ?: @"", parameters[@"uuid"], parameters[@"uid"]] options:0 error:nil] encoding:NSUTF8StringEncoding];
+    [self.bridge whiteReplaceRoom:identity configuration:sdkParameters timeout:[parameters[@"timeout"] doubleValue] / 1000.0 bind:^{
+        [self whiteBindCommonCallback];
+    } start:^(NSNumber *generation) {
+        [self whiteJoinRoomAfterReplacement:parameters generation:generation callbacks:callbacks completionHandler:completionHandler];
+    } failure:^(NSError *error) { if (completionHandler) completionHandler(NO, nil, error); }];
+}
+
+- (void)whiteJoinRoomAfterReplacement:(NSDictionary *)parameters generation:(NSNumber *)generation callbacks:(id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(void (^)(BOOL, WhiteRoom *, NSError *))completionHandler {
+    if (![self.bridge whiteContinueJoin:generation cancellation:^(NSError *error) { if (completionHandler) completionHandler(NO, nil, error); }]) return;
+    WhiteBoardView *scopedBridge = [self.bridge whiteScopedBridge:generation];
     //从 WhiteBoardView 父类中解耦
     if (!self.bridge.roomCallbacks) {
         WhiteRoomCallbacks *roomCallbacks = [[WhiteRoomCallbacks alloc] init];
@@ -34,29 +51,41 @@
     }
 
     
-    if (callbacks) {
-        self.bridge.roomCallbacks.delegate = callbacks;
-        self.bridge.commonCallbacks.roomDelegate = callbacks;
-    }
+    self.bridge.roomCallbacks.delegate = callbacks;
+    self.bridge.commonCallbacks.roomDelegate = callbacks;
     __weak typeof(self.bridge)weakBridge = self.bridge;
-    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:config.uuid bridge:weakBridge];
+    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:parameters[@"uuid"] bridge:scopedBridge];
     self.bridge.roomCallbacks.room = room;
 #if DEBUG
-    if (config.enableWritableAssert) {
+    if ([parameters[@"enableWritableAssert"] boolValue]) {
         [WritableDetectRoom startObserveRoom:room];
     }
     
-    room.shouldCheckingRepeatSetWritable = config.enableWritableAssert;
+    room.shouldCheckingRepeatSetWritable = [parameters[@"enableWritableAssert"] boolValue];
 #else
     room.shouldCheckingRepeatSetWritable = false;
 #endif
-    
-    [self.bridge callHandler:@"sdk.joinRoom" arguments:@[config] completionHandler:^(id _Nullable value) {
+
+    // Match Android: capture T0 after SDK readiness, just before dispatching this join.
+    // Only enrich this attempt's JSON snapshot; never mutate the caller's config.
+    NSMutableDictionary *joinParameters = [parameters mutableCopy];
+    NSMutableDictionary *nativeTags = [parameters[@"__nativeTags"] isKindOfClass:NSDictionary.class]
+        ? [parameters[@"__nativeTags"] mutableCopy] : [NSMutableDictionary dictionary];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    formatter.timeZone = NSTimeZone.localTimeZone;
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    nativeTags[@"traceId"] = NSUUID.UUID.UUIDString;
+    nativeTags[@"time"] = [formatter stringFromDate:NSDate.date];
+    joinParameters[@"__nativeTags"] = nativeTags;
+
+    [scopedBridge callHandler:@"sdk.joinRoom" arguments:@[joinParameters] completionHandler:^(id _Nullable value) {
        
-        if (completionHandler) {
+        {
             NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             NSDictionary *error = dict[@"__error"];
+            if (![weakBridge whiteComplete:generation success:error == nil]) return;
             if (error) {
                 NSString *desc = error[@"message"] ? : @"";
                 NSString *description = error[@"jsStack"] ? : @"";
@@ -69,7 +98,7 @@
                     // 这个问题可以通过往 indexDB 里不停塞入 100 kb的 item，在塞满后再刷新页面复现。
                     [self.bridge evaluateJavaScript:@"indexedDB.databases().then(ds => Promise.all(ds.map(d => indexedDB.deleteDatabase(d.name))))" completionHandler:nil];
                 }
-                completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-100 userInfo:userInfo]);
+                if (completionHandler) completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-100 userInfo:userInfo]);
             } else {
                 room.observerId = dict[@"observerId"];
                 room.writable = [dict[@"isWritable"] boolValue];
@@ -77,11 +106,11 @@
                 weakBridge.room = room;
                 weakBridge.roomCallbacks.room = room;
                 
-                if (config.drawOnlyApplePencil && UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                if ([parameters[@"drawOnlyApplePencil"] boolValue] && UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
                     [room prepareForApplePencilDrawOnly:TRUE];
                 }
                 
-                completionHandler(YES, room, nil);
+                if (completionHandler) completionHandler(YES, room, nil);
             }
         }
         if (weakBridge.backgroundColor) {

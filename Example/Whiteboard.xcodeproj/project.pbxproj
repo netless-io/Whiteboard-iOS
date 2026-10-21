@@ -66,6 +66,7 @@
 		8AC2F0E327F43F0900A980D9 /* BaseRoomTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */; };
 		8AF1F04428153AFB00AA7535 /* SDKTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF1F04328153AFB00AA7535 /* SDKTest.m */; };
 		E5BC674B5D0955C29DD16C67 /* libPods-Whiteboard_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11245956B412E193A973B1F2 /* libPods-Whiteboard_Example.a */; };
+		AB6909B3F918496AAB49ED8B /* SessionLifecycleNativeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87997E75481F4E9705254F39 /* SessionLifecycleNativeTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,6 +166,8 @@
 		8AC2F0E227F43F0900A980D9 /* BaseRoomTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseRoomTest.m; sourceTree = "<group>"; };
 		8AF1F04328153AFB00AA7535 /* SDKTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDKTest.m; sourceTree = "<group>"; };
 		AA32734B84DB53CD19446306 /* libPods-Whiteboard_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Whiteboard_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		87997E75481F4E9705254F39 /* SessionLifecycleNativeTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SessionLifecycleNativeTests.m; sourceTree = "<group>"; };
+		B2ED4890E49CD05067F851A8 /* SessionLifecycleProbe.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SessionLifecycleProbe.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -303,6 +306,8 @@
 				8A48FAE227E33A9E00D6F98B /* WritableDetectTest.m */,
 				8A592E412BDF4AC600393A0C /* ApplePencilDrawTest.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
+				87997E75481F4E9705254F39 /* SessionLifecycleNativeTests.m */,
+				B2ED4890E49CD05067F851A8 /* SessionLifecycleProbe.h */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -599,6 +604,7 @@
 				8A592E422BDF4AC600393A0C /* ApplePencilDrawTest.m in Sources */,
 				8A18D2A427EDA89500EC29B1 /* MultiViewsRoomTest.m in Sources */,
 				8AB1A7812880127E000AE9A1 /* SyncedStoreTest.m in Sources */,
+				AB6909B3F918496AAB49ED8B /* SessionLifecycleNativeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

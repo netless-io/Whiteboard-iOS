@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithUuid:(NSString *)uuid bridge:(WhiteBoardView *)bridge;
 
-@property (nonatomic, weak, readonly) WhiteBoardView *bridge;
+@property (nonatomic, strong, readonly) WhiteBoardView *bridge;
 
 @end
 

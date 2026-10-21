@@ -65,7 +65,7 @@
         case WhiteRoomPhaseDisconnecting:
         case WhiteRoomPhaseDisconnected:
             [self updateLoadingVisible:YES];
-            [self requestReconnectIfNeeded];
+            // The existing host may still own a transport. Do not replace it automatically.
             break;
         case WhiteRoomPhaseConnecting:
             [self updateLoadingVisible:YES];
@@ -93,18 +93,8 @@
     self.recovering = NO;
     [self updateLoadingVisible:YES];
 
-    NSTimeInterval multiplier = pow(2, MIN(self.retryAttempt, (NSUInteger)16));
-    NSTimeInterval delay = MIN(self.maximumRetryDelay, self.initialRetryDelay * multiplier);
-    self.retryAttempt += 1;
-    NSUInteger generation = ++self.scheduleGeneration;
-    __weak typeof(self) weakSelf = self;
-    self.scheduler(delay, ^{
-        __strong typeof(weakSelf) self = weakSelf;
-        if (!self || !self.isActive || generation != self.scheduleGeneration) {
-            return;
-        }
-        [self requestReconnectIfNeeded];
-    });
+    // Join failure is not evidence that the old SDK request/transport was disposed.
+
 }
 
 - (void)requestReconnectIfNeeded
