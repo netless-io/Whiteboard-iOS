@@ -1,0 +1,63 @@
+{
+  "kind": "workspace verification; unpublished local dependencies",
+  "date": "2026-10-29",
+  "sourceBranches": {
+    "white-sdk": {
+      "branch": "master",
+      "base": "088af3343d9af5a3bf4546d4cbcbec592b35d6a1",
+      "sourceDiffSha256": "d77c53c80ef48bcb88efeb04ad5e1f755ef6872d383bdb441ec836d41c60141f",
+      "sourceFilesSha256": "af732b5e4f2d5b28e96c89556a0c1414a48311f457be74fd1c245e24aa1d0b62"
+    },
+    "akko": {
+      "branch": "master",
+      "base": "57fa7fbcd0cebb3bf5e3a81d8971df28016faa4c",
+      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceFilesSha256": "3a324232c639145faf6d6a9443e37f600411f49228c82cb39f611b5f9af4e373"
+    },
+    "akko-server": {
+      "branch": "master",
+      "base": "9580657e2bf2d2a03dadfb9c081f4fa4ce928bff",
+      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceFilesSha256": "755b9b3b7869c55b013a3c42fdc9779133ca1beaa9463b32025f004ea768bf8e"
+    },
+    "appliance-plugin": {
+      "branch": "master",
+      "base": "e8965bf595b74930ba20119690325eb979f6aea4",
+      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceFilesSha256": "42b187525aafe3db23ae91ec1e7585915116c046eb0a041d1aa2b8e0d639b4c9"
+    },
+    "spritejs": {
+      "branch": "master",
+      "base": "c032359aad2cb02dcec7da117740eeb1ad154289",
+      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceFilesSha256": "d6fc02cfd5fe2aa99dcb826430d1d74ac7770d27c6f9d110551ae8f7c212853e"
+    },
+    "window-manager": {
+      "branch": "master",
+      "base": "5ae0cdcbc1cc369935b8ccd5d696a6dda3c370ed",
+      "sourceDiffSha256": "6d0defa516c9d710d4a541d6e175ea22d9d8e5f66f9f7caa8135148ec2075c35",
+      "sourceFilesSha256": "389e8d6bd0a083221c411e995743cf4ec730b105358b007fcd2877b159dd7666"
+    },
+    "Whiteboard-bridge": {
+      "branch": "master",
+      "base": "60709414e7f5eb2b897ba917b5105cc409c518a7",
+      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceFilesSha256": "b9097913cb1d88da0791302f593e1bab9aa698fb1d336ee5330f2e492d3e90d9"
+    }
+  },
+  "assets": {
+    "6070941": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "appliance-worker-full-source.b4921454.js": "ba8e4130b8189a40b8bec44cedc247db638a2fe5d4ce8909f291999692443f6b",
+    "appliance-worker-sub-source.819cf297.js": "4f5678b166515f20e5b4c8ac4e3c06eee1a59808c8d3832022a4b2b4d06400af",
+    "index.html": "51f3f67765e0cecde45408351ecacca57a35419498883005298bfd7e15626b26",
+    "main.css": "de8a7bfe30820a70aa7cd138417f395cf7217d34db7e4840f91a73af1839058c",
+    "main.fd617cea.js": "b827bf50badf7b96312e4891864b2ea826311be79247d143b952f35d7cdd3ec2",
+    "netless.99dd49fe.js": "c0278158035c5983d461b4ad604f93847a4d11cb017b1767c749cc0e0b846a9d",
+    "netless.css": "9ae25c8d357ae142d9cb39bc3453e968194cfc2ab1bdd259948cef96177d733a",
+    "runtime.c8899540.js": "d083f6afb1431ff995b3430a25923373307d595a910b79c95d443c3f0b5b428f",
+    "vendor.1dc4d3a8.js": "bdb9d09ab05fe3042a7e97e677e7d166603bf36d04ad11f2cfc4c20ee15e8e3d",
+    "vendor.css": "518a7903e963337e10a3dd58cdb02c30c6427a60a8f80fb709abb437c347008c",
+    "video.16e43ef6.js": "4cc7fa5200a374a2072499ec582b1d4d1c2010f979a8c842f2582871a0411cd8",
+    "web-sdk.5f2cc80e.js": "f71be39cae66bf04910f901a30dd6efa644a2a68bc7ff52f5b3801bb125d4b79"
+  }
+}

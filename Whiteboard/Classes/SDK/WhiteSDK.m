@@ -188,6 +188,7 @@
 #pragma mark - Private
 - (void)setupWebSdk
 {
+    self.initializationConfiguration = [NSJSONSerialization JSONObjectWithData:[self.config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     if (self.config.useWebKeyboardInjection) {
         [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:TRUE];
     }
@@ -195,10 +196,26 @@
         [self.bridge setDebugViewStateLoggingEnabled:YES];
         [self.bridge observeWKWebViewConsole];
     }
-    [self.bridge setupWebSDKWithConfig:self.config completion:nil];
+    if ([self.bridge whiteCanConfigureCallbacks]) {
+        [self.bridge whitePrepareConfiguration:self.initializationConfiguration timeout:15 completion:^(NSError *error) {}];
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideLogNotification:) name:@"Slide-Log" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideVolumeNotification:) name:@"Slide-Volume" object:nil];
 }
+
+- (void)prepareWithCompletionHandler:(void (^)(NSError *))completion {
+    [self prepareWithTimeout:15 completionHandler:completion];
+}
+- (void)prepareWithTimeout:(NSTimeInterval)timeout completionHandler:(void (^)(NSError *))completion {
+    WhiteBoardView *view = self.bridge;
+    if (!view) {
+        if (completion) completion([NSError errorWithDomain:@"WhiteLifecycle" code:-1100 userInfo:@{NSLocalizedDescriptionKey:@"HostInvalid"}]);
+        return;
+    }
+    [view whitePrepareConfiguration:self.initializationConfiguration timeout:timeout completion:completion];
+}
+- (void)cancelPreparation { [self.bridge whiteCancelPreparation]; }
+- (NSDictionary *)preparationInfo { return [self.bridge whitePreparationInfo:self.initializationConfiguration] ?: @{@"ready":@NO}; }
 
 #pragma mark - PPT Volume
 - (void)getSlideVolumeWithCompletionHandler:(void (^)(CGFloat, NSError * _Nonnull))completionHandler

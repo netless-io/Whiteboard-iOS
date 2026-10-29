@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WhiteConsts.h"
 #import "WhiteSlideAppParams.h"
+#import "WhiteAppliancePluginOptions.h"
 
 
 typedef NS_ENUM(NSInteger, WhiteDeviceType) {
@@ -266,6 +267,8 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  默认为 NO。
  */
 @property (nonatomic, assign) BOOL enableAppliancePlugin;
+/** SDK defaults prepared before join; WhiteRoomConfig keeps its per-room override. */
+@property (nonatomic, strong, nullable) WhiteAppliancePluginOptions *appliancePluginOptions;
 
 /**
  * 配置白板的 API 服务器域名列表，可以用于服务器代理。配置后，白板不再使用 sdk 自带配置。

@@ -328,6 +328,20 @@
     
 }
 
+- (void)testAppliancePreparationOptionsHaveBothSdkAndRoomEntries
+{
+    WhiteSdkConfiguration *sdk=[[WhiteSdkConfiguration alloc] initWithApp:@"app"];
+    XCTAssertNil(sdk.jsonDict[@"appliancePluginOptions"]);
+    WhiteAppliancePluginOptions *options=[WhiteAppliancePluginOptions new];
+    options.extras=@{@"useWorker":@"auto",@"useSimple":@NO,@"bufferSize":@0};
+    sdk.appliancePluginOptions=options;
+    WhiteRoomConfig *room=[[WhiteRoomConfig alloc] initWithUUID:@"uuid" roomToken:@"test" uid:@"uid"];
+    room.appliancePluginOptions=options;
+    XCTAssertEqualObjects(sdk.jsonDict[@"appliancePluginOptions"], room.jsonDict[@"appliancePluginOptions"]);
+    XCTAssertEqualObjects(sdk.jsonDict[@"appliancePluginOptions"][@"extras"][@"useSimple"], @NO);
+    XCTAssertFalse([sdk.jsonDict[@"__nativeConfigDefaults"] containsObject:@"appliancePluginOptions"]);
+}
+
 - (void)testHasBackgroundImageParamsToJson
 {
     WhiteHasBackgroundImageParams *params = [[WhiteHasBackgroundImageParams alloc] init];

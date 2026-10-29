@@ -82,6 +82,14 @@ static NSMutableDictionary<NSString *, WhiteReplacement *> *WhiteReplacements(vo
 @property (nonatomic, copy) NSArray *whiteSdkInitArgs;
 @property (nonatomic, strong) WhiteReplacement *whiteReplacement;
 @property (nonatomic, copy) NSString *whiteIdentity;
+@property (nonatomic, copy) NSString *whiteViewId;
+@property (nonatomic, copy) NSDictionary *whitePreparationConfiguration;
+@property (nonatomic, strong) NSMutableArray *whitePreparationWaiters;
+@property (nonatomic) NSUInteger whitePreparationEpoch;
+@property (nonatomic) NSUInteger whiteSetupCount;
+@property (nonatomic) BOOL whitePrepared;
+@property (nonatomic) NSTimeInterval whitePreparationStarted;
+@property (nonatomic) NSTimeInterval whitePreparationElapsed;
 - (void)whiteCall:(NSString *)method arguments:(NSArray *)args generation:(NSNumber *)generation completion:(void (^)(id))completion;
 
 @property (nonatomic, copy) NSString* customResourceUrl;
@@ -157,6 +165,7 @@ static const NSUInteger WhiteBoardViewDebugLogMaxLength = 2048;
     _whiteState = @"idle";
     _whiteGeneration = @0;
     _whiteReady = [NSMutableArray array];
+    _whiteViewId = NSUUID.UUID.UUIDString;
     _customResourceUrl = [customResourceUrl copy];
     _enableHttpsScheme = enableHttpsScheme;
     
@@ -268,11 +277,8 @@ static id WhiteLifecycleFailure(NSString *message) {
                 if (!request.generation) { [self whiteFinishReplacement:request error:WhiteLifecycleError(@"Busy")]; return; }
                 WhiteOwners()[identity] = self; self.whiteIdentity = identity;
                 bind();
-                self.whiteSdkInitArgs = @[configuration];
-                [self whiteCall:@"sdk.newWhiteSdk" arguments:@[configuration] generation:request.generation completion:^(id value) {
+                [self whitePrepareConfiguration:configuration timeout:timeout admitted:YES completion:^(NSError *setupError) {
                     if (![self whiteReplacementIsCurrent:request] || ![self whiteCurrent:request.generation]) return;
-                    NSDictionary *result = [value isKindOfClass:NSString.class] ? [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
-                    NSError *setupError = !result ? WhiteLifecycleError(@"InvalidSetupResult") : result[@"__error"] ? WhiteLifecycleError(result[@"__error"][@"message"]) : nil;
                     if (setupError) [self whiteComplete:request.generation success:NO];
                     [self whiteFinishReplacement:request error:setupError];
                 }];
@@ -292,7 +298,7 @@ static id WhiteLifecycleFailure(NSString *message) {
             if (![value[@"documentId"] isKindOfClass:NSString.class]) { [self whiteInvalidate]; return; }
             self.whiteDocument = value[@"documentId"];
             NSArray *work = self.whiteReady.copy; [self.whiteReady removeAllObjects];
-            if (restoreSdk && self.whiteSdkInitArgs) [self whiteCall:@"sdk.newWhiteSdk" arguments:self.whiteSdkInitArgs generation:@0 completion:nil];
+            if (restoreSdk && self.whiteSdkInitArgs) [self whitePrepareConfiguration:self.whiteSdkInitArgs.firstObject timeout:15 completion:nil];
             for (void (^block)(void) in work) block();
         }
     }];
@@ -397,6 +403,7 @@ static id WhiteLifecycleFailure(NSString *message) {
         if (completion) [self.whiteCloseCallbacks addObject:completion];
         void (^pending)(NSError *) = self.whitePending; self.whitePending = nil;
         if (pending) pending(WhiteLifecycleError(@"Cancelled"));
+        if (pending) [self whiteCancelPreparation];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [self whiteFinishLeave:generation value:WhiteLifecycleFailure(@"LeaveTimeout")];
         });
@@ -409,6 +416,8 @@ static id WhiteLifecycleFailure(NSString *message) {
     @synchronized (self) {
         if (self.whiteInvalid) return;
         self.whiteInvalid = YES; self.whiteState = @"blocked"; [self.whiteReady removeAllObjects];
+        [self whiteFinishPreparation:WhiteLifecycleError(@"HostInvalid")];
+        self.whitePrepared = NO;
         if (self.whiteReplacement) [self whiteFinishReplacement:self.whiteReplacement error:WhiteLifecycleError(@"HostInvalid")];
         void (^pending)(NSError *) = self.whitePending; self.whitePending = nil;
         if (pending) pending(WhiteLifecycleError(@"HostInvalid"));
@@ -441,6 +450,7 @@ static id WhiteLifecycleFailure(NSString *message) {
     BOOL closed = [self.whiteState isEqualToString:@"idle"] &&
         (self.whiteGeneration.unsignedLongLongValue == 0 || (self.whiteCloseCompleted && !self.whiteCloseError));
     if (!closed) { [self whiteInvalidate]; return [super reload]; }
+    [self whiteCancelPreparation];
     self.whiteDocument = nil; self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1);
     [self.whiteReady removeAllObjects]; self.whiteCloseCallbacks = nil; self.whiteCloseCompleted = NO; self.whiteCloseError = nil;
     [self resetCallInfoList];
@@ -510,6 +520,84 @@ static id WhiteLifecycleFailure(NSString *message) {
 }
 
 #pragma mark - Private.h Methods
+- (NSDictionary *)whitePreparationInfo:(NSDictionary *)configuration {
+    return @{@"ready":@(!self.whiteInvalid && self.whitePrepared && [configuration isEqual:self.whitePreparationConfiguration]),
+             @"viewId":self.whiteViewId ?: @"", @"documentId":self.whiteDocument ?: @"",
+             @"setupCount":@(self.whiteSetupCount), @"elapsedMs":@(self.whitePreparationElapsed * 1000),
+             @"generation":self.whiteGeneration ?: @0, @"roomState":self.whiteState ?: @"idle"};
+}
+- (void)whiteLogPreload:(NSString *)event {
+    NSMutableDictionary *info = [[self whitePreparationInfo:self.whitePreparationConfiguration] mutableCopy];
+    info[@"event"] = event; info[@"uptimeMs"] = @(NSProcessInfo.processInfo.systemUptime * 1000);
+    [self.commonCallbacks logger:@{@"WhitePreload":info}];
+}
+- (void)whiteFinishPreparation:(NSError *)error {
+    NSArray *waiters = self.whitePreparationWaiters.copy;
+    self.whitePreparationWaiters = nil;
+    self.whitePreparationEpoch++;
+    if (!waiters) return;
+    self.whitePrepared = !error;
+    self.whitePreparationElapsed = NSProcessInfo.processInfo.systemUptime - self.whitePreparationStarted;
+    [self whiteLogPreload:error ? @"prepare_failed" : @"prepare_ready"];
+    for (void (^callback)(NSError *) in waiters) callback(error);
+}
+- (void)whiteCancelPreparation {
+    dispatch_main_async_safe(^{
+        self.whitePrepared = NO;
+        [self whiteFinishPreparation:WhiteLifecycleError(@"Cancelled")];
+    });
+}
+- (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout completion:(void (^)(NSError *))completion {
+    [self whitePrepareConfiguration:configuration timeout:timeout admitted:NO completion:completion];
+}
+- (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout admitted:(BOOL)admitted completion:(void (^)(NSError *))completion {
+    dispatch_main_async_safe(^{
+        if (self.whiteInvalid || !configuration || !isfinite(timeout) || timeout <= 0) {
+            if (completion) completion(WhiteLifecycleError(self.whiteInvalid ? @"HostInvalid" : @"InvalidPreparationOptions"));
+            return;
+        }
+        BOOL same = [configuration isEqual:self.whitePreparationConfiguration];
+        if (same && self.whitePrepared) {
+            [self whiteLogPreload:@"prepare_cache_hit"];
+            if (completion) completion(nil);
+            return;
+        }
+        if ((!same && [self.whiteState isEqualToString:@"joining"] && !admitted) || (!same && ([self.whiteState isEqualToString:@"active"] || [self.whiteState isEqualToString:@"closing"] || [self.whiteState isEqualToString:@"blocked"]))) {
+            if (completion) completion(WhiteLifecycleError(@"Busy"));
+            return;
+        }
+        if (!same) [self whiteCancelPreparation];
+        BOOL starting = !self.whitePreparationWaiters;
+        if (starting) {
+            self.whitePrepared = NO;
+            self.whitePreparationConfiguration = configuration;
+            self.whitePreparationWaiters = [NSMutableArray array];
+            self.whitePreparationStarted = NSProcessInfo.processInfo.systemUptime;
+            self.whitePreparationEpoch++;
+        }
+        if (completion) [self.whitePreparationWaiters addObject:completion];
+        NSUInteger epoch = self.whitePreparationEpoch;
+        // The earliest requested deadline wins for all callers sharing this attempt.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self.whitePreparationWaiters && epoch == self.whitePreparationEpoch) [self whiteFinishPreparation:WhiteLifecycleError(@"PrepareTimeout")];
+        });
+        if (!starting) return;
+        [self whiteLogPreload:@"prepare_start"];
+        __weak typeof(self) weakSelf = self;
+        void (^start)(void) = ^{
+            WhiteBoardView *host = weakSelf;
+            if (!host || host.whiteInvalid || epoch != host.whitePreparationEpoch || !host.whitePreparationWaiters) return;
+            host.whiteSetupCount++;
+            [host whiteCall:@"sdk.newWhiteSdk" arguments:@[configuration] generation:@0 completion:^(id value) {
+                if (epoch != host.whitePreparationEpoch || !host.whitePreparationWaiters) return;
+                NSDictionary *result = [value isKindOfClass:NSString.class] ? [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
+                NSError *error = ![result isKindOfClass:NSDictionary.class] ? WhiteLifecycleError(@"InvalidSetupResult") : result[@"__error"] ? WhiteLifecycleError(result[@"__error"][@"message"]) : nil;
+                [host whiteFinishPreparation:error];
+            }];
+        };
+        if (self.whiteDocument) start(); else [self.whiteReady addObject:[start copy]];
+    });
+}
 - (void)setupWebSDKWithConfig:(WhiteSdkConfiguration *)config completion:(void (^) (id _Nullable value))completionHandler
 {
     self.whiteSdkInitArgs = @[config];
