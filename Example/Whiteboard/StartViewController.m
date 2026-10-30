@@ -28,6 +28,10 @@
 @property UILabel *status;
 @property NSMutableDictionary *evidence;
 @property BOOL joining;
+#if DEBUG
+@property NSTimer *networkTimer;
+@property NSString *networkCommandID;
+#endif
 @end
 @implementation WhitePreloadDemoController
 - (void)viewDidLoad {
@@ -41,9 +45,16 @@
     [self.view addSubview:self.board];
     UIStackView *overlay=[UIStackView new];overlay.axis=UILayoutConstraintAxisVertical;overlay.backgroundColor=UIColor.secondarySystemBackgroundColor;
     self.status=[UILabel new];self.status.text=@"正在准备白板…";self.status.numberOfLines=0;
-    self.enterButton=[UIButton buttonWithType:UIButtonTypeSystem];[self.enterButton setTitle:@"进入测试课堂" forState:UIControlStateNormal];self.enterButton.enabled=NO;
+    self.enterButton=[UIButton buttonWithType:UIButtonTypeSystem];[self.enterButton setTitle:@"进入测试课堂" forState:UIControlStateNormal];self.enterButton.enabled=NO;self.enterButton.accessibilityIdentifier=@"preload.join";
     [self.enterButton addTarget:self action:@selector(enterClass) forControlEvents:UIControlEventTouchUpInside];
-    [overlay addArrangedSubview:self.status];[overlay addArrangedSubview:self.enterButton];[self.view addSubview:overlay];overlay.translatesAutoresizingMaskIntoConstraints=NO;
+    [overlay addArrangedSubview:self.status];[overlay addArrangedSubview:self.enterButton];
+#if DEBUG
+    if([NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-network"]) {
+        UIButton *leave=[UIButton buttonWithType:UIButtonTypeSystem];[leave setTitle:@"退出测试课堂" forState:UIControlStateNormal];leave.accessibilityIdentifier=@"preload.leave";
+        [leave addTarget:self action:@selector(leaveTestClass) forControlEvents:UIControlEventTouchUpInside];[overlay addArrangedSubview:leave];
+    }
+#endif
+    [self.view addSubview:overlay];overlay.translatesAutoresizingMaskIntoConstraints=NO;
     [NSLayoutConstraint activateConstraints:@[[overlay.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],[overlay.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],[overlay.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor]]];
     WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];config.useMultiViews=YES;config.enableAppliancePlugin=YES;
     WhiteAppliancePluginOptions *appliance=[WhiteAppliancePluginOptions new];
@@ -57,11 +68,45 @@
         if(error){[host record:@"prepare_error" completion:nil];return;}
         host.enterButton.enabled=YES;
         [host record:@"prepared" completion:^{
-            if([NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-probe"])
+            if([NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-probe"] && ![NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-network"])
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW,2*NSEC_PER_SEC),dispatch_get_main_queue(),^{[weakSelf enterClass];});
         }];
     }];
+#if DEBUG
+    if([NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-network"]) {
+        self.networkTimer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(networkTick) userInfo:nil repeats:YES];
+    }
+#endif
 }
+#if DEBUG
+// USB file commands drive the real Native SDK while data traffic is unavailable.
+- (void)leaveTestClass {
+    [self.sdk leaveRoomWithCompletionHandler:^(NSError *error){
+        self.joining=NO;self.room=nil;self.enterButton.enabled=YES;self.status.text=@"白板已准备，等待进入课堂";
+        [self record:error?@"leave_error":@"left" completion:nil];
+    }];
+}
+- (void)networkTick {
+    NSString *documents=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject;
+    NSData *data=[NSData dataWithContentsOfFile:[documents stringByAppendingPathComponent:@"white-preload-command.json"]];
+    NSDictionary *command=data?[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]:nil;
+    if(command[@"id"] && ![self.networkCommandID isEqual:command[@"id"]]) {
+        self.networkCommandID=command[@"id"];
+        if([command[@"action"] isEqual:@"join"]) [self enterClass];
+        if([command[@"action"] isEqual:@"leave"]) [self.sdk leaveRoomWithCompletionHandler:^(NSError *error){
+            self.joining=NO;self.room=nil;self.enterButton.enabled=YES;
+            [self record:error?@"leave_error":@"left" completion:nil];
+        }];
+    }
+    NSString *js=@"(function(){var p=window.__preloadProbe;if(!p)return {};var w=window.__whitePreparation;var urls=w&&w.workerUrls;if(urls&&urls.fullWorkerUrl&&!p.firstBlob)p.firstBlob=urls.fullWorkerUrl;if(window.room&&!p.firstRoom)p.firstRoom=window.room;if(!p.canaryPending){p.canaryPending=true;var x=new XMLHttpRequest();x.open('GET','https://api-cn-hz.netless.link/v5/configs/regions?networkProbe='+Date.now());x.timeout=2500;var done=function(ok){p.canary={ok:ok,status:x.status,time:Date.now()};p.canaryPending=false};x.onload=function(){done(x.status>0)};x.onerror=function(){done(false)};x.ontimeout=function(){done(false)};x.send()}return {constructors:p.constructors,joins:p.joins,sameSdk:window.sdk===p.firstSdk,sameBlob:!!p.firstBlob&&!!urls&&urls.fullWorkerUrl===p.firstBlob,sameRoom:!!window.room&&window.room===p.firstRoom,roomPresent:!!window.room,managerPresent:!!window.manager,phase:window.room&&window.room.phase,online:navigator.onLine,canary:p.canary,resources:w,content:{fixture:window.room&&window.room.state.globalState.preloadNetworkFixture,apps:window.manager&&window.manager.apps,titleVisible:document.body.innerText.indexOf('Preload Network Slide')>=0,canvases:document.querySelectorAll('canvas').length,noteData:window.appliancePlugin&&window.appliancePlugin.currentManager&&JSON.stringify(window.appliancePlugin.currentManager.collector.storage)}}})()";
+    [self.board evaluateJavaScript:js completionHandler:^(id value,NSError *error){
+        NSMutableArray *samples=self.evidence[@"networkSamples"];if(!samples){samples=[NSMutableArray array];self.evidence[@"networkSamples"]=samples;}
+        [samples addObject:@{@"wallTimeMs":@(NSDate.date.timeIntervalSince1970*1000),@"command":self.networkCommandID?:@"",@"js":value?:@{},@"native":self.sdk.preparationInfo}];
+        if(samples.count>600)[samples removeObjectAtIndex:0];
+        [[NSJSONSerialization dataWithJSONObject:self.evidence options:NSJSONWritingPrettyPrinted error:nil] writeToFile:[documents stringByAppendingPathComponent:@"white-preload-demo.json"] atomically:YES];
+    }];
+}
+#endif
 - (void)logger:(NSDictionary *)dict { if(dict[@"WhitePreload"]) NSLog(@"WHITE_PRELOAD_EVENT %@",dict[@"WhitePreload"]); }
 - (void)record:(NSString *)event completion:(void (^)(void))completion {
     NSDictionary *native=self.sdk.preparationInfo;
@@ -80,9 +125,9 @@
         WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:WhitePreloadRoomUUID roomToken:WhitePreloadRoomToken uid:[@"ios-preload-" stringByAppendingString:NSUUID.UUID.UUIDString]];
         config.region=WhiteRegionCN;config.isWritable=NO;config.windowParams=[WhiteWindowParams new];
         [self.sdk joinRoomWithConfig:config callbacks:nil completionHandler:^(BOOL success,WhiteRoom *room,NSError *error){
-            self.room=room;self.status.text=success?@"已进入课堂":error.localizedDescription;
+            self.room=room;if(!success){self.joining=NO;self.enterButton.enabled=YES;}self.status.text=success?@"已进入课堂":error.localizedDescription;
             [self record:success?@"room_ready":@"join_error" completion:^{
-                if(success&&[NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-probe"])
+                if(success&&[NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-probe"] && ![NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-network"])
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,5*NSEC_PER_SEC),dispatch_get_main_queue(),^{[self.sdk leaveRoomWithCompletionHandler:^(NSError *e){[self record:e?@"leave_error":@"left" completion:nil];}];});
             }];
         }];
@@ -90,7 +135,11 @@
 }
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if(self.isMovingFromParentViewController || self.navigationController.isBeingDismissed){[self.sdk cancelPreparation];[self.sdk leaveRoomWithCompletionHandler:^(NSError *error){}];}
+    if(self.isMovingFromParentViewController || self.navigationController.isBeingDismissed){
+#if DEBUG
+        [self.networkTimer invalidate];self.networkTimer=nil;
+#endif
+        [self.sdk cancelPreparation];[self.sdk leaveRoomWithCompletionHandler:^(NSError *error){}];}
 }
 @end
 
