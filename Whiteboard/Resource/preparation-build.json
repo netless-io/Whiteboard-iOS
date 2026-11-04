@@ -1,63 +1,134 @@
 {
-  "kind": "workspace verification; unpublished local dependencies",
-  "date": "2026-10-29",
-  "sourceBranches": {
-    "white-sdk": {
-      "branch": "master",
-      "base": "088af3343d9af5a3bf4546d4cbcbec592b35d6a1",
-      "sourceDiffSha256": "d77c53c80ef48bcb88efeb04ad5e1f755ef6872d383bdb441ec836d41c60141f",
-      "sourceFilesSha256": "af732b5e4f2d5b28e96c89556a0c1414a48311f457be74fd1c245e24aa1d0b62"
+  "kind": "production Bridge; clean committed source and published npm dependencies",
+  "date": "2026-11-04",
+  "bridgeCommit": "f0f37319f4ebd18b00a246d65f4bdd767a73d9af",
+  "bridgeMarker": "f0f3731",
+  "lockfileSha256": "472a0a430b6f4dee558467ab93738f6d12584716cc1be21d55567712c6b40d6f",
+  "dependencies": {
+    "white-web-sdk": {
+      "version": "2.16.61",
+      "packageJsonSha256": "9f41937a4912dd6df0060fb587f32cdb188d8cc7a916f3c592fa8b74e5fc5d8c"
     },
-    "akko": {
-      "branch": "master",
-      "base": "57fa7fbcd0cebb3bf5e3a81d8971df28016faa4c",
-      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sourceFilesSha256": "3a324232c639145faf6d6a9443e37f600411f49228c82cb39f611b5f9af4e373"
+    "@netless/window-manager": {
+      "version": "1.0.27",
+      "packageJsonSha256": "d36077a8f8f3a25121376ea2932a16ce1078b8706ee50cec4494bbdacf71feb8"
     },
-    "akko-server": {
-      "branch": "master",
-      "base": "9580657e2bf2d2a03dadfb9c081f4fa4ce928bff",
-      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sourceFilesSha256": "755b9b3b7869c55b013a3c42fdc9779133ca1beaa9463b32025f004ea768bf8e"
-    },
-    "appliance-plugin": {
-      "branch": "master",
-      "base": "e8965bf595b74930ba20119690325eb979f6aea4",
-      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sourceFilesSha256": "42b187525aafe3db23ae91ec1e7585915116c046eb0a041d1aa2b8e0d639b4c9"
-    },
-    "spritejs": {
-      "branch": "master",
-      "base": "c032359aad2cb02dcec7da117740eeb1ad154289",
-      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sourceFilesSha256": "d6fc02cfd5fe2aa99dcb826430d1d74ac7770d27c6f9d110551ae8f7c212853e"
-    },
-    "window-manager": {
-      "branch": "master",
-      "base": "5ae0cdcbc1cc369935b8ccd5d696a6dda3c370ed",
-      "sourceDiffSha256": "6d0defa516c9d710d4a541d6e175ea22d9d8e5f66f9f7caa8135148ec2075c35",
-      "sourceFilesSha256": "389e8d6bd0a083221c411e995743cf4ec730b105358b007fcd2877b159dd7666"
-    },
-    "Whiteboard-bridge": {
-      "branch": "master",
-      "base": "60709414e7f5eb2b897ba917b5105cc409c518a7",
-      "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sourceFilesSha256": "b9097913cb1d88da0791302f593e1bab9aa698fb1d336ee5330f2e492d3e90d9"
+    "@netless/appliance-plugin": {
+      "version": "1.1.46",
+      "packageJsonSha256": "4214493317de50706dab752a96cc59e46dbf47500bf373047bf60de57e6b2e13"
     }
   },
+  "modelPreloadProbe": {
+    "passed": true,
+    "boundary": "complete production-mode Bridge/Web SDK/Akko bundle in Chromium; controlled gateway; join stops at Magix boundary",
+    "cases": [
+      {
+        "flag": "omitted",
+        "constructorCalls": 0,
+        "prepareCalls": 0,
+        "modelHintRequests": 0,
+        "modelState": "deferredHandshake",
+        "handshakeEntry": 1,
+        "joinError": "PROBE_HANDSHAKE_BOUNDARY"
+      },
+      {
+        "flag": false,
+        "constructorCalls": 0,
+        "prepareCalls": 0,
+        "modelHintRequests": 0,
+        "modelState": "deferredHandshake",
+        "handshakeEntry": 1,
+        "joinError": "PROBE_HANDSHAKE_BOUNDARY"
+      },
+      {
+        "flag": true,
+        "constructorCalls": 1,
+        "prepareCalls": 1,
+        "modelHintRequests": 1,
+        "modelState": "deferredHandshake",
+        "handshakeEntry": 0
+      }
+    ],
+    "bridgeCases": [
+      {
+        "flag": "omitted",
+        "effective": false,
+        "prepareCalls": 0
+      },
+      {
+        "flag": false,
+        "effective": false,
+        "prepareCalls": 0
+      },
+      {
+        "flag": true,
+        "effective": true,
+        "prepareCalls": 1
+      }
+    ]
+  },
+  "appAndApplianceProbe": {
+    "passed": true,
+    "boundary": "production Bridge bundle with controlled App class downloads; real appliance Worker preparation; no live Room",
+    "cases": [
+      {
+        "selection": "omitted",
+        "fetched": [
+          "Presentation",
+          "Slide"
+        ],
+        "setupCalls": 0
+      },
+      {
+        "selection": [],
+        "fetched": [],
+        "setupCalls": 0
+      },
+      {
+        "selection": [
+          "MediaPlayer"
+        ],
+        "fetched": [
+          "MediaPlayer"
+        ],
+        "setupCalls": 0
+      },
+      {
+        "selection": [
+          "DocsViewer",
+          "Slide",
+          "DocsViewer"
+        ],
+        "fetched": [
+          "DocsViewer",
+          "Slide"
+        ],
+        "setupCalls": 0
+      }
+    ],
+    "appliance": {
+      "enableModelPreload": false,
+      "enableAppliancePlugin": true,
+      "options": "omitted; auto default",
+      "state": "ready",
+      "renderModel": "worker-offscreen-transfer/webgl2",
+      "fullWorkerBlob": true
+    }
+  },
+  "nativeDeviceRoomProbe": "not executed; Native SDKs are not published by this task",
   "assets": {
-    "6070941": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "appliance-worker-full-source.b4921454.js": "ba8e4130b8189a40b8bec44cedc247db638a2fe5d4ce8909f291999692443f6b",
-    "appliance-worker-sub-source.819cf297.js": "4f5678b166515f20e5b4c8ac4e3c06eee1a59808c8d3832022a4b2b4d06400af",
-    "index.html": "51f3f67765e0cecde45408351ecacca57a35419498883005298bfd7e15626b26",
+    "appliance-worker-full-source.026543af.js": "965cf93e4bdb5176729710c2754c4a16fe90051abb33295a696450b6f7f126d9",
+    "appliance-worker-sub-source.da626076.js": "538977cbd5775deac93fbaa6f9d464b5937da173382e87bb8d4c3684a6e13e09",
+    "f0f3731": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "index.html": "e231a29c2ae93e6b9742f38f8ae192601184c4ba20f809f8f9a55c4ced185e5f",
+    "main.096062b9.js": "33ce085cc38c227b514e03fedf3b6442091dfcbc9047ca202acff6ecd1826fe6",
     "main.css": "de8a7bfe30820a70aa7cd138417f395cf7217d34db7e4840f91a73af1839058c",
-    "main.fd617cea.js": "b827bf50badf7b96312e4891864b2ea826311be79247d143b952f35d7cdd3ec2",
-    "netless.99dd49fe.js": "c0278158035c5983d461b4ad604f93847a4d11cb017b1767c749cc0e0b846a9d",
     "netless.css": "9ae25c8d357ae142d9cb39bc3453e968194cfc2ab1bdd259948cef96177d733a",
-    "runtime.c8899540.js": "d083f6afb1431ff995b3430a25923373307d595a910b79c95d443c3f0b5b428f",
-    "vendor.1dc4d3a8.js": "bdb9d09ab05fe3042a7e97e677e7d166603bf36d04ad11f2cfc4c20ee15e8e3d",
+    "netless.fd84e04c.js": "547aeaf3633a11cc2deb7cdf76311000650e47b35e53750543b4ce7402cff018",
+    "runtime.15430c32.js": "611ed0c40e477436683e231829de3f838093a3cfb5907de233c5e5c20da3e18b",
     "vendor.css": "518a7903e963337e10a3dd58cdb02c30c6427a60a8f80fb709abb437c347008c",
+    "vendor.e48755ae.js": "cfd98635babb55494da055cabaebc8d51847eed4d3aaf2c4e846b6f72d0e9f52",
     "video.16e43ef6.js": "4cc7fa5200a374a2072499ec582b1d4d1c2010f979a8c842f2582871a0411cd8",
-    "web-sdk.5f2cc80e.js": "f71be39cae66bf04910f901a30dd6efa644a2a68bc7ff52f5b3801bb125d4b79"
+    "web-sdk.33f7e6a1.js": "ce57ad000d824bd36f6be0265906fc432c0662497e8f07c7115d3be7a94d98a0"
   }
 }

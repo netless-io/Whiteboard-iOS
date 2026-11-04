@@ -137,6 +137,36 @@
 
 @implementation WhiteObjectTests
 
+- (void)testBuiltinAppPreloadSelectionJson
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app"];
+    XCTAssertNil(config.jsonDict[@"preloadBuiltinApps"]);
+    NSMutableArray *kinds = [NSMutableArray arrayWithArray:@[@"Slide", @"Presentation"]];
+    config.preloadBuiltinApps = kinds;
+    [kinds removeAllObjects];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:config.jsonDict options:0 error:nil];
+    NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    XCTAssertEqualObjects(payload[@"preloadBuiltinApps"], (@[@"Slide", @"Presentation"]));
+    config.preloadBuiltinApps = @[];
+    XCTAssertEqualObjects(config.jsonDict[@"preloadBuiltinApps"], @[]);
+    config.preloadBuiltinApps = nil;
+    XCTAssertNil(config.jsonDict[@"preloadBuiltinApps"]);
+    XCTAssertFalse(config.enableModelPreload);
+}
+
+- (void)testModelPreloadOptInJson
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app"];
+    XCTAssertFalse(config.enableModelPreload);
+    XCTAssertEqualObjects(config.jsonDict[@"enableModelPreload"], @NO);
+    config.enableModelPreload = YES;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:config.jsonDict options:0 error:nil];
+    NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    XCTAssertEqualObjects(payload[@"enableModelPreload"], @YES);
+    config.enableModelPreload = NO;
+    XCTAssertEqualObjects(config.jsonDict[@"enableModelPreload"], @NO);
+}
+
 - (void)testDynamicConfigRegionMapAndExplicitDefaults
 {
     WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app"];

@@ -566,7 +566,10 @@ static id WhiteLifecycleFailure(NSString *message) {
             if (completion) completion(WhiteLifecycleError(@"Busy"));
             return;
         }
-        if (!same) [self whiteCancelPreparation];
+        // Install the target attempt before invoking cancellations: a caller
+        // may synchronously retry a different configuration from its callback.
+        NSArray *cancelledWaiters = !same ? self.whitePreparationWaiters.copy : nil;
+        if (!same) self.whitePreparationWaiters = nil;
         BOOL starting = !self.whitePreparationWaiters;
         if (starting) {
             self.whitePrepared = NO;
@@ -577,6 +580,8 @@ static id WhiteLifecycleFailure(NSString *message) {
         }
         if (completion) [self.whitePreparationWaiters addObject:completion];
         NSUInteger epoch = self.whitePreparationEpoch;
+        for (void (^callback)(NSError *) in cancelledWaiters) callback(WhiteLifecycleError(@"Cancelled"));
+        if (epoch != self.whitePreparationEpoch || !self.whitePreparationWaiters) return;
         // The earliest requested deadline wins for all callers sharing this attempt.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (self.whitePreparationWaiters && epoch == self.whitePreparationEpoch) [self whiteFinishPreparation:WhiteLifecycleError(@"PrepareTimeout")];
