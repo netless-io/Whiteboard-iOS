@@ -14,6 +14,7 @@
 - (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout completion:(void (^)(NSError *error))completion;
 - (void)whiteCancelPreparation;
 - (NSDictionary *)whitePreparationInfo:(NSDictionary *)configuration;
+- (NSUInteger)whitePreparationRevision;
 - (void)whiteLogPreload:(NSString *)event;
 - (void)whiteReplaceRoom:(NSString *)identity configuration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout bind:(void (^)(void))bind start:(void (^)(NSNumber *generation))start failure:(void (^)(NSError *error))failure;
 - (BOOL)whiteCanConfigureCallbacks;

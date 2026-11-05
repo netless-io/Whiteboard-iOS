@@ -115,7 +115,7 @@ static NSInteger const MaoBottomPanelHeight = 190;
         roomConfig.region = WhiteRegionCN;
         roomConfig.windowParams = [[WhiteWindowParams alloc] init];
         roomConfig.windowParams.fullscreen = YES;
-        roomConfig.windowParams.useBoxesStatus = YES;
+        roomConfig.windowParams.useBoxesStatus = NO;
         self.roomConfig = roomConfig;
     }
     [super joinRoomWithToken:roomToken];

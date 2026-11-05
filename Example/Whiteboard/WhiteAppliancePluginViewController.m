@@ -9,8 +9,8 @@
 #import "Masonry.h"
 #import "WhiteUtils.h"
 
-static NSString * const kAppliancePluginRoomUUID = @"b192fe80ba1b11f1b109bd7837044901";
-static NSString * const kAppliancePluginRoomToken = @"NETLESSROOM_YWs9VWtNUk92M1JIN2I2Z284dCZleHBpcmVBdD0xNzkwNTYyNzUzMjg1Jm5vbmNlPWIxYWFmMzUwLWJhMWItMTFmMS1iYzM4LWQ3Yjg5YzgwZTNlMSZyb2xlPTEmc2lnPWQzODBiNzExNjE1ZjMwNmU2N2JiMzE5MDc5ODBiZmQ3MjA2NmJmZWI3ZjRiOGMyNjFlMGFmNzYzNjNkMTVmNjImdXVpZD1iMTkyZmU4MGJhMWIxMWYxYjEwOWJkNzgzNzA0NDkwMQ";
+static NSString * const kAppliancePluginRoomUUID = WhiteRoomUUID;
+static NSString * const kAppliancePluginRoomToken = WhiteRoomToken;
 static CGFloat const kAppliancePluginOriginWidth = 1280.0;
 static CGFloat const kAppliancePluginOriginHeight = 720.0;
 static NSString * const kAppliancePluginSlidePrefix = @"https://conversion-demo-cn.oss-cn-hangzhou.aliyuncs.com/demo/dynamicConvert";
@@ -52,9 +52,15 @@ static NSString * const kAppliancePluginSlideTaskId = @"3e3a2b8845194f998e6e05ad
         config.useMultiViews = YES;
         config.renderEngine = WhiteSdkRenderEngineCanvas;
         config.region = WhiteRegionCN;
+        config.dynamicConfig = @{
+            @"cn-hz": @"https://fastboard-demo-config.oss-cn-hangzhou.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"sg": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"us-sv": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"eu": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"in-mum": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json"
+        };
         config.log = YES;
         config.enableAppliancePlugin = YES;
-        config.userCursor = NO;
         config.loggerOptions = @{
             @"printLevelMask": WhiteSDKLoggerOptionLevelDebug
         };
@@ -145,7 +151,47 @@ static NSString * const kAppliancePluginSlideTaskId = @"3e3a2b8845194f998e6e05ad
 {
     [super actionAfterSuccessJoinRoom:room roomToken:roomToken];
     [self updateWritableUI];
+#if DEBUG
+    if ([NSProcessInfo.processInfo.arguments containsObject:@"--white-dynamic-config-probe"]) {
+        NSLog(@"[DynamicConfigDemo] join-success room=%@", self.roomUuid);
+        __weak typeof(self) weakSelf = self;
+        for (NSNumber *delay in @[@0, @5, @30]) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay.doubleValue * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                if (weakSelf.room == room) {
+                    [weakSelf logDynamicConfigProbe];
+                }
+            });
+        }
+    }
+#endif
 }
+
+#if DEBUG
+- (void)logDynamicConfigProbe
+{
+    // Read the actual Room, WM and plugin after initialization, without changing their state.
+    NSString *script = @"(function(){var r=window.room,m=window.manager,p=window.appliancePlugin;"
+        "var pm=p&&p.currentManager,e=pm&&pm.pluginOptions&&pm.pluginOptions.extras;"
+        "return JSON.stringify({observedAt:new Date().toISOString(),roomUUID:r&&r.uuid,ua:navigator.userAgent,platform:window.__platform,"
+        "state:r&&r.dynamicConfigState,resolved:r&&r.dynamicConfig,"
+        "room:{phase:r&&r.phase,disableCameraTransform:r&&r.disableCameraTransform,"
+        "disableDeviceInputs:r&&r.disableDeviceInputs,isWritable:r&&r.isWritable},"
+        "windowManager:{attached:!!m,mainViewDisableCameraTransform:m&&m.mainView&&m.mainView.disableCameraTransform},"
+        "plugin:{attached:!!p,renderMode:pm&&pm.renderMode,decision:pm&&pm.renderingCompatibilityDecision,"
+        "extras:e&&{useWorker:e.useWorker,useSimple:e.useSimple,useBackgroundThread:e.useBackgroundThread,"
+        "strokeWidth:e.strokeWidth,syncOpt:e.syncOpt,backgroundImageLoadOptions:e.backgroundImageLoadOptions,"
+        "allowImageBitmapFallback:e.allowImageBitmapFallback}}});})()";
+    [self.boardView evaluateJavaScript:script completionHandler:^(id result, NSError *error) {
+        if (error) {
+            NSLog(@"[DynamicConfigDemo] probe-error=%@", error.localizedDescription);
+        } else if ([result isKindOfClass:NSString.class]) {
+            NSLog(@"[DynamicConfigDemo] snapshot=%@", result);
+            NSURL *directory = [NSFileManager.defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
+            [result writeToURL:[directory URLByAppendingPathComponent:@"WhiteDynamicConfigProbe.json"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    }];
+}
+#endif
 
 #pragma mark - UI
 

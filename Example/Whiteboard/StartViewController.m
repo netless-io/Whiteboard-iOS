@@ -8,6 +8,9 @@
 
 #import "StartViewController.h"
 #import "WhiteAppliancePluginViewController.h"
+#import "WhiteWorkerProbeViewController.h"
+#import "WhiteLaunchPreloadViewController.h"
+#import "WhiteReleaseE2EController.h"
 
 #import "Whiteboard.h"
 #import "WhiteSDK+Room.h"
@@ -145,7 +148,11 @@
 
 #if DEBUG
 @interface StartViewController ()
+@property (nonatomic, assign) BOOL didAutoJoinDynamicConfigDemo;
 @property (nonatomic, assign) BOOL didAutoJoinPreloadDemo;
+@property (nonatomic, assign) BOOL didAutoJoinWorkerProbe;
+@property (nonatomic, assign) BOOL didAutoLaunchBenchmark;
+@property (nonatomic, assign) BOOL didAutoLaunchReleaseE2E;
 @end
 #endif
 
@@ -155,8 +162,28 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if (!self.didAutoLaunchReleaseE2E && [NSProcessInfo.processInfo.arguments containsObject:@"--white-release-e2e"]) {
+        self.didAutoLaunchReleaseE2E = YES;
+        [self.navigationController pushViewController:[WhiteReleaseE2EController new] animated:NO];
+        return;
+    }
+    if (!self.didAutoLaunchBenchmark && [NSProcessInfo.processInfo.arguments containsObject:@"--white-launch-benchmark"]) {
+        self.didAutoLaunchBenchmark = YES;
+        [self.navigationController pushViewController:[WhiteLaunchPreloadViewController new] animated:NO];
+        return;
+    }
+    if (!self.didAutoJoinWorkerProbe && [NSProcessInfo.processInfo.arguments containsObject:@"--white-worker-probe"]) {
+        self.didAutoJoinWorkerProbe = YES;
+        [self.navigationController pushViewController:[WhiteWorkerProbeViewController new] animated:YES];
+        return;
+    }
     if (!self.didAutoJoinPreloadDemo && [NSProcessInfo.processInfo.arguments containsObject:@"--white-preload-probe"]) {
         self.didAutoJoinPreloadDemo=YES;[self joinPreloadDemo];return;
+    }
+    if (!self.didAutoJoinDynamicConfigDemo &&
+        [NSProcessInfo.processInfo.arguments containsObject:@"--white-dynamic-config-probe"]) {
+        self.didAutoJoinDynamicConfigDemo = YES;
+        [self joinAppliancePluginWindowRoom:nil];
     }
 }
 #endif
@@ -185,6 +212,11 @@
     stack.spacing = 18;
     stack.alignment = UIStackViewAlignmentCenter;
     [self.view addSubview:stack];
+#if DEBUG
+    UIButton *benchmarkBtn = [self createButtonWithTitle:@"启动页预加载对照 Demo"];
+    [benchmarkBtn addTarget:self action:@selector(joinLaunchBenchmark) forControlEvents:UIControlEventTouchUpInside];
+    [stack addArrangedSubview:benchmarkBtn];
+#endif
     [stack setTranslatesAutoresizingMaskIntoConstraints:NO];
     [NSLayoutConstraint activateConstraints:@[
         [stack.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
@@ -195,6 +227,9 @@
 }
 
 #pragma mark - Button Action
+#if DEBUG
+- (void)joinLaunchBenchmark { [self.navigationController pushViewController:[WhiteLaunchPreloadViewController new] animated:YES]; }
+#endif
 - (void)joinPreloadDemo { [self.navigationController pushViewController:[WhitePreloadDemoController new] animated:YES]; }
 - (void)joinAppliancePluginWindowRoom:(UIButton *)sender {
     WhiteAppliancePluginViewController *vc = [[WhiteAppliancePluginViewController alloc] init];

@@ -54,8 +54,10 @@ suffix = r'''
 @property (strong) WhiteBoardView *bridge;
 @property (copy) NSDictionary *initializationConfiguration;
 - (void)prepareWithTimeout:(NSTimeInterval)timeout completionHandler:(void (^)(NSError *))completion;
+- (void)whiteObservePreload;
 @end
 @implementation WhiteSDK
+- (void)whiteObservePreload {}
 '''
 main = r'''
 @end

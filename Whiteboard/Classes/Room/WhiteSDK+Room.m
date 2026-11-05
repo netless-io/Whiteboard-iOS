@@ -43,6 +43,7 @@
 
 - (void)whiteJoinRoomAfterReplacement:(NSDictionary *)parameters generation:(NSNumber *)generation callbacks:(id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(void (^)(BOOL, WhiteRoom *, NSError *))completionHandler {
     if (![self.bridge whiteContinueJoin:generation cancellation:^(NSError *error) { if (completionHandler) completionHandler(NO, nil, error); }]) return;
+    [self whiteObservePreload];
     WhiteBoardView *scopedBridge = [self.bridge whiteScopedBridge:generation];
     //从 WhiteBoardView 父类中解耦
     if (!self.bridge.roomCallbacks) {

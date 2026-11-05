@@ -7,6 +7,17 @@
 
 #import "WhiteCommonCallbacks.h"
 
+@implementation WhitePreloadResult
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    NSString *state = dictionary[@"state"], *message = dictionary[@"message"];
+    if (![state isKindOfClass:NSString.class] || ![message isKindOfClass:NSString.class] ||
+        !(([state isEqualToString:@"success"] && message.length == 0) ||
+          ([state isEqualToString:@"warn"] && [message stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet].length > 0))) return nil;
+    if ((self = [super init])) { _state = [state copy]; _message = [message copy]; }
+    return self;
+}
+@end
+
 @implementation WhiteBackgroundImageLoadEvent
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];

@@ -50,7 +50,7 @@
     if (!_playerConfig) {
         _playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
         WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
-        windowParams.useBoxesStatus = YES;
+        windowParams.useBoxesStatus = NO;
         _playerConfig.windowParams = windowParams;
 //        _playerConfig.mediaURL = @"https://white-pan.oss-cn-shanghai.aliyuncs.com/101/oceans.mp4";
     }

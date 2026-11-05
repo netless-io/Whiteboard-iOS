@@ -520,6 +520,7 @@ static id WhiteLifecycleFailure(NSString *message) {
 }
 
 #pragma mark - Private.h Methods
+- (NSUInteger)whitePreparationRevision { return self.whitePreparationEpoch; }
 - (NSDictionary *)whitePreparationInfo:(NSDictionary *)configuration {
     return @{@"ready":@(!self.whiteInvalid && self.whitePrepared && [configuration isEqual:self.whitePreparationConfiguration]),
              @"viewId":self.whiteViewId ?: @"", @"documentId":self.whiteDocument ?: @"",

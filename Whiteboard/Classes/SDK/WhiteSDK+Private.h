@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSDictionary *initializationConfiguration;
 @property (nonatomic, weak, nullable) id<WhiteCommonCallbackDelegate> commonCallbackDelegate;
 - (void)whiteBindCommonCallback;
+- (void)whiteObservePreload;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -3,6 +3,14 @@
 
 ---
 
+## [2.16.148] - 2026-11-06
+
+- Add SDK constructor App preparation with `preloadBuiltinApps` (default Slide and Presentation; `[]` disables it), while model preloading remains false by default.
+- Add `prepareCompletion` and a single `onPreloadStateChange` result; isolate cancelled/replaced SDK callbacks and preserve normal room initialization fallback.
+- Allow Appliance preparation at SDK construction and expose `WhiteSlideAppParams.enableSharedMediaVolume`, default false.
+- Embed production Bridge c577b39 with white-web-sdk 2.16.62, WindowManager 1.0.28, Appliance Plugin 1.1.48 and app-slide 0.2.109 from registry dependencies.
+- Include Appliance rendering, Text editing/transaction completion and synchronized Text scale-preview fixes; add launch preparation demos and debug-only release E2E tools.
+
 ## [2.16.147] - 2026-10-21
 
 - Upgrade embedded @netless/app-slide to 0.2.108 (Slide 1.4.65).
