@@ -103,6 +103,9 @@ extern WhiteSlideNavigationButtonMode const WhiteSlideNavigationButtonModeStep;
  */
 @property (nonatomic, assign) BOOL enableScale;
 
+/** 是否开启 Slide 课件媒体音量共享，默认 NO。 */
+@property (nonatomic, assign) BOOL enableSharedMediaVolume;
+
 /**
  Slide 同步事件队列策略。`fifo` 按顺序处理全部事件；`latest-pending-render` 允许交互模式跳过积压的中间页面渲染。未设置时由 Slide 使用 `fifo`。
  */

@@ -11,12 +11,20 @@
 #endif
 
 //#define WhiteSDKToken <#@sdk Token#>
-#define WhiteAppIdentifier @"123/123"
+#if !defined(WHITE_LAUNCH_BENCHMARK) && __has_include("WhiteDynamicConfigDemo.local.h")
+#import "WhiteDynamicConfigDemo.local.h"
+#else
+#define WhiteAppIdentifier @"123/132"
+#endif
 
 
 // 如果需要进入特定房间，取消以下两行注释，同时填入对应的 UUID 以及 roomToken
-#define WhiteRoomUUID  @""
+#define WhiteRoomUUID @"4ebe52e0c5e311f1b65ae5345069f0c4"
+#ifdef WhiteDynamicConfigRoomToken
+#define WhiteRoomToken WhiteDynamicConfigRoomToken
+#else
 #define WhiteRoomToken @""
+#endif
 
 #ifdef __OBJC__
     @import UIKit;

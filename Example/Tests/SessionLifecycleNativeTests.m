@@ -98,6 +98,7 @@ static NSString * const SessionRoomToken = @"";
     NSDictionary *data=[self snapshot:@"capturedParameters"];XCTAssertEqualObjects(data[@"rooms"][0][@"uid"],expectedUid);XCTAssertEqual([self open:data],1);[self leave];
 }
 - (void)testDelayedSetupUsesConfiguredDeadlineAndRejectsPlayer {
+    [self.sdk cancelPreparation];
     [self js:@"var f=window.bridge.getFunction('sdk.newWhiteSdk').function;window.bridge.registerAsync('sdk.newWhiteSdk',function(){var a=[].slice.call(arguments),reply=a.pop();a.push(function(v){setTimeout(function(){reply(v)},1800)});return f.apply(null,a)});true"];
     WhiteRoomConfig *config=[self config];config.timeout=@.6;
     XCTestExpectation *done=[self expectationWithDescription:@"configured timeout"];__block NSUInteger calls=0;
@@ -412,6 +413,66 @@ static NSString * const SessionRoomToken = @"";
 @interface SessionLifecycleOwnerTests : XCTestCase
 @end
 @implementation SessionLifecycleOwnerTests
+- (void)testPreparationCoalescesAndJoinReusesCapturedConfiguration {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.holdSetup=YES;
+    WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:@"mock-app"];config.useMultiViews=YES;
+    WhiteSDK *sdk=[[WhiteSDK alloc] initWithWhiteBoardView:board config:config];config.useMultiViews=NO;
+    __block NSUInteger replies=0;
+    [sdk prepareWithCompletionHandler:^(NSError *e){XCTAssertNil(e);replies++;}];
+    [sdk prepareWithCompletionHandler:^(NSError *e){XCTAssertNil(e);replies++;}];
+    XCTAssertEqual(board.setups,1);XCTAssertEqualObjects(sdk.preparationInfo[@"generation"],@0);XCTAssertEqualObjects(sdk.preparationInfo[@"roomState"],@"idle");
+    board.setupReply(nil);XCTAssertEqual(replies,2);XCTAssertTrue([sdk.preparationInfo[@"ready"] boolValue]);
+    [self joinSDK:sdk];XCTAssertEqual(board.setups,1);XCTAssertTrue([board.actualConfiguration[@"useMultiViews"] boolValue]);
+    [board whiteLeave:nil completion:nil];[board whiteInvalidate];
+}
+- (void)testPreparationTimeoutCompletesOnceAndLateReplyIsIgnored {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.holdSetup=YES;
+    WhiteSDK *sdk=[[WhiteSDK alloc] initWithWhiteBoardView:board config:[[WhiteSdkConfiguration alloc] initWithApp:@"mock-app"]];
+    XCTestExpectation *done=[self expectationWithDescription:@"prepare timeout"];__block NSUInteger calls=0;
+    [sdk prepareWithTimeout:.05 completionHandler:^(NSError *e){calls++;XCTAssertEqualObjects(e.localizedDescription,@"PrepareTimeout");[done fulfill];}];
+    void (^late)(id)=board.setupReply;[self waitForExpectations:@[done] timeout:2];late(nil);
+    XCTAssertEqual(calls,1);XCTAssertFalse([sdk.preparationInfo[@"ready"] boolValue]);
+    board.holdSetup=NO;[sdk prepareWithCompletionHandler:^(NSError *e){XCTAssertNil(e);}];XCTAssertEqual(board.setups,2);[board whiteInvalidate];
+}
+- (void)testCancelledPreparationBeforeHandshakeCannotInitialize {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.dropHandshake=YES;
+    WhiteSDK *sdk=[[WhiteSDK alloc] initWithWhiteBoardView:board config:[[WhiteSdkConfiguration alloc] initWithApp:@"mock-app"]];
+    __block NSUInteger calls=0;[sdk prepareWithCompletionHandler:^(NSError *e){calls++;XCTAssertEqualObjects(e.localizedDescription,@"Cancelled");}];
+    [sdk cancelPreparation];board.handshakeReply(@{@"value":@"{\"documentId\":\"unit-doc\"}"});
+    XCTAssertEqual(board.setups,0);XCTAssertEqual(calls,1);XCTAssertFalse([sdk.preparationInfo[@"ready"] boolValue]);[board whiteInvalidate];
+}
+- (void)testPreparationInvalidationRejectsAllWaiters {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.holdSetup=YES;
+    WhiteSDK *sdk=[[WhiteSDK alloc] initWithWhiteBoardView:board config:[[WhiteSdkConfiguration alloc] initWithApp:@"mock-app"]];
+    __block NSUInteger calls=0;[sdk prepareWithCompletionHandler:^(NSError *e){calls++;XCTAssertEqualObjects(e.localizedDescription,@"HostInvalid");}];
+    [board whiteInvalidate];board.setupReply(nil);XCTAssertEqual(calls,1);XCTAssertFalse([sdk.preparationInfo[@"ready"] boolValue]);
+}
+- (void)testPreparationRejectsMalformedSetupAndCanRetry {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.holdSetup=YES;
+    WhiteSDK *sdk=[[WhiteSDK alloc] initWithWhiteBoardView:board config:[[WhiteSdkConfiguration alloc] initWithApp:@"mock-app"]];
+    __block NSError *error;[sdk prepareWithCompletionHandler:^(NSError *e){error=e;}];board.setupReply(@"[]");
+    XCTAssertEqualObjects(error.localizedDescription,@"InvalidSetupResult");XCTAssertFalse([sdk.preparationInfo[@"ready"] boolValue]);
+    board.holdSetup=NO;[sdk prepareWithCompletionHandler:^(NSError *e){XCTAssertNil(e);}];XCTAssertTrue([sdk.preparationInfo[@"ready"] boolValue]);[board whiteInvalidate];
+}
+- (void)testPreparationCannotReconfigureActiveRoom {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];WhiteSDK *a=[self playerFacade:board app:@"A" multi:NO];[self joinSDK:a];
+    WhiteSDK *b=[self playerFacade:board app:@"B" multi:YES];__block NSError *error;
+    [b prepareWithCompletionHandler:^(NSError *e){error=e;}];XCTAssertEqualObjects(error.localizedDescription,@"Busy");XCTAssertEqualObjects(board.actualApp,@"A");
+    [board whiteLeave:nil completion:nil];[board whiteInvalidate];
+}
+- (void)testPreparationCannotStealSdkDuringPendingJoin {
+    LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.holdSetup=YES;
+    WhiteSDK *a=[self playerFacade:board app:@"A" multi:NO];
+    WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:@"pending-room" roomToken:@"mock" uid:@"pending-uid"];
+    XCTestExpectation *pending=[self expectationWithDescription:@"pending admitted"],*joined=[self expectationWithDescription:@"original joined"];
+    [a joinRoomWithConfig:config callbacks:nil completionHandler:^(BOOL success,WhiteRoom *room,NSError *error){XCTAssertTrue(success);XCTAssertNil(error);[joined fulfill];}];
+    dispatch_async(dispatch_get_main_queue(),^{
+        WhiteSDK *b=[self playerFacade:board app:@"B" multi:YES];__block NSError *error;
+        [b prepareWithCompletionHandler:^(NSError *e){error=e;}];XCTAssertEqualObjects(error.localizedDescription,@"Busy");
+        XCTAssertEqualObjects(board.actualApp,@"A");XCTAssertEqual(board.setups,1);[pending fulfill];board.setupReply(nil);
+    });
+    [self waitForExpectations:@[pending,joined] timeout:2];[board whiteLeave:nil completion:nil];[board whiteInvalidate];
+}
 - (void)verifyTimeout:(BOOL)missingHandshake {
     LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.dropHandshake=missingHandshake;board.holdSetup=YES;[board whiteClaimSdk];
     XCTestExpectation *done=[self expectationWithDescription:@"deadline"];__block NSUInteger results=0,starts=0;

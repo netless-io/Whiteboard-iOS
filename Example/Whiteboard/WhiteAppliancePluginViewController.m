@@ -9,8 +9,12 @@
 #import "Masonry.h"
 #import "WhiteUtils.h"
 
-static NSString * const kAppliancePluginRoomUUID = @"";
-static NSString * const kAppliancePluginRoomToken = @"";
+static NSString * const kAppliancePluginRoomUUID = WhiteRoomUUID;
+static NSString * const kAppliancePluginRoomToken = WhiteRoomToken;
+static CGFloat const kAppliancePluginOriginWidth = 1280.0;
+static CGFloat const kAppliancePluginOriginHeight = 720.0;
+static NSString * const kAppliancePluginSlidePrefix = @"https://conversion-demo-cn.oss-cn-hangzhou.aliyuncs.com/demo/dynamicConvert";
+static NSString * const kAppliancePluginSlideTaskId = @"3e3a2b8845194f998e6e05adab70e1a1";
 
 @interface WhiteRoomViewController (WhiteAppliancePluginPrivate)
 - (void)setupViews;
@@ -23,6 +27,15 @@ static NSString * const kAppliancePluginRoomToken = @"";
 @property (nonatomic, strong) UIButton *writableButton;
 @property (nonatomic, strong) UIButton *exitButton;
 @property (nonatomic, strong) UIScrollView *toolbarView;
+@property (nonatomic, copy, nullable) NSString *currentDocsAppId;
+
+- (void)scalePage:(UIButton *)sender;
+- (void)insertImage:(UIButton *)sender;
+- (void)addSlideApp;
+- (void)addPresentationApp;
+- (void)previousPage:(UIButton *)sender;
+- (void)nextPage:(UIButton *)sender;
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)event target:(nullable NSString *)target;
 
 @end
 
@@ -33,14 +46,21 @@ static NSString * const kAppliancePluginRoomToken = @"";
     if (self = [super init]) {
         self.roomUuid = kAppliancePluginRoomUUID;
         self.useMultiViews = YES;
+        self.allowImageBitmapFallback = NO;
 
         WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];
         config.useMultiViews = YES;
         config.renderEngine = WhiteSdkRenderEngineCanvas;
         config.region = WhiteRegionCN;
+        config.dynamicConfig = @{
+            @"cn-hz": @"https://fastboard-demo-config.oss-cn-hangzhou.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"sg": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"us-sv": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"eu": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json",
+            @"in-mum": @"https://fastboard-demo-config-sg.oss-ap-southeast-1.aliyuncs.com/whiteboard-config-service/fastboard-demo/ios/latest.json"
+        };
         config.log = YES;
         config.enableAppliancePlugin = YES;
-        config.userCursor = YES;
         config.loggerOptions = @{
             @"printLevelMask": WhiteSDKLoggerOptionLevelDebug
         };
@@ -59,11 +79,6 @@ static NSString * const kAppliancePluginRoomToken = @"";
         localLogOptions.enabled = @YES;
         localLogOptions.enabledUpload = @YES;
         config.localLogOptions = localLogOptions;
-
-        WhitePresentationAppOptions *presentationAppOptions = [[WhitePresentationAppOptions alloc] init];
-        presentationAppOptions.maxCameraScale = @4;
-        presentationAppOptions.useScrollbar = @YES;
-        config.presentationAppOptions = presentationAppOptions;
 
         self.sdkConfig = config;
     }
@@ -108,7 +123,19 @@ static NSString * const kAppliancePluginRoomToken = @"";
         roomConfig.isWritable = NO;
 
         WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
-        windowParams.overwriteStyles = @".netless-app-slide-wb-view {clip-path: none !important;}";
+        windowParams.chessboard = NO;
+        windowParams.fullscreen = YES;
+        windowParams.useBoxesStatus = NO;
+        windowParams.forceMaximized = YES;
+        windowParams.lazySetupInMaximizedMode = YES;
+        windowParams.maxCachedAppsInMaximizedMode = @5;
+        windowParams.overwriteStyles =
+            @".telebox-collector{display:none !important;}"
+             ".vjs-p .player-controller{display:none !important;}"
+             ".netless-app-slide-wb-view {clip-path: none !important;}"
+             ".telebox-box.telebox-blur.telebox-maximized {display: none !important;}"
+             ".netless-app-slide-content [data-resizable-scroll=\"true\"] ~ .scroll-bar { display: none !important;}"
+             ".netless-app-slide-content [data-resizable-scroll=\"true\"] { width: 100% !important; height: 100% !important;}";
         roomConfig.windowParams = windowParams;
 
         WhiteAppliancePluginOptions *pluginOptions = [[WhiteAppliancePluginOptions alloc] init];
@@ -124,7 +151,47 @@ static NSString * const kAppliancePluginRoomToken = @"";
 {
     [super actionAfterSuccessJoinRoom:room roomToken:roomToken];
     [self updateWritableUI];
+#if DEBUG
+    if ([NSProcessInfo.processInfo.arguments containsObject:@"--white-dynamic-config-probe"]) {
+        NSLog(@"[DynamicConfigDemo] join-success room=%@", self.roomUuid);
+        __weak typeof(self) weakSelf = self;
+        for (NSNumber *delay in @[@0, @5, @30]) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay.doubleValue * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                if (weakSelf.room == room) {
+                    [weakSelf logDynamicConfigProbe];
+                }
+            });
+        }
+    }
+#endif
 }
+
+#if DEBUG
+- (void)logDynamicConfigProbe
+{
+    // Read the actual Room, WM and plugin after initialization, without changing their state.
+    NSString *script = @"(function(){var r=window.room,m=window.manager,p=window.appliancePlugin;"
+        "var pm=p&&p.currentManager,e=pm&&pm.pluginOptions&&pm.pluginOptions.extras;"
+        "return JSON.stringify({observedAt:new Date().toISOString(),roomUUID:r&&r.uuid,ua:navigator.userAgent,platform:window.__platform,"
+        "state:r&&r.dynamicConfigState,resolved:r&&r.dynamicConfig,"
+        "room:{phase:r&&r.phase,disableCameraTransform:r&&r.disableCameraTransform,"
+        "disableDeviceInputs:r&&r.disableDeviceInputs,isWritable:r&&r.isWritable},"
+        "windowManager:{attached:!!m,mainViewDisableCameraTransform:m&&m.mainView&&m.mainView.disableCameraTransform},"
+        "plugin:{attached:!!p,renderMode:pm&&pm.renderMode,decision:pm&&pm.renderingCompatibilityDecision,"
+        "extras:e&&{useWorker:e.useWorker,useSimple:e.useSimple,useBackgroundThread:e.useBackgroundThread,"
+        "strokeWidth:e.strokeWidth,syncOpt:e.syncOpt,backgroundImageLoadOptions:e.backgroundImageLoadOptions,"
+        "allowImageBitmapFallback:e.allowImageBitmapFallback}}});})()";
+    [self.boardView evaluateJavaScript:script completionHandler:^(id result, NSError *error) {
+        if (error) {
+            NSLog(@"[DynamicConfigDemo] probe-error=%@", error.localizedDescription);
+        } else if ([result isKindOfClass:NSString.class]) {
+            NSLog(@"[DynamicConfigDemo] snapshot=%@", result);
+            NSURL *directory = [NSFileManager.defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
+            [result writeToURL:[directory URLByAppendingPathComponent:@"WhiteDynamicConfigProbe.json"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    }];
+}
+#endif
 
 #pragma mark - UI
 
@@ -173,6 +240,21 @@ static NSString * const kAppliancePluginRoomToken = @"";
     [toolbarTitles enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL *stop) {
         UIButton *toolButton = [self toolButtonWithTitle:title tag:idx];
         [toolbarStack addArrangedSubview:toolButton];
+    }];
+
+    NSArray<NSDictionary *> *docsButtons = @[
+        @{ @"title": @"Insert Image", @"action": NSStringFromSelector(@selector(insertImage:)) },
+        @{ @"title": @"Add Slide", @"action": NSStringFromSelector(@selector(addSlideApp)) },
+        @{ @"title": @"Add Presentation", @"action": NSStringFromSelector(@selector(addPresentationApp)) },
+        @{ @"title": @"Scale 2x", @"action": NSStringFromSelector(@selector(scalePage:)) },
+        @{ @"title": @"Prev", @"action": NSStringFromSelector(@selector(previousPage:)) },
+        @{ @"title": @"Next", @"action": NSStringFromSelector(@selector(nextPage:)) }
+    ];
+    [docsButtons enumerateObjectsUsingBlock:^(NSDictionary *item, NSUInteger idx, BOOL *stop) {
+        UIButton *button = [self toolButtonWithTitle:item[@"title"] tag:-1];
+        [button removeTarget:self action:@selector(selectAppliance:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
+        [toolbarStack addArrangedSubview:button];
     }];
 
     self.toolbarView.hidden = YES;
@@ -277,9 +359,7 @@ static NSString * const kAppliancePluginRoomToken = @"";
     return @{
         @"useSimple": @YES,
         @"useBackgroundThread": @YES,
-        @"canvasOpt": @{
-            @"contextType": @"2d"
-        },
+        @"allowImageBitmapFallback": @(self.allowImageBitmapFallback),
         @"cursor": @{
             @"enable": @YES,
             @"expirationTime": @500,
@@ -301,10 +381,6 @@ static NSString * const kAppliancePluginRoomToken = @"";
                 }
             }
         },
-        @"syncOpt": @{
-            @"interval": @100,
-            @"smoothSync": @NO
-        },
         @"bezier": @{
             @"enable": @NO,
             @"maxDrawCount": @200
@@ -315,6 +391,103 @@ static NSString * const kAppliancePluginRoomToken = @"";
             @"rightBoundBreak": @YES
         }
     };
+}
+
+- (void)scalePage:(UIButton *)sender
+{
+    if (!self.room) {
+        return;
+    }
+    WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
+    options.target = self.currentDocsAppId;
+    options.scale = @2.0;
+    __weak typeof(self) weakSelf = self;
+    [self.room dispatchDocsEvent:WhiteWindowDocsEventScalePage options:options completionHandler:^(WhiteDispatchDocsEventResult *result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *failure = result.message.length ? [NSString stringWithFormat:@" (%@: %@)", result.reason, result.message] : @"";
+            NSLog(@"[Whiteboard] dispatch scalePage(2x): %@%@", result.accepted ? @"YES" : @"NO", failure);
+            (void)weakSelf;
+        });
+    }];
+}
+
+- (void)insertImage:(UIButton *)sender
+{
+    if (!self.room) {
+        return;
+    }
+    WhiteImageInformation *info = [[WhiteImageInformation alloc] initWithFrame:CGRectMake(0, 0, 100, 200)];
+    [self.room insertImage:info src:@"https://p5.ssl.qhimg.com/t01a2bd87890397464a.png"];
+}
+
+- (void)addSlideApp
+{
+    if (!self.room) {
+        return;
+    }
+    NSString *path = [NSString stringWithFormat:@"/appliance-slide/%@", NSUUID.UUID.UUIDString];
+    WhiteAppParam *param = [WhiteAppParam createSlideApp:path
+                                                   taskId:kAppliancePluginSlideTaskId
+                                                      url:kAppliancePluginSlidePrefix
+                                                    title:@"Slide 1280x720"];
+    param.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:kAppliancePluginOriginWidth
+                                                              height:kAppliancePluginOriginHeight];
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:param completionHandler:^(NSString *appId) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.currentDocsAppId = appId;
+            NSLog(@"[Whiteboard] add slide app: %@", appId);
+        });
+    }];
+}
+
+- (void)addPresentationApp
+{
+    if (!self.room) {
+        return;
+    }
+    NSArray<WhiteScene *> *scenes = @[
+        [[WhiteScene alloc] initWithName:@"1" ppt:[[WhitePptPage alloc] initWithSrc:@"https://convertcdn.netless.link/staticConvert/18140800fe8a11eb8cb787b1c376634e/1.png" size:CGSizeMake(714, 1010)]],
+        [[WhiteScene alloc] initWithName:@"2" ppt:[[WhitePptPage alloc] initWithSrc:@"https://convertcdn.netless.link/staticConvert/18140800fe8a11eb8cb787b1c376634e/2.png" size:CGSizeMake(714, 1010)]]
+    ];
+    WhiteAppParam *param = [WhiteAppParam createPresentationApp:@"/appliance-presentation"
+                                                           scenes:scenes
+                                                            title:@"Presentation 1280x720"];
+    param.originSize = [[WhiteWindowOriginSize alloc] initWithWidth:kAppliancePluginOriginWidth
+                                                              height:kAppliancePluginOriginHeight];
+    __weak typeof(self) weakSelf = self;
+    [self.room addApp:param completionHandler:^(NSString *appId) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.currentDocsAppId = appId;
+            NSLog(@"[Whiteboard] add presentation app: %@", appId);
+        });
+    }];
+}
+
+- (void)previousPage:(UIButton *)sender
+{
+    [self dispatchDocsEvent:WhiteWindowDocsEventPrevPage target:self.currentDocsAppId];
+}
+
+- (void)nextPage:(UIButton *)sender
+{
+    [self dispatchDocsEvent:WhiteWindowDocsEventNextPage target:self.currentDocsAppId];
+}
+
+- (void)dispatchDocsEvent:(WhiteWindowDocsEventKey)event target:(NSString *)target
+{
+    if (!self.room) {
+        return;
+    }
+    WhiteWindowDocsEventOptions *options = [[WhiteWindowDocsEventOptions alloc] init];
+    options.target = target;
+    __weak typeof(self) weakSelf = self;
+    [self.room dispatchDocsEvent:event options:options completionHandler:^(WhiteDispatchDocsEventResult *result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"[Whiteboard] dispatch %@ target=%@: %@ reason=%@", event, target ?: @"focused", result.accepted ? @"YES" : @"NO", result.reason);
+            (void)weakSelf;
+        });
+    }];
 }
 
 #pragma mark - WhiteCommonCallbackDelegate

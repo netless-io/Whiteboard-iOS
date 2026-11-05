@@ -30,7 +30,8 @@
     if (!config.uuid.length || !config.roomToken.length || !config.uid.length) {
         if (completionHandler) completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1100 userInfo:@{NSLocalizedDescriptionKey: @"InvalidJoinParameters"}]); return;
     }
-    NSDictionary *sdkParameters = [NSJSONSerialization JSONObjectWithData:[self.config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    [self.bridge whiteLogPreload:@"native_join_entry"];
+    NSDictionary *sdkParameters = self.initializationConfiguration;
     NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:[config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     NSString *identity = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@[sdkParameters[@"appIdentifier"] ?: @"", parameters[@"uuid"], parameters[@"uid"]] options:0 error:nil] encoding:NSUTF8StringEncoding];
     [self.bridge whiteReplaceRoom:identity configuration:sdkParameters timeout:[parameters[@"timeout"] doubleValue] / 1000.0 bind:^{
@@ -42,6 +43,7 @@
 
 - (void)whiteJoinRoomAfterReplacement:(NSDictionary *)parameters generation:(NSNumber *)generation callbacks:(id<WhiteRoomCallbackDelegate>)callbacks completionHandler:(void (^)(BOOL, WhiteRoom *, NSError *))completionHandler {
     if (![self.bridge whiteContinueJoin:generation cancellation:^(NSError *error) { if (completionHandler) completionHandler(NO, nil, error); }]) return;
+    [self whiteObservePreload];
     WhiteBoardView *scopedBridge = [self.bridge whiteScopedBridge:generation];
     //从 WhiteBoardView 父类中解耦
     if (!self.bridge.roomCallbacks) {
@@ -79,6 +81,7 @@
     nativeTags[@"time"] = [formatter stringFromDate:NSDate.date];
     joinParameters[@"__nativeTags"] = nativeTags;
 
+    [self.bridge whiteLogPreload:@"join_dispatch"];
     [scopedBridge callHandler:@"sdk.joinRoom" arguments:@[joinParameters] completionHandler:^(id _Nullable value) {
        
         {
@@ -110,6 +113,7 @@
                     [room prepareForApplePencilDrawOnly:TRUE];
                 }
                 
+                [weakBridge whiteLogPreload:@"room_ready"];
                 if (completionHandler) completionHandler(YES, room, nil);
             }
         }

@@ -28,6 +28,7 @@ WhiteSlideNavigationButtonMode const WhiteSlideNavigationButtonModeStep = @"step
         _invisibleBehavior = nil;
         _resourceMaxRetries = @3;
         _enableScale = NO;
+        _enableSharedMediaVolume = NO;
     }
     return self;
 }

@@ -36,3 +36,9 @@ Carthage/Build
 # `pod install` in .travis.yml
 #
 Pods/
+# Local preload test credentials
+Example/Whiteboard/WhitePreloadDemo.local.h
+# Generated only by scripts/ios-launch-preload-benchmark/prepare-assets.py
+Example/Whiteboard/LaunchBenchWhiteboard.bundle/
+__pycache__/
+*.pyc

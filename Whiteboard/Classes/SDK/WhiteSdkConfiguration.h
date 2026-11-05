@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WhiteConsts.h"
 #import "WhiteSlideAppParams.h"
+#import "WhiteAppliancePluginOptions.h"
 
 
 typedef NS_ENUM(NSInteger, WhiteDeviceType) {
@@ -130,6 +131,20 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  Supply iOS configuration URLs on iOS.
  */
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *dynamicConfig;
+
+/**
+ 是否提前查询并下载房间模型，默认 NO。
+ 仅对已完成服务端准备的项目和区域显式开启，必须在构造 WhiteSDK 前设置。
+ 关闭时不请求模型预加载接口，由正常入房握手加载模型；不影响动态配置、教具或课件资源策略。
+ */
+@property (nonatomic, assign) BOOL enableModelPreload;
+
+/**
+ 构造 WhiteSDK 时后台预加载的 App 类。nil 默认 Slide、Presentation，@[] 关闭。
+ 可选值（大小写固定）：@"Slide"、@"Presentation"、@"MediaPlayer"、@"DocsViewer"。
+ 仅准备 App 类，不创建实例或加载课件内容；独立于 enableModelPreload。
+ */
+@property (nonatomic, copy, nullable) NSArray<NSString *> *preloadBuiltinApps;
 
 /**
  是否监听图片加载失败事件。
@@ -264,8 +279,14 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  启用 Appliance插件。
  启用后，原基础教具将被替换。请确保同一房间的所有终端使用相同配置。
  默认为 NO。
+ 在构造 WhiteSDK 前设为 YES，可独立启动教具渲染准备，不依赖 enableModelPreload。
+ 无需设置 appliancePluginOptions。未被配置覆盖时，插件默认 useWorker 为 "auto"，
+ 按能力、缓存和页面可见性决定是否执行探针。
  */
 @property (nonatomic, assign) BOOL enableAppliancePlugin;
+/** Optional SDK defaults prepared before join; WhiteRoomConfig keeps its per-room override.
+ Omit to use plugin defaults, including useWorker: "auto", unless overridden by dynamic configuration. */
+@property (nonatomic, strong, nullable) WhiteAppliancePluginOptions *appliancePluginOptions;
 
 /**
  * 配置白板的 API 服务器域名列表，可以用于服务器代理。配置后，白板不再使用 sdk 自带配置。

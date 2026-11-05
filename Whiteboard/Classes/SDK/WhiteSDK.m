@@ -34,6 +34,11 @@
 
 @interface WhiteSDK()
 
+@property (nonatomic, strong) WhitePreloadResult *preloadResult;
+@property (nonatomic, copy) NSString *preloadDocument;
+@property (nonatomic, assign) NSUInteger preloadRevision;
+@property (nonatomic, assign) BOOL preloadObserved, preloadDelivered;
+
 @property (nonatomic, strong, readwrite) WhiteAudioMixerBridge *audioMixer;
 @property (nonatomic, strong, readwrite) WhiteAudioEffectMixerBridge *effectMixer;
 @property (nonatomic, strong, readwrite) WhiteAudioPcmDataBrige *pcmBridge;
@@ -50,7 +55,7 @@
 
 + (NSString *)version
 {
-    return @"2.16.147";
+    return @"2.16.148";
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer pcmDataDelegate:(nullable id<WhiteAudioPcmDataDelegate>)pcmDataDelegate {
@@ -188,6 +193,7 @@
 #pragma mark - Private
 - (void)setupWebSdk
 {
+    self.initializationConfiguration = [NSJSONSerialization JSONObjectWithData:[self.config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     if (self.config.useWebKeyboardInjection) {
         [WhiteWebViewInjection allowDisplayingKeyboardWithoutUserAction:TRUE];
     }
@@ -195,10 +201,33 @@
         [self.bridge setDebugViewStateLoggingEnabled:YES];
         [self.bridge observeWKWebViewConsole];
     }
-    [self.bridge setupWebSDKWithConfig:self.config completion:nil];
+    if ([self.bridge whiteCanConfigureCallbacks]) {
+        __weak typeof(self) weakSelf = self;
+        [self.bridge whitePrepareConfiguration:self.initializationConfiguration timeout:15 completion:^(NSError *error) {
+            if (!error) [weakSelf whiteObservePreload];
+        }];
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideLogNotification:) name:@"Slide-Log" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSlideVolumeNotification:) name:@"Slide-Volume" object:nil];
 }
+
+- (void)prepareWithCompletionHandler:(void (^)(NSError *))completion {
+    [self prepareWithTimeout:15 completionHandler:completion];
+}
+- (void)prepareWithTimeout:(NSTimeInterval)timeout completionHandler:(void (^)(NSError *))completion {
+    WhiteBoardView *view = self.bridge;
+    if (!view) {
+        if (completion) completion([NSError errorWithDomain:@"WhiteLifecycle" code:-1100 userInfo:@{NSLocalizedDescriptionKey:@"HostInvalid"}]);
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    [view whitePrepareConfiguration:self.initializationConfiguration timeout:timeout completion:^(NSError *error) {
+        if (!error) [weakSelf whiteObservePreload];
+        if (completion) completion(error);
+    }];
+}
+- (void)cancelPreparation { [self.bridge whiteCancelPreparation]; }
+- (NSDictionary *)preparationInfo { return [self.bridge whitePreparationInfo:self.initializationConfiguration] ?: @{@"ready":@NO}; }
 
 #pragma mark - PPT Volume
 - (void)getSlideVolumeWithCompletionHandler:(void (^)(CGFloat, NSError * _Nonnull))completionHandler
@@ -236,10 +265,39 @@
 }
 
 #pragma mark - CommonCallback
+- (void)whiteObservePreload {
+    if (self.preloadObserved || ![self.preparationInfo[@"ready"] boolValue] || self.bridge.whiteCallbackOwner != self) return;
+    self.preloadObserved = YES;
+    self.preloadRevision = [self.bridge whitePreparationRevision];
+    self.preloadDocument = self.preparationInfo[@"documentId"];
+    __weak typeof(self) weakSelf = self;
+    [self.bridge callHandler:@"sdk.observePreload" arguments:@[self.initializationConfiguration] completionHandler:^(id value) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            typeof(self) sdk = weakSelf;
+            if (!sdk || ![value isKindOfClass:NSString.class]) return;
+            NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *payload = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
+            if (![payload isKindOfClass:NSDictionary.class]) return;
+            sdk.preloadResult = [[WhitePreloadResult alloc] initWithDictionary:payload];
+            [sdk whiteDeliverPreloadResult];
+        });
+    }];
+}
+- (void)whiteDeliverPreloadResult {
+    if (self.preloadDelivered || !self.preloadResult || !self.bridge || self.bridge.whiteCallbackOwner != self ||
+        [self.bridge whitePreparationRevision] != self.preloadRevision || ![self.preparationInfo[@"ready"] boolValue] ||
+        ![self.preloadDocument isEqual:self.preparationInfo[@"documentId"]] ||
+        ![self.commonCallbackDelegate respondsToSelector:@selector(onPreloadStateChange:)]) return;
+    self.preloadDelivered = YES;
+    @try { [self.commonCallbackDelegate onPreloadStateChange:self.preloadResult]; }
+    @catch (NSException *exception) { NSLog(@"[White] onPreloadStateChange callback failed"); }
+}
 - (void)setCommonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callbackDelegate
 {
     _commonCallbackDelegate = callbackDelegate;
     if (self.bridge.whiteCallbackOwner == self) self.bridge.commonCallbacks.delegate = callbackDelegate;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{ [weakSelf whiteDeliverPreloadResult]; });
 }
 
 - (void)whiteBindCommonCallback

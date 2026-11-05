@@ -11,6 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** Optional constructor preparation only; does not indicate room readiness. */
+@interface WhitePreloadResult : NSObject
+@property (nonatomic, copy, readonly) NSString *state;
+@property (nonatomic, copy, readonly) NSString *message;
+- (nullable instancetype)initWithDictionary:(NSDictionary *)dictionary;
+@end
+
 @interface WhiteBackgroundImageLoadEvent : NSObject
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, copy, readonly) NSString *state;
@@ -35,6 +42,9 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol WhiteCommonCallbackDelegate <NSObject>
 
 @optional
+
+/** Called once: success, or warn with a nonempty message. Does not gate joinRoom. */
+- (void)onPreloadStateChange:(WhitePreloadResult *)result;
 
 /** SDK 出现未捕获的全局错误回调。
  

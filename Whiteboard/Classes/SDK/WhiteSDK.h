@@ -52,6 +52,19 @@ typedef void (^WhiteHasBackgroundImageCompletionHandler)(BOOL exists, NSError * 
 + (NSString *)version;
 
 /**
+ 等待当前页面的 Bridge 握手及 JS SDK 构造完成，不加入房间。
+ 初始化时已自动开始准备；重复调用合并到同一任务。默认超时 15 秒。
+ 不代表应用配置网络请求、房间连接或课件首帧完成。请同时强持有 WhiteBoardView。
+ SDK 配置在构造时建立快照，后续修改原配置不影响该实例。
+ */
+- (void)prepareWithCompletionHandler:(void (^)(NSError * _Nullable error))completion;
+- (void)prepareWithTimeout:(NSTimeInterval)timeout completionHandler:(void (^)(NSError * _Nullable error))completion;
+/** 取消等待并清除准备命中状态；不会断开已经加入的房间。 */
+- (void)cancelPreparation;
+/** 无凭据的诊断信息：ready、viewId、documentId、setupCount、elapsedMs。 */
+@property (nonatomic, readonly, copy) NSDictionary<NSString *, id> *preparationInfo;
+
+/**
  设置 RTC 混音并初始化 `WhiteSDK` 对象。
  请确保在调用其他 API 前先调用该方法创建并初始化白板 SDK 对象。
  @param boardView     白板界面，详见 [WhiteBoardView](WhiteBoardView)。

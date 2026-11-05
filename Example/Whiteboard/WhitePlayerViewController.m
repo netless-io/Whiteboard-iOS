@@ -92,7 +92,7 @@
         _playerConfig = [[WhitePlayerConfig alloc] initWithRoom:self.roomUuid roomToken:self.roomToken];
         _playerConfig.region = WhiteRegionCN;
         WhiteWindowParams *windowParams = [[WhiteWindowParams alloc] init];
-        windowParams.useBoxesStatus = YES;
+        windowParams.useBoxesStatus = NO;
         _playerConfig.windowParams = windowParams;
     }
     return _playerConfig;

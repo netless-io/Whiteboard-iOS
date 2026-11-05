@@ -25,7 +25,7 @@
     if (!config.room.length || !config.roomToken.length) {
         if (completionHandler) completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1100 userInfo:@{NSLocalizedDescriptionKey: @"InvalidReplayParameters"}]); return;
     }
-    NSDictionary *sdkParameters = [NSJSONSerialization JSONObjectWithData:[self.config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    NSDictionary *sdkParameters = self.initializationConfiguration;
     NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:[config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     NSNumber *generation = [self.bridge whiteBeginWithCancellation:^(NSError *error) { if (completionHandler) completionHandler(NO, nil, error); }];
     if (!generation) { if (completionHandler) completionHandler(NO, nil, [NSError errorWithDomain:WhiteConstErrorDomain code:-1100 userInfo:@{NSLocalizedDescriptionKey: @"Busy/AlreadyJoined"}]); return; }
@@ -63,6 +63,8 @@
             weakBridge.backgroundColor = weakBridge.backgroundColor;
         }
     };
+    // The legacy Player path explicitly configures its facade; invalidate any cached Room preparation.
+    [self.bridge whiteCancelPreparation];
     [scopedBridge callHandler:@"sdk.newWhiteSdk" arguments:@[sdkParameters] completionHandler:^(id value) {
         if (![weakBridge whiteCurrent:generation]) return;
         NSDictionary *result = [value isKindOfClass:NSString.class] ? [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
