@@ -11,6 +11,7 @@
 
 @interface WhiteBoardView ()
 - (BOOL)whiteClaimSdk;
+- (void)whiteConfigureConfiguration:(NSDictionary *)configuration completion:(void (^)(NSError *error))completion;
 - (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout completion:(void (^)(NSError *error))completion;
 - (void)whiteCancelPreparation;
 - (NSDictionary *)whitePreparationInfo:(NSDictionary *)configuration;

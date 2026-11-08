@@ -298,7 +298,7 @@ static id WhiteLifecycleFailure(NSString *message) {
             if (![value[@"documentId"] isKindOfClass:NSString.class]) { [self whiteInvalidate]; return; }
             self.whiteDocument = value[@"documentId"];
             NSArray *work = self.whiteReady.copy; [self.whiteReady removeAllObjects];
-            if (restoreSdk && self.whiteSdkInitArgs) [self whitePrepareConfiguration:self.whiteSdkInitArgs.firstObject timeout:15 completion:nil];
+            if (restoreSdk && self.whiteSdkInitArgs) [self whiteConfigureConfiguration:self.whiteSdkInitArgs.firstObject completion:nil];
             for (void (^block)(void) in work) block();
         }
     }];
@@ -548,12 +548,20 @@ static id WhiteLifecycleFailure(NSString *message) {
         [self whiteFinishPreparation:WhiteLifecycleError(@"Cancelled")];
     });
 }
+// Background construction has no deadline. Explicit preparation and join retain their own deadlines.
+- (void)whiteConfigureConfiguration:(NSDictionary *)configuration completion:(void (^)(NSError *))completion {
+    [self whitePrepareConfiguration:configuration timeout:0 admitted:NO completion:completion];
+}
 - (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout completion:(void (^)(NSError *))completion {
+    if (!isfinite(timeout) || timeout <= 0) {
+        if (completion) completion(WhiteLifecycleError(@"InvalidPreparationOptions"));
+        return;
+    }
     [self whitePrepareConfiguration:configuration timeout:timeout admitted:NO completion:completion];
 }
 - (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout admitted:(BOOL)admitted completion:(void (^)(NSError *))completion {
     dispatch_main_async_safe(^{
-        if (self.whiteInvalid || !configuration || !isfinite(timeout) || timeout <= 0) {
+        if (self.whiteInvalid || !configuration || !isfinite(timeout) || timeout < 0) {
             if (completion) completion(WhiteLifecycleError(self.whiteInvalid ? @"HostInvalid" : @"InvalidPreparationOptions"));
             return;
         }
@@ -584,7 +592,7 @@ static id WhiteLifecycleFailure(NSString *message) {
         for (void (^callback)(NSError *) in cancelledWaiters) callback(WhiteLifecycleError(@"Cancelled"));
         if (epoch != self.whitePreparationEpoch || !self.whitePreparationWaiters) return;
         // The earliest requested deadline wins for all callers sharing this attempt.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (timeout > 0) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (self.whitePreparationWaiters && epoch == self.whitePreparationEpoch) [self whiteFinishPreparation:WhiteLifecycleError(@"PrepareTimeout")];
         });
         if (!starting) return;

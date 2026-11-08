@@ -22,6 +22,23 @@
 #define WhitePreloadRoomToken @""
 #endif
 
+#if DEBUG
+// Test-only control of the actual launch Demo instance; no second SDK or WebView is created.
+void WhiteLaunchDemoAttachReleaseProbe(WhiteBoardView *board, WhiteSDK *sdk, WhiteRoom *room, NSString *runID) {
+    static WhiteReleaseE2EController *probe;
+    probe = [WhiteReleaseE2EController new];
+    probe.board = board; probe.sdk = sdk; probe.room = room;
+    probe.nativeEvents = [NSMutableArray arrayWithObject:@{@"event":@"launchDemo",@"runId":runID}]; probe.touchQueue = [NSMutableArray array];
+    probe.pendingReplies = [NSMutableDictionary dictionary];
+    probe.prepared = YES;
+#if WHITE_RELEASE_NATIVE_TOUCH
+    probe.uiReady = YES;
+#endif
+    [board.configuration.userContentController addScriptMessageHandler:probe name:@"whiteReleaseEval"];
+    [probe startReleaseServer];
+}
+#endif
+
 // Keep this controller (and its actual WebView) alive throughout waiting and class.
 @interface WhitePreloadDemoController : UIViewController <WhiteCommonCallbackDelegate>
 @property WhiteBoardView *board;
@@ -62,9 +79,13 @@
     WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:[WhiteUtils appIdentifier]];config.useMultiViews=YES;config.enableAppliancePlugin=YES;
     WhiteAppliancePluginOptions *appliance=[WhiteAppliancePluginOptions new];
     appliance.extras=@{@"useWorker":@"auto",@"useSimple":@YES,@"allowImageBitmapFallback":@YES};
+    config.enablePreLoadAppliancePlugin=YES;
+    config.preloadBuiltinApps=@[@"Slide",@"Presentation"];
     config.appliancePluginOptions=appliance;
     self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config commonCallbackDelegate:self];
     __weak typeof(self) weakSelf=self;
+    // Optional base JS readiness only; onPreloadStateChange reports optional work separately.
+    // Neither callback proves drawing readiness: wait for room and input initialization before drawing.
     [self.sdk prepareWithCompletionHandler:^(NSError *error){
         WhitePreloadDemoController *host=weakSelf;if(!host)return;
         host.status.text=error ? error.localizedDescription : @"白板已准备，等待进入课堂";
@@ -110,6 +131,11 @@
     }];
 }
 #endif
+- (void)onPreloadStateChange:(WhitePreloadResult *)result {
+    // Optional preparation is separate from base JS readiness and from room/input readiness.
+    self.evidence[@"optionalPreload"] = @{@"state":result.state ?: @"", @"message":result.message ?: @""};
+    [self record:@"optional_preload_complete" completion:nil];
+}
 - (void)logger:(NSDictionary *)dict { if(dict[@"WhitePreload"]) NSLog(@"WHITE_PRELOAD_EVENT %@",dict[@"WhitePreload"]); }
 - (void)record:(NSString *)event completion:(void (^)(void))completion {
     NSDictionary *native=self.sdk.preparationInfo;

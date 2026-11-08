@@ -63,6 +63,11 @@ typedef void (^WhiteReleaseReply)(id);
     WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.fixture[@"appIdentifier"]];
     config.region=WhiteRegionCN; config.useMultiViews=YES; config.enableAppliancePlugin=YES;
     config.renderEngine=WhiteSdkRenderEngineCanvas;
+    if ([self.fixture[@"apiHosts"] isKindOfClass:NSArray.class]) config.apiHosts=self.fixture[@"apiHosts"];
+    if ([NSProcessInfo.processInfo.arguments containsObject:@"--release-preload"]) {
+        config.enablePreLoadAppliancePlugin=YES;
+        config.preloadBuiltinApps=@[@"Slide",@"Presentation"];
+    }
     // enableModelPreload deliberately stays at the Native default (false).
     if ([NSProcessInfo.processInfo.arguments containsObject:@"--release-empty-apps"]) config.preloadBuiltinApps=@[];
     WhiteSlideAppParams *slide=[WhiteSlideAppParams new];
@@ -72,6 +77,14 @@ typedef void (^WhiteReleaseReply)(id);
     config.whiteSlideAppParams=slide;
     self.nativeConfiguration=config.jsonDict;
     self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config commonCallbackDelegate:self];
+    if ([NSProcessInfo.processInfo.arguments containsObject:@"--release-immediate-join"]) {
+        // Call the real Native join synchronously after construction, without a prepare waiter.
+        [self.nativeEvents addObject:@{@"event":@"immediateJoinRequested",@"readyBeforeJoin":self.sdk.preparationInfo[@"ready"] ?: @NO}];
+        [self handleReleaseRequest:@{@"action":@"join",@"uid":@"ios-immediate-without-prepare"} reply:^(id value) {
+            self.prepared = !value[@"error"]; self.prepareError = value[@"error"];
+        }];
+        return;
+    }
     __weak typeof(self) weakSelf=self;
     [self.sdk prepareWithCompletionHandler:^(NSError *error){
         weakSelf.prepared=error==nil; weakSelf.prepareError=error.localizedDescription;

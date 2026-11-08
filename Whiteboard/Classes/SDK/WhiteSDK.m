@@ -203,7 +203,7 @@
     }
     if ([self.bridge whiteCanConfigureCallbacks]) {
         __weak typeof(self) weakSelf = self;
-        [self.bridge whitePrepareConfiguration:self.initializationConfiguration timeout:15 completion:^(NSError *error) {
+        [self.bridge whiteConfigureConfiguration:self.initializationConfiguration completion:^(NSError *error) {
             if (!error) [weakSelf whiteObservePreload];
         }];
     }
@@ -266,6 +266,12 @@
 
 #pragma mark - CommonCallback
 - (void)whiteObservePreload {
+    NSDictionary *config = self.initializationConfiguration;
+    BOOL optional = [config[@"enableModelPreload"] isEqual:@YES] ||
+        [config[@"dynamicConfig"] isKindOfClass:NSDictionary.class] ||
+        ([config[@"preloadBuiltinApps"] isKindOfClass:NSArray.class] && [config[@"preloadBuiltinApps"] count] > 0) ||
+        ([config[@"enableAppliancePlugin"] isEqual:@YES] && [config[@"enablePreLoadAppliancePlugin"] isEqual:@YES]);
+    if (!optional) return;
     if (self.preloadObserved || ![self.preparationInfo[@"ready"] boolValue] || self.bridge.whiteCallbackOwner != self) return;
     self.preloadObserved = YES;
     self.preloadRevision = [self.bridge whitePreparationRevision];

@@ -3,17 +3,10 @@
 #import "Whiteboard.h"
 #import "WhiteSDK+Room.h"
 #import <unistd.h>
+extern void WhiteLaunchDemoAttachReleaseProbe(WhiteBoardView *, WhiteSDK *, WhiteRoom *, NSString *);
 
-@interface WhiteLaunchBenchView : WhiteBoardView
-@end
-@implementation WhiteLaunchBenchView
-- (NSBundle *)whiteSDKBundle {
-    return [NSBundle bundleWithPath:[NSBundle.mainBundle pathForResource:@"LaunchBenchWhiteboard" ofType:@"bundle"]];
-}
-@end
-
-@interface WhiteLaunchPreloadViewController () <WhiteCommonCallbackDelegate, WKScriptMessageHandler>
-@property WhiteLaunchBenchView *board;
+@interface WhiteLaunchPreloadViewController () <WhiteCommonCallbackDelegate>
+@property WhiteBoardView *board;
 @property WhiteSDK *sdk;
 @property WhiteRoom *room;
 @property WhiteRoomConfig *roomConfig;
@@ -24,7 +17,7 @@
 @property NSMutableDictionary *result;
 @property NSString *runID, *mode;
 @property BOOL joining, finished, ready, sampling;
-@property BOOL automated;
+@property BOOL automated, baseReady, optionalReady;
 @property NSTimer *commandTimer;
 @end
 
@@ -35,10 +28,6 @@
     return i != NSNotFound && i + 1 < args.count ? args[i+1] : fallback;
 }
 - (NSString *)documents { return NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject; }
-- (NSString *)benchResource:(NSString *)name {
-    NSBundle *bundle = [NSBundle bundleWithPath:[NSBundle.mainBundle pathForResource:@"LaunchBenchWhiteboard" ofType:@"bundle"]];
-    return [NSString stringWithContentsOfFile:[bundle pathForResource:name ofType:@"js"] encoding:NSUTF8StringEncoding error:nil];
-}
 - (void)setPhase:(NSString *)phase text:(NSString *)text {
     self.status.text = text;
     self.status.accessibilityIdentifier = [@"bench." stringByAppendingString:phase];
@@ -64,7 +53,7 @@
     [self save];
     [self setPhase:@"failed" text:message];
     [self.commandTimer invalidate];
-    [self.board evaluateJavaScript:@"({requests:window.__iosBenchTransportNetwork,preparation:window.__whitePreparation,config:window.__launchBenchConfig})" completionHandler:^(id value, NSError *error) {
+    [self.board evaluateJavaScript:@"({sdkVersion:window.sdk&&window.sdk.version,roomPhase:window.room&&window.room.phase})" completionHandler:^(id value, NSError *error) {
         if (value) self.result[@"failureDiagnostics"] = value;
         [self save];
         if (self.automated) { fprintf(stdout,"IOS_BENCH_ERROR\n"); fflush(stdout); }
@@ -92,7 +81,7 @@
     self.cover.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.cover];
     self.status = [UILabel new]; self.status.numberOfLines = 0;
-    [self setPhase:@"preparing" text:@"正在清空本测试 App 的 IndexedDB…"];
+    [self setPhase:@"preparing" text:@"正在初始化测试入口…"];
     self.preparedButton = [self button:@"预加载入房" identifier:@"bench.preload.join" action:@selector(joinPrepared)];
     self.directButton = [self button:@"普通入房（点击后初始化）" identifier:@"bench.direct.join" action:@selector(joinDirect)];
     self.preparedButton.enabled = NO; self.directButton.enabled = NO;
@@ -102,17 +91,10 @@
     [NSLayoutConstraint activateConstraints:@[[stack.centerYAnchor constraintEqualToAnchor:self.cover.centerYAnchor],
         [stack.leadingAnchor constraintEqualToAnchor:self.cover.leadingAnchor constant:24],
         [stack.trailingAnchor constraintEqualToAnchor:self.cover.trailingAnchor constant:-24]]];
-    // Same cold-IDB/warm-HTTP policy as Android; do not clear unrelated Safari/app data.
-    WKWebsiteDataStore *store = WKWebsiteDataStore.defaultDataStore;
-    [store removeDataOfTypes:[NSSet setWithObject:WKWebsiteDataTypeIndexedDBDatabases] modifiedSince:NSDate.distantPast completionHandler:^{
-        [store fetchDataRecordsOfTypes:[NSSet setWithObject:WKWebsiteDataTypeIndexedDBDatabases] completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {
-            if (records.count) { [self fail:@"IndexedDBCleanupFailed"]; return; }
-            self.result[@"indexedDBBeforeLaunch"] = @"verified no IndexedDB records; HTTP cache retained";
-            [self mark:@"PAGE_READY" payload:@{@"sdkExists":@NO, @"webViewExists":@NO}];
-            if ([self.mode isEqual:@"preload"]) [self initializeBoard:YES];
-            else { self.directButton.enabled = YES; [self setPhase:@"ready" text:@"点击后创建 WebView / SDK 并入房"]; [self scheduleAutoTap]; }
-        }];
-    }];
+    [self mark:@"PAGE_READY" payload:@{@"sdkExists":@NO, @"webViewExists":@NO}];
+    if ([self.mode isEqual:@"preload"]) [self initializeBoard:YES];
+    else { self.directButton.enabled = YES; [self setPhase:@"ready" text:@"点击后创建 WebView / SDK 并入房"]; [self scheduleAutoTap]; }
+
 }
 - (void)initializeBoard:(BOOL)preparing {
     NSData *data = [NSData dataWithContentsOfFile:[[self documents] stringByAppendingPathComponent:@"launch-preload.private.json"]];
@@ -120,17 +102,18 @@
     if (![credentials[@"roomToken"] length] || ![credentials[@"appIdentifier"] length] || ![credentials[@"uuid"] length]) {
         [self fail:@"MissingPrivateRoomConfiguration"]; return;
     }
-    WKWebViewConfiguration *web = [WKWebViewConfiguration new];
-    [web.userContentController addScriptMessageHandler:self name:@"launchBench"];
-    NSString *shim = [NSString stringWithFormat:@"window.__iosBenchDeferAppliance=%@;\n%@", preparing ? @"false" : @"true",
-        [self benchResource:@"ios-transport"]];
-    [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:shim injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
-    self.board = [[WhiteLaunchBenchView alloc] initWithFrame:self.view.bounds configuration:web];
+    // Use the current SDK bundle. The archived benchmark bundle is not a Demo dependency.
+    self.board = [[WhiteBoardView alloc] initWithFrame:self.view.bounds];
     self.board.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:self.board atIndex:0];
     WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:credentials[@"appIdentifier"]];
     config.region = WhiteRegionCN; config.useMultiViews = YES; config.enableAppliancePlugin = YES;
-    if (preparing) config.appliancePluginOptions = [WhiteAppliancePluginOptions new];
+    if ([credentials[@"apiHosts"] isKindOfClass:NSArray.class]) config.apiHosts = credentials[@"apiHosts"];
+    if (preparing) {
+        config.enablePreLoadAppliancePlugin = YES;
+        config.preloadBuiltinApps = @[@"Slide", @"Presentation"];
+        config.appliancePluginOptions = [WhiteAppliancePluginOptions new];
+    }
     else config.preloadBuiltinApps = @[];
     // enableModelPreload is omitted and remains false. useWorker defaults to auto.
     config.preloadDynamicPPT = NO;
@@ -138,7 +121,7 @@
     config.whiteSlideAppParams.enableGlobalClick = NO;
     config.whiteSlideAppParams.syncEventQueuePolicy = WhiteSlideSyncEventQueuePolicyLatestPendingRender;
     self.roomConfig = [[WhiteRoomConfig alloc] initWithUUID:credentials[@"uuid"] roomToken:credentials[@"roomToken"] uid:@"launch-aligned-config-benchmark"];
-    self.roomConfig.region = WhiteRegionCN; self.roomConfig.isWritable = NO;
+    self.roomConfig.region = WhiteRegionCN; self.roomConfig.isWritable = YES;
     if (!preparing) self.roomConfig.appliancePluginOptions = [WhiteAppliancePluginOptions new];
     WhiteWindowParams *window = [WhiteWindowParams new];
     window.forceMaximized = YES; window.lazySetupInMaximizedMode = YES;
@@ -149,13 +132,28 @@
     self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config commonCallbackDelegate:self];
     if (preparing) {
         __weak typeof(self) weakSelf = self;
+        // Optional base JS readiness; it does not wait for Apps or the appliance probe.
         [self.sdk prepareWithCompletionHandler:^(NSError *error) {
             if (error) { [weakSelf fail:error.localizedDescription]; return; }
-            [weakSelf.board evaluateJavaScript:@"window.__launchPrepare()" completionHandler:^(id value, NSError *error) {
-                if (error) [weakSelf fail:@"PrepareProbeFailed"];
-            }];
+            weakSelf.baseReady = YES;
+            [weakSelf updatePreparedState];
         }];
     }
+}
+- (void)onPreloadStateChange:(WhitePreloadResult *)result {
+    // Optional work has a separate once-only callback. Room/input readiness is checked after join.
+    [self mark:@"OPTIONAL_PRELOAD" payload:@{@"state":result.state ?: @"", @"message":result.message ?: @""}];
+    self.optionalReady = YES;
+    [self updatePreparedState];
+}
+- (void)updatePreparedState {
+    if (self.ready || self.finished || !self.baseReady || !self.optionalReady) return;
+    self.ready = YES;
+    [self mark:@"PRELOAD_READY" payload:nil];
+    self.result[@"nativePrepared"] = self.sdk.preparationInfo;
+    self.preparedButton.enabled = YES; self.directButton.enabled = YES;
+    [self setPhase:@"ready" text:@"基础资源与可选预加载已完成，可入房"];
+    [self scheduleAutoTap];
 }
 - (void)joinPrepared {
     if (!self.ready || self.joining || self.finished) return;
@@ -169,7 +167,6 @@
     // Manual selection after warming is supported; formal direct launches start empty.
     if (self.board) {
         [self.sdk cancelPreparation];
-        [self.board.configuration.userContentController removeScriptMessageHandlerForName:@"launchBench"];
         [self.board removeFromSuperview]; self.board = nil; self.sdk = nil;
     }
     self.mode = @"direct"; self.result[@"mode"] = self.mode;
@@ -190,44 +187,27 @@
         [weakSelf finishIfReady];
     }];
 }
-- (void)userContentController:(WKUserContentController *)controller didReceiveScriptMessage:(WKScriptMessage *)message {
-    if (self.finished || ![message.body isKindOfClass:NSDictionary.class]) return;
-    NSDictionary *body = message.body;
-    if ([body[@"method"] isEqual:@"prepared"]) {
-        if (self.ready || ![self.mode isEqual:@"preload"]) return;
-        self.ready = YES;
-        [self mark:@"PRELOAD_READY" payload:@{@"deviceEpochMs":body[@"payload"][@"readyAt"], @"evidence":body[@"payload"]}];
-        self.result[@"nativePrepared"] = self.sdk.preparationInfo;
-        self.preparedButton.enabled = YES; self.directButton.enabled = YES;
-        [self setPhase:@"ready" text:@"白板已准备，可直接入房"];
-        [self scheduleAutoTap];
-    } else if ([body[@"method"] isEqual:@"record"]) {
-        NSDictionary *event = body[@"payload"];
-        if (![@[@"T1",@"T2",@"T3",@"T4",@"T5_SETUP",@"T5_READY"] containsObject:event[@"stage"]]) return;
-        [self.events addObject:event];
-        [self finishIfReady];
-    }
-}
 - (void)finishIfReady {
     if (self.finished || self.sampling) return;
-    NSSet *stages = [NSSet setWithArray:[self.events valueForKey:@"stage"]];
-    if (![[NSSet setWithArray:@[@"T0",@"T1",@"T2",@"T3",@"T4",@"T5_READY",@"NATIVE_JOIN_SUCCESS"]] isSubsetOfSet:stages]) return;
+    if (!self.room) return;
     self.sampling = YES;
-    NSString *js = [self benchResource:@"snapshot"];
+    NSString *js = @"({sdkVersion:window.sdk.version,roomPhase:window.room.phase,writable:window.room.isWritable,managerVersion:window.manager&&window.manager.version,applianceVersion:window.appliancePlugin&&window.appliancePlugin.currentManager.version,configuration:{apps:window.sdk.__nativePreparation?\"explicit\":\"off\"}})";
     [self.board evaluateJavaScript:js completionHandler:^(id value, NSError *error) {
         if (error || ![value isKindOfClass:NSDictionary.class]) { [self fail:@"SnapshotFailed"]; return; }
         self.result[@"snapshot"] = value;
         self.result[@"nativeAfterJoin"] = self.sdk.preparationInfo;
         self.result[@"status"] = @"joined"; [self save];
-        // Accessible controls and screenshots are collected only after all measured stages.
+        // Native join success includes the current Bridge initialization; no legacy timing hooks are used.
         self.status = [UILabel new]; self.status.backgroundColor = UIColor.whiteColor;
         self.status.frame = CGRectMake(12,100,330,36); [self.view addSubview:self.status];
-        [self setPhase:@"completed" text:@"初始化完成"];
+        [self setPhase:@"completed" text:@"已入房，可使用白板"];
         self.leaveButton = [self button:@"退出测试房间" identifier:@"bench.leave" action:@selector(leave)];
         self.leaveButton.frame = CGRectMake(12,140,200,44); self.leaveButton.backgroundColor = UIColor.whiteColor;
         [self.view addSubview:self.leaveButton];
         if (self.automated) {
-            // iOS 17 has no legacy screenshotr service. Capture WK content after T5.
+            if ([NSProcessInfo.processInfo.arguments containsObject:@"--bench-release-control"])
+                WhiteLaunchDemoAttachReleaseProbe(self.board, self.sdk, self.room, self.runID);
+            // Capture the actual WK content after Native join success.
             [self.board takeSnapshotWithConfiguration:nil completionHandler:^(UIImage *image, NSError *snapshotError) {
                 if (!image) { [self fail:@"PostJoinScreenshotFailed"]; return; }
                 NSString *name = [self.runID stringByAppendingString:@".png"];
@@ -248,7 +228,6 @@
         self.result[@"status"] = @"passed"; [self save]; self.finished = YES;
         [self setPhase:@"left" text:@"已正常离房"];
         [self.commandTimer invalidate]; self.commandTimer = nil;
-        [self.board.configuration.userContentController removeScriptMessageHandlerForName:@"launchBench"];
         if (self.automated) {
             fprintf(stdout,"IOS_BENCH_LEFT %s\n",self.runID.UTF8String); fflush(stdout);
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC/5), dispatch_get_main_queue(), ^{ exit(0); });
