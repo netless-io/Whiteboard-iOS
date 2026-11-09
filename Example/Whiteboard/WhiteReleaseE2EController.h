@@ -60,6 +60,11 @@ typedef void (^WhiteReleaseReply)(id);
     self.board.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.board.accessibilityIdentifier=@"release.whiteboard";
     [self.view addSubview:self.board];
+    // A fresh WebView lets fault tests install observation before the real Native constructor.
+    if ([NSProcessInfo.processInfo.arguments containsObject:@"--release-deferred-init"]) return;
+    [self configureReleaseSDK:@{}];
+}
+- (void)configureReleaseSDK:(NSDictionary *)options {
     WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.fixture[@"appIdentifier"]];
     config.region=WhiteRegionCN; config.useMultiViews=YES; config.enableAppliancePlugin=YES;
     config.renderEngine=WhiteSdkRenderEngineCanvas;
@@ -75,6 +80,18 @@ typedef void (^WhiteReleaseReply)(id);
     slide.syncEventQueuePolicy=WhiteSlideSyncEventQueuePolicyLatestPendingRender;
     if ([NSProcessInfo.processInfo.arguments containsObject:@"--release-shared-volume"]) slide.enableSharedMediaVolume=YES;
     config.whiteSlideAppParams=slide;
+    // These are public Native setters, matching the Android release configuration matrix.
+    if (options[@"enableModelPreload"]) config.enableModelPreload=[options[@"enableModelPreload"] boolValue];
+    if (options[@"enableAppliancePlugin"]) config.enableAppliancePlugin=[options[@"enableAppliancePlugin"] boolValue];
+    if (options[@"enablePreLoadAppliancePlugin"]) config.enablePreLoadAppliancePlugin=[options[@"enablePreLoadAppliancePlugin"] boolValue];
+    if (options[@"useMultiViews"]) config.useMultiViews=[options[@"useMultiViews"] boolValue];
+    if ([options[@"preloadBuiltinApps"] isKindOfClass:NSArray.class]) config.preloadBuiltinApps=options[@"preloadBuiltinApps"];
+    if ([options[@"dynamicConfig"] isKindOfClass:NSDictionary.class]) config.dynamicConfig=options[@"dynamicConfig"];
+    if ([options[@"appliancePluginOptions"] isKindOfClass:NSDictionary.class]) {
+        WhiteAppliancePluginOptions *appliance=[WhiteAppliancePluginOptions new];
+        appliance.extras=options[@"appliancePluginOptions"];
+        config.appliancePluginOptions=appliance;
+    }
     self.nativeConfiguration=config.jsonDict;
     self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config commonCallbackDelegate:self];
     if ([NSProcessInfo.processInfo.arguments containsObject:@"--release-immediate-join"]) {
@@ -120,6 +137,11 @@ typedef void (^WhiteReleaseReply)(id);
 }
 - (void)handleReleaseRequest:(NSDictionary *)request reply:(WhiteReleaseReply)reply {
     NSString *action=request[@"action"];
+    if([action isEqual:@"configure"]){
+        if(self.sdk){reply(@{@"error":@"A fresh physical-device process is required for configuration"});return;}
+        [self configureReleaseSDK:request[@"options"] ?: @{}];
+        reply(@{@"configured":@YES});return;
+    }
     if([action isEqual:@"eval"]){[self releaseEvaluate:request[@"expression"] ?: @"null" reply:reply];return;}
     if([action isEqual:@"uiReady"]){self.uiReady=YES;reply(@{@"ready":@YES});return;}
     if([action isEqual:@"touchPoll"]){id next=self.touchQueue.firstObject ?: NSNull.null;if(self.touchQueue.count)[self.touchQueue removeObjectAtIndex:0];reply(@{@"command":next});return;}
@@ -146,6 +168,7 @@ typedef void (^WhiteReleaseReply)(id);
     }
     if([action isEqual:@"leave"]){[self.sdk leaveRoomWithCompletionHandler:^(NSError *error){self.room=nil;reply(error ? @{@"error":error.localizedDescription} : @{@"state":@"left"});}];return;}
     if([action isEqual:@"pencil"]){[self.room setMemberState:[WhiteMemberState _white_yy_modelWithDictionary:request[@"payload"]]];reply(@{@"configured":@YES});return;}
+    if([action isEqual:@"enableUndo"]){[self.room disableSerialization:NO];reply(@{@"configured":@YES});return;}
     if([action isEqual:@"addSlide"]){WhiteAppParam *app=[WhiteAppParam createSlideApp:[@"/release-slide/" stringByAppendingString:NSUUID.UUID.UUIDString] taskId:@"9340e8e067bc11ec8f582b1b98453394" url:@"https://convertcdn.netless.link/dynamicConvert" title:@"Release E2E fixture"];app.originSize=[[WhiteWindowOriginSize alloc] initWithWidth:1280 height:720];[self.room addApp:app completionHandler:^(NSString *appId){reply(appId ?: @"");}];return;}
     if([action isEqual:@"docs"]){NSDictionary *payload=request[@"payload"];[self.room dispatchDocsEvent:payload[@"event"] options:[WhiteWindowDocsEventOptions _white_yy_modelWithDictionary:payload[@"options"]] completionHandler:^(WhiteDispatchDocsEventResult *result){reply(result.jsonDict ?: @{});}];return;}
     if([action isEqual:@"docsSequence"]){
