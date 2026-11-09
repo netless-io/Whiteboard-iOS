@@ -126,7 +126,8 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 @property (nonatomic, copy) NSString *appIdentifier;
 
 /** Region -> this platform's public OSS latest.json URL. No OSS credentials are needed.
- Missing region or unreadable JSON keeps local parameters; download timeout is 5 seconds.
+ Missing region or unreadable JSON keeps local parameters. Construction prefetch has no deadline;
+ joinRoom waits up to 5 seconds for the pending prefetch before its normal fallback.
  Example: @{ @"cn-hz": @"https://example.cn/ios/latest.json", @"sg": @"https://example.com/ios/latest.json" }.
  Supply iOS configuration URLs on iOS.
  */
@@ -140,7 +141,7 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
 @property (nonatomic, assign) BOOL enableModelPreload;
 
 /**
- 构造 WhiteSDK 时后台预加载的 App 类。nil 默认 Slide、Presentation，@[] 关闭。
+ 构造 WhiteSDK 时后台预加载的 App 类。nil 或 @[] 关闭；只有显式非空列表才开启。
  可选值（大小写固定）：@"Slide"、@"Presentation"、@"MediaPlayer"、@"DocsViewer"。
  仅准备 App 类，不创建实例或加载课件内容；独立于 enableModelPreload。
  */
@@ -279,11 +280,12 @@ FOUNDATION_EXPORT WhiteSDKLoggerReportModeKey const WhiteSDKLoggerReportBan;
  启用 Appliance插件。
  启用后，原基础教具将被替换。请确保同一房间的所有终端使用相同配置。
  默认为 NO。
- 在构造 WhiteSDK 前设为 YES，可独立启动教具渲染准备，不依赖 enableModelPreload。
- 无需设置 appliancePluginOptions。未被配置覆盖时，插件默认 useWorker 为 "auto"，
- 按能力、缓存和页面可见性决定是否执行探针。
+ 仅启用教具功能；默认在入房后初始化，不触发预加载。
  */
 @property (nonatomic, assign) BOOL enableAppliancePlugin;
+/** 显式提前准备教具探针及所需 Worker，默认 NO。仅 enableAppliancePlugin 同时为 YES 生效。
+ mainThread 不准备 Worker；useSimple 省略或 YES 仅准备 Full Worker。 */
+@property (nonatomic, assign) BOOL enablePreLoadAppliancePlugin;
 /** Optional SDK defaults prepared before join; WhiteRoomConfig keeps its per-room override.
  Omit to use plugin defaults, including useWorker: "auto", unless overridden by dynamic configuration. */
 @property (nonatomic, strong, nullable) WhiteAppliancePluginOptions *appliancePluginOptions;

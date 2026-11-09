@@ -93,6 +93,14 @@ int main(void) {
     NSCAssert(cached && view.setups.count==2, @"same configuration must reuse ready setup");
    }
   }
+  WhiteBoardView *background=[WhiteBoardView new];
+  [background whiteConfigureConfiguration:aConfig completion:nil];
+  NSCAssert(background.setups.count==1 && background.whitePreparationWaiters,@"background starts once without deadline");
+  __block BOOL invalid=NO;
+  [background whitePrepareConfiguration:aConfig timeout:0 completion:^(NSError *e){invalid=[e.localizedDescription isEqualToString:@"InvalidPreparationOptions"];}];
+  NSCAssert(invalid,@"explicit zero timeout remains invalid");
+  void (^finish)(id)=background.setupCallbacks.lastObject;finish(@"{}");
+  NSCAssert(background.whitePrepared,@"background completes normally");
   puts("4 actual Objective-C public prepare reentry/cancellation cases passed, including late responses and ready cache");
  }
  return 0;

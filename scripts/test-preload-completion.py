@@ -67,7 +67,7 @@ main = r'''
 static void drain(void) { CFRunLoopRunInMode(kCFRunLoopDefaultMode,0.02,false); }
 static WhiteSDK *make(void) {
  WhiteSDK *sdk=[WhiteSDK new];sdk.bridge=[WhiteBoardView new];sdk.bridge.whiteCallbackOwner=sdk;
- sdk.bridge.commonCallbacks=[CommonCallbacks new];sdk.initializationConfiguration=@{};
+ sdk.bridge.commonCallbacks=[CommonCallbacks new];sdk.initializationConfiguration=@{@"preloadBuiltinApps":@[@"Slide"]};
  sdk.preparationInfo=@{@"ready":@YES,@"documentId":@"document"};return sdk;
 }
 int main(void) { @autoreleasepool {
@@ -78,6 +78,14 @@ int main(void) { @autoreleasepool {
  NSCAssert([wire[@"enableSharedMediaVolume"] isEqual:@YES],@"actual Slide JSON preserves true");
  slide.enableSharedMediaVolume=NO;NSCAssert([slide.jsonDict[@"enableSharedMediaVolume"] isEqual:@NO],@"explicit false preserved");
  NSCAssert((![[WhitePreloadResult alloc]initWithDictionary:@{@"state":@"warn",@"message":@""}]),@"invalid warn rejected");
+ for(NSDictionary *config in @[@{},@{@"enableModelPreload":@NO},@{@"preloadBuiltinApps":@[]},@{@"enableAppliancePlugin":@YES},@{@"enablePreLoadAppliancePlugin":@YES}]) {
+  WhiteSDK *off=make();off.initializationConfiguration=config;[off whiteObservePreload];
+  NSCAssert(!off.bridge.reply && !off.preloadObserved,@"off does not call JS or register observer");
+ }
+ for(NSDictionary *config in @[@{@"enableModelPreload":@YES},@{@"dynamicConfig":@{}},@{@"preloadBuiltinApps":@[@"Slide"]},@{@"enableAppliancePlugin":@YES,@"enablePreLoadAppliancePlugin":@YES}]) {
+  WhiteSDK *on=make();on.initializationConfiguration=config;[on whiteObservePreload];
+  NSCAssert(on.bridge.reply && on.preloadObserved,@"explicit preparation observes completion");
+ }
  Listener *a=[Listener new],*b=[Listener new];WhiteSDK *sdk=make();[sdk whiteObservePreload];
  sdk.bridge.reply(@"{\"state\":\"warn\",\"message\":\"Slide failed\"}");drain();
  NSCAssert(a.calls==0,@"buffer until subscribed");sdk.commonCallbackDelegate=a;drain();

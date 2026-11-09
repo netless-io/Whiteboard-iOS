@@ -30,7 +30,11 @@ static void WhiteReleaseTouch(UIView *view, NSDictionary *command, void (^reply)
     UITouch *touch = [[UITouch alloc] initAtPoint:first inWindow:window];
     if (!touch.view || !touch.window) { reply(@{@"error":@"Native touch did not hit a window view"}); return; }
     NSString *hitViewClass=NSStringFromClass(touch.view.class) ?: @"nil";
-    if (!tap) { [touch setIsTap:NO]; [touch setTapCount:0]; }
+    if (!tap) {
+        // UIKit removed this optional private hint on newer iOS versions.
+        if ([touch respondsToSelector:@selector(setIsTap:)]) [touch setIsTap:NO];
+        [touch setTapCount:0];
+    }
     NSTimeInterval started = NSDate.date.timeIntervalSince1970 * 1000;
     [touch setPhaseAndUpdateTimestamp:UITouchPhaseBegan];
     [touch setIsFromEdge:NO];

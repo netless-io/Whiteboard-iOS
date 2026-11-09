@@ -1,3 +1,9 @@
+## [2.16.149] - 2026-11-09
+
+- Align optional preload with Android: App classes require an explicit list; appliance preparation requires enablePreLoadAppliancePlugin=true (default false).
+- Keep ordinary constructor-then-join usage free from optional preload and retain separate base preparation / optional completion callbacks.
+- Update the ordinary/preload Demo and embed published White Web SDK 2.16.63, Appliance Plugin 1.1.49, WindowManager 1.0.29 and Slide 0.2.109.
+
 # ChangeLog
 本项目的所有值得注意的更改都将记录在此文件中。
 

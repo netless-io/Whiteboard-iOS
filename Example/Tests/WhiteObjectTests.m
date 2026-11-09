@@ -154,6 +154,20 @@
     XCTAssertFalse(config.enableModelPreload);
 }
 
+- (void)testAppliancePreloadOptInJson
+{
+    WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app"];
+    XCTAssertFalse(config.enablePreLoadAppliancePlugin);
+    XCTAssertEqualObjects(config.jsonDict[@"enablePreLoadAppliancePlugin"], @NO);
+    config.enableAppliancePlugin = YES;
+    XCTAssertEqualObjects(config.jsonDict[@"enablePreLoadAppliancePlugin"], @NO);
+    config.enablePreLoadAppliancePlugin = YES;
+    NSDictionary *wire = [NSJSONSerialization JSONObjectWithData:[config.jsonString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    XCTAssertEqualObjects(wire[@"enablePreLoadAppliancePlugin"], @YES);
+    config.enablePreLoadAppliancePlugin = NO;
+    XCTAssertEqualObjects(config.jsonDict[@"enablePreLoadAppliancePlugin"], @NO);
+}
+
 - (void)testModelPreloadOptInJson
 {
     WhiteSdkConfiguration *config = [[WhiteSdkConfiguration alloc] initWithApp:@"app"];
