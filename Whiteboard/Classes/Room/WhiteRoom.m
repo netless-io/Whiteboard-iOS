@@ -590,10 +590,10 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     if ([webView isKindOfClass:[WhiteBoardView class]]) {
         [(WhiteBoardView *)webView logDebugViewStateWithReason:@"webViewWebContentProcessDidTerminate" force:YES];
     }
-    [(WhiteBoardView *)webView whiteInvalidate];
+    [(WhiteBoardView *)webView whiteDestroy];
     [self updatePhase:WhiteRoomPhaseDisconnected];
     if ([((WhiteBoardView *)webView).commonCallbacks.delegate respondsToSelector:@selector(throwError:)]) {
-        [((WhiteBoardView *)webView).commonCallbacks.delegate throwError:[NSError errorWithDomain:WhiteConstErrorDomain code:-500 userInfo:@{NSLocalizedDescriptionKey: @"Renderer exited; host cleanup is unconfirmed"}]];
+        [((WhiteBoardView *)webView).commonCallbacks.delegate throwError:[NSError errorWithDomain:WhiteConstErrorDomain code:-500 userInfo:@{NSLocalizedDescriptionKey: @"Renderer exited; local host has been destroyed"}]];
     }
 
 }

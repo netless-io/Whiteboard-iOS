@@ -27,6 +27,7 @@
 - (void)whiteLeaveRoom:(void (^ _Nullable)(NSError * _Nullable))completion;
 - (void)whiteLeave:(nullable NSNumber *)generation completion:(void (^_Nullable)(NSError * _Nullable error))completion;
 - (void)whiteInvalidate;
+- (void)whiteDestroy;
 - (BOOL)whiteCurrent:(NSNumber *)generation;
 
 
