@@ -21,9 +21,11 @@ static NSString * const SessionRoomToken = @"";
 
 @interface LifecycleCommonCounter : NSObject <WhiteCommonCallbackDelegate>
 @property NSUInteger pauses;
+@property NSMutableArray<NSString *> *apiErrors;
 @end
 @implementation LifecycleCommonCounter
 - (void)pptMediaPause { self.pauses++; }
+- (void)throwError:(NSError *)error { [self.apiErrors addObject:error.localizedDescription]; }
 @end
 
 @interface SessionLifecycleNativeTests : XCTestCase
@@ -33,6 +35,7 @@ static NSString * const SessionRoomToken = @"";
 @property NSMutableDictionary *evidence;
 @property NSString *uid;
 @property BOOL expectBlocked;
+@property NSDictionary *apiFixture;
 @end
 @implementation SessionLifecycleNativeTests
 - (id)js:(NSString *)source {
@@ -55,7 +58,7 @@ static NSString * const SessionRoomToken = @"";
     NSUInteger count=0; for (NSDictionary *socket in snapshot[@"sockets"]) if ([socket[@"state"] integerValue]==1) count++; return count;
 }
 - (WhiteRoomConfig *)config {
-    WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:SessionRoomUuid roomToken:SessionRoomToken uid:self.uid];
+    WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:self.apiFixture[@"uuid"] ?: SessionRoomUuid roomToken:self.apiFixture[@"roomToken"] ?: SessionRoomToken uid:self.uid];
     config.region=WhiteRegionCN; config.isWritable=NO; config.windowParams=[[WhiteWindowParams alloc] init]; return config;
 }
 - (void)join {
@@ -75,21 +78,25 @@ static NSString * const SessionRoomToken = @"";
 }
 - (void)setUp {
     [super setUp]; self.continueAfterFailure=NO;
-    XCTAssertTrue(SessionRoomToken.length>0,@"Local test credentials are required");
+    if ([self.name containsString:@"testApiReturnContract"]) {
+        NSString *file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"api-return.private.json"];
+        self.apiFixture = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:file] options:0 error:nil];
+        XCTAssertTrue([self.apiFixture[@"roomToken"] length]>0,@"Runtime test fixture is required");
+    } else XCTAssertTrue(SessionRoomToken.length>0,@"Local test credentials are required");
     self.evidence=[NSMutableDictionary dictionary]; self.uid=[@"ios-lifecycle-candidate-" stringByAppendingString:NSUUID.UUID.UUIDString];
     WKWebViewConfiguration *web=[[WKWebViewConfiguration alloc] init];
     NSString *relay=@"(function(){var Original=window.WebSocket;function Routed(url,protocols){if(/^wss:\\/\\//.test(url))url='ws://127.0.0.1:18765/relay?group=ios&target='+encodeURIComponent(url);return protocols===undefined?new Original(url):new Original(url,protocols)}Routed.prototype=Original.prototype;['CONNECTING','OPEN','CLOSING','CLOSED'].forEach(function(k){Routed[k]=Original[k]});window.WebSocket=Routed})()";
-    [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:relay injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
+    if (![self.name containsString:@"testApiReturnContract"]) [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:relay injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
     self.board=[[WhiteBoardView alloc] initWithFrame:UIScreen.mainScreen.bounds configuration:web];
     [UIApplication.sharedApplication.keyWindow.rootViewController.view addSubview:self.board];
-    WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:SessionAppIdentifier];config.useMultiViews=YES;config.enableAppliancePlugin=YES;
+    WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.apiFixture[@"appIdentifier"] ?: SessionAppIdentifier];config.useMultiViews=YES;config.enableAppliancePlugin=YES;config.apiHosts=self.apiFixture[@"apiHosts"];
     self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config];
     NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:40];
     while(![[self js:SessionLifecycleProbeJS] boolValue]){XCTAssertGreaterThan(deadline.timeIntervalSinceNow,0);[self pause:.1];}
 }
 - (void)tearDown {
     self.continueAfterFailure=YES;
-    [self gate:NO];
+    if (![self.name containsString:@"testApiReturnContract"]) [self gate:NO];
     if(self.sdk && !self.expectBlocked) [self leave];
     if(self.board){[self pause:.3];if([[self js:@"!!window.__lifecycleProbe"] boolValue])[self snapshot:@"final"];else self.evidence[@"documentDiscarded"]=@YES;NSString *path=[NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"session-candidate-%@.json",self.name]];
         [[NSJSONSerialization dataWithJSONObject:self.evidence options:NSJSONWritingPrettyPrinted error:nil] writeToFile:path atomically:YES];NSLog(@"SESSION_CANDIDATE_EVIDENCE %@",path);[self.board removeFromSuperview];}
@@ -380,6 +387,41 @@ static NSString * const SessionRoomToken = @"";
     [self waitForExpectations:@[stopped] timeout:25];XCTAssertEqualObjects([self.board valueForKey:@"whiteState"],@"blocked");[self rejectDuplicate];
     XCTAssertEqualObjects([self js:@"window.__stopCount"],@1);XCTAssertEqual([[self snapshot:@"stopFailureRetryRejected"][@"joinStarts"] integerValue],0);
 }
+
+- (void)testApiReturnContract {
+    [self join];
+    LifecycleCommonCounter *counter = [LifecycleCommonCounter new]; counter.apiErrors = [NSMutableArray array];
+    self.board.commonCallbacks.delegate = counter;
+    for (NSUInteger i=0; i<10; i++) {
+        XCTestExpectation *state = [self expectationWithDescription:@"room state"];
+        [self.room getRoomStateWithResult:^(WhiteRoomState *value) { XCTAssertNotNil(value); [state fulfill]; }];
+        [self waitForExpectations:@[state] timeout:10];
+        XCTestExpectation *scenes = [self expectationWithDescription:@"entire scenes"];
+        [self.room getEntireScenes:^(NSDictionary *value) { XCTAssertNotNil(value); [scenes fulfill]; }];
+        [self waitForExpectations:@[scenes] timeout:10];
+        XCTestExpectation *apps = [self expectationWithDescription:@"empty apps"];
+        [self js:@"Object.defineProperty(window.manager,'apps',{configurable:true,get:function(){return undefined}});true"];
+        [self.room queryAllAppsWithCompletionHandler:^(NSDictionary *value, NSError *error) { XCTAssertNil(error); XCTAssertEqual(value.count,0); [apps fulfill]; }];
+        [self waitForExpectations:@[apps] timeout:10]; [self js:@"delete window.manager.apps;true"];
+        for (NSString *api in @[@"nextPage", @"prevPage", @"closeApp"]) {
+            [self js:[NSString stringWithFormat:@"window.__apiOriginal=window.manager.%@;window.manager.%@=function(){return Promise.reject(new Error('device API failure'))};true",api,api]];
+            XCTestExpectation *failed = [self expectationWithDescription:api];
+            if ([api isEqualToString:@"nextPage"]) [self.room nextPage:^(BOOL success) { XCTAssertFalse(success); [failed fulfill]; }];
+            else if ([api isEqualToString:@"prevPage"]) [self.room prevPage:^(BOOL success) { XCTAssertFalse(success); [failed fulfill]; }];
+            else [self.room closeApp:@"missing" completionHandler:^{[failed fulfill];}];
+            [self waitForExpectations:@[failed] timeout:10];
+            XCTAssertEqualObjects(counter.apiErrors.lastObject,@"device API failure");
+            [self js:[NSString stringWithFormat:@"window.manager.%@=window.__apiOriginal;delete window.__apiOriginal;true",api]];
+        }
+        [self js:@"window.__apiView=window.manager.focusedView;window.__apiOriginal=window.__apiView.insertText;window.__apiView.insertText=function(){throw new Error('device insertion failure')};true"];
+        XCTestExpectation *text = [self expectationWithDescription:@"insertion error"];
+        [self.room insertText:0 y:0 textContent:@"contract-test" completionHandler:^(NSString *value) { XCTAssertNil(value); [text fulfill]; }];
+        [self waitForExpectations:@[text] timeout:10];XCTAssertEqualObjects(counter.apiErrors.lastObject,@"device insertion failure");
+        [self js:@"window.__apiView.insertText=window.__apiOriginal;delete window.__apiView;delete window.__apiOriginal;true"];
+    }
+    XCTAssertEqual(counter.apiErrors.count,40);
+}
+
 
 @end
 

@@ -890,3 +890,59 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
 }
 
 @end
+
+// Return-contract tests use the public Room APIs with controlled transport replies.
+#import "../../Whiteboard/Classes/Room/WhiteRoom+Private.h"
+#import "../../Whiteboard/Classes/Displayer/WhiteCommonCallbacks.h"
+
+@interface ApiReplyBoard : WhiteBoardView
+@property id replyValue;
+@end
+@implementation ApiReplyBoard
+- (void)callHandler:(NSString *)method completionHandler:(void (^)(id))completionHandler {
+    if (completionHandler) completionHandler(self.replyValue);
+}
+- (void)callHandler:(NSString *)method arguments:(NSArray *)arguments completionHandler:(void (^)(id))completionHandler {
+    if (completionHandler) completionHandler(self.replyValue);
+}
+@end
+@interface ApiErrorCounter : NSObject <WhiteCommonCallbackDelegate>
+@property NSMutableArray<NSError *> *errors;
+@end
+@implementation ApiErrorCounter
+- (void)throwError:(NSError *)error { [self.errors addObject:error]; }
+@end
+@interface RoomApiReturnTests : XCTestCase
+@end
+@implementation RoomApiReturnTests
+- (void)testErrorRepliesFinishCallbacksAndReportOriginalError {
+    ApiReplyBoard *board = [[ApiReplyBoard alloc] initWithFrame:CGRectZero];
+    ApiErrorCounter *counter = [ApiErrorCounter new]; counter.errors = [NSMutableArray array];
+    board.commonCallbacks = [[WhiteCommonCallbacks alloc] init]; board.commonCallbacks.delegate = counter;
+    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:@"synthetic-room" bridge:board];
+    NSDictionary *failure = @{@"__error":@{@"message":@"synthetic failure",@"jsStack":@"synthetic stack"}};
+    NSData *data = [NSJSONSerialization dataWithJSONObject:failure options:0 error:nil];
+    for (id reply in @[failure, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]]) {
+        board.replyValue = reply;
+        __block NSUInteger callbacks = 0;
+        [room nextPage:^(BOOL success) { XCTAssertFalse(success); callbacks++; }];
+        [room prevPage:^(BOOL success) { XCTAssertFalse(success); callbacks++; }];
+        [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) { XCTAssertNil(textId); callbacks++; }];
+        [room closeApp:@"id" completionHandler:^{ callbacks++; }];
+        XCTAssertEqual(callbacks, 4);
+    }
+    XCTAssertEqual(counter.errors.count, 8);
+    for (NSError *error in counter.errors) XCTAssertEqualObjects(error.localizedDescription, @"synthetic failure");
+}
+- (void)testNormalWireValuesArePreserved {
+    ApiReplyBoard *board = [[ApiReplyBoard alloc] initWithFrame:CGRectZero];
+    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:@"synthetic-room" bridge:board];
+    __block NSUInteger callbacks = 0;
+    board.replyValue = @NO; [room nextPage:^(BOOL success) { XCTAssertFalse(success); callbacks++; }];
+    board.replyValue = @YES; [room prevPage:^(BOOL success) { XCTAssertTrue(success); callbacks++; }];
+    board.replyValue = @"text-id";
+    [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) { XCTAssertEqualObjects(textId, @"text-id"); callbacks++; }];
+    board.replyValue = nil; [room closeApp:@"id" completionHandler:^{ callbacks++; }];
+    XCTAssertEqual(callbacks, 4);
+}
+@end
