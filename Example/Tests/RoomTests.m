@@ -927,7 +927,7 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
         __block NSUInteger callbacks = 0;
         [room nextPage:^(BOOL success) { XCTAssertFalse(success); callbacks++; }];
         [room prevPage:^(BOOL success) { XCTAssertFalse(success); callbacks++; }];
-        [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) { XCTAssertNil(textId); callbacks++; }];
+        [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) { XCTAssertEqualObjects(textId, @""); callbacks++; }];
         [room closeApp:@"id" completionHandler:^{ callbacks++; }];
         XCTAssertEqual(callbacks, 4);
     }
@@ -944,5 +944,25 @@ static NSString * const kTestingCustomEventName = @"WhiteCommandCustomEvent";
     [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) { XCTAssertEqualObjects(textId, @"text-id"); callbacks++; }];
     board.replyValue = nil; [room closeApp:@"id" completionHandler:^{ callbacks++; }];
     XCTAssertEqual(callbacks, 4);
+}
+- (void)testInsertTextMalformedRepliesReturnNonNullEmptyIdentifierAndReportError {
+    ApiReplyBoard *board = [[ApiReplyBoard alloc] initWithFrame:CGRectZero];
+    ApiErrorCounter *counter = [ApiErrorCounter new]; counter.errors = [NSMutableArray array];
+    board.commonCallbacks = [[WhiteCommonCallbacks alloc] init]; board.commonCallbacks.delegate = counter;
+    WhiteRoom *room = [[WhiteRoom alloc] initWithUuid:@"synthetic-room" bridge:board];
+    __block NSUInteger callbacks = 0;
+    for (id reply in @[@YES, @{}, NSNull.null]) {
+        board.replyValue = reply;
+        [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) {
+            XCTAssertNotNil(textId); XCTAssertEqualObjects(textId, @""); callbacks++;
+        }];
+    }
+    board.replyValue = nil;
+    [room insertText:0 y:0 textContent:@"text" completionHandler:^(NSString *textId) {
+        XCTAssertNotNil(textId); XCTAssertEqualObjects(textId, @""); callbacks++;
+    }];
+    XCTAssertEqual(callbacks, 4);
+    XCTAssertEqual(counter.errors.count, 4);
+    for (NSError *error in counter.errors) XCTAssertEqualObjects(error.localizedDescription, @"Expected string text identifier");
 }
 @end

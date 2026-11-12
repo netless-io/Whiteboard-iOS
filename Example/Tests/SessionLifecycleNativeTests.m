@@ -451,7 +451,7 @@ static NSString * const SessionRoomToken = @"";
         }
         [self js:@"window.__apiView=window.manager.focusedView;window.__apiOriginal=window.__apiView.insertText;window.__apiView.insertText=function(){throw new Error('device insertion failure')};true"];
         XCTestExpectation *text = [self expectationWithDescription:@"insertion error"];
-        [self.room insertText:0 y:0 textContent:@"contract-test" completionHandler:^(NSString *value) { XCTAssertNil(value); [text fulfill]; }];
+        [self.room insertText:0 y:0 textContent:@"contract-test" completionHandler:^(NSString *value) { XCTAssertEqualObjects(value, @""); [text fulfill]; }];
         [self waitForExpectations:@[text] timeout:10];XCTAssertEqualObjects(counter.apiErrors.lastObject,@"device insertion failure");
         [self js:@"window.__apiView.insertText=window.__apiOriginal;delete window.__apiView;delete window.__apiOriginal;true"];
     }

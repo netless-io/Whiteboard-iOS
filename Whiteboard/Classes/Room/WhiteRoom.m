@@ -372,7 +372,7 @@
 }
 
 // Legacy callbacks have no NSError parameter. Report failures through the existing
-// common callback and still finish the operation with NO/nil (or void for closeApp).
+// common callback and still finish the operation with NO/empty ID (or void for closeApp).
 - (BOOL)white_reportBridgeError:(id)value
 {
     id decoded = value;
@@ -410,10 +410,14 @@
 
 #pragma mark - Text API
 
-- (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^)(NSString * _Nullable))completionHandler {
+- (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^)(NSString * _Nonnull))completionHandler {
     [self.bridge callHandler:@"room.insertText" arguments:@[@(x), @(y), textContent] completionHandler:^(id _Nullable value) {
         BOOL failed = [self white_reportBridgeError:value];
-        if (completionHandler) completionHandler(!failed && [value isKindOfClass:NSString.class] ? value : nil);
+        if (!failed && ![value isKindOfClass:NSString.class]) {
+            [self white_reportBridgeError:@{@"__error": @{@"message": @"Expected string text identifier"}}];
+            failed = YES;
+        }
+        if (completionHandler) completionHandler(failed ? @"" : value);
     }];
 }
 
