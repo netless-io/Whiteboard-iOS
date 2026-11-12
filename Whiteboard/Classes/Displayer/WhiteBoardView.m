@@ -99,6 +99,7 @@ static NSMutableDictionary<NSString *, WhiteReplacement *> *WhiteReplacements(vo
 @property (nonatomic) NSTimeInterval whitePreparationStarted;
 @property (nonatomic) NSTimeInterval whitePreparationElapsed;
 - (void)whiteCall:(NSString *)method arguments:(NSArray *)args generation:(NSNumber *)generation completion:(void (^)(id))completion;
+- (void)whiteContinueAfterFailedLeave:(NSNumber *)generation error:(NSError *)error;
 
 @property (nonatomic, copy) NSString* customResourceUrl;
 @property (nonatomic, strong) WhiteboardLocalFileResourceLoader *resourceLoader;
@@ -298,16 +299,16 @@ static id WhiteLifecycleFailure(NSString *message) {
         if (previous) [previous.host whiteCancelReplacement:previous];
         if (local && local != previous) [self whiteCancelReplacement:local];
         if (![self whiteReplacementIsCurrent:request]) return;
-        [self whiteLeave:nil completion:^(NSError *error) {
+        NSNumber *localGeneration = self.whiteGeneration;
+        [self whiteLeave:localGeneration completion:^(NSError *error) {
             WhiteBoardView *self = weakSelf;
             if (!self) return;
             if (![self whiteReplacementIsCurrent:request]) return;
-            if (error) { [self whiteFinishReplacement:request error:error]; return; }
+            if (error) [self whiteContinueAfterFailedLeave:localGeneration error:error];
             void (^closed)(NSError *) = ^(NSError *closeError) {
                 WhiteBoardView *self = weakSelf;
                 if (!self) return;
                 if (![self whiteReplacementIsCurrent:request]) return;
-                if (closeError) { [self whiteFinishReplacement:request error:closeError]; return; }
                 request.generation = [self whiteBeginCreation:@(timeout) cancellation:^(NSError *error) { [weakSelf whiteFinishReplacement:request error:error]; }];
                 if (!request.generation) { [self whiteFinishReplacement:request error:WhiteLifecycleError(@"Busy")]; return; }
                 [WhiteOwners() setObject:self forKey:identity]; self.whiteIdentity = identity;
@@ -322,7 +323,15 @@ static id WhiteLifecycleFailure(NSString *message) {
             };
             // The target owner may have switched identity while this host was closing.
             WhiteBoardView *old = [WhiteOwners() objectForKey:identity];
-            if (old && old != self) [old whiteLeave:nil completion:closed]; else closed(nil);
+            if (old && old != self) {
+                __weak WhiteBoardView *weakOld = old;
+                NSNumber *oldGeneration = old.whiteGeneration;
+                [old whiteLeave:oldGeneration completion:^(NSError *error) {
+                    if (![weakSelf whiteReplacementIsCurrent:request]) return;
+                    if (error) [weakOld whiteContinueAfterFailedLeave:oldGeneration error:error];
+                    closed(nil);
+                }];
+            } else closed(nil);
         }];
     });
 }
@@ -417,7 +426,8 @@ static id WhiteLifecycleFailure(NSString *message) {
             }
             completion(envelope[@"value"] == NSNull.null ? nil : envelope[@"value"]);
         } : nil;
-        [self callHandler:method arguments:values completionHandler:response];
+        @try { [self callHandler:method arguments:values completionHandler:response]; }
+        @catch (NSException *exception) { if (completion) completion(WhiteLifecycleFailure(exception.reason ?: @"BridgeCallFailed")); }
     });
 }
 - (void)whiteFinishLeave:(NSNumber *)generation value:(id)value {
@@ -429,7 +439,8 @@ static id WhiteLifecycleFailure(NSString *message) {
         self.whiteCloseCompleted = YES; self.whiteState = self.whiteCloseError ? @"blocked" : @"idle";
         if (!self.whiteCloseError && self.whiteIdentity && [WhiteOwners() objectForKey:self.whiteIdentity] == self) [WhiteOwners() removeObjectForKey:self.whiteIdentity];
         NSArray *callbacks = self.whiteCloseCallbacks.copy; self.whiteCloseCallbacks = nil;
-        for (void (^callback)(NSError *) in callbacks) callback(self.whiteCloseError);
+        NSError *closeError = self.whiteCloseError;
+        for (void (^callback)(NSError *) in callbacks) callback(closeError);
     }
 }
 - (void)whiteLeaveRoom:(void (^)(NSError *))completion {
@@ -455,10 +466,28 @@ static id WhiteLifecycleFailure(NSString *message) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [weakSelf whiteFinishLeave:generation value:WhiteLifecycleFailure(@"LeaveTimeout")];
         });
-        [self whiteCall:@"sdk.leaveRoom" arguments:nil generation:generation completion:^(id value) {
-            [weakSelf whiteFinishLeave:generation value:value];
-        }];
+        @try {
+            [self whiteCall:@"sdk.leaveRoom" arguments:nil generation:generation completion:^(id value) {
+                [weakSelf whiteFinishLeave:generation value:value];
+            }];
+        } @catch (NSException *exception) {
+            [self whiteFinishLeave:generation value:WhiteLifecycleFailure(exception.reason ?: @"LeaveFailed")];
+        }
     }
+}
+- (void)whiteContinueAfterFailedLeave:(NSNumber *)generation error:(NSError *)error {
+    if (![generation isEqual:self.whiteGeneration]) return;
+    NSString *message = error.localizedDescription ?: @"LeaveFailed";
+    @try { [self.commonCallbacks logger:@{@"funName":@"leaveRoomFailed", @"message":message, @"replacementPolicy":@"continue"}]; }
+    @catch (NSException *exception) { NSLog(@"WhiteSDK leave logger failed: %@", exception.reason); }
+    // Enqueue the old scope before advancing Native generation; whiteCall defers its scope check.
+    @try { [self callHandler:@"sdk.continueAfterLeaveFailure" arguments:@[@{@"__whiteScope":[self whiteScope:generation]}, message] completionHandler:nil]; }
+    @catch (NSException *exception) { NSLog(@"WhiteSDK failed to notify old room logger: %@", exception.reason); }
+    if (self.whiteIdentity && [WhiteOwners() objectForKey:self.whiteIdentity] == self) [WhiteOwners() removeObjectForKey:self.whiteIdentity];
+    self.whiteIdentity = nil;
+    self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1);
+    self.whiteCloseCompleted = NO; self.whiteCloseError = nil;
+    self.whiteState = self.whiteInvalid ? @"blocked" : @"idle";
 }
 - (void)whiteInvalidate {
     @synchronized (self) {

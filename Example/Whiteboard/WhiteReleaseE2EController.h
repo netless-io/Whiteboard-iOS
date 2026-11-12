@@ -15,6 +15,7 @@ typedef void (^WhiteReleaseReply)(id);
 @property(nonatomic,strong) WhiteBoardView *board;
 @property(nonatomic,strong) WhiteSDK *sdk;
 @property(nonatomic,strong) WhiteRoom *room;
+@property(nonatomic,strong) NSMutableArray<NSDictionary *> *retiredHosts;
 @property(nonatomic,strong) NSDictionary *fixture;
 @property(nonatomic,strong) NSDictionary *nativeConfiguration;
 @property(nonatomic,strong) NSMutableArray *nativeEvents;
@@ -103,6 +104,7 @@ typedef void (^WhiteReleaseReply)(id);
         return;
     }
     __weak typeof(self) weakSelf=self;
+    if ([options[@"skipPrepare"] boolValue]) return;
     [self.sdk prepareWithCompletionHandler:^(NSError *error){
         weakSelf.prepared=error==nil; weakSelf.prepareError=error.localizedDescription;
         [weakSelf.nativeEvents addObject:@{@"event":@"prepare",@"success":@(error==nil)}];
@@ -165,6 +167,33 @@ typedef void (^WhiteReleaseReply)(id);
         window.originSize=[[WhiteWindowOriginSize alloc] initWithWidth:1280 height:720];params.windowParams=window;
         double start=NSDate.date.timeIntervalSince1970*1000;
         [self.sdk joinRoomWithConfig:params callbacks:nil completionHandler:^(BOOL success,WhiteRoom *room,NSError *error){self.room=room;NSDictionary *event=@{@"event":@"join",@"success":@(success),@"start":@(start),@"end":@(NSDate.date.timeIntervalSince1970*1000)};[self.nativeEvents addObject:event];reply(error ? @{@"error":error.localizedDescription} : event);}];return;
+    }
+    // Debug-only lifecycle fault matrix. Commands still use the public Native SDK.
+    if([action isEqual:@"prepareSdk"]){[self.sdk prepareWithCompletionHandler:^(NSError *error){reply(error ? @{@"error":error.localizedDescription} : @{@"prepared":@YES});}];return;}
+    if([action isEqual:@"disconnect"]){[self.room disconnect:^{reply(@{@"complete":@YES});}];return;}
+    if([action isEqual:@"newSDK"]){
+        self.room=nil;self.sdk=nil;
+        [self configureReleaseSDK:request[@"options"] ?: @{}];reply(@{@"created":@YES});return;
+    }
+    if([action isEqual:@"newHost"]){
+        if(!self.retiredHosts)self.retiredHosts=[NSMutableArray array];
+        [self.retiredHosts addObject:@{@"board":self.board,@"sdk":self.sdk,@"room":self.room ?: NSNull.null}];
+        WKWebViewConfiguration *web=[WKWebViewConfiguration new];
+        [web.userContentController addScriptMessageHandler:self name:@"whiteReleaseEval"];
+        for(WKUserScript *script in self.board.configuration.userContentController.userScripts)[web.userContentController addUserScript:script];
+        self.board=[[WhiteBoardView alloc] initWithFrame:self.view.bounds configuration:web];
+        self.board.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;[self.view addSubview:self.board];
+        self.room=nil;[self configureReleaseSDK:request[@"options"] ?: @{}];reply(@{@"created":@YES});return;
+    }
+    if([action isEqual:@"evalOld"]){
+        WhiteBoardView *fresh=self.board;self.board=self.retiredHosts.lastObject[@"board"];
+        if(!self.board){self.board=fresh;reply(@{@"error":@"No retired host"});return;}
+        [self releaseEvaluate:request[@"expression"] ?: @"null" reply:reply];self.board=fresh;return;
+    }
+    if([action isEqual:@"destroyOld"]){
+        NSDictionary *host=self.retiredHosts.lastObject;__weak WhiteBoardView *released=host[@"board"];
+        [host[@"board"] removeFromSuperview];[self.retiredHosts removeLastObject];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,300*NSEC_PER_MSEC),dispatch_get_main_queue(),^{reply(@{@"destroyed":@(released==nil)});});return;
     }
     if([action isEqual:@"leave"]){[self.sdk leaveRoomWithCompletionHandler:^(NSError *error){self.room=nil;reply(error ? @{@"error":error.localizedDescription} : @{@"state":@"left"});}];return;}
     if([action isEqual:@"pencil"]){[self.room setMemberState:[WhiteMemberState _white_yy_modelWithDictionary:request[@"payload"]]];reply(@{@"configured":@YES});return;}

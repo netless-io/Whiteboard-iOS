@@ -78,7 +78,7 @@ static NSString * const SessionRoomToken = @"";
 }
 - (void)setUp {
     [super setUp]; self.continueAfterFailure=NO;
-    if ([self.name containsString:@"testApiReturnContract"]) {
+    if (([self.name containsString:@"testApiReturnContract"] || [self.name containsString:@"testLeaveFailureRecovery"])) {
         NSString *file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"api-return.private.json"];
         self.apiFixture = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:file] options:0 error:nil];
         XCTAssertTrue([self.apiFixture[@"roomToken"] length]>0,@"Runtime test fixture is required");
@@ -86,7 +86,7 @@ static NSString * const SessionRoomToken = @"";
     self.evidence=[NSMutableDictionary dictionary]; self.uid=[@"ios-lifecycle-candidate-" stringByAppendingString:NSUUID.UUID.UUIDString];
     WKWebViewConfiguration *web=[[WKWebViewConfiguration alloc] init];
     NSString *relay=@"(function(){var Original=window.WebSocket;function Routed(url,protocols){if(/^wss:\\/\\//.test(url))url='ws://127.0.0.1:18765/relay?group=ios&target='+encodeURIComponent(url);return protocols===undefined?new Original(url):new Original(url,protocols)}Routed.prototype=Original.prototype;['CONNECTING','OPEN','CLOSING','CLOSED'].forEach(function(k){Routed[k]=Original[k]});window.WebSocket=Routed})()";
-    if (![self.name containsString:@"testApiReturnContract"]) [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:relay injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
+    if (!([self.name containsString:@"testApiReturnContract"] || [self.name containsString:@"testLeaveFailureRecovery"])) [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:relay injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
     self.board=[[WhiteBoardView alloc] initWithFrame:UIScreen.mainScreen.bounds configuration:web];
     [UIApplication.sharedApplication.keyWindow.rootViewController.view addSubview:self.board];
     WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.apiFixture[@"appIdentifier"] ?: SessionAppIdentifier];config.useMultiViews=YES;config.enableAppliancePlugin=YES;config.apiHosts=self.apiFixture[@"apiHosts"];
@@ -96,7 +96,7 @@ static NSString * const SessionRoomToken = @"";
 }
 - (void)tearDown {
     self.continueAfterFailure=YES;
-    if (![self.name containsString:@"testApiReturnContract"]) [self gate:NO];
+    if (!([self.name containsString:@"testApiReturnContract"] || [self.name containsString:@"testLeaveFailureRecovery"])) [self gate:NO];
     if(self.sdk && !self.expectBlocked) [self leave];
     if(self.board){[self pause:.3];if([[self js:@"!!window.__lifecycleProbe"] boolValue])[self snapshot:@"final"];else self.evidence[@"documentDiscarded"]=@YES;NSString *path=[NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"session-candidate-%@.json",self.name]];
         [[NSJSONSerialization dataWithJSONObject:self.evidence options:NSJSONWritingPrettyPrinted error:nil] writeToFile:path atomically:YES];NSLog(@"SESSION_CANDIDATE_EVIDENCE %@",path);[self.board removeFromSuperview];}
@@ -388,6 +388,42 @@ static NSString * const SessionRoomToken = @"";
     XCTAssertEqualObjects([self js:@"window.__stopCount"],@1);XCTAssertEqual([[self snapshot:@"stopFailureRetryRejected"][@"joinStarts"] integerValue],0);
 }
 
+- (void)injectLeaveFailure {
+    [self js:@"window.__leaveErrors=[];var r=window.room,d=r.disconnect.bind(r),e=r.logger.error.bind(r.logger);r.logger=Object.create(r.logger,{error:{value:function(m){window.__leaveErrors.push(m);return e(m)}}});r.disconnect=function(){return d().then(function(){throw new Error('device old leave failure')})};true"];
+}
+- (void)verifyLeaveFailureLog {
+    XCTAssertTrue([[self js:@"window.__leaveErrors.filter(function(m){return typeof m==='string'&&m.indexOf('[Bridge] Previous room leave failed: device old leave failure')>=0}).length===1"] boolValue]);
+}
+- (void)testLeaveFailureRecoveryTimeout {
+    [self join];[self injectLeaveFailure];
+    [self js:@"(function(r,disconnect){r.disconnect=function(){return disconnect.call(r).catch(function(){return new Promise(function(resolve){window.__finishOldLeave=resolve})})}})(window.room,window.room.disconnect);true"];
+    [self join];XCTAssertTrue([[self js:@"window.__leaveErrors.some(function(m){return m.indexOf('LeaveTimeout')>=0})"] boolValue]);
+    [self js:@"window.__finishOldLeave();true"];[self pause:.3];XCTAssertTrue([[self js:@"window.room.phase==='connected'"] boolValue]);
+    XCTAssertEqual([self open:[self snapshot:@"timeoutRecovered"]],1);[self leave];
+}
+- (void)testLeaveFailureRecovery {
+    for(NSUInteger i=0;i<10;i++) {
+        if(i%2) {XCTestExpectation *ready=[self expectationWithDescription:@"prepared SDK"];[self.sdk prepareWithCompletionHandler:^(NSError *e){XCTAssertNil(e);[ready fulfill];}];[self waitForExpectations:@[ready] timeout:30];}
+        [self join];[self injectLeaveFailure];
+        XCTestExpectation *failed=[self expectationWithDescription:@"explicit leave failed"];
+        [self.sdk leaveRoomWithCompletionHandler:^(NSError *e){XCTAssertEqualObjects(e.localizedDescription,@"device old leave failure");[failed fulfill];}];
+        [self waitForExpectations:@[failed] timeout:25];[self verifyLeaveFailureLog];[self join];
+        [self injectLeaveFailure];XCTestExpectation *disconnected=[self expectationWithDescription:@"disconnect callback"];
+        [self.room disconnect:^{[disconnected fulfill];}];[self waitForExpectations:@[disconnected] timeout:25];
+        [self verifyLeaveFailureLog];[self join];
+        [self injectLeaveFailure];[self join];[self verifyLeaveFailureLog];
+        [self injectLeaveFailure];WhiteBoardView *old=self.board;
+        self.board=[[WhiteBoardView alloc] initWithFrame:UIScreen.mainScreen.bounds configuration:[WKWebViewConfiguration new]];
+        [UIApplication.sharedApplication.keyWindow.rootViewController.view addSubview:self.board];
+        WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.apiFixture[@"appIdentifier"]];config.useMultiViews=YES;config.apiHosts=self.apiFixture[@"apiHosts"];
+        self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config];
+        NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:40];while(![[self js:SessionLifecycleProbeJS] boolValue]){XCTAssertGreaterThan(deadline.timeIntervalSinceNow,0);[self pause:.1];}
+        [self join];WhiteBoardView *fresh=self.board;self.board=old;[self verifyLeaveFailureLog];XCTAssertEqual([self open:[self snapshot:@"oldAfterFailedLeave"]],0);self.board=fresh;
+        [old whiteDestroy];[old removeFromSuperview];[self join];
+        XCTAssertEqual([self open:[self snapshot:@"freshReplacement"]],1);[self leave];
+        NSLog(@"LEAVE_FALLBACK_DEVICE PASS %lu/10",(unsigned long)i+1);
+    }
+}
 - (void)testApiReturnContract {
     [self join];
     LifecycleCommonCounter *counter = [LifecycleCommonCounter new]; counter.apiErrors = [NSMutableArray array];
@@ -432,6 +468,9 @@ static NSString * const SessionRoomToken = @"";
 @property BOOL holdLeave;
 @property (copy) void (^leaveReply)(void);
 @property NSUInteger leaves;
+@property NSUInteger recoveries;
+@property BOOL throwLeave;
+@property NSString *leaveError;
 @property (copy) void (^handshakeReply)(id);
 @property (copy) void (^setupReply)(id);
 @property NSUInteger setups;
@@ -446,6 +485,8 @@ static NSString * const SessionRoomToken = @"";
         self.handshakeReply=reply;
         if(!self.dropHandshake) reply(@{@"value":@"{\"documentId\":\"unit-doc\"}"});
     } else {
+        if([method isEqualToString:@"sdk.continueAfterLeaveFailure"]) self.recoveries++;
+        if([method isEqualToString:@"sdk.leaveRoom"] && self.throwLeave) @throw [NSException exceptionWithName:@"SyntheticLeave" reason:@"synthetic transport failure" userInfo:nil];
         if([method isEqualToString:@"sdk.newWhiteSdk"]) {
             id payload=args.lastObject;
             self.actualApp=[payload valueForKey:@"appIdentifier"];
@@ -455,7 +496,7 @@ static NSString * const SessionRoomToken = @"";
         if(!reply) return;
         id envelope=@{@"scope":args[0][@"__whiteScope"],@"value":@"{}"};
         if([method isEqualToString:@"sdk.newWhiteSdk"]){self.setups++;self.setupReply=^(id value){reply(value ? @{@"scope":args[0][@"__whiteScope"],@"value":value} : envelope);};if(!self.holdSetup)self.setupReply(nil);}
-        else if([method isEqualToString:@"sdk.leaveRoom"]){self.leaves++;self.leaveReply=^{reply(envelope);};if(!self.holdLeave)self.leaveReply();}
+        else if([method isEqualToString:@"sdk.leaveRoom"]){self.leaves++;NSString *failure=self.leaveError;self.leaveReply=^{reply(failure ? @{@"scope":args[0][@"__whiteScope"],@"value":failure} : envelope);};if(!self.holdLeave)self.leaveReply();}
         else reply(envelope);
     }
 }
@@ -469,6 +510,36 @@ static NSString * const SessionRoomToken = @"";
         @autoreleasepool { [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.01]]; }
     }
     XCTAssertNil(*view);
+}
+- (void)testFailedLeavePermitsSameAndCrossHostReplacement {
+    for(NSNumber *cross in @[@NO,@YES]) {
+        LifecycleUnitBoard *a=[LifecycleUnitBoard new],*b=cross.boolValue?[LifecycleUnitBoard new]:a;[a whiteClaimSdk];if(b!=a)[b whiteClaimSdk];
+        NSString *key=NSUUID.UUID.UUIDString;[self activate:a key:key];a.leaveError=@"{\"__error\":{\"message\":\"synthetic close failure\"}}";
+        [self activate:b key:key];XCTAssertEqual(a.recoveries,1);XCTAssertTrue([b whiteCurrent:cross.boolValue?@1:@3]);
+        a.leaveReply();XCTAssertTrue([b whiteCurrent:cross.boolValue?@1:@3]);[a whiteDestroy];[b whiteDestroy];
+    }
+}
+- (void)testExplicitFailedLeaveRemainsObservableThenNextJoinRecovers {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;[self activate:board key:key];
+    board.leaveError=@"{\"__error\":{\"message\":\"synthetic close failure\"}}";
+    XCTestExpectation *left=[self expectationWithDescription:@"explicit leave error"];
+    [board whiteLeave:@1 completion:^(NSError *e){XCTAssertEqualObjects(e.localizedDescription,@"synthetic close failure");[left fulfill];}];
+    [self waitForExpectations:@[left] timeout:2];[self activate:board key:[key stringByAppendingString:@"other"]];
+    XCTAssertEqual(board.leaves,1);XCTAssertEqual(board.recoveries,1);XCTAssertTrue([board whiteCurrent:@3]);[board whiteDestroy];
+}
+- (void)testLeaveTimeoutRecoveryFencesLateResponse {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;[self activate:board key:key];board.holdLeave=YES;
+    XCTestExpectation *joined=[self expectationWithDescription:@"replacement after timeout"];
+    [board whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([board whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([board whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
+    dispatch_async(dispatch_get_main_queue(),^{ dispatch_async(dispatch_get_main_queue(),^{
+        XCTAssertEqual(board.leaves,1);
+        [board performSelector:NSSelectorFromString(@"whiteFinishLeave:value:") withObject:@1 withObject:@"{\"__error\":{\"message\":\"LeaveTimeout\"}}"];
+    }); });
+    [self waitForExpectations:@[joined] timeout:2];board.leaveReply();XCTAssertTrue([board whiteCurrent:@3]);XCTAssertEqual(board.recoveries,1);[board whiteDestroy];
+}
+- (void)testSynchronousLeaveTransportExceptionDoesNotBlockReplacement {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;[self activate:board key:key];board.throwLeave=YES;
+    [self activate:board key:key];XCTAssertEqual(board.recoveries,1);XCTAssertTrue([board whiteCurrent:@3]);[board whiteDestroy];
 }
 - (void)testDestroyedOwnerPermitsSameIdentityWithoutExplicitLeave {
     LifecycleUnitBoard *old=[LifecycleUnitBoard new],*fresh=[LifecycleUnitBoard new];[old whiteClaimSdk];[fresh whiteClaimSdk];
