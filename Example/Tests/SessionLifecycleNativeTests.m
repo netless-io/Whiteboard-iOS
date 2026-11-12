@@ -373,7 +373,7 @@ static NSString * const SessionRoomToken = @"";
     [self join];[old setGlobalState:(WhiteGlobalState *)@{@"staleReloadHandle":@YES}];[self pause:.3];
     XCTAssertFalse([[[self js:@"window.room.state.globalState"] objectForKey:@"staleReloadHandle"] boolValue]);
     NSDictionary *current=[self snapshot:@"afterControlledReload"];XCTAssertEqual([self open:current],1);XCTAssertEqual([current[@"joinStarts"] integerValue],1);
-    [self.board reload];[self pause:1];self.expectBlocked=YES;[self rejectDuplicate];XCTAssertTrue([[self.board valueForKey:@"whiteInvalid"] boolValue]);
+    [self.board reload];[self join];XCTAssertFalse([[self.board valueForKey:@"whiteInvalid"] boolValue]);[self leave];
 }
 
 - (void)testPlayerStopBeforeFirstFrameFailureBlocksRejoin {
@@ -478,12 +478,20 @@ static NSString * const SessionRoomToken = @"";
 @property NSDictionary *actualConfiguration;
 @property NSDictionary *replayParameters;
 @property NSUInteger replays;
+@property NSUInteger documentLoads;
+@property BOOL holdNavigationDocument;
 @end
 @implementation LifecycleUnitBoard
+- (void)loadInitialResource { self.documentLoads++; }
+- (void)evaluateJavaScript:(NSString *)script completionHandler:(void (^)(id, NSError *))reply {
+    if ([script hasPrefix:@"window.location.search.indexOf('__whiteNativeRecovery="]) {
+        if (reply) reply(@(!self.holdNavigationDocument), nil);
+    } else [super evaluateJavaScript:script completionHandler:reply];
+}
 - (void)callHandler:(NSString *)method arguments:(NSArray *)args completionHandler:(void (^)(id))reply {
     if ([method isEqualToString:@"sdk.getLifecycle"]) {
         self.handshakeReply=reply;
-        if(!self.dropHandshake) reply(@{@"value":@"{\"documentId\":\"unit-doc\"}"});
+        if(!self.dropHandshake) reply(@{@"value":[NSString stringWithFormat:@"{\"documentId\":\"unit-doc%@\"}",self.documentLoads>1?[NSString stringWithFormat:@"-%lu",(unsigned long)self.documentLoads]:@""]});
     } else {
         if([method isEqualToString:@"sdk.continueAfterLeaveFailure"]) self.recoveries++;
         if([method isEqualToString:@"sdk.leaveRoom"] && self.throwLeave) @throw [NSException exceptionWithName:@"SyntheticLeave" reason:@"synthetic transport failure" userInfo:nil];
@@ -657,6 +665,40 @@ static NSString * const SessionRoomToken = @"";
     XCTestExpectation *joined=[self expectationWithDescription:@"activate"];
     [board whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([board whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([board whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
     [self waitForExpectations:@[joined] timeout:2];
+}
+- (void)testActiveNavigationRecoversSameViewAndRejectsLateOldLeave {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;
+    [self activate:board key:key];board.holdLeave=YES;[board loadHTMLString:@"navigation" baseURL:nil];
+    XCTAssertTrue([[board valueForKey:@"whiteInvalid"] boolValue]);void (^late)(void)=board.leaveReply;
+    board.holdLeave=NO;[self activate:board key:key];XCTAssertEqual(board.documentLoads,2);
+    NSNumber *generation=[board valueForKey:@"whiteGeneration"];late();XCTAssertTrue([board whiteCurrent:generation]);[board whiteDestroy];
+}
+- (void)testNavigationDuringSetupCancelsOldRequestButNotReplacement {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];board.holdSetup=YES;
+    XCTestExpectation *cancelled=[self expectationWithDescription:@"old setup cancelled"];
+    [board whiteReplaceRoom:NSUUID.UUID.UUIDString configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTFail(@"old join");} failure:^(NSError *e){XCTAssertNotNil(e);[cancelled fulfill];}];
+    dispatch_async(dispatch_get_main_queue(),^{[board loadHTMLString:@"navigation" baseURL:nil];});
+    [self waitForExpectations:@[cancelled] timeout:2];void (^late)(id)=board.setupReply;
+    board.holdSetup=NO;[self activate:board key:NSUUID.UUID.UUIDString];late(nil);
+    XCTAssertTrue([board whiteCurrent:[board valueForKey:@"whiteGeneration"]]);[board whiteDestroy];
+}
+- (void)testNavigationCannotReviveDestroyedView {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];[self activate:board key:NSUUID.UUID.UUIDString];
+    [board loadHTMLString:@"navigation" baseURL:nil];[board whiteDestroy];XCTAssertFalse([board whiteClaimSdk]);
+}
+- (void)testRecoveryWaitsForRequestedDocumentBeforeStartingNewRoom {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;
+    NSArray *scripts=board.configuration.userContentController.userScripts.copy;
+    [self activate:board key:key];[board loadHTMLString:@"navigation" baseURL:nil];board.holdNavigationDocument=YES;
+    NSUInteger setups=board.setups;
+    XCTestExpectation *joined=[self expectationWithDescription:@"requested recovery document"];
+    [board whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([board whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([board whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100*NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+        XCTAssertEqual(board.setups,setups);XCTAssertNil([board valueForKey:@"whiteDocument"]);
+        board.holdNavigationDocument=NO;
+    });
+    [self waitForExpectations:@[joined] timeout:2];
+    XCTAssertEqualObjects(board.configuration.userContentController.userScripts,scripts);[board whiteDestroy];
 }
 - (void)testReplacementDoesNotCloseOwnerThatChangedIdentityDuringLocalLeave {
     LifecycleUnitBoard *a=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero],*b=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];[a whiteClaimSdk];[b whiteClaimSdk];

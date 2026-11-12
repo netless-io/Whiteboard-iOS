@@ -79,6 +79,11 @@ static NSMutableDictionary<NSString *, WhiteReplacement *> *WhiteReplacements(vo
 @property (nonatomic) BOOL whiteSdkClaimed;
 @property (nonatomic) BOOL whiteInvalid;
 @property (nonatomic) BOOL whiteDestroyed;
+@property (nonatomic) BOOL whiteNavigationInvalid;
+@property (nonatomic) NSUInteger whiteDocumentEpoch;
+@property (nonatomic, copy) NSString *whiteRetiredDocument;
+@property (nonatomic, copy) NSString *whiteRecoveryToken;
+@property (nonatomic) NSTimeInterval whiteRecoveryDeadline;
 @property (nonatomic, copy) NSString *whiteDocument;
 @property (nonatomic, copy) NSString *whiteState;
 @property (nonatomic, strong) NSNumber *whiteGeneration;
@@ -100,6 +105,8 @@ static NSMutableDictionary<NSString *, WhiteReplacement *> *WhiteReplacements(vo
 @property (nonatomic) NSTimeInterval whitePreparationElapsed;
 - (void)whiteCall:(NSString *)method arguments:(NSArray *)args generation:(NSNumber *)generation completion:(void (^)(id))completion;
 - (void)whiteContinueAfterFailedLeave:(NSNumber *)generation error:(NSError *)error;
+- (void)whiteRecoverNavigation;
+- (void)whiteNavigationWillChange;
 
 @property (nonatomic, copy) NSString* customResourceUrl;
 @property (nonatomic, strong) WhiteboardLocalFileResourceLoader *resourceLoader;
@@ -260,6 +267,7 @@ static id WhiteLifecycleFailure(NSString *message) {
     return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:value options:0 error:nil] encoding:NSUTF8StringEncoding];
 }
 - (BOOL)whiteClaimSdk {
+    [self whiteRecoverNavigation];
     @synchronized (self) {
         if (self.whiteInvalid) return NO;
         if (self.whiteSdkClaimed) return YES;
@@ -292,6 +300,7 @@ static id WhiteLifecycleFailure(NSString *message) {
     dispatch_async(dispatch_get_main_queue(), ^{
         WhiteBoardView *self = weakSelf;
         if (!self) { failure(WhiteLifecycleError(@"HostInvalid")); return; }
+        [self whiteRecoverNavigation];
         WhiteReplacement *request = [WhiteReplacement new]; request.host = self; request.identity = identity;
         request.start = start; request.failure = failure; request.waiting = YES;
         WhiteReplacement *previous = WhiteReplacements()[identity]; WhiteReplacement *local = self.whiteReplacement;
@@ -337,14 +346,37 @@ static id WhiteLifecycleFailure(NSString *message) {
 }
 - (void)whiteHandshake:(BOOL)restoreSdk {
     __weak typeof(self) weakSelf = self;
+    NSUInteger epoch = self.whiteDocumentEpoch;
+    if (self.whiteRecoveryToken) {
+        // A late dsinit from the page being replaced can flush the bridge queue.
+        // Wait for the document requested by recovery before accepting its handshake.
+        NSString *probe = [NSString stringWithFormat:@"window.location.search.indexOf('__whiteNativeRecovery=%@') >= 0 && !!(window.bridge && window.bridge.getFunction && window.bridge.getFunction('sdk.getLifecycle'))", self.whiteRecoveryToken];
+        [self evaluateJavaScript:probe completionHandler:^(id value, NSError *error) {
+            WhiteBoardView *self = weakSelf;
+            if (!self || self.whiteInvalid || epoch != self.whiteDocumentEpoch || self.whiteDocument) return;
+            if (!error && [value respondsToSelector:@selector(boolValue)] && [value boolValue]) {
+                self.whiteRecoveryToken = nil;
+                [self whiteHandshake:restoreSdk];
+            } else if (NSDate.date.timeIntervalSince1970 >= self.whiteRecoveryDeadline) {
+                [self whiteInvalidate];
+            } else {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+                    WhiteBoardView *self = weakSelf;
+                    if (self && !self.whiteInvalid && epoch == self.whiteDocumentEpoch) [self whiteHandshake:restoreSdk];
+                });
+            }
+        }];
+        return;
+    }
     [self callHandler:@"sdk.getLifecycle" arguments:nil completionHandler:^(id envelope) {
         WhiteBoardView *self = weakSelf;
         if (!self) return;
         @synchronized (self) {
-            if (self.whiteInvalid) return;
+            if (self.whiteInvalid || epoch != self.whiteDocumentEpoch || self.whiteDocument) return;
             NSString *json = [envelope isKindOfClass:NSDictionary.class] ? envelope[@"value"] : nil;
             NSDictionary *value = json ? [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] : nil;
             if (![value[@"documentId"] isKindOfClass:NSString.class]) { [self whiteInvalidate]; return; }
+            if ([value[@"documentId"] isEqual:self.whiteRetiredDocument]) return;
             self.whiteDocument = value[@"documentId"];
             NSArray *work = self.whiteReady.copy; [self.whiteReady removeAllObjects];
             if (restoreSdk && self.whiteSdkInitArgs) [self whiteConfigureConfiguration:self.whiteSdkInitArgs.firstObject completion:nil];
@@ -493,6 +525,7 @@ static id WhiteLifecycleFailure(NSString *message) {
     @synchronized (self) {
         if (self.whiteInvalid) return;
         self.whiteInvalid = YES; self.whiteState = @"blocked"; [self.whiteReady removeAllObjects];
+        self.whiteDocumentEpoch++;
         [self whiteFinishPreparation:WhiteLifecycleError(@"HostInvalid")];
         self.whitePrepared = NO;
         if (self.whiteReplacement) [self whiteFinishReplacement:self.whiteReplacement error:WhiteLifecycleError(@"HostInvalid")];
@@ -521,6 +554,9 @@ static id WhiteLifecycleFailure(NSString *message) {
     NSDictionary *envelope = args[@"data"]; NSDictionary *scope = [envelope isKindOfClass:NSDictionary.class] ? envelope[@"scope"] : nil;
     if (self.whiteInvalid || ![scope[@"documentId"] isEqual:self.whiteDocument] ||
         ([scope[@"generation"] unsignedLongLongValue] && ![scope[@"generation"] isEqual:self.whiteGeneration])) return @"{\"code\":0}";
+    if ([method isEqualToString:@"sdk.documentNavigating"]) {
+        [self whiteNavigationWillChange]; return @"{\"code\":0}";
+    }
     if ([method isEqualToString:@"sdk.lifecycleState"]) {
         NSString *next = envelope[@"value"][@"state"];
         if ([next isEqualToString:@"blocked"] || ([next isEqualToString:@"idle"] && self.whiteCloseCompleted && !self.whiteCloseError)) self.whiteState = next;
@@ -531,16 +567,54 @@ static id WhiteLifecycleFailure(NSString *message) {
     return [super call:method :unwrapped];
 }
 - (WKNavigation *)loadRequest:(NSURLRequest *)request {
-    if (self.whiteDocument) [self whiteInvalidate];
+    [self whiteNavigationWillChange];
     return [super loadRequest:request];
+}
+- (WKNavigation *)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL {
+    [self whiteNavigationWillChange];
+    return [super loadHTMLString:string baseURL:baseURL];
+}
+- (WKNavigation *)loadData:(NSData *)data MIMEType:(NSString *)type characterEncodingName:(NSString *)encoding baseURL:(NSURL *)baseURL {
+    [self whiteNavigationWillChange];
+    return [super loadData:data MIMEType:type characterEncodingName:encoding baseURL:baseURL];
+}
+- (void)whiteNavigationWillChange {
+    if (!self.whiteDocument || self.whiteInvalid || self.whiteDestroyed) return;
+    self.whiteNavigationInvalid = YES;
+    if (![self.whiteState isEqualToString:@"idle"]) {
+        __weak typeof(self) weakSelf = self;
+        [self whiteLeave:self.whiteGeneration completion:^(NSError *error) {
+            @try { if (error) [weakSelf.commonCallbacks logger:@{@"funName":@"roomNavigation", @"message":error.localizedDescription, @"replacementPolicy":@"continue"}]; }
+            @catch (NSException *exception) { NSLog(@"WhiteSDK navigation logger failed: %@", exception.reason); }
+        }];
+        @try { [self.commonCallbacks logger:@{@"funName":@"roomNavigation", @"message":@"Room document navigated; closure unconfirmed, next join will restore the SDK page", @"replacementPolicy":@"continue"}]; }
+        @catch (NSException *exception) { NSLog(@"WhiteSDK navigation logger failed: %@", exception.reason); }
+    }
+    [self whiteInvalidate];
+}
+- (void)whiteRecoverNavigation {
+    if (!self.whiteNavigationInvalid || self.whiteDestroyed) return;
+    self.whiteNavigationInvalid = NO; self.whiteInvalid = NO;
+    if (self.whiteIdentity && [WhiteOwners() objectForKey:self.whiteIdentity] == self) [WhiteOwners() removeObjectForKey:self.whiteIdentity];
+    self.whiteIdentity = nil;
+    self.whiteRetiredDocument = self.whiteDocument; self.whiteDocument = nil; self.whiteDocumentEpoch++;
+    self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1); self.whiteState = @"idle";
+    self.whitePending = nil; self.whiteCloseCallbacks = nil; self.whiteCloseCompleted = NO; self.whiteCloseError = nil;
+    [self.whiteReady removeAllObjects]; [self whiteCancelPreparation];
+    [self resetCallInfoList];
+    self.whiteRecoveryToken = NSUUID.UUID.UUIDString;
+    self.whiteRecoveryDeadline = NSDate.date.timeIntervalSince1970 + 30;
+    [self loadInitialResource];
+    [self whiteHandshake:YES];
 }
 - (WKNavigation *)reload {
     if (!self.whiteDocument || self.whiteInvalid) return [super reload];
     BOOL closed = [self.whiteState isEqualToString:@"idle"] &&
         (self.whiteGeneration.unsignedLongLongValue == 0 || (self.whiteCloseCompleted && !self.whiteCloseError));
-    if (!closed) { [self whiteInvalidate]; return [super reload]; }
+    if (!closed) { [self whiteNavigationWillChange]; return [super reload]; }
     [self whiteCancelPreparation];
-    self.whiteDocument = nil; self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1);
+    self.whiteRetiredDocument = self.whiteDocument; self.whiteDocument = nil; self.whiteDocumentEpoch++;
+    self.whiteGeneration = @(self.whiteGeneration.unsignedLongLongValue + 1);
     [self.whiteReady removeAllObjects]; self.whiteCloseCallbacks = nil; self.whiteCloseCompleted = NO; self.whiteCloseError = nil;
     [self resetCallInfoList];
     WKNavigation *navigation = [super reload];
@@ -650,6 +724,7 @@ static id WhiteLifecycleFailure(NSString *message) {
 }
 - (void)whitePrepareConfiguration:(NSDictionary *)configuration timeout:(NSTimeInterval)timeout admitted:(BOOL)admitted completion:(void (^)(NSError *))completion {
     dispatch_main_async_safe(^{
+        [self whiteRecoverNavigation];
         if (self.whiteInvalid || !configuration || !isfinite(timeout) || timeout < 0) {
             if (completion) completion(WhiteLifecycleError(self.whiteInvalid ? @"HostInvalid" : @"InvalidPreparationOptions"));
             return;
@@ -1047,10 +1122,22 @@ window.addEventListener('error', function(e) {\
 {
     [self logDebugViewStateWithReason:@"loadInitialResource" force:YES];
     NSURL *url = [self resourceURL];
+    // A distinct recovery URL prevents an intermediate reload document from
+    // satisfying the new handshake; application user scripts stay untouched.
+    NSString *(^recoveryURL)(NSURL *) = ^NSString *(NSURL *source) {
+        NSURLComponents *parts = [NSURLComponents componentsWithURL:source resolvingAgainstBaseURL:NO];
+        if (self.whiteRecoveryToken) {
+            NSMutableArray *query = [parts.queryItems mutableCopy] ?: [NSMutableArray array];
+            [query addObject:[NSURLQueryItem queryItemWithName:@"__whiteNativeRecovery" value:self.whiteRecoveryToken]];
+            parts.queryItems = query;
+        }
+        return parts.URL.absoluteString;
+    };
+    url = [NSURL URLWithString:recoveryURL(url)];
     if (self.enableHttpsScheme && self.resourceLoader) {
         NSString *bundleId = [NSBundle mainBundle].bundleIdentifier ?: @"localhost";
         NSString *baseURLString = [NSString stringWithFormat:@"https://%@", bundleId];
-        NSURL *baseURL = [NSURL URLWithString:baseURLString];
+        NSURL *baseURL = [NSURL URLWithString:recoveryURL([NSURL URLWithString:baseURLString])];
         [self.resourceLoader loadResourceURL:url baseURL:baseURL];
         return;
     }

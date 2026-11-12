@@ -171,6 +171,20 @@ typedef void (^WhiteReleaseReply)(id);
     // Debug-only lifecycle fault matrix. Commands still use the public Native SDK.
     if([action isEqual:@"prepareSdk"]){[self.sdk prepareWithCompletionHandler:^(NSError *error){reply(error ? @{@"error":error.localizedDescription} : @{@"prepared":@YES});}];return;}
     if([action isEqual:@"disconnect"]){[self.room disconnect:^{reply(@{@"complete":@YES});}];return;}
+    if([action isEqual:@"lifecycleStatus"]){
+        reply(@{@"invalid":[self.board valueForKey:@"whiteInvalid"],@"document":[self.board valueForKey:@"whiteDocument"] ?: NSNull.null,
+          @"generation":[self.board valueForKey:@"whiteGeneration"],@"state":[self.board valueForKey:@"whiteState"]});return;
+    }
+    if([action isEqual:@"navigate"]){
+        NSString *kind=request[@"kind"];
+        if([kind isEqual:@"reload"])[self.board reload];
+        else if([kind isEqual:@"html"])[self.board loadHTMLString:@"<title>navigation</title>" baseURL:nil];
+        else if([kind isEqual:@"request"])[self.board loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+        else if([kind isEqual:@"js-reload"])[self.board evaluateJavaScript:@"location.reload()" completionHandler:nil];
+        else if([kind isEqual:@"js-navigate"])[self.board evaluateJavaScript:@"location.href='about:blank'" completionHandler:nil];
+        else {reply(@{@"error":@"Unknown navigation kind"});return;}
+        reply(@{@"requested":@YES});return;
+    }
     if([action isEqual:@"newSDK"]){
         self.room=nil;self.sdk=nil;
         [self configureReleaseSDK:request[@"options"] ?: @{}];reply(@{@"created":@YES});return;
