@@ -8,6 +8,7 @@
 #import <netinet/in.h>
 #import <unistd.h>
 #import "WhiteReleaseNativeTouch.h"
+#import "WhiteReleaseLifecycleHarness.h"
 
 typedef void (^WhiteReleaseReply)(id);
 
@@ -28,6 +29,7 @@ typedef void (^WhiteReleaseReply)(id);
 @property(nonatomic,assign) BOOL uiReady;
 @property(nonatomic,assign) BOOL serverStarted;
 @property(nonatomic,strong) NSMutableArray<NSDictionary *> *backgroundEvents;
+@property(nonatomic,strong) WhiteReleaseLifecycleHarness *lifecycleHarness;
 @end
 
 @implementation WhiteReleaseE2EController
@@ -149,13 +151,21 @@ typedef void (^WhiteReleaseReply)(id);
 }
 - (void)handleReleaseRequest:(NSDictionary *)request reply:(WhiteReleaseReply)reply {
     NSString *action=request[@"action"];
+    if([action isEqual:@"lifecycle"]){
+        if(!self.lifecycleHarness){
+            if(self.sdk){reply(@{@"error":@"Launch deferred initialization before the lifecycle matrix"});return;}
+            [self.board removeFromSuperview];self.board=nil;
+            self.lifecycleHarness=[WhiteReleaseLifecycleHarness new];self.lifecycleHarness.container=self.view;self.lifecycleHarness.fixture=self.fixture;
+        }
+        [self.lifecycleHarness handle:request reply:reply];return;
+    }
     if([action isEqual:@"backgroundStatus"]){
         reply(@{@"pid":@(getpid()),@"state":@(UIApplication.sharedApplication.applicationState),
-                @"events":self.backgroundEvents,@"board":[NSString stringWithFormat:@"%p",self.board],
+                @"events":self.backgroundEvents.copy ?: @[],@"board":[NSString stringWithFormat:@"%p",self.board],
                 @"sdk":[NSString stringWithFormat:@"%p",self.sdk],@"room":[NSString stringWithFormat:@"%p",self.room],
                 @"document":[self.board valueForKey:@"whiteDocument"] ?: NSNull.null,
-                @"generation":[self.board valueForKey:@"whiteGeneration"],
-                @"invalid":[self.board valueForKey:@"whiteInvalid"]});return;
+                @"generation":[self.board valueForKey:@"whiteGeneration"] ?: NSNull.null,
+                @"invalid":[self.board valueForKey:@"whiteInvalid"] ?: NSNull.null});return;
     }
     if([action isEqual:@"backgroundHome"]){
         // Debug fixture only: request the real SpringBoard Home transition. No DOM
