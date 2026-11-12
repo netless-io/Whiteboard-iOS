@@ -27,6 +27,7 @@ typedef void (^WhiteReleaseReply)(id);
 @property(nonatomic,assign) BOOL prepared;
 @property(nonatomic,assign) BOOL uiReady;
 @property(nonatomic,assign) BOOL serverStarted;
+@property(nonatomic,strong) NSMutableArray<NSDictionary *> *backgroundEvents;
 @end
 
 @implementation WhiteReleaseE2EController
@@ -40,6 +41,11 @@ typedef void (^WhiteReleaseReply)(id);
     self.navigationController.navigationBarHidden=YES;
     self.view.backgroundColor=UIColor.whiteColor;
     self.nativeEvents=[NSMutableArray array]; self.touchQueue=[NSMutableArray array]; self.pendingReplies=[NSMutableDictionary dictionary];
+    self.backgroundEvents=[NSMutableArray array];
+    for (NSString *name in @[UIApplicationDidEnterBackgroundNotification, UIApplicationWillEnterForegroundNotification,
+                            UIApplicationDidBecomeActiveNotification, UIApplicationWillResignActiveNotification]) {
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(releaseBackgroundChanged:) name:name object:nil];
+    }
 #if WHITE_RELEASE_NATIVE_TOUCH
     self.uiReady=YES;
 #endif
@@ -111,6 +117,10 @@ typedef void (^WhiteReleaseReply)(id);
     }];
 }
 - (void)viewDidLayoutSubviews { [super viewDidLayoutSubviews]; self.board.frame=self.view.bounds; }
+- (void)releaseBackgroundChanged:(NSNotification *)notification {
+    [self.backgroundEvents addObject:@{@"event":notification.name,@"at":@(NSDate.date.timeIntervalSince1970*1000),
+                                      @"state":@(UIApplication.sharedApplication.applicationState)}];
+}
 - (void)onPreloadStateChange:(WhitePreloadResult *)result {
     self.preloadCount++;
     self.preloadResult=@{@"state":result.state ?: @"",@"message":result.message ?: @"",@"count":@(self.preloadCount)};
@@ -139,6 +149,26 @@ typedef void (^WhiteReleaseReply)(id);
 }
 - (void)handleReleaseRequest:(NSDictionary *)request reply:(WhiteReleaseReply)reply {
     NSString *action=request[@"action"];
+    if([action isEqual:@"backgroundStatus"]){
+        reply(@{@"pid":@(getpid()),@"state":@(UIApplication.sharedApplication.applicationState),
+                @"events":self.backgroundEvents,@"board":[NSString stringWithFormat:@"%p",self.board],
+                @"sdk":[NSString stringWithFormat:@"%p",self.sdk],@"room":[NSString stringWithFormat:@"%p",self.room],
+                @"document":[self.board valueForKey:@"whiteDocument"] ?: NSNull.null,
+                @"generation":[self.board valueForKey:@"whiteGeneration"],
+                @"invalid":[self.board valueForKey:@"whiteInvalid"]});return;
+    }
+    if([action isEqual:@"backgroundHome"]){
+        // Debug fixture only: request the real SpringBoard Home transition. No DOM
+        // visibility/pagehide event is synthesized, and no Room API is called.
+        SEL suspend=NSSelectorFromString(@"suspend");
+        if(![UIApplication.sharedApplication respondsToSelector:suspend]){reply(@{@"error":@"System Home transition unavailable"});return;}
+        reply(@{@"requested":@YES});
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,250*NSEC_PER_MSEC),dispatch_get_main_queue(),^{
+            NSMethodSignature *signature=[UIApplication.sharedApplication methodSignatureForSelector:suspend];
+            NSInvocation *invocation=[NSInvocation invocationWithMethodSignature:signature];
+            invocation.target=UIApplication.sharedApplication;invocation.selector=suspend;[invocation invoke];
+        });return;
+    }
     if([action isEqual:@"configure"]){
         if(self.sdk){reply(@{@"error":@"A fresh physical-device process is required for configuration"});return;}
         [self configureReleaseSDK:request[@"options"] ?: @{}];
