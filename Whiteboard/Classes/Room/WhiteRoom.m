@@ -371,24 +371,54 @@
     }];
 }
 
+// Legacy callbacks have no NSError parameter. Report failures through the existing
+// common callback and still finish the operation with NO/empty ID (or void for closeApp).
+- (BOOL)white_reportBridgeError:(id)value
+{
+    id decoded = value;
+    if ([value isKindOfClass:NSString.class]) {
+        NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
+        decoded = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingFragmentsAllowed error:nil];
+    }
+    if (![decoded isKindOfClass:NSDictionary.class]) return NO;
+    NSDictionary *payload = decoded[@"__error"];
+    if (![payload isKindOfClass:NSDictionary.class]) return NO;
+    NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-1000 userInfo:@{
+        NSLocalizedDescriptionKey: payload[@"message"] ?: @"Unknown exception",
+        NSDebugDescriptionErrorKey: payload[@"jsStack"] ?: @"Unknown stack"
+    }];
+    id<WhiteCommonCallbackDelegate> delegate = ((WhiteBoardView *)self.bridge).commonCallbacks.delegate;
+    if ([delegate respondsToSelector:@selector(throwError:)]) [delegate throwError:error];
+    return YES;
+}
+
 - (void)nextPage:(void(^ _Nullable)(BOOL success))completionHandler
 {
-    [self.bridge callHandler:@"room.nextPage" completionHandler:^(id  _Nullable value) {
-        if (completionHandler) { completionHandler([value boolValue]); }
+    [self.bridge callHandler:@"room.nextPage" completionHandler:^(id _Nullable value) {
+        BOOL failed = [self white_reportBridgeError:value];
+        if (completionHandler) completionHandler(!failed && [value isKindOfClass:NSNumber.class] && [value boolValue]);
     }];
 }
 
 - (void)prevPage:(void(^ _Nullable)(BOOL success))completionHandler
 {
-    [self.bridge callHandler:@"room.prevPage" completionHandler:^(id  _Nullable value) {
-        if (completionHandler) { completionHandler([value boolValue]); }
+    [self.bridge callHandler:@"room.prevPage" completionHandler:^(id _Nullable value) {
+        BOOL failed = [self white_reportBridgeError:value];
+        if (completionHandler) completionHandler(!failed && [value isKindOfClass:NSNumber.class] && [value boolValue]);
     }];
 }
 
 #pragma mark - Text API
 
 - (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^)(NSString * _Nonnull))completionHandler {
-    [self.bridge callHandler:@"room.insertText" arguments:@[@(x), @(y), textContent] completionHandler:completionHandler];
+    [self.bridge callHandler:@"room.insertText" arguments:@[@(x), @(y), textContent] completionHandler:^(id _Nullable value) {
+        BOOL failed = [self white_reportBridgeError:value];
+        if (!failed && ![value isKindOfClass:NSString.class]) {
+            [self white_reportBridgeError:@{@"__error": @{@"message": @"Expected string text identifier"}}];
+            failed = YES;
+        }
+        if (completionHandler) completionHandler(failed ? @"" : value);
+    }];
 }
 
 - (void)updateText:(NSString *)textId textContent:(NSString *)textContent {
@@ -590,10 +620,10 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
     if ([webView isKindOfClass:[WhiteBoardView class]]) {
         [(WhiteBoardView *)webView logDebugViewStateWithReason:@"webViewWebContentProcessDidTerminate" force:YES];
     }
-    [(WhiteBoardView *)webView whiteInvalidate];
+    [(WhiteBoardView *)webView whiteDestroy];
     [self updatePhase:WhiteRoomPhaseDisconnected];
     if ([((WhiteBoardView *)webView).commonCallbacks.delegate respondsToSelector:@selector(throwError:)]) {
-        [((WhiteBoardView *)webView).commonCallbacks.delegate throwError:[NSError errorWithDomain:WhiteConstErrorDomain code:-500 userInfo:@{NSLocalizedDescriptionKey: @"Renderer exited; host cleanup is unconfirmed"}]];
+        [((WhiteBoardView *)webView).commonCallbacks.delegate throwError:[NSError errorWithDomain:WhiteConstErrorDomain code:-500 userInfo:@{NSLocalizedDescriptionKey: @"Renderer exited; local host has been destroyed"}]];
     }
 
 }
@@ -628,6 +658,7 @@ static NSString * const RoomSyncNamespace = @"room.sync.%@";
 
 - (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler {
     [self.bridge callHandler:@"room.closeApp" arguments:@[appId] completionHandler:^(id  _Nullable value) {
+        [self white_reportBridgeError:value];
         if (completionHandler) {
             completionHandler();
         }

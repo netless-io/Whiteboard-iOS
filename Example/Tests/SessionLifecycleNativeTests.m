@@ -12,12 +12,20 @@ static NSString * const SessionAppIdentifier = @"";
 static NSString * const SessionRoomUuid = @"";
 static NSString * const SessionRoomToken = @"";
 #endif
+#ifndef SessionDeviceOtherRoomUuid
+#define SessionDeviceOtherRoomUuid @""
+#endif
+#ifndef SessionDeviceOtherRoomToken
+#define SessionDeviceOtherRoomToken @""
+#endif
 
 @interface LifecycleCommonCounter : NSObject <WhiteCommonCallbackDelegate>
 @property NSUInteger pauses;
+@property NSMutableArray<NSString *> *apiErrors;
 @end
 @implementation LifecycleCommonCounter
 - (void)pptMediaPause { self.pauses++; }
+- (void)throwError:(NSError *)error { [self.apiErrors addObject:error.localizedDescription]; }
 @end
 
 @interface SessionLifecycleNativeTests : XCTestCase
@@ -27,6 +35,7 @@ static NSString * const SessionRoomToken = @"";
 @property NSMutableDictionary *evidence;
 @property NSString *uid;
 @property BOOL expectBlocked;
+@property NSDictionary *apiFixture;
 @end
 @implementation SessionLifecycleNativeTests
 - (id)js:(NSString *)source {
@@ -49,7 +58,7 @@ static NSString * const SessionRoomToken = @"";
     NSUInteger count=0; for (NSDictionary *socket in snapshot[@"sockets"]) if ([socket[@"state"] integerValue]==1) count++; return count;
 }
 - (WhiteRoomConfig *)config {
-    WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:SessionRoomUuid roomToken:SessionRoomToken uid:self.uid];
+    WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:self.apiFixture[@"uuid"] ?: SessionRoomUuid roomToken:self.apiFixture[@"roomToken"] ?: SessionRoomToken uid:self.uid];
     config.region=WhiteRegionCN; config.isWritable=NO; config.windowParams=[[WhiteWindowParams alloc] init]; return config;
 }
 - (void)join {
@@ -69,21 +78,25 @@ static NSString * const SessionRoomToken = @"";
 }
 - (void)setUp {
     [super setUp]; self.continueAfterFailure=NO;
-    XCTAssertTrue(SessionRoomToken.length>0,@"Local test credentials are required");
+    if (([self.name containsString:@"testApiReturnContract"] || [self.name containsString:@"testLeaveFailureRecovery"])) {
+        NSString *file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"api-return.private.json"];
+        self.apiFixture = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:file] options:0 error:nil];
+        XCTAssertTrue([self.apiFixture[@"roomToken"] length]>0,@"Runtime test fixture is required");
+    } else XCTAssertTrue(SessionRoomToken.length>0,@"Local test credentials are required");
     self.evidence=[NSMutableDictionary dictionary]; self.uid=[@"ios-lifecycle-candidate-" stringByAppendingString:NSUUID.UUID.UUIDString];
     WKWebViewConfiguration *web=[[WKWebViewConfiguration alloc] init];
     NSString *relay=@"(function(){var Original=window.WebSocket;function Routed(url,protocols){if(/^wss:\\/\\//.test(url))url='ws://127.0.0.1:18765/relay?group=ios&target='+encodeURIComponent(url);return protocols===undefined?new Original(url):new Original(url,protocols)}Routed.prototype=Original.prototype;['CONNECTING','OPEN','CLOSING','CLOSED'].forEach(function(k){Routed[k]=Original[k]});window.WebSocket=Routed})()";
-    [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:relay injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
+    if (!([self.name containsString:@"testApiReturnContract"] || [self.name containsString:@"testLeaveFailureRecovery"])) [web.userContentController addUserScript:[[WKUserScript alloc] initWithSource:relay injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
     self.board=[[WhiteBoardView alloc] initWithFrame:UIScreen.mainScreen.bounds configuration:web];
     [UIApplication.sharedApplication.keyWindow.rootViewController.view addSubview:self.board];
-    WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:SessionAppIdentifier];config.useMultiViews=YES;config.enableAppliancePlugin=YES;
+    WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.apiFixture[@"appIdentifier"] ?: SessionAppIdentifier];config.useMultiViews=YES;config.enableAppliancePlugin=YES;config.apiHosts=self.apiFixture[@"apiHosts"];
     self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config];
     NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:40];
     while(![[self js:SessionLifecycleProbeJS] boolValue]){XCTAssertGreaterThan(deadline.timeIntervalSinceNow,0);[self pause:.1];}
 }
 - (void)tearDown {
     self.continueAfterFailure=YES;
-    [self gate:NO];
+    if (!([self.name containsString:@"testApiReturnContract"] || [self.name containsString:@"testLeaveFailureRecovery"])) [self gate:NO];
     if(self.sdk && !self.expectBlocked) [self leave];
     if(self.board){[self pause:.3];if([[self js:@"!!window.__lifecycleProbe"] boolValue])[self snapshot:@"final"];else self.evidence[@"documentDiscarded"]=@YES;NSString *path=[NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"session-candidate-%@.json",self.name]];
         [[NSJSONSerialization dataWithJSONObject:self.evidence options:NSJSONWritingPrettyPrinted error:nil] writeToFile:path atomically:YES];NSLog(@"SESSION_CANDIDATE_EVIDENCE %@",path);[self.board removeFromSuperview];}
@@ -234,11 +247,13 @@ static NSString * const SessionRoomToken = @"";
     [self pause:8];NSDictionary *held=[self snapshot:@"reconnectingAfter8s"];XCTAssertEqualObjects(held[@"rooms"][0][@"phase"],@"reconnecting");XCTAssertEqual([held[@"joinStarts"] integerValue],1);
     [self gate:NO];[self phase:@"connected" timeout:60];XCTAssertEqual([self open:[self snapshot:@"recovered"]],1);XCTAssertEqual([[self snapshot:@"onePublicJoin"][@"joinStarts"] integerValue],1);[self leave];
 }
-- (void)testReconnectingLeaveTerminalBlocksRejoin {
+- (void)testReconnectingLeaveWaitsForRecoveryThenAllowsRejoin {
     [self join];[self gate:YES];[self js:@"window.__lifecycleProbe.closeTransport(0)"];[self phase:@"reconnecting" timeout:10];
-    XCTestExpectation *done=[self expectationWithDescription:@"uncertain leave"];
-    [self.sdk leaveRoomWithCompletionHandler:^(NSError *error){XCTAssertEqualObjects(error.localizedDescription,@"CloseUnconfirmed");self.expectBlocked=YES;[done fulfill];}];
-    [self waitForExpectations:@[done] timeout:25];[self phase:@"disconnected" timeout:10];[self rejectDuplicate];[self gate:NO];[self pause:3];XCTAssertEqual([[self snapshot:@"terminalRetryRejected"][@"joinStarts"] integerValue],1);
+    XCTestExpectation *done=[self expectationWithDescription:@"confirmed leave after automatic recovery"];__block BOOL completed=NO;
+    [self.sdk leaveRoomWithCompletionHandler:^(NSError *error){XCTAssertNil(error);completed=YES;[done fulfill];}];
+    [self pause:.5];XCTAssertFalse(completed);XCTAssertEqual([[self snapshot:@"waitingForRecovery"][@"joinStarts"] integerValue],1);
+    [self gate:NO];[self waitForExpectations:@[done] timeout:25];[self phase:@"disconnected" timeout:10];
+    XCTAssertEqual([self open:[self snapshot:@"confirmedLeave"]],0);[self join];XCTAssertEqual([[self snapshot:@"rejoined"][@"joinStarts"] integerValue],2);[self leave];
 }
 - (void)testInitialTimeoutAndLateSuccessCleanup {
     [self js:@"window.__originalJoin=window.sdk.joinRoom;window.sdk.joinRoom=function(p,c){return window.__originalJoin(p,c).then(function(r){return new Promise(function(done){setTimeout(function(){done(r)},48000)})})};true"];
@@ -358,7 +373,7 @@ static NSString * const SessionRoomToken = @"";
     [self join];[old setGlobalState:(WhiteGlobalState *)@{@"staleReloadHandle":@YES}];[self pause:.3];
     XCTAssertFalse([[[self js:@"window.room.state.globalState"] objectForKey:@"staleReloadHandle"] boolValue]);
     NSDictionary *current=[self snapshot:@"afterControlledReload"];XCTAssertEqual([self open:current],1);XCTAssertEqual([current[@"joinStarts"] integerValue],1);
-    [self.board reload];[self pause:1];self.expectBlocked=YES;[self rejectDuplicate];XCTAssertTrue([[self.board valueForKey:@"whiteInvalid"] boolValue]);
+    [self.board reload];[self join];XCTAssertFalse([[self.board valueForKey:@"whiteInvalid"] boolValue]);[self leave];
 }
 
 - (void)testPlayerStopBeforeFirstFrameFailureBlocksRejoin {
@@ -373,6 +388,77 @@ static NSString * const SessionRoomToken = @"";
     XCTAssertEqualObjects([self js:@"window.__stopCount"],@1);XCTAssertEqual([[self snapshot:@"stopFailureRetryRejected"][@"joinStarts"] integerValue],0);
 }
 
+- (void)injectLeaveFailure {
+    [self js:@"window.__leaveErrors=[];var r=window.room,d=r.disconnect.bind(r),e=r.logger.error.bind(r.logger);r.logger=Object.create(r.logger,{error:{value:function(m){window.__leaveErrors.push(m);return e(m)}}});r.disconnect=function(){return d().then(function(){throw new Error('device old leave failure')})};true"];
+}
+- (void)verifyLeaveFailureLog {
+    XCTAssertTrue([[self js:@"window.__leaveErrors.filter(function(m){return typeof m==='string'&&m.indexOf('[Bridge] Previous room leave failed: device old leave failure')>=0}).length===1"] boolValue]);
+}
+- (void)testLeaveFailureRecoveryTimeout {
+    [self join];[self injectLeaveFailure];
+    [self js:@"(function(r,disconnect){r.disconnect=function(){return disconnect.call(r).catch(function(){return new Promise(function(resolve){window.__finishOldLeave=resolve})})}})(window.room,window.room.disconnect);true"];
+    [self join];XCTAssertTrue([[self js:@"window.__leaveErrors.some(function(m){return m.indexOf('LeaveTimeout')>=0})"] boolValue]);
+    [self js:@"window.__finishOldLeave();true"];[self pause:.3];XCTAssertTrue([[self js:@"window.room.phase==='connected'"] boolValue]);
+    XCTAssertEqual([self open:[self snapshot:@"timeoutRecovered"]],1);[self leave];
+}
+- (void)testLeaveFailureRecovery {
+    for(NSUInteger i=0;i<10;i++) {
+        if(i%2) {XCTestExpectation *ready=[self expectationWithDescription:@"prepared SDK"];[self.sdk prepareWithCompletionHandler:^(NSError *e){XCTAssertNil(e);[ready fulfill];}];[self waitForExpectations:@[ready] timeout:30];}
+        [self join];[self injectLeaveFailure];
+        XCTestExpectation *failed=[self expectationWithDescription:@"explicit leave failed"];
+        [self.sdk leaveRoomWithCompletionHandler:^(NSError *e){XCTAssertEqualObjects(e.localizedDescription,@"device old leave failure");[failed fulfill];}];
+        [self waitForExpectations:@[failed] timeout:25];[self verifyLeaveFailureLog];[self join];
+        [self injectLeaveFailure];XCTestExpectation *disconnected=[self expectationWithDescription:@"disconnect callback"];
+        [self.room disconnect:^{[disconnected fulfill];}];[self waitForExpectations:@[disconnected] timeout:25];
+        [self verifyLeaveFailureLog];[self join];
+        [self injectLeaveFailure];[self join];[self verifyLeaveFailureLog];
+        [self injectLeaveFailure];WhiteBoardView *old=self.board;
+        self.board=[[WhiteBoardView alloc] initWithFrame:UIScreen.mainScreen.bounds configuration:[WKWebViewConfiguration new]];
+        [UIApplication.sharedApplication.keyWindow.rootViewController.view addSubview:self.board];
+        WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:self.apiFixture[@"appIdentifier"]];config.useMultiViews=YES;config.apiHosts=self.apiFixture[@"apiHosts"];
+        self.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:self.board config:config];
+        NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:40];while(![[self js:SessionLifecycleProbeJS] boolValue]){XCTAssertGreaterThan(deadline.timeIntervalSinceNow,0);[self pause:.1];}
+        [self join];WhiteBoardView *fresh=self.board;self.board=old;[self verifyLeaveFailureLog];XCTAssertEqual([self open:[self snapshot:@"oldAfterFailedLeave"]],0);self.board=fresh;
+        [old whiteDestroy];[old removeFromSuperview];[self join];
+        XCTAssertEqual([self open:[self snapshot:@"freshReplacement"]],1);[self leave];
+        NSLog(@"LEAVE_FALLBACK_DEVICE PASS %lu/10",(unsigned long)i+1);
+    }
+}
+- (void)testApiReturnContract {
+    [self join];
+    LifecycleCommonCounter *counter = [LifecycleCommonCounter new]; counter.apiErrors = [NSMutableArray array];
+    self.board.commonCallbacks.delegate = counter;
+    for (NSUInteger i=0; i<10; i++) {
+        XCTestExpectation *state = [self expectationWithDescription:@"room state"];
+        [self.room getRoomStateWithResult:^(WhiteRoomState *value) { XCTAssertNotNil(value); [state fulfill]; }];
+        [self waitForExpectations:@[state] timeout:10];
+        XCTestExpectation *scenes = [self expectationWithDescription:@"entire scenes"];
+        [self.room getEntireScenes:^(NSDictionary *value) { XCTAssertNotNil(value); [scenes fulfill]; }];
+        [self waitForExpectations:@[scenes] timeout:10];
+        XCTestExpectation *apps = [self expectationWithDescription:@"empty apps"];
+        [self js:@"Object.defineProperty(window.manager,'apps',{configurable:true,get:function(){return undefined}});true"];
+        [self.room queryAllAppsWithCompletionHandler:^(NSDictionary *value, NSError *error) { XCTAssertNil(error); XCTAssertEqual(value.count,0); [apps fulfill]; }];
+        [self waitForExpectations:@[apps] timeout:10]; [self js:@"delete window.manager.apps;true"];
+        for (NSString *api in @[@"nextPage", @"prevPage", @"closeApp"]) {
+            [self js:[NSString stringWithFormat:@"window.__apiOriginal=window.manager.%@;window.manager.%@=function(){return Promise.reject(new Error('device API failure'))};true",api,api]];
+            XCTestExpectation *failed = [self expectationWithDescription:api];
+            if ([api isEqualToString:@"nextPage"]) [self.room nextPage:^(BOOL success) { XCTAssertFalse(success); [failed fulfill]; }];
+            else if ([api isEqualToString:@"prevPage"]) [self.room prevPage:^(BOOL success) { XCTAssertFalse(success); [failed fulfill]; }];
+            else [self.room closeApp:@"missing" completionHandler:^{[failed fulfill];}];
+            [self waitForExpectations:@[failed] timeout:10];
+            XCTAssertEqualObjects(counter.apiErrors.lastObject,@"device API failure");
+            [self js:[NSString stringWithFormat:@"window.manager.%@=window.__apiOriginal;delete window.__apiOriginal;true",api]];
+        }
+        [self js:@"window.__apiView=window.manager.focusedView;window.__apiOriginal=window.__apiView.insertText;window.__apiView.insertText=function(){throw new Error('device insertion failure')};true"];
+        XCTestExpectation *text = [self expectationWithDescription:@"insertion error"];
+        [self.room insertText:0 y:0 textContent:@"contract-test" completionHandler:^(NSString *value) { XCTAssertEqualObjects(value, @""); [text fulfill]; }];
+        [self waitForExpectations:@[text] timeout:10];XCTAssertEqualObjects(counter.apiErrors.lastObject,@"device insertion failure");
+        [self js:@"window.__apiView.insertText=window.__apiOriginal;delete window.__apiView;delete window.__apiOriginal;true"];
+    }
+    XCTAssertEqual(counter.apiErrors.count,40);
+}
+
+
 @end
 
 // Unit transport: exercises the production owner without a real SDK or server.
@@ -382,6 +468,9 @@ static NSString * const SessionRoomToken = @"";
 @property BOOL holdLeave;
 @property (copy) void (^leaveReply)(void);
 @property NSUInteger leaves;
+@property NSUInteger recoveries;
+@property BOOL throwLeave;
+@property NSString *leaveError;
 @property (copy) void (^handshakeReply)(id);
 @property (copy) void (^setupReply)(id);
 @property NSUInteger setups;
@@ -389,13 +478,23 @@ static NSString * const SessionRoomToken = @"";
 @property NSDictionary *actualConfiguration;
 @property NSDictionary *replayParameters;
 @property NSUInteger replays;
+@property NSUInteger documentLoads;
+@property BOOL holdNavigationDocument;
 @end
 @implementation LifecycleUnitBoard
+- (void)loadInitialResource { self.documentLoads++; }
+- (void)evaluateJavaScript:(NSString *)script completionHandler:(void (^)(id, NSError *))reply {
+    if ([script hasPrefix:@"window.location.search.indexOf('__whiteNativeRecovery="]) {
+        if (reply) reply(@(!self.holdNavigationDocument), nil);
+    } else [super evaluateJavaScript:script completionHandler:reply];
+}
 - (void)callHandler:(NSString *)method arguments:(NSArray *)args completionHandler:(void (^)(id))reply {
     if ([method isEqualToString:@"sdk.getLifecycle"]) {
         self.handshakeReply=reply;
-        if(!self.dropHandshake) reply(@{@"value":@"{\"documentId\":\"unit-doc\"}"});
+        if(!self.dropHandshake) reply(@{@"value":[NSString stringWithFormat:@"{\"documentId\":\"unit-doc%@\"}",self.documentLoads>1?[NSString stringWithFormat:@"-%lu",(unsigned long)self.documentLoads]:@""]});
     } else {
+        if([method isEqualToString:@"sdk.continueAfterLeaveFailure"]) self.recoveries++;
+        if([method isEqualToString:@"sdk.leaveRoom"] && self.throwLeave) @throw [NSException exceptionWithName:@"SyntheticLeave" reason:@"synthetic transport failure" userInfo:nil];
         if([method isEqualToString:@"sdk.newWhiteSdk"]) {
             id payload=args.lastObject;
             self.actualApp=[payload valueForKey:@"appIdentifier"];
@@ -405,7 +504,7 @@ static NSString * const SessionRoomToken = @"";
         if(!reply) return;
         id envelope=@{@"scope":args[0][@"__whiteScope"],@"value":@"{}"};
         if([method isEqualToString:@"sdk.newWhiteSdk"]){self.setups++;self.setupReply=^(id value){reply(value ? @{@"scope":args[0][@"__whiteScope"],@"value":value} : envelope);};if(!self.holdSetup)self.setupReply(nil);}
-        else if([method isEqualToString:@"sdk.leaveRoom"]){self.leaves++;self.leaveReply=^{reply(envelope);};if(!self.holdLeave)self.leaveReply();}
+        else if([method isEqualToString:@"sdk.leaveRoom"]){self.leaves++;NSString *failure=self.leaveError;self.leaveReply=^{reply(failure ? @{@"scope":args[0][@"__whiteScope"],@"value":failure} : envelope);};if(!self.holdLeave)self.leaveReply();}
         else reply(envelope);
     }
 }
@@ -413,6 +512,78 @@ static NSString * const SessionRoomToken = @"";
 @interface SessionLifecycleOwnerTests : XCTestCase
 @end
 @implementation SessionLifecycleOwnerTests
+- (void)assertViewReleased:(LifecycleUnitBoard * __weak *)view {
+    NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:2];
+    while (*view && deadline.timeIntervalSinceNow>0) {
+        @autoreleasepool { [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.01]]; }
+    }
+    XCTAssertNil(*view);
+}
+- (void)testFailedLeavePermitsSameAndCrossHostReplacement {
+    for(NSNumber *cross in @[@NO,@YES]) {
+        LifecycleUnitBoard *a=[LifecycleUnitBoard new],*b=cross.boolValue?[LifecycleUnitBoard new]:a;[a whiteClaimSdk];if(b!=a)[b whiteClaimSdk];
+        NSString *key=NSUUID.UUID.UUIDString;[self activate:a key:key];a.leaveError=@"{\"__error\":{\"message\":\"synthetic close failure\"}}";
+        [self activate:b key:key];XCTAssertEqual(a.recoveries,1);XCTAssertTrue([b whiteCurrent:cross.boolValue?@1:@3]);
+        a.leaveReply();XCTAssertTrue([b whiteCurrent:cross.boolValue?@1:@3]);[a whiteDestroy];[b whiteDestroy];
+    }
+}
+- (void)testExplicitFailedLeaveRemainsObservableThenNextJoinRecovers {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;[self activate:board key:key];
+    board.leaveError=@"{\"__error\":{\"message\":\"synthetic close failure\"}}";
+    XCTestExpectation *left=[self expectationWithDescription:@"explicit leave error"];
+    [board whiteLeave:@1 completion:^(NSError *e){XCTAssertEqualObjects(e.localizedDescription,@"synthetic close failure");[left fulfill];}];
+    [self waitForExpectations:@[left] timeout:2];[self activate:board key:[key stringByAppendingString:@"other"]];
+    XCTAssertEqual(board.leaves,1);XCTAssertEqual(board.recoveries,1);XCTAssertTrue([board whiteCurrent:@3]);[board whiteDestroy];
+}
+- (void)testLeaveTimeoutRecoveryFencesLateResponse {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;[self activate:board key:key];board.holdLeave=YES;
+    XCTestExpectation *joined=[self expectationWithDescription:@"replacement after timeout"];
+    [board whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([board whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([board whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
+    dispatch_async(dispatch_get_main_queue(),^{ dispatch_async(dispatch_get_main_queue(),^{
+        XCTAssertEqual(board.leaves,1);
+        [board performSelector:NSSelectorFromString(@"whiteFinishLeave:value:") withObject:@1 withObject:@"{\"__error\":{\"message\":\"LeaveTimeout\"}}"];
+    }); });
+    [self waitForExpectations:@[joined] timeout:2];board.leaveReply();XCTAssertTrue([board whiteCurrent:@3]);XCTAssertEqual(board.recoveries,1);[board whiteDestroy];
+}
+- (void)testSynchronousLeaveTransportExceptionDoesNotBlockReplacement {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;[self activate:board key:key];board.throwLeave=YES;
+    [self activate:board key:key];XCTAssertEqual(board.recoveries,1);XCTAssertTrue([board whiteCurrent:@3]);[board whiteDestroy];
+}
+- (void)testDestroyedOwnerPermitsSameIdentityWithoutExplicitLeave {
+    LifecycleUnitBoard *old=[LifecycleUnitBoard new],*fresh=[LifecycleUnitBoard new];[old whiteClaimSdk];[fresh whiteClaimSdk];
+    NSString *key=NSUUID.UUID.UUIDString;[self activate:old key:key];[old whiteDestroy];[self activate:fresh key:key];
+    XCTAssertEqual(old.leaves,0);XCTAssertTrue([fresh whiteCurrent:@1]);[fresh whiteDestroy];
+}
+- (void)testDestroyUnblocksWaitingReplacementAndIgnoresLateLeave {
+    LifecycleUnitBoard *old=[LifecycleUnitBoard new],*fresh=[LifecycleUnitBoard new];[old whiteClaimSdk];[fresh whiteClaimSdk];
+    NSString *key=NSUUID.UUID.UUIDString;[self activate:old key:key];old.holdLeave=YES;
+    XCTestExpectation *joined=[self expectationWithDescription:@"new host after renderer destruction"];
+    [fresh whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([fresh whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([fresh whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
+    dispatch_async(dispatch_get_main_queue(),^{XCTAssertEqual(old.leaves,1);[old whiteDestroy];});
+    [self waitForExpectations:@[joined] timeout:2];old.leaveReply();[old whiteDestroy];XCTAssertTrue([fresh whiteCurrent:@1]);[fresh whiteDestroy];
+}
+- (void)testReleasedViewIsNotRetainedByOwnerRegistryOrJoinDeadline {
+    __weak LifecycleUnitBoard *released;
+    NSString *key=NSUUID.UUID.UUIDString;
+    @autoreleasepool {
+        LifecycleUnitBoard *board=[LifecycleUnitBoard new];released=board;[board whiteClaimSdk];[self activate:board key:key];
+        // These stored replies belong to the synthetic transport, not WKWebView.
+        board.handshakeReply=nil;board.setupReply=nil;
+    }
+    [self assertViewReleased:&released];
+    LifecycleUnitBoard *fresh=[LifecycleUnitBoard new];[fresh whiteClaimSdk];[self activate:fresh key:key];[fresh whiteDestroy];
+}
+- (void)testRepeatedDestroyAndRejoinDoesNotKeepPreviousViewsAlive {
+    NSString *key=NSUUID.UUID.UUIDString;
+    for(NSUInteger i=0;i<30;i++) {
+        __weak LifecycleUnitBoard *released;
+        @autoreleasepool {
+            LifecycleUnitBoard *board=[LifecycleUnitBoard new];released=board;[board whiteClaimSdk];[self activate:board key:key];
+            [board whiteDestroy];board.handshakeReply=nil;board.setupReply=nil;
+        }
+        [self assertViewReleased:&released];
+    }
+}
 - (void)testPreparationCoalescesAndJoinReusesCapturedConfiguration {
     LifecycleUnitBoard *board=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];board.holdSetup=YES;
     WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:@"mock-app"];config.useMultiViews=YES;
@@ -494,6 +665,40 @@ static NSString * const SessionRoomToken = @"";
     XCTestExpectation *joined=[self expectationWithDescription:@"activate"];
     [board whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([board whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([board whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
     [self waitForExpectations:@[joined] timeout:2];
+}
+- (void)testActiveNavigationRecoversSameViewAndRejectsLateOldLeave {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;
+    [self activate:board key:key];board.holdLeave=YES;[board loadHTMLString:@"navigation" baseURL:nil];
+    XCTAssertTrue([[board valueForKey:@"whiteInvalid"] boolValue]);void (^late)(void)=board.leaveReply;
+    board.holdLeave=NO;[self activate:board key:key];XCTAssertEqual(board.documentLoads,2);
+    NSNumber *generation=[board valueForKey:@"whiteGeneration"];late();XCTAssertTrue([board whiteCurrent:generation]);[board whiteDestroy];
+}
+- (void)testNavigationDuringSetupCancelsOldRequestButNotReplacement {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];board.holdSetup=YES;
+    XCTestExpectation *cancelled=[self expectationWithDescription:@"old setup cancelled"];
+    [board whiteReplaceRoom:NSUUID.UUID.UUIDString configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTFail(@"old join");} failure:^(NSError *e){XCTAssertNotNil(e);[cancelled fulfill];}];
+    dispatch_async(dispatch_get_main_queue(),^{[board loadHTMLString:@"navigation" baseURL:nil];});
+    [self waitForExpectations:@[cancelled] timeout:2];void (^late)(id)=board.setupReply;
+    board.holdSetup=NO;[self activate:board key:NSUUID.UUID.UUIDString];late(nil);
+    XCTAssertTrue([board whiteCurrent:[board valueForKey:@"whiteGeneration"]]);[board whiteDestroy];
+}
+- (void)testNavigationCannotReviveDestroyedView {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];[self activate:board key:NSUUID.UUID.UUIDString];
+    [board loadHTMLString:@"navigation" baseURL:nil];[board whiteDestroy];XCTAssertFalse([board whiteClaimSdk]);
+}
+- (void)testRecoveryWaitsForRequestedDocumentBeforeStartingNewRoom {
+    LifecycleUnitBoard *board=[LifecycleUnitBoard new];[board whiteClaimSdk];NSString *key=NSUUID.UUID.UUIDString;
+    NSArray *scripts=board.configuration.userContentController.userScripts.copy;
+    [self activate:board key:key];[board loadHTMLString:@"navigation" baseURL:nil];board.holdNavigationDocument=YES;
+    NSUInteger setups=board.setups;
+    XCTestExpectation *joined=[self expectationWithDescription:@"requested recovery document"];
+    [board whiteReplaceRoom:key configuration:@{} timeout:5 bind:^{} start:^(NSNumber *g){XCTAssertTrue([board whiteContinueJoin:g cancellation:^(NSError *e){XCTFail(@"%@",e);}]);XCTAssertTrue([board whiteComplete:g success:YES]);[joined fulfill];} failure:^(NSError *e){XCTFail(@"%@",e);}];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100*NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+        XCTAssertEqual(board.setups,setups);XCTAssertNil([board valueForKey:@"whiteDocument"]);
+        board.holdNavigationDocument=NO;
+    });
+    [self waitForExpectations:@[joined] timeout:2];
+    XCTAssertEqualObjects(board.configuration.userContentController.userScripts,scripts);[board whiteDestroy];
 }
 - (void)testReplacementDoesNotCloseOwnerThatChangedIdentityDuringLocalLeave {
     LifecycleUnitBoard *a=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero],*b=[[LifecycleUnitBoard alloc] initWithFrame:CGRectZero];[a whiteClaimSdk];[b whiteClaimSdk];
@@ -585,6 +790,225 @@ static NSString * const SessionRoomToken = @"";
     WhiteSDK *b=[self playerFacade:board app:@"mock-app-B" multi:YES];[self createPlayer:b];late(nil);
     XCTAssertEqual(calls,1);XCTAssertEqual(board.replays,1);XCTAssertEqualObjects(board.actualApp,@"mock-app-B");
     [board whiteLeave:nil completion:nil];[board whiteInvalidate];
+}
+
+@end
+
+@interface ReentryDeviceHost : NSObject <WhiteCommonCallbackDelegate>
+@property (nonatomic, strong) WhiteBoardView *view;
+@property (nonatomic, weak) WhiteBoardView *releasedView;
+@property (nonatomic, weak) WhiteSDK *releasedSdk;
+@property WhiteSDK *sdk;
+@property WhiteRoom *room;
+@property XCTestExpectation *joinDone;
+@property NSError *error;
+@property NSUInteger callbacks;
+@property XCTestExpectation *preloadDone;
+@property WhitePreloadResult *preloadResult;
+@property NSUInteger preloadCallbacks;
+@end
+@implementation ReentryDeviceHost
+- (void)onPreloadStateChange:(WhitePreloadResult *)result {self.preloadResult=result;self.preloadCallbacks++;if(self.preloadCallbacks==1)[self.preloadDone fulfill];}
+@end
+
+/** Uses ordinary public APIs, the bundled Bridge and an actual room. No preload. */
+@interface DestroyedHostReentryDeviceTests : XCTestCase
+@property BOOL preloaded;
+@end
+@implementation DestroyedHostReentryDeviceTests
+- (void)pause:(NSTimeInterval)seconds {
+    XCTestExpectation *done=[self expectationWithDescription:@"observe"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(seconds*NSEC_PER_SEC)),dispatch_get_main_queue(),^{[done fulfill];});
+    [self waitForExpectations:@[done] timeout:seconds+5];
+}
+- (id)js:(ReentryDeviceHost *)host code:(NSString *)code {
+    XCTestExpectation *done=[self expectationWithDescription:@"device JS"];__block id value;
+    [host.view evaluateJavaScript:code completionHandler:^(id result,NSError *e){XCTAssertNil(e);value=result;[done fulfill];}];
+    [self waitForExpectations:@[done] timeout:15];return value;
+}
+- (ReentryDeviceHost *)create {
+    ReentryDeviceHost *host=[ReentryDeviceHost new];
+    host.view=[[WhiteBoardView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    [UIApplication.sharedApplication.keyWindow.rootViewController.view addSubview:host.view];
+    if(self.preloaded)host.preloadDone=[self expectationWithDescription:@"optional preload completion"];
+    [self newSdk:host];
+    NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:40];
+    while(![[self js:host code:SessionLifecycleProbeJS] boolValue]){XCTAssertGreaterThan(deadline.timeIntervalSinceNow,0);[self pause:.05];}
+    if(self.preloaded){
+        XCTestExpectation *prepared=[self expectationWithDescription:@"SDK preparation"];
+        [host.sdk prepareWithTimeout:45 completionHandler:^(NSError *error){XCTAssertNil(error);[prepared fulfill];}];
+        [self waitForExpectations:@[prepared,host.preloadDone] timeout:55];
+        XCTAssertEqualObjects(host.preloadResult.state,@"success",@"%@",host.preloadResult.message);XCTAssertEqual(host.preloadCallbacks,1);
+        XCTAssertEqual([[self snapshot:host][@"joinStarts"] integerValue],0);XCTAssertEqual([self open:[self snapshot:host]],0);
+    }
+    return host;
+}
+- (void)newSdk:(ReentryDeviceHost *)host {
+    WhiteSdkConfiguration *config=[[WhiteSdkConfiguration alloc] initWithApp:SessionAppIdentifier];config.useMultiViews=YES;
+    if(self.preloaded){config.enableModelPreload=YES;config.preloadBuiltinApps=@[@"Slide",@"Presentation"];}
+#ifdef SessionDeviceApiHosts
+    config.apiHosts=SessionDeviceApiHosts;
+#endif
+    host.sdk=[[WhiteSDK alloc] initWithWhiteBoardView:host.view config:config commonCallbackDelegate:host];
+}
+- (void)join:(ReentryDeviceHost *)host uid:(NSString *)uid { [self join:host uid:uid otherRoom:NO]; }
+- (void)join:(ReentryDeviceHost *)host uid:(NSString *)uid otherRoom:(BOOL)otherRoom {
+    host.joinDone=[self expectationWithDescription:@"public join completion"];
+    WhiteRoomConfig *config=[[WhiteRoomConfig alloc] initWithUUID:otherRoom?SessionDeviceOtherRoomUuid:SessionRoomUuid roomToken:otherRoom?SessionDeviceOtherRoomToken:SessionRoomToken uid:uid];
+    config.region=WhiteRegionCN;config.isWritable=NO;config.windowParams=[WhiteWindowParams new];
+    [host.sdk joinRoomWithConfig:config callbacks:nil completionHandler:^(BOOL success,WhiteRoom *room,NSError *error){host.callbacks++;host.error=error;host.room=room;[host.joinDone fulfill];}];
+}
+- (NSDictionary *)snapshot:(ReentryDeviceHost *)host {
+    NSString *json=[self js:host code:@"JSON.stringify(window.__lifecycleProbe.snapshot())"];
+    NSDictionary *s=[NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    XCTAssertEqual([s[@"sensorErrors"] count],0);return s;
+}
+- (NSUInteger)open:(NSDictionary *)s {NSUInteger n=0;for(NSDictionary *socket in s[@"sockets"])if([socket[@"state"] integerValue]==1)n++;return n;}
+- (NSDictionary *)connectedSnapshot:(ReentryDeviceHost *)host {
+    NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:45];BOOL observed=NO;
+    while(YES){NSDictionary *s=[self snapshot:host];NSString *phase=[s[@"rooms"] lastObject][@"phase"];
+        if([phase isEqual:@"connected"]){XCTAssertEqual([self open:s],1);return s;}
+        XCTAssertTrue([phase isEqual:@"reconnecting"]||[phase isEqual:@"connecting"],@"Room terminated: %@",phase);
+        if(!observed){NSLog(@"DESTROYED_HOST_MATRIX WAIT white-sdk/Akko internal %@",phase);observed=YES;}
+        XCTAssertGreaterThan(deadline.timeIntervalSinceNow,0,@"SDK recovery deadline");[self pause:.1];
+    }
+}
+- (void)assertOld:(NSDictionary *)old beforeNew:(NSDictionary *)fresh {
+    long long closed=0,started=0;
+    for(NSDictionary *event in old[@"events"])if([event[@"type"] isEqual:@"room-phase"]&&[event[@"phase"] isEqual:@"disconnected"])closed=[event[@"at"] longLongValue];
+    for(NSDictionary *event in fresh[@"events"])if([event[@"type"] isEqual:@"join-start"])started=[event[@"at"] longLongValue];
+    XCTAssertGreaterThan(closed,0);XCTAssertGreaterThanOrEqual(started,closed,@"old Room must disconnect before replacement actual join");
+}
+- (void)joined:(ReentryDeviceHost *)host {
+    [self waitForExpectations:@[host.joinDone] timeout:55];XCTAssertNil(host.error);XCTAssertNotNil(host.room);XCTAssertEqual(host.callbacks,1);
+    [self connectedSnapshot:host];
+}
+- (XCTestExpectation *)exit:(ReentryDeviceHost *)host mode:(NSString *)mode {
+    XCTestExpectation *done=[self expectationWithDescription:@"exit completion"];
+    if([mode isEqual:@"disconnect"]) [host.room disconnect:^{[done fulfill];}];
+    else [host.sdk leaveRoomWithCompletionHandler:^(NSError *error){host.error=error;[done fulfill];}];
+    return done;
+}
+- (void)destroy:(ReentryDeviceHost *)host {
+    if(host.view)host.releasedView=host.view;
+    [host.view removeFromSuperview];host.view=nil;
+}
+- (void)testOrdinaryJoinExitMatrixTwentyEach {
+    self.continueAfterFailure=NO;XCTAssertGreaterThan(SessionRoomToken.length,0);
+    NSUInteger repeats=20;NSString *count=NSProcessInfo.processInfo.environment[@"MATRIX_REPEATS"];if(count.length)repeats=count.integerValue;
+    NSString *only=NSProcessInfo.processInfo.environment[@"MATRIX_CASE"];
+    NSArray *cases=@[@"destroy-first",@"leave-await-destroy",@"disconnect-await-destroy",@"leave-destroy-without-wait",@"disconnect-destroy-without-wait",@"live-takeover-then-destroy-A",@"destroy-A-during-takeover",@"removeSuperview-live-takeover",@"releaseSdk-live-takeover",@"duplicate-exit-destroy",@"different-uid-live",@"different-room-live",@"destroy-B-during-takeover"];
+    for(NSString *name in cases){if(only.length&&![only isEqual:name])continue;for(NSUInteger iteration=1;iteration<=repeats;iteration++){@autoreleasepool{
+        ReentryDeviceHost *a=nil,*b=nil,*c=nil;NSDate *started=NSDate.date;NSMutableArray *exits=[NSMutableArray array];
+        @try {
+            NSString *uid=[NSString stringWithFormat:@"ios-destroy-%@-%lu-%@",name,(unsigned long)iteration,NSUUID.UUID.UUIDString];
+            NSString *oldSession;BOOL held;
+            @autoreleasepool {
+            a=[self create];[self join:a uid:uid];[self joined:a];oldSession=[self snapshot:a][@"rooms"][0][@"connectionSession"];
+            if([name isEqual:@"removeSuperview-live-takeover"]) [a.view removeFromSuperview];
+            if([name isEqual:@"releaseSdk-live-takeover"]) a.sdk=nil;
+            if([name isEqual:@"leave-await-destroy"]||[name isEqual:@"disconnect-await-destroy"]){
+                [self waitForExpectations:@[[self exit:a mode:[name hasPrefix:@"disconnect"]?@"disconnect":@"leave"]] timeout:25];XCTAssertNil(a.error);[self destroy:a];
+            } else if([name hasSuffix:@"destroy-without-wait"]){[exits addObject:[self exit:a mode:[name hasPrefix:@"disconnect"]?@"disconnect":@"leave"]];[self destroy:a];}
+            else if([name isEqual:@"duplicate-exit-destroy"]){[exits addObject:[self exit:a mode:@"disconnect"]];[exits addObject:[self exit:a mode:@"leave"]];[self destroy:a];}
+            else if([name isEqual:@"destroy-first"]) [self destroy:a];
+            held=[name isEqual:@"destroy-A-during-takeover"]||[name isEqual:@"destroy-B-during-takeover"];
+            if(held) [self js:a code:@"var f=window.bridge.getFunction('sdk.leaveRoom').function;window.bridge.registerAsync('sdk.leaveRoom',function(){var a=[].slice.call(arguments);setTimeout(function(){f.apply(null,a)},1500)});true"];
+            }
+            if([name isEqual:@"destroy-first"])XCTAssertNil(a.releasedView,@"A must actually deallocate before B is created");
+            @autoreleasepool {
+            b=[self create];[self join:b uid:[name isEqual:@"different-uid-live"]?[uid stringByAppendingString:@"-other"]:uid otherRoom:[name isEqual:@"different-room-live"]];
+            if(held){[self pause:.15];XCTAssertEqual(b.callbacks,0);
+                if([name isEqual:@"destroy-B-during-takeover"]){[self destroy:b];}
+                else [self destroy:a];
+            }
+            }
+            if([name isEqual:@"destroy-A-during-takeover"])XCTAssertNil(a.releasedView);
+            if([name isEqual:@"destroy-B-during-takeover"]){[self waitForExpectations:@[b.joinDone] timeout:3];XCTAssertNotNil(b.error);c=[self create];[self join:c uid:uid];}
+            ReentryDeviceHost *active=c?:b;[self joined:active];if(exits.count)[self waitForExpectations:exits timeout:5];NSDictionary *fresh=[self connectedSnapshot:active];
+            XCTAssertEqual([self open:fresh],1);XCTAssertEqual([fresh[@"joinStarts"] integerValue],1);XCTAssertNotEqualObjects(oldSession,fresh[@"rooms"][0][@"connectionSession"]);
+            if(a.view){NSDictionary *old=[self snapshot:a];BOOL independent=[name isEqual:@"different-uid-live"]||[name isEqual:@"different-room-live"];XCTAssertEqual([self open:old],independent?1:0);if(!independent)[self assertOld:old beforeNew:fresh];}
+            [self destroy:a];[self pause:.15];XCTAssertEqual([self open:[self connectedSnapshot:active]],1);XCTAssertEqual(active.callbacks,1);
+            [self waitForExpectations:@[[self exit:active mode:@"leave"]] timeout:25];XCTAssertNil(active.error);XCTAssertEqual([self open:[self snapshot:active]],0);
+            NSLog(@"DESTROYED_HOST_MATRIX PASS %@ %lu/%lu durationMs=%.0f",name,(unsigned long)iteration,(unsigned long)repeats,-started.timeIntervalSinceNow*1000);
+        } @finally {[self destroy:a];[self destroy:b];[self destroy:c];}
+    }}}
+}
+- (void)testPreloadedSameHostReuseMatrixTwentyEach {
+    self.continueAfterFailure=NO;self.preloaded=YES;
+    NSString *count=NSProcessInfo.processInfo.environment[@"MATRIX_REPEATS"];NSUInteger repeats=count.length?count.integerValue:20;
+    for(NSString *mode in @[@"leave",@"direct"])for(NSString *identity in @[@"same",@"different-uid",@"different-room",@"different-both"])for(NSUInteger i=1;i<=repeats;i++){@autoreleasepool{
+        NSString *name=[NSString stringWithFormat:@"preload-reuse-%@-%@",mode,identity];ReentryDeviceHost *host;NSDate *started=NSDate.date;
+        @try {
+            NSString *uid=[@"ios-reuse-" stringByAppendingString:NSUUID.UUID.UUIDString];host=[self create];[self join:host uid:uid];[self joined:host];
+            NSString *firstSession=[self connectedSnapshot:host][@"rooms"][0][@"connectionSession"];
+            if([identity isEqual:@"same"])[self js:host code:@"window.__lifecycleProbe.reconnectOnNextLeave()"];
+            if([mode isEqual:@"leave"])[self waitForExpectations:@[[self exit:host mode:@"leave"]] timeout:25];
+            [self js:host code:@"window.__reuseSdk=window.sdk;var f=window.sdk.joinRoom.bind(window.sdk);window.sdk.joinRoom=function(p,c){window.__reuseJoinGate=window.__lifecycleProbe.snapshot();return f(p,c)};true"];
+            host.callbacks=0;host.error=nil;host.room=nil;
+            BOOL otherUid=[identity isEqual:@"different-uid"]||[identity isEqual:@"different-both"];
+            BOOL otherRoom=[identity isEqual:@"different-room"]||[identity isEqual:@"different-both"];
+            [self join:host uid:otherUid?[uid stringByAppendingString:@"-other"]:uid otherRoom:otherRoom];[self joined:host];
+            NSString *json=[self js:host code:@"JSON.stringify(window.__reuseJoinGate)"];
+            NSDictionary *gate=[NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            XCTAssertEqual([self open:gate],0,@"old socket must be closed before the second actual join");XCTAssertEqualObjects(gate[@"rooms"][0][@"phase"],@"disconnected");
+            NSDictionary *fresh=[self connectedSnapshot:host];XCTAssertEqual([fresh[@"joinStarts"] integerValue],2);XCTAssertEqual([fresh[@"rooms"] count],2);XCTAssertEqual([self open:fresh],1);
+            XCTAssertNotEqualObjects(firstSession,fresh[@"rooms"][1][@"connectionSession"]);XCTAssertTrue([[self js:host code:@"window.sdk===window.__reuseSdk"] boolValue]);XCTAssertEqual(host.preloadCallbacks,1);
+            if([identity isEqual:@"same"]){XCTAssertEqualObjects([self js:host code:@"window.__lifecycleProbe.reconnectLeavePhase"],@"reconnecting");XCTAssertGreaterThanOrEqual([fresh[@"sockets"] count],3);}
+            [self waitForExpectations:@[[self exit:host mode:@"leave"]] timeout:25];XCTAssertNil(host.error);XCTAssertEqual([self open:[self snapshot:host]],0);
+            NSLog(@"DESTROYED_HOST_MATRIX PASS %@ %lu/%lu durationMs=%.0f",name,(unsigned long)i,(unsigned long)repeats,-started.timeIntervalSinceNow*1000);
+        } @finally {[self destroy:host];}
+    }}
+}
+- (void)testNativeSdkReplacementMatrixTenEach {
+    self.continueAfterFailure=NO;
+    NSString *count=NSProcessInfo.processInfo.environment[@"MATRIX_REPEATS"],*only=NSProcessInfo.processInfo.environment[@"MATRIX_CASE"];
+    NSUInteger repeats=count.length?count.integerValue:10;
+    for(NSNumber *preload in @[@NO,@YES])for(NSString *mode in @[@"drop-reference-takeover",@"new-sdk-direct-same",@"new-sdk-direct-different-uid",@"new-sdk-direct-different-room",@"new-sdk-direct-different-both",@"new-sdk-after-leave"])for(NSUInteger i=1;i<=repeats;i++){@autoreleasepool{
+        self.preloaded=preload.boolValue;
+        NSString *name=[NSString stringWithFormat:@"%@-%@",self.preloaded?@"preload":@"ordinary",mode];if(only.length&&![only isEqual:name])continue;
+        ReentryDeviceHost *a=nil,*b=nil;NSDate *started=NSDate.date;
+        @try {
+            NSString *uid=[@"ios-wrapper-" stringByAppendingString:NSUUID.UUID.UUIDString];NSString *session;WhiteBoardView *sameView;
+            @autoreleasepool {
+                a=[self create];[self join:a uid:uid];[self joined:a];
+                session=[self connectedSnapshot:a][@"rooms"][0][@"connectionSession"];
+                if([mode isEqual:@"new-sdk-after-leave"]){[self waitForExpectations:@[[self exit:a mode:@"leave"]] timeout:25];XCTAssertNil(a.error);}
+                [self js:a code:@"window.__replacementSdk=window.sdk;true"];
+                sameView=a.view;a.releasedSdk=a.sdk;a.sdk=nil;
+            }
+            [self pause:.1];BOOL collectedBefore=a.releasedSdk==nil;
+            XCTAssertNil(a.sdk);XCTAssertNil(a.releasedSdk,@"Native SDK should deallocate independently of the retained View");
+            @autoreleasepool {XCTAssertEqual([self open:[self snapshot:a]],[mode isEqual:@"new-sdk-after-leave"]?0:1);}
+            if([mode isEqual:@"drop-reference-takeover"]){
+                @autoreleasepool {
+                b=[self create];[self join:b uid:uid];[self joined:b];NSDictionary *fresh=[self connectedSnapshot:b],*closed=[self snapshot:a];
+                XCTAssertEqual([fresh[@"joinStarts"] integerValue],1);XCTAssertEqual([self open:closed],0);[self assertOld:closed beforeNew:fresh];
+                XCTAssertNotEqualObjects(session,fresh[@"rooms"][0][@"connectionSession"]);XCTAssertEqual(sameView,a.view);
+                XCTAssertTrue([[self js:a code:@"window.sdk===window.__replacementSdk"] boolValue]);
+                sameView=nil;[self destroy:a];
+                }
+                [self pause:.15];XCTAssertNil(a.releasedView);[self connectedSnapshot:b];
+                [self waitForExpectations:@[[self exit:b mode:@"leave"]] timeout:25];XCTAssertNil(b.error);XCTAssertEqual([self open:[self snapshot:b]],0);
+            }else{
+                [self js:a code:@"var f=window.sdk.joinRoom.bind(window.sdk);window.sdk.joinRoom=function(p,c){window.__replacementJoinGate=window.__lifecycleProbe.snapshot();return f(p,c)};true"];
+                [self newSdk:a];XCTAssertNotNil(a.sdk);XCTAssertEqual(sameView,a.view);
+                a.callbacks=0;a.error=nil;a.room=nil;
+                BOOL otherUid=[mode hasSuffix:@"different-uid"]||[mode hasSuffix:@"different-both"],otherRoom=[mode hasSuffix:@"different-room"]||[mode hasSuffix:@"different-both"];
+                [self join:a uid:otherUid?[uid stringByAppendingString:@"-other"]:uid otherRoom:otherRoom];[self joined:a];
+                NSString *json=[self js:a code:@"JSON.stringify(window.__replacementJoinGate)"];
+                NSDictionary *gate=[NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+                XCTAssertEqual([self open:gate],0);XCTAssertEqualObjects(gate[@"rooms"][0][@"phase"],@"disconnected");
+                NSDictionary *fresh=[self connectedSnapshot:a];XCTAssertEqual([fresh[@"joinStarts"] integerValue],2);XCTAssertEqual([fresh[@"rooms"] count],2);XCTAssertEqual([self open:fresh],1);
+                XCTAssertNotEqualObjects(session,fresh[@"rooms"][1][@"connectionSession"]);XCTAssertTrue([[self js:a code:@"window.sdk===window.__replacementSdk"] boolValue]);
+                XCTAssertEqualObjects(fresh[@"rooms"][1][@"uuid"],otherRoom?SessionDeviceOtherRoomUuid:SessionRoomUuid);XCTAssertEqualObjects(fresh[@"rooms"][1][@"uid"],otherUid?[uid stringByAppendingString:@"-other"]:uid);
+                [self waitForExpectations:@[[self exit:a mode:@"leave"]] timeout:25];XCTAssertNil(a.error);XCTAssertEqual([self open:[self snapshot:a]],0);
+                sameView=nil;
+            }
+            NSLog(@"DESTROYED_HOST_MATRIX MEMORY %@ %lu businessReferenceReleased=true sdkCollectedBefore=%@ sdkCollectedAfter=%@",name,(unsigned long)i,collectedBefore?@"true":@"false",a.releasedSdk==nil?@"true":@"false");
+            NSLog(@"DESTROYED_HOST_MATRIX PASS %@ %lu/%lu durationMs=%.0f",name,(unsigned long)i,(unsigned long)repeats,-started.timeIntervalSinceNow*1000);
+        } @finally {[self destroy:a];[self destroy:b];}
+    }}
 }
 
 @end

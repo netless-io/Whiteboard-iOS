@@ -1,3 +1,11 @@
+## [2.16.150] - 2026-11-12
+
+- Fix stale room ownership after host destruction and preserve internal leave-before-join replacement for live hosts.
+- Report failed/timed-out room cleanup and continue replacement; isolate stale callbacks and recover explicit joins after document navigation.
+- Preserve successful room API return formats while propagating errors and completing unsupported/failed Bridge operations.
+- Preserve the nonnull insertText completion signature for existing Objective-C and Swift integrations.
+- Embed Bridge 6b1e3cd without changing Web SDK 2.16.63, WindowManager 1.0.29, Appliance Plugin 1.1.49 or app-slide 0.2.109.
+
 ## [2.16.149] - 2026-11-09
 
 - Align optional preload with Android: App classes require an explicit list; appliance preparation requires enablePreLoadAppliancePlugin=true (default false).

@@ -8,6 +8,7 @@
 #import <netinet/in.h>
 #import <unistd.h>
 #import "WhiteReleaseNativeTouch.h"
+#import "WhiteReleaseLifecycleHarness.h"
 
 typedef void (^WhiteReleaseReply)(id);
 
@@ -15,6 +16,7 @@ typedef void (^WhiteReleaseReply)(id);
 @property(nonatomic,strong) WhiteBoardView *board;
 @property(nonatomic,strong) WhiteSDK *sdk;
 @property(nonatomic,strong) WhiteRoom *room;
+@property(nonatomic,strong) NSMutableArray<NSDictionary *> *retiredHosts;
 @property(nonatomic,strong) NSDictionary *fixture;
 @property(nonatomic,strong) NSDictionary *nativeConfiguration;
 @property(nonatomic,strong) NSMutableArray *nativeEvents;
@@ -26,6 +28,8 @@ typedef void (^WhiteReleaseReply)(id);
 @property(nonatomic,assign) BOOL prepared;
 @property(nonatomic,assign) BOOL uiReady;
 @property(nonatomic,assign) BOOL serverStarted;
+@property(nonatomic,strong) NSMutableArray<NSDictionary *> *backgroundEvents;
+@property(nonatomic,strong) WhiteReleaseLifecycleHarness *lifecycleHarness;
 @end
 
 @implementation WhiteReleaseE2EController
@@ -39,6 +43,11 @@ typedef void (^WhiteReleaseReply)(id);
     self.navigationController.navigationBarHidden=YES;
     self.view.backgroundColor=UIColor.whiteColor;
     self.nativeEvents=[NSMutableArray array]; self.touchQueue=[NSMutableArray array]; self.pendingReplies=[NSMutableDictionary dictionary];
+    self.backgroundEvents=[NSMutableArray array];
+    for (NSString *name in @[UIApplicationDidEnterBackgroundNotification, UIApplicationWillEnterForegroundNotification,
+                            UIApplicationDidBecomeActiveNotification, UIApplicationWillResignActiveNotification]) {
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(releaseBackgroundChanged:) name:name object:nil];
+    }
 #if WHITE_RELEASE_NATIVE_TOUCH
     self.uiReady=YES;
 #endif
@@ -103,12 +112,17 @@ typedef void (^WhiteReleaseReply)(id);
         return;
     }
     __weak typeof(self) weakSelf=self;
+    if ([options[@"skipPrepare"] boolValue]) return;
     [self.sdk prepareWithCompletionHandler:^(NSError *error){
         weakSelf.prepared=error==nil; weakSelf.prepareError=error.localizedDescription;
         [weakSelf.nativeEvents addObject:@{@"event":@"prepare",@"success":@(error==nil)}];
     }];
 }
 - (void)viewDidLayoutSubviews { [super viewDidLayoutSubviews]; self.board.frame=self.view.bounds; }
+- (void)releaseBackgroundChanged:(NSNotification *)notification {
+    [self.backgroundEvents addObject:@{@"event":notification.name,@"at":@(NSDate.date.timeIntervalSince1970*1000),
+                                      @"state":@(UIApplication.sharedApplication.applicationState)}];
+}
 - (void)onPreloadStateChange:(WhitePreloadResult *)result {
     self.preloadCount++;
     self.preloadResult=@{@"state":result.state ?: @"",@"message":result.message ?: @"",@"count":@(self.preloadCount)};
@@ -137,6 +151,34 @@ typedef void (^WhiteReleaseReply)(id);
 }
 - (void)handleReleaseRequest:(NSDictionary *)request reply:(WhiteReleaseReply)reply {
     NSString *action=request[@"action"];
+    if([action isEqual:@"lifecycle"]){
+        if(!self.lifecycleHarness){
+            if(self.sdk){reply(@{@"error":@"Launch deferred initialization before the lifecycle matrix"});return;}
+            [self.board removeFromSuperview];self.board=nil;
+            self.lifecycleHarness=[WhiteReleaseLifecycleHarness new];self.lifecycleHarness.container=self.view;self.lifecycleHarness.fixture=self.fixture;
+        }
+        [self.lifecycleHarness handle:request reply:reply];return;
+    }
+    if([action isEqual:@"backgroundStatus"]){
+        reply(@{@"pid":@(getpid()),@"state":@(UIApplication.sharedApplication.applicationState),
+                @"events":self.backgroundEvents.copy ?: @[],@"board":[NSString stringWithFormat:@"%p",self.board],
+                @"sdk":[NSString stringWithFormat:@"%p",self.sdk],@"room":[NSString stringWithFormat:@"%p",self.room],
+                @"document":[self.board valueForKey:@"whiteDocument"] ?: NSNull.null,
+                @"generation":[self.board valueForKey:@"whiteGeneration"] ?: NSNull.null,
+                @"invalid":[self.board valueForKey:@"whiteInvalid"] ?: NSNull.null});return;
+    }
+    if([action isEqual:@"backgroundHome"]){
+        // Debug fixture only: request the real SpringBoard Home transition. No DOM
+        // visibility/pagehide event is synthesized, and no Room API is called.
+        SEL suspend=NSSelectorFromString(@"suspend");
+        if(![UIApplication.sharedApplication respondsToSelector:suspend]){reply(@{@"error":@"System Home transition unavailable"});return;}
+        reply(@{@"requested":@YES});
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,250*NSEC_PER_MSEC),dispatch_get_main_queue(),^{
+            NSMethodSignature *signature=[UIApplication.sharedApplication methodSignatureForSelector:suspend];
+            NSInvocation *invocation=[NSInvocation invocationWithMethodSignature:signature];
+            invocation.target=UIApplication.sharedApplication;invocation.selector=suspend;[invocation invoke];
+        });return;
+    }
     if([action isEqual:@"configure"]){
         if(self.sdk){reply(@{@"error":@"A fresh physical-device process is required for configuration"});return;}
         [self configureReleaseSDK:request[@"options"] ?: @{}];
@@ -165,6 +207,47 @@ typedef void (^WhiteReleaseReply)(id);
         window.originSize=[[WhiteWindowOriginSize alloc] initWithWidth:1280 height:720];params.windowParams=window;
         double start=NSDate.date.timeIntervalSince1970*1000;
         [self.sdk joinRoomWithConfig:params callbacks:nil completionHandler:^(BOOL success,WhiteRoom *room,NSError *error){self.room=room;NSDictionary *event=@{@"event":@"join",@"success":@(success),@"start":@(start),@"end":@(NSDate.date.timeIntervalSince1970*1000)};[self.nativeEvents addObject:event];reply(error ? @{@"error":error.localizedDescription} : event);}];return;
+    }
+    // Debug-only lifecycle fault matrix. Commands still use the public Native SDK.
+    if([action isEqual:@"prepareSdk"]){[self.sdk prepareWithCompletionHandler:^(NSError *error){reply(error ? @{@"error":error.localizedDescription} : @{@"prepared":@YES});}];return;}
+    if([action isEqual:@"disconnect"]){[self.room disconnect:^{reply(@{@"complete":@YES});}];return;}
+    if([action isEqual:@"lifecycleStatus"]){
+        reply(@{@"invalid":[self.board valueForKey:@"whiteInvalid"],@"document":[self.board valueForKey:@"whiteDocument"] ?: NSNull.null,
+          @"generation":[self.board valueForKey:@"whiteGeneration"],@"state":[self.board valueForKey:@"whiteState"]});return;
+    }
+    if([action isEqual:@"navigate"]){
+        NSString *kind=request[@"kind"];
+        if([kind isEqual:@"reload"])[self.board reload];
+        else if([kind isEqual:@"html"])[self.board loadHTMLString:@"<title>navigation</title>" baseURL:nil];
+        else if([kind isEqual:@"request"])[self.board loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+        else if([kind isEqual:@"js-reload"])[self.board evaluateJavaScript:@"location.reload()" completionHandler:nil];
+        else if([kind isEqual:@"js-navigate"])[self.board evaluateJavaScript:@"location.href='about:blank'" completionHandler:nil];
+        else {reply(@{@"error":@"Unknown navigation kind"});return;}
+        reply(@{@"requested":@YES});return;
+    }
+    if([action isEqual:@"newSDK"]){
+        self.room=nil;self.sdk=nil;
+        [self configureReleaseSDK:request[@"options"] ?: @{}];reply(@{@"created":@YES});return;
+    }
+    if([action isEqual:@"newHost"]){
+        if(!self.retiredHosts)self.retiredHosts=[NSMutableArray array];
+        [self.retiredHosts addObject:@{@"board":self.board,@"sdk":self.sdk,@"room":self.room ?: NSNull.null}];
+        WKWebViewConfiguration *web=[WKWebViewConfiguration new];
+        [web.userContentController addScriptMessageHandler:self name:@"whiteReleaseEval"];
+        for(WKUserScript *script in self.board.configuration.userContentController.userScripts)[web.userContentController addUserScript:script];
+        self.board=[[WhiteBoardView alloc] initWithFrame:self.view.bounds configuration:web];
+        self.board.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;[self.view addSubview:self.board];
+        self.room=nil;[self configureReleaseSDK:request[@"options"] ?: @{}];reply(@{@"created":@YES});return;
+    }
+    if([action isEqual:@"evalOld"]){
+        WhiteBoardView *fresh=self.board;self.board=self.retiredHosts.lastObject[@"board"];
+        if(!self.board){self.board=fresh;reply(@{@"error":@"No retired host"});return;}
+        [self releaseEvaluate:request[@"expression"] ?: @"null" reply:reply];self.board=fresh;return;
+    }
+    if([action isEqual:@"destroyOld"]){
+        NSDictionary *host=self.retiredHosts.lastObject;__weak WhiteBoardView *released=host[@"board"];
+        [host[@"board"] removeFromSuperview];[self.retiredHosts removeLastObject];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,300*NSEC_PER_MSEC),dispatch_get_main_queue(),^{reply(@{@"destroyed":@(released==nil)});});return;
     }
     if([action isEqual:@"leave"]){[self.sdk leaveRoomWithCompletionHandler:^(NSError *error){self.room=nil;reply(error ? @{@"error":error.localizedDescription} : @{@"state":@"left"});}];return;}
     if([action isEqual:@"pencil"]){[self.room setMemberState:[WhiteMemberState _white_yy_modelWithDictionary:request[@"payload"]]];reply(@{@"configured":@YES});return;}

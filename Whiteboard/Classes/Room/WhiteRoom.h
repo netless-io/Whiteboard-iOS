@@ -186,7 +186,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param x 第一个字的的左侧边中点，世界坐标系中的 x 坐标
  * @param y 第一个字的的左侧边中点，世界坐标系中的 y 坐标
  * @param textContent 初始化文字的内容
- * @param completionHandler 返回该文字的标识符
+ * @param completionHandler 返回该文字的标识符。失败时为空字符串，并通过 WhiteCommonCallbackDelegate.throwError 上报错误。
  */
 - (void)insertText:(CGFloat)x y:(CGFloat)y textContent:(NSString *)textContent completionHandler:(void (^) (NSString * textId))completionHandler;
 
@@ -672,6 +672,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param appId 添加app时返回的id
  */
+// completionHandler 表示调用结束；失败通过 WhiteCommonCallbackDelegate.throwError 上报。
 - (void)closeApp:(NSString *)appId completionHandler:(void (^)(void))completionHandler;
 
 /**
