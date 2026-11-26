@@ -122,16 +122,30 @@
 
 - (NSString *)slideResourceMaxRetries:(NSDictionary *)info
 {
-    if ([self.slideDelegate respondsToSelector:@selector(onSlideResourceMaxRetries:error:)]) {
-        NSString *url = info[@"url"] ?: @"";
-        NSString *message = info[@"message"] ?: @"";
-        NSString *jsStack = info[@"jsStack"] ?: @"";
-        NSDictionary *userInfo = @{
-            NSLocalizedDescriptionKey: message,
-            NSDebugDescriptionErrorKey: jsStack
-        };
-        NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-70100 userInfo:userInfo];
-        [self.slideDelegate onSlideResourceMaxRetries:url error:error];
+    id<WhiteSlideDelegate> delegate = self.slideDelegate;
+    BOOL hasContextCallback = [delegate respondsToSelector:@selector(onSlideResourceMaxRetries:error:slideId:pageIndex:isPreload:)];
+    if (!hasContextCallback && ![delegate respondsToSelector:@selector(onSlideResourceMaxRetries:error:)]) {
+        return @"";
+    }
+    NSString *url = info[@"url"] ?: @"";
+    NSString *message = info[@"message"] ?: @"";
+    NSString *jsStack = info[@"jsStack"] ?: @"";
+    NSDictionary *userInfo = @{
+        NSLocalizedDescriptionKey: message,
+        NSDebugDescriptionErrorKey: jsStack
+    };
+    NSError *error = [NSError errorWithDomain:WhiteConstErrorDomain code:-70100 userInfo:userInfo];
+    if (hasContextCallback) {
+        NSString *slideId = [info[@"slideId"] isKindOfClass:NSString.class] ? info[@"slideId"] : @"";
+        NSNumber *page = [info[@"pageIndex"] isKindOfClass:NSNumber.class] ? info[@"pageIndex"] : nil;
+        NSNumber *preload = [info[@"isPreload"] isKindOfClass:NSNumber.class] ? info[@"isPreload"] : nil;
+        [delegate onSlideResourceMaxRetries:url
+                                      error:error
+                                    slideId:slideId
+                                  pageIndex:page ? page.integerValue : -1
+                                  isPreload:preload ? preload.boolValue : YES];
+    } else {
+        [delegate onSlideResourceMaxRetries:url error:error];
     }
     return @"";
 }
