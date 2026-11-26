@@ -48,6 +48,16 @@ typedef void (^SlideUrlInterrupterCallback)(NSString * _Nullable result);
  */
 - (void)onSlideResourceMaxRetries:(NSString *)url error:(NSError *)error;
 
+/**
+ Slide 资源重试耗尽回调，包含失败页的上下文。实现此回调时，SDK 优先调用此方法。
+ @param url 加载失败的资源 URL。
+ @param error 错误信息。
+ @param slideId Slide 实例 ID，旧资源包可能返回空字符串。
+ @param pageIndex 失败页码，从 1 开始，-1 表示未知。
+ @param isPreload 为 YES 时该资源错误未阻塞当前页渲染，旧资源包默认为 YES。
+ */
+- (void)onSlideResourceMaxRetries:(NSString *)url error:(NSError *)error slideId:(NSString *)slideId pageIndex:(NSInteger)pageIndex isPreload:(BOOL)isPreload;
+
 - (void)onSlideError:(WhiteSlideErrorType)slideError errorMessage:(NSString *)errorMessage slideId:(NSString *)slideId slideIndex:(NSInteger)slideIndex;
 
 /**
