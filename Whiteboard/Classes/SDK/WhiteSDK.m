@@ -55,7 +55,7 @@
 
 + (NSString *)version
 {
-    return @"2.16.150";
+    return @"2.16.151";
 }
 
 - (instancetype)initWithWhiteBoardView:(WhiteBoardView *)boardView config:(WhiteSdkConfiguration *)config commonCallbackDelegate:(nullable id<WhiteCommonCallbackDelegate>)callback audioMixerBridgeDelegate:(nullable id<WhiteAudioMixerBridgeDelegate>)mixer effectMixerBridgeDelegate:(nullable id<WhiteAudioEffectMixerBridgeDelegate>)effectMixer pcmDataDelegate:(nullable id<WhiteAudioPcmDataDelegate>)pcmDataDelegate {
